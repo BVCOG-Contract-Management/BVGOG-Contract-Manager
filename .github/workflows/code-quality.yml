@@ -1,2 +1,0 @@
-- name: RuboCop Linter Action
-  uses: andrewmcodes-archive/rubocop-linter-action@v3.3.0
