@@ -1574,7 +1574,6 @@ Lint/AssignmentInCondition:
   Enabled: true
   SafeAutoCorrect: false
   VersionAdded: '0.9'
-  VersionChanged: '<<next>>'
   AllowSafeAssignment: true
 
 Lint/BigDecimalNew:
