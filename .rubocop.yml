@@ -1568,14 +1568,6 @@ Lint/AmbiguousRegexpLiteral:
   VersionAdded: '0.17'
   VersionChanged: '0.83'
 
-Lint/AssignmentInCondition:
-  Description: "Don't use assignment in conditions."
-  StyleGuide: '#safe-assignment-in-condition'
-  Enabled: true
-  SafeAutoCorrect: false
-  VersionAdded: '0.9'
-  AllowSafeAssignment: true
-
 Lint/BigDecimalNew:
   Description: '`BigDecimal.new()` is deprecated. Use `BigDecimal()` instead.'
   Enabled: true
