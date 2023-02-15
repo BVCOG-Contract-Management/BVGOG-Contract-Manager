@@ -1,4 +1,3 @@
-# Ruby on Rails Github Actions Workflow
 name: Ruby
 on: [push, pull_request]
   branches: [ main ]
