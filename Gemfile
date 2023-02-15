@@ -72,3 +72,5 @@ group :test do
 end
 
 gem "rubocop", "~> 1.45"
+
+gem "rubocop-rails", "~> 2.17"
