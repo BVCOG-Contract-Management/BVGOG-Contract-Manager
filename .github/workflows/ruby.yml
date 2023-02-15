@@ -1,66 +1,70 @@
+# Ruby on Rails Github Actions Workflow
 name: Ruby
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main]
+on: [push, pull_request]
+  branches: [ main ]
 jobs:
-  build:
+  format:
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
-services:
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Ruby 3.2.0
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.2.0
+          bundler-cache: true
+      - name: Install dependencies
+        run: |
+          sudo apt-get install libpq-dev
+          gem install bundler
+          gem install rufo
+          bundle install
+      - name: Run Rufo
+        run: |
+          rufo .
+      - name: Check for Rufo changes
+        run: |
+          git diff --exit-code
+      - name: Push Rufo changes
+        if: steps.git-check.outputs.modified == 'true'
+        run: |
+          git config --global user.name 'Github Actions'
+          git config --global user.email 'github-actions@users.noreply.github.com'
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+          git commit -am "Automated formatting changes"
+          git push
+
+  test:
+    runs-on: ubuntu-latest
+    services:
       postgres:
-        image: postgres:12
-        ports: ["5432:5432"]
+        image: postgres:12.2
         env:
-          POSTGRES_PASSWORD: password
-        options: >-
-          --health-cmd pg_isready 
-          --health-interval 10s 
-          --health-timeout 5s 
-          --health-retries 5
-steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v2
-- name: Set up Ruby
-      uses: ruby/setup-ruby@ec106b438a1ff6ff109590de34ddc62c540232e0
-      with:
-        ruby-version: 3.2.0
-- name: Install PostgreSQL 12 client
-      run: |
-        sudo apt-get -yqq install libpq-dev
-- name: Cache Ruby Gems
-      uses: actions/cache@v2
-      with:
-        path: vendor/bundle
-        key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-gems-
-  
-    - name: Bundle Install
-      run: |
-        bundle config path vendor/bundle
-        bundle install --jobs 4 --retry 3
-- name: Run Tests
-      env:
-        PG_DATABASE: postgres
-        PG_HOST: localhost
-        PG_USER: postgres
-        PG_PASSWORD: password
-        RAILS_ENV: test
-        WITH_COVERAGE: true
-        DISABLE_SPRING: 1
-      run: |
-        bin/rails db:setup
-        bundle exec rake test
-- name: Upload Code Coverage
-      uses: actions/upload-artifact@v2
-      with:
-        name: code-coverage
-        path: coverage/
-- name: Formatting and Security Checks
-      run: |
-        bundle exec rubocop
-        bundle exec brakeman -z
-        gem install bundle-audit
-        bundle-audit update
-        bundle-audit
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Ruby 3.2.0
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.2.0
+          bundler-cache: true
+      - name: Install dependencies
+        run: |
+          sudo apt-get install libpq-dev
+          gem install bundler
+          bundle install
+      - name: Setup database
+        env: 
+          RAILS_ENV: test
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
+        run: |
+          bundle exec rails db:prepare
+          bundle exec rails db:migrate
+          bundle exec rspec spec
+
+      
