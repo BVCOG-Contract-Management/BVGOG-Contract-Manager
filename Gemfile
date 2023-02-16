@@ -75,3 +75,5 @@ gem "rubocop", "~> 1.45"
 
 gem "rubocop-rails", "~> 2.17"
 gem "pg", "~> 1.4"
+
+gem "rspec", "~> 3.12"
