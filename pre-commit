@@ -1,4 +1,0 @@
-#!/bin/sh
-# ./.git/hooks/pre-commit
-
-.git/hooks/pre-commit-ruby

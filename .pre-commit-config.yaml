@@ -1,0 +1,9 @@
+repos:
+-   repo: local
+    hooks:
+      - id: pre-commit-ruby
+        name: Rufo
+        language: system
+        entry: ./pre-commit-hooks/pre-commit-ruby
+        stages: [commit]
+        verbose: true
