@@ -13,3 +13,10 @@
  *= require_tree .
  *= require_self
  */
+
+@import "main";
+@import "sidebar";
+
+ body {
+    font-family: 'Nunito Sans', sans-serif !important;
+ }

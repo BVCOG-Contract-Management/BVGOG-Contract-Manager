@@ -1,0 +1,15 @@
+@import "mixins";
+
+// Colors
+$dark-gray: #333;
+$asphalt: #17191e;
+
+// Sidebar
+$aside-background-color: $dark-gray;
+$aside-border: 1px solid #e3e6f0;
+$aside-width: fit-content;
+$aside-padding: 25px;
+
+$aside-header-background-color: $asphalt;
+$aside-header-text-color: white;
+$aside-header-padding: 20px 0 10px 0;

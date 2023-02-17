@@ -77,3 +77,5 @@ gem "rubocop-rails", "~> 2.17"
 gem "pg", "~> 1.4"
 
 gem "rspec", "~> 3.12"
+
+gem "sass-rails", "~> 6.0.0"
