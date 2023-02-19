@@ -8,7 +8,7 @@ class CreateContracts < ActiveRecord::Migration[7.0]
       t.integer :point_of_contact_id
       t.integer :status
       t.integer :vendor_id
-      t.integer :type
+      t.integer :contract_type
       t.string :description
       t.string :key_words
       t.float :amount_dollar

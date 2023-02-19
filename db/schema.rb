@@ -25,7 +25,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_19_042830) do
     t.integer "point_of_contact_id"
     t.integer "status"
     t.integer "vendor_id"
-    t.integer "type"
+    t.integer "contract_type"
     t.string "description"
     t.string "key_words"
     t.float "amount_dollar"
