@@ -12,7 +12,7 @@ class CreateContracts < ActiveRecord::Migration[7.0]
       t.string :description
       t.string :key_words
       t.float :amount_dollar
-      t.int :amount_duration
+      t.integer :amount_duration
       t.datetime :start_date
       t.string :initial_term_amount
       t.string :initial_term_duration
