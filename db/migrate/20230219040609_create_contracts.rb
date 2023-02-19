@@ -6,13 +6,13 @@ class CreateContracts < ActiveRecord::Migration[7.0]
       t.integer :entity_id
       t.integer :program_id
       t.integer :point_of_contact_id
-      t.integer :contract_status
+      t.integer :status
       t.integer :vendor_id
-      t.integer :contract_type
+      t.integer :type
       t.string :description
       t.string :key_words
       t.float :amount_dollar
-      t.string :amount_duration
+      t.int :amount_duration
       t.datetime :start_date
       t.string :initial_term_amount
       t.string :initial_term_duration
