@@ -7,3 +7,7 @@
 #   Character.create(name: "Luke", movie: movies.first)
 
 # Seed the RottenPotatoes DB with some movies.
+
+Vendor.create!([{name: "Vcorp"}])
+Entity.create!([{name: "Test Entity"}])
+User.create!([{name: "Test User", level: 1}])
