@@ -26,7 +26,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_19_042830) do
     t.integer "status"
     t.integer "vendor_id"
     t.integer "contract_type"
-    t.string "description"
+    t.text "description"
     t.string "key_words"
     t.float "amount_dollar"
     t.integer "amount_duration"
@@ -46,7 +46,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_19_042830) do
 
   create_table "documents", force: :cascade do |t|
     t.string "file_name"
-    t.string "path"
+    t.text "path"
     t.integer "contract_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -80,7 +80,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_19_042830) do
 
   create_table "vendor_reviews", force: :cascade do |t|
     t.integer "rating"
-    t.string "description"
+    t.text "description"
     t.integer "vendor_id"
     t.integer "user_id"
     t.datetime "created_at", null: false

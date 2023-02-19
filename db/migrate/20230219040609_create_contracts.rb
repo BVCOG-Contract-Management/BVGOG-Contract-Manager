@@ -9,7 +9,7 @@ class CreateContracts < ActiveRecord::Migration[7.0]
       t.integer :status
       t.integer :vendor_id
       t.integer :contract_type
-      t.string :description
+      t.text :description
       t.string :key_words
       t.float :amount_dollar
       t.integer :amount_duration
