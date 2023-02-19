@@ -23,13 +23,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_19_042830) do
     t.integer "entity_id"
     t.integer "program_id"
     t.integer "point_of_contact_id"
-    t.integer "contract_status"
+    t.integer "status"
     t.integer "vendor_id"
-    t.integer "contract_type"
+    t.integer "type"
     t.string "description"
     t.string "key_words"
     t.float "amount_dollar"
-    t.string "amount_duration"
+    t.integer "amount_duration"
     t.datetime "start_date"
     t.string "initial_term_amount"
     t.string "initial_term_duration"
@@ -54,15 +54,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_19_042830) do
 
   create_table "entities", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "movies", force: :cascade do |t|
-    t.string "title"
-    t.string "rating"
-    t.text "description"
-    t.datetime "release_date", precision: nil
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
