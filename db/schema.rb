@@ -19,7 +19,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_19_042830) do
 
   create_table "contracts", force: :cascade do |t|
     t.string "title"
-    t.integer "number"
+    t.string "number"
     t.integer "entity_id"
     t.integer "program_id"
     t.integer "point_of_contact_id"
@@ -34,6 +34,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_19_042830) do
     t.string "initial_term_amount"
     t.string "initial_term_duration"
     t.datetime "end_date"
+    t.integer "end_trigger"
     t.boolean "requires_rebid", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -49,7 +50,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_19_042830) do
     t.integer "contract_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index "\"entity_id\"", name: "index_documents_on_entity_id"
+    t.index ["contract_id"], name: "index_documents_on_contract_id"
   end
 
   create_table "entities", force: :cascade do |t|
@@ -65,7 +66,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_19_042830) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "full_name"
+    t.string "first_name"
+    t.string "last_name"
+    t.string "email"
+    t.integer "program_id"
+    t.boolean "program_manager", default: false
+    t.boolean "status", default: false
+    t.integer "redirect_user_id"
     t.integer "level"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

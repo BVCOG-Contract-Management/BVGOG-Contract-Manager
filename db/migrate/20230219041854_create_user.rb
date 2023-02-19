@@ -5,8 +5,8 @@ class CreateUser < ActiveRecord::Migration[7.0]
       t.string :last_name
       t.string :email
       t.integer :program_id
-      t.program_manager :boolean, default: false
-      t.status :boolean, default: false
+      t.boolean :program_manager, default: false
+      t.boolean :status, default: false
       t.integer :redirect_user_id
       t.integer :level
       #Created_at is automatically created when the user is created by rails

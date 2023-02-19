@@ -10,4 +10,4 @@
 
 Vendor.create!([{name: "Vcorp"}])
 Entity.create!([{name: "Test Entity"}])
-User.create!([{name: "Test User", level: 1}])
+User.create!([{first_name: "Liam", last_name: "Berney", email: "iamrberney@tamu.edu", level: 0}])
