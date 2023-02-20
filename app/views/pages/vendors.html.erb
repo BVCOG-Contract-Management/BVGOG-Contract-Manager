@@ -3,6 +3,11 @@
     Find me in app/views/pages/vendors.html.erb
     This is the vendors page.
 </p>
+<style>
+table, th, td {
+  border: 1px solid black;
+}
+</style>
 <table>
   <thead>
     <tr>
@@ -16,7 +21,7 @@
       <tr>
         <td><%= vendor.id %></td>
         <td><%= vendor.name %></td>
-        <!--<td><%= average_rating%></td>-->
+        <td><%= vendor.average_rating %></td>
       </tr>
     <% end %>
   </tbody>
