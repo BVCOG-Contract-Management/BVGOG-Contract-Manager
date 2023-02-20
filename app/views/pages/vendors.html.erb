@@ -1,0 +1,23 @@
+<h1 class="title is-3">Vendors</h1>
+<p>
+    Find me in app/views/pages/vendors.html.erb
+    This is the vendors page.
+</p>
+<table>
+  <thead>
+    <tr>
+      <th>Vendor ID</th>
+      <th>Name</th>
+      <th>Average Rating</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @vendors.each do |vendor| %>
+      <tr>
+        <td><%= vendor.id %></td>
+        <td><%= vendor.name %></td>
+        <!--<td><%= average_rating%></td>-->
+      </tr>
+    <% end %>
+  </tbody>
+</table>

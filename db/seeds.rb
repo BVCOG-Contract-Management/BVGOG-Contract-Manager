@@ -9,6 +9,8 @@
 # Seed the RottenPotatoes DB with some movies.
 
 Vendor.create!([{ name: 'Vcorp' }])
+Vendor.create!([{ name: 'Scorp' }])
+Vendor.create!([{ name: 'Bcorp' }])
 Entity.create!([{ name: 'Test Entity' }])
 User.create!([{ first_name: 'Liam', last_name: 'Berney', email: 'liamrberney@tamu.edu', level: 0 }])
 Program.create!([{ name: 'Test Program' }])
