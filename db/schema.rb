@@ -57,23 +57,27 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_21_174315) do
     t.text "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_entities_on_name", unique: true
   end
 
   create_table "programs", force: :cascade do |t|
     t.text "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_programs_on_name", unique: true
   end
 
   create_table "users", force: :cascade do |t|
     t.text "first_name", null: false
     t.text "last_name", null: false
     t.text "email", null: false
+    t.text "password", null: false
     t.boolean "is_program_manager", default: false, null: false
     t.boolean "is_active", default: true, null: false
     t.integer "redirect_user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["redirect_user_id"], name: "index_users_on_redirect_user_id"
   end
 
@@ -84,6 +88,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_21_174315) do
     t.integer "vendor_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["user_id", "vendor_id"], name: "index_vendor_reviews_on_user_id_and_vendor_id", unique: true
     t.index ["user_id"], name: "index_vendor_reviews_on_user_id"
     t.index ["vendor_id"], name: "index_vendor_reviews_on_vendor_id"
   end
@@ -92,6 +97,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_21_174315) do
     t.text "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_vendors_on_name", unique: true
   end
 
   add_foreign_key "contract_documents", "contracts"

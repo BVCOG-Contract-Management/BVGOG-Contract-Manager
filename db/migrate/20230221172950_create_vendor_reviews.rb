@@ -6,6 +6,9 @@ class CreateVendorReviews < ActiveRecord::Migration[7.0]
       t.references :user, null: false, foreign_key: true
       t.references :vendor, null: false, foreign_key: true
 
+      # (user, vendor) pair must be unique
+      t.index [:user_id, :vendor_id], unique: true
+
       t.timestamps
     end
   end

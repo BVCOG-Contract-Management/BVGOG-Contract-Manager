@@ -3,7 +3,8 @@ class CreateUsers < ActiveRecord::Migration[7.0]
     create_table :users do |t|
       t.text :first_name, null: false
       t.text :last_name, null: false
-      t.text :email, null: false
+      t.text :email, null: false, index: { unique: true }
+      t.text :password, null: false
       t.boolean :is_program_manager, null: false, default: false
       t.boolean :is_active, null: false, default: true
 
