@@ -7,6 +7,7 @@ class CreateUsers < ActiveRecord::Migration[7.0]
       t.text :password, null: false
       t.boolean :is_program_manager, null: false, default: false
       t.boolean :is_active, null: false, default: true
+      t.text :level, null: false, default: UserLevel::THREE
 
       # Add self association for redirect user
       t.references :redirect_user, foreign_key: { to_table: :users }

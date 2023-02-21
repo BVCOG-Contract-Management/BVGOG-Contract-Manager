@@ -23,6 +23,11 @@ RSpec.describe User, type: :model do
     expect { user.save! }.to raise_error(ActiveRecord::NotNullViolation)
   end
 
+  it "should not save user without level" do
+    user = build(:user, level: nil)
+    expect { user.save! }.to raise_error(ActiveRecord::NotNullViolation)
+  end
+
   it "should save user with email, password, first name, and last name" do
     user = build(:user)
     expect { user.save! }.not_to raise_error

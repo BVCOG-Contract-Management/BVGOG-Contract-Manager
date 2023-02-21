@@ -74,6 +74,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_21_174315) do
     t.text "password", null: false
     t.boolean "is_program_manager", default: false, null: false
     t.boolean "is_active", default: true, null: false
+    t.text "level", default: "three", null: false
     t.integer "redirect_user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

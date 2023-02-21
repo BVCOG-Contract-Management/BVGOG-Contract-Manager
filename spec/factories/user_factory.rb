@@ -8,5 +8,6 @@ FactoryBot.define do
     last_name { Faker::Name.last_name }
     is_program_manager { false }
     is_active { true }
+    level { UserLevel::THREE }
   end
 end
