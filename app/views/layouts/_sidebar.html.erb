@@ -15,7 +15,7 @@
       </p>
       <ul class="menu-list">
         <% page[:subpaths].each do |item| %>
-          <% if url_for(only_path: true) == item[:path] then %>
+          <% if url_for(only_path: true) == item[:path] %>
             <a href="<% item[:path] %>" class="sidebar-item has-background-light menu-item has-text-black-bis">
           <% else %>
             <a href="<% item[:path] %>" class="sidebar-item menu-item has-text-link-light">

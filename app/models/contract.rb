@@ -1,10 +1,10 @@
 class Contract < ApplicationRecord
-  belongs_to :entity, class_name: 'Entity', foreign_key: 'entity_id'
-  belongs_to :program, class_name: 'Program', foreign_key: 'program_id'
-  belongs_to :point_of_contact, class_name: 'User', foreign_key: 'point_of_contact_id'
-  belongs_to :vendor, class_name: 'Vendor', foreign_key: 'vendor_id'
-  has_many :contract_documents, class_name: 'ContractDocument'
-  
+  belongs_to :entity, class_name: "Entity", foreign_key: "entity_id"
+  belongs_to :program, class_name: "Program", foreign_key: "program_id"
+  belongs_to :point_of_contact, class_name: "User", foreign_key: "point_of_contact_id"
+  belongs_to :vendor, class_name: "Vendor", foreign_key: "vendor_id"
+  has_many :contract_documents, class_name: "ContractDocument"
+
   # Enums
   has_enumeration_for :contract_type, with: ContractType, create_helpers: true
   has_enumeration_for :contract_status, with: ContractStatus, create_helpers: true
