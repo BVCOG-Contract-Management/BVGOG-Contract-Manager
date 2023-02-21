@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  rating: 1.5
+  description: MyText
+  user: one
+  vendor: one
+
+two:
+  rating: 1.5
+  description: MyText
+  user: two
+  vendor: two
