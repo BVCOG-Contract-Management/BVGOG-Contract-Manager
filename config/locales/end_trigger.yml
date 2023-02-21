@@ -1,0 +1,6 @@
+en:
+  enumerations:
+    end_trigger:
+      limited_term: 'Limited term'
+      upon_completion: 'Upon completion'
+      continuous: 'Continuous'

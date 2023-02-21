@@ -81,3 +81,5 @@ gem "rubocop-rails", "~> 2.17"
 gem "rspec", "~> 3.12"
 
 gem "sass-rails", "~> 6.0.0"
+
+gem 'enumerate_it', '~> 3.2.4'
