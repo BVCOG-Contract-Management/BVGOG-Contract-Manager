@@ -57,7 +57,7 @@ group :development, :test do
 
   gem "factory_bot_rails", "~> 6.2.0"
 
-  gem 'faker', '~> 2.19.0'
+  gem "faker", "~> 2.19.0"
 end
 
 group :development do
@@ -89,5 +89,3 @@ gem "rspec-rails", "~> 5.0"
 gem "sass-rails", "~> 6.0.0"
 
 gem "enumerate_it", "~> 3.2.4"
-
-

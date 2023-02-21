@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe VendorReview, type: :model do
-    include FactoryBot::Syntax::Methods
+  include FactoryBot::Syntax::Methods
 
   it "should not save vendor review without user" do
     vendor_review = build(:vendor_review, user: nil)
