@@ -29,6 +29,11 @@ class CreateUsers < ActiveRecord::Migration
 end
 ```
 
+To generate a model that references another model, use the `references type for a column` syntax. For example, to create a model called `Post` that references the `User` model, run the following command:
+```
+rails generate model Post title:string content:text user:references
+```
+
 ## Associations
 To create associations between models, use the `has_many`, `belongs_to`, and `has_and_belongs_to_many` methods. For example, to create a `has_many` association between the `User` and `Post` models, add the following line to the `User` model definition (in `app/models/user.rb`)):
 ```
