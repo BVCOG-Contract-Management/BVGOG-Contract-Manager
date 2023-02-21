@@ -27,7 +27,7 @@ RSpec.describe Vendor, type: :model do
     expect(vendor.vendor_reviews).to include(vendor_review_two)
   end
 
-  pending "should query all contracts for a vendor" do
+  it "should query all contracts for a vendor" do
     vendor = create(:vendor)
     contract_one = create(:contract, vendor: vendor)
     contract_two = create(:contract, vendor: vendor)

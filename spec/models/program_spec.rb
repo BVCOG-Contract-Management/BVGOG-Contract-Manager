@@ -19,7 +19,7 @@ RSpec.describe Program, type: :model do
     expect { program_two.save! }.to raise_error(ActiveRecord::RecordNotUnique)
   end
 
-  pending "should query all contracts for a program" do
+  it "should query all contracts for a program" do
     program = create(:program)
     contract_one = create(:contract, program: program)
     contract_two = create(:contract, program: program)

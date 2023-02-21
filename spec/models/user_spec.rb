@@ -42,7 +42,7 @@ RSpec.describe User, type: :model do
     expect(user.vendor_reviews).to include(vendor_review_two)
   end
 
-  pending "should query all contracts a user is the point of contact for" do
+  it "should query all contracts a user is the point of contact for" do
     user = create(:user)
     contract_one = create(:contract, point_of_contact: user)
     contract_two = create(:contract, point_of_contact: user)
