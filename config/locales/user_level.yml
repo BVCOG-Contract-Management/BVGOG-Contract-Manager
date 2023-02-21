@@ -1,0 +1,7 @@
+en:
+  enumerations:
+    user_level:
+      zero: 'Zero'
+      one: 'One'
+      two: 'Two'
+      three: 'Three'
