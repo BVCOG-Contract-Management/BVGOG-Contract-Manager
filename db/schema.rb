@@ -40,11 +40,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_21_174315) do
     t.integer "initial_term_amount"
     t.datetime "ends_at"
     t.boolean "requires_rebid"
-    t.integer "contract_type", null: false
-    t.integer "contract_status"
-    t.integer "amount_duration"
-    t.integer "initial_term_duration"
-    t.integer "end_trigger"
+    t.text "contract_type", null: false
+    t.text "contract_status"
+    t.text "amount_duration"
+    t.text "initial_term_duration"
+    t.text "end_trigger"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["entity_id"], name: "index_contracts_on_entity_id"

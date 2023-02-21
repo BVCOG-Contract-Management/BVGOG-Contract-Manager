@@ -16,11 +16,11 @@ class CreateContracts < ActiveRecord::Migration[7.0]
       t.boolean :requires_rebid
 
       # Enums
-      t.integer :contract_type, null: false
-      t.integer :contract_status
-      t.integer :amount_duration
-      t.integer :initial_term_duration
-      t.integer :end_trigger
+      t.text :contract_type, null: false
+      t.text :contract_status
+      t.text :amount_duration
+      t.text :initial_term_duration
+      t.text :end_trigger
 
       t.timestamps
     end
