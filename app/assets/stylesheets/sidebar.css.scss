@@ -1,0 +1,31 @@
+@import "main";
+
+#sidebar-column {
+  background-color: $aside-background-color;
+  width: $aside-width !important;
+}
+
+.sidebar-main{
+  @include transition(all, 0.3s, ease);
+  background-color: $aside-background-color;
+  border-right: $aside-border;
+  padding: $aside-padding !important;
+  min-height: 100vh;
+  width: 100%;
+  overflow-y: scroll;
+  border: none;
+}
+
+#sidebar-header {
+  background-color: $aside-header-background-color;
+  border-bottom: $aside-border;
+  padding: $aside-header-padding;
+  border: none;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  h3 {
+    color: $aside-header-text-color;
+  }
+}

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Bvcog</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+    
+    <% # Bulma CSS %>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+
+    <% # FontAwesome %>
+    <script src="https://kit.fontawesome.com/bf35c596df.js" crossorigin="anonymous"></script>
+
+    <% # Fonts %>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700&display=swap');
+    </style>
+  </head>
+
+  <body>
+      <div class="columns">
+        <div id="sidebar-column" class="column is-2 is-paddingless">
+          <%= render partial: "layouts/sidebar", locals: { page_list: page_list } %>
+        </div>
+        <div class="column">
+          <div class="container">
+            <div>
+              Header Bar Goes Here
+            </div>
+            <div class="mt-3">
+              <%= yield %>
+            </div>
+          </div>
+        </div>
+      </div>
+  </body>
+</html>
