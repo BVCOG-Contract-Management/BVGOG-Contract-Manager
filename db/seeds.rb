@@ -9,14 +9,11 @@
 # Seed the RottenPotatoes DB with some movies.
 
 Vendor.create!([{ name: 'Vcorp' }])
-Vendor.create!([{ name: 'Scorp' }])
-Vendor.create!([{ name: 'Bcorp' }])
 Entity.create!([{ name: 'Test Entity' }])
 User.create!([{ first_name: 'Liam', last_name: 'Berney', email: 'liamrberney@tamu.edu', level: 0 }])
 Program.create!([{ name: 'Test Program' }])
 Document.create!([{ file_name: 'Test Document' }])
-VendorReview.create!([{ user_id: 0, vendor_id: 1, rating: 5, description: 'Test Review' }])
-VendorReview.create!([{ user_id: 0, vendor_id: 2, rating: 5, description: 'Test Review' }])
+VendorReview.create!([{ user_id: 0, vendor_id: 0, rating: 5, description: 'Test Review' }])
 Contract.create!([{ title: 'Test Contract', number: '1', entity_id: 0, program_id: 0, point_of_contact_id: 0, status: 0,
                     vendor_id: 0, contract_type: 0, description: 'Test Contract Description', key_words: 'Test Key Words', amount_dollar: 10_000, amount_duration: 1 }])
 
