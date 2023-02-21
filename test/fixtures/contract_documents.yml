@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  file_name: MyText
+  full_path: MyText
+  contract: one
+
+two:
+  file_name: MyText
+  full_path: MyText
+  contract: two

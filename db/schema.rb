@@ -10,9 +10,57 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_21_172950) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_21_174315) do
   create_table "bvcog_configs", force: :cascade do |t|
     t.text "contracts_path"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "contract_documents", force: :cascade do |t|
+    t.text "file_name"
+    t.text "full_path"
+    t.integer "contract_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["contract_id"], name: "index_contract_documents_on_contract_id"
+  end
+
+  create_table "contracts", force: :cascade do |t|
+    t.text "title"
+    t.text "number"
+    t.integer "entity_id", null: false
+    t.integer "program_id", null: false
+    t.integer "point_of_contact_id", null: false
+    t.integer "vendor_id", null: false
+    t.text "decription"
+    t.text "key_words"
+    t.float "amount_dollar"
+    t.datetime "starts_at"
+    t.integer "initial_term_amount"
+    t.datetime "ends_at"
+    t.boolean "requires_rebid"
+    t.integer "contract_type"
+    t.integer "contract_status"
+    t.integer "amount_duration"
+    t.integer "initial_term_duration"
+    t.integer "end_trigger"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["entity_id"], name: "index_contracts_on_entity_id"
+    t.index ["point_of_contact_id"], name: "index_contracts_on_point_of_contact_id"
+    t.index ["program_id"], name: "index_contracts_on_program_id"
+    t.index ["vendor_id"], name: "index_contracts_on_vendor_id"
+  end
+
+  create_table "entities", force: :cascade do |t|
+    t.text "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "programs", force: :cascade do |t|
+    t.text "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -46,6 +94,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_21_172950) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "contract_documents", "contracts"
+  add_foreign_key "contracts", "entities"
+  add_foreign_key "contracts", "programs"
+  add_foreign_key "contracts", "users", column: "point_of_contact_id"
+  add_foreign_key "contracts", "vendors"
   add_foreign_key "users", "users", column: "redirect_user_id"
   add_foreign_key "vendor_reviews", "users"
   add_foreign_key "vendor_reviews", "vendors"

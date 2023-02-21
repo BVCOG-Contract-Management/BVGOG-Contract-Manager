@@ -1,0 +1,31 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyText
+  number: MyText
+  entity: one
+  program: one
+  point_of_contact: one
+  vendor: one
+  decription: MyText
+  key_words: MyText
+  amount_dollar: 1.5
+  starts_at: 2023-02-21 11:43:15
+  initial_term_amount: 1
+  ends_at: 2023-02-21 11:43:15
+  requires_rebid: false
+
+two:
+  title: MyText
+  number: MyText
+  entity: two
+  program: two
+  point_of_contact: two
+  vendor: two
+  decription: MyText
+  key_words: MyText
+  amount_dollar: 1.5
+  starts_at: 2023-02-21 11:43:15
+  initial_term_amount: 1
+  ends_at: 2023-02-21 11:43:15
+  requires_rebid: false
