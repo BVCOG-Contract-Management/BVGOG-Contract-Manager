@@ -1,11 +1,11 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  file_name: MyText
-  full_path: MyText
+  file_name: Contract1.pdf
+  full_path: /Users/steve/Documents/Contracts/Contract1.pdf
   contract: one
 
 two:
-  file_name: MyText
-  full_path: MyText
+  file_name: Contract2.pdf
+  full_path: /Users/steve/Documents/Contracts/Contract2.pdf
   contract: two

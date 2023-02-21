@@ -1,7 +1,5 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  contracts_path: MyText
+  contracts_path: ~/Documents/Contracts
 
-two:
-  contracts_path: MyText

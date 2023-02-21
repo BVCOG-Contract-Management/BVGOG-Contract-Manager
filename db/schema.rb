@@ -12,14 +12,14 @@
 
 ActiveRecord::Schema[7.0].define(version: 2023_02_21_174315) do
   create_table "bvcog_configs", force: :cascade do |t|
-    t.text "contracts_path"
+    t.text "contracts_path", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "contract_documents", force: :cascade do |t|
-    t.text "file_name"
-    t.text "full_path"
+    t.text "file_name", null: false
+    t.text "full_path", null: false
     t.integer "contract_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -27,20 +27,20 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_21_174315) do
   end
 
   create_table "contracts", force: :cascade do |t|
-    t.text "title"
+    t.text "title", null: false
     t.text "number"
     t.integer "entity_id", null: false
     t.integer "program_id", null: false
     t.integer "point_of_contact_id", null: false
     t.integer "vendor_id", null: false
-    t.text "decription"
+    t.text "description"
     t.text "key_words"
     t.float "amount_dollar"
-    t.datetime "starts_at"
+    t.datetime "starts_at", null: false
     t.integer "initial_term_amount"
     t.datetime "ends_at"
     t.boolean "requires_rebid"
-    t.integer "contract_type"
+    t.integer "contract_type", null: false
     t.integer "contract_status"
     t.integer "amount_duration"
     t.integer "initial_term_duration"
@@ -54,23 +54,23 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_21_174315) do
   end
 
   create_table "entities", force: :cascade do |t|
-    t.text "name"
+    t.text "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "programs", force: :cascade do |t|
-    t.text "name"
+    t.text "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|
-    t.text "first_name"
-    t.text "last_name"
-    t.text "email"
-    t.boolean "is_program_manager"
-    t.boolean "is_active"
+    t.text "first_name", null: false
+    t.text "last_name", null: false
+    t.text "email", null: false
+    t.boolean "is_program_manager", default: false, null: false
+    t.boolean "is_active", default: true, null: false
     t.integer "redirect_user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -78,7 +78,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_21_174315) do
   end
 
   create_table "vendor_reviews", force: :cascade do |t|
-    t.float "rating"
+    t.float "rating", null: false
     t.text "description"
     t.integer "user_id", null: false
     t.integer "vendor_id", null: false
@@ -89,7 +89,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_21_174315) do
   end
 
   create_table "vendors", force: :cascade do |t|
-    t.text "name"
+    t.text "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

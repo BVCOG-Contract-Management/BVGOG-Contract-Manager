@@ -1,8 +1,8 @@
 class CreateContractDocuments < ActiveRecord::Migration[7.0]
   def change
     create_table :contract_documents do |t|
-      t.text :file_name
-      t.text :full_path
+      t.text :file_name, null: false
+      t.text :full_path, null: false
       
       t.references :contract, null: false, foreign_key: { to_table: :contracts }
 

@@ -1,31 +1,39 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  title: MyText
-  number: MyText
+  title: Contract1
+  number: A123
   entity: one
   program: one
   point_of_contact: one
   vendor: one
-  decription: MyText
-  key_words: MyText
-  amount_dollar: 1.5
+  description: This is a test contract
+  key_words: test,contract,one
+  amount_dollar: 1500
   starts_at: 2023-02-21 11:43:15
   initial_term_amount: 1
   ends_at: 2023-02-21 11:43:15
   requires_rebid: false
+  contract_type: 1
+  contract_status: 1
+  initial_term_duration: 1
+  end_trigger: 1
 
 two:
-  title: MyText
-  number: MyText
-  entity: two
-  program: two
-  point_of_contact: two
-  vendor: two
-  decription: MyText
-  key_words: MyText
-  amount_dollar: 1.5
+  title: Contract2
+  number: A124
+  entity: one
+  program: one
+  point_of_contact: one
+  vendor: one
+  description: This is a test contract
+  key_words: test,contract,two
+  amount_dollar: 1500
   starts_at: 2023-02-21 11:43:15
   initial_term_amount: 1
   ends_at: 2023-02-21 11:43:15
   requires_rebid: false
+  contract_type: 1
+  contract_status: 1
+  initial_term_duration: 1
+  end_trigger: 1

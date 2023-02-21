@@ -1,13 +1,13 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  rating: 1.5
-  description: MyText
+  rating: 4.2
+  description: This is a test review for vendor one
   user: one
   vendor: one
 
 two:
-  rating: 1.5
-  description: MyText
-  user: two
+  rating: 3.5
+  description: This is a test review for vendor two
+  user: one
   vendor: two
