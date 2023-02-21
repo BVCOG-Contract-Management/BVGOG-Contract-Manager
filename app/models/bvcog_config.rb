@@ -1,0 +1,2 @@
+class BvcogConfig < ApplicationRecord
+end
