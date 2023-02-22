@@ -1,8 +1,11 @@
 class ContractsController < ApplicationController
+  
   before_action :set_contract, only: %i[ show edit update destroy ]
 
   # GET /contracts or /contracts.json
   def index
+    add_breadcrumb "Contracts", contracts_path
+
     @contracts = Contract.all
     # Order by "sort" parameter in the query string
     if params[:sort]
@@ -12,15 +15,23 @@ class ContractsController < ApplicationController
 
   # GET /contracts/1 or /contracts/1.json
   def show
+    add_breadcrumb "Contracts", contracts_path
+    add_breadcrumb @contract.title, contract_path(@contract)
   end
 
   # GET /contracts/new
   def new
+    add_breadcrumb "Contracts", contracts_path
+    add_breadcrumb "New Contract", new_contract_path
+
     @contract = Contract.new
   end
 
   # GET /contracts/1/edit
   def edit
+    add_breadcrumb "Contracts", contracts_path
+    add_breadcrumb @contract.title, contract_path(@contract)
+    add_breadcrumb "Edit", edit_contract_path(@contract)
   end
 
   # POST /contracts or /contracts.json

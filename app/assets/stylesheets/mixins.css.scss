@@ -5,3 +5,16 @@
   -o-transition: $property $duration $timing;
   transition: $property $duration $timing;
 }
+
+@mixin link-hover ($color: #000, $hover-color: gray) {
+  a {
+    @include transition(all, 0.3s, ease);
+    color: $color;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: none;
+      color: $hover-color;
+    }
+  }
+}

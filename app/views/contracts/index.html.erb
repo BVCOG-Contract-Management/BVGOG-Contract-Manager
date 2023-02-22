@@ -4,48 +4,68 @@
   View Contracts
 <% end %>
 
-<div id="contracts">
-  <table class="table">
-    <thead>
-      <tr>
-        <th>
-          <%= link_to "Title", :sort => "title" %>
-        </th>
-        <th>
-          <%= link_to "Number", :sort => "number" %>
-        </th>
-        <th>
-          <%= link_to "Point of Contact", :sort => "point_of_contact" %>
-        </th>
-        <th>
-          <%= link_to "Vendor", :sort => "vendor" %>
-        </th>
-        <th>
-          <%= link_to "Start Date", :sort => "starts_at" %>
-        </th>
-        <th>
-          <%= link_to "End Date", :sort => "ends_at" %>
-        </th>
-        <th>
-          <%= link_to "Amount", :sort => "amount_dollar" %>
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @contracts.each do |contract| %>
-        <tr>
-          <td>
-            <%= link_to contract.title, contract %>
-          </td>
-          <td><%= contract.number %></td>
-          <td><%= contract.point_of_contact.first_name %> <%= contract.point_of_contact.last_name %></td>
-          <td><%= contract.vendor.name %></td>
-          <td><%= contract.starts_at %></td>
-          <td><%= contract.ends_at %></td>
-          <td><%= number_to_currency(contract.amount_dollar) %> per <%= contract.amount_duration %></td>
-        </tr>
-      <% end %>
-    </tbody>
-</div>
 
-<%= link_to "New contract", new_contract_path %>
+<div id="contracts">
+  <%= link_to "New contract", new_contract_path, class: "button is-primary" %>
+  <div class="card">
+    <header class="card-header">
+      <div class="columns is-justify-content-space-between">
+        <div class="column is-6">
+          <p class="card-header-title">
+            <span class="icon">
+              <i class="fa-solid fa-file-contract"></i>
+            </span>
+            Contracts
+          </p>
+        </div>
+        <div class="column is-6">
+          <input class="input" type="text" placeholder="Search by title or point of contact">
+        </div>
+      </div>
+      
+    </header>
+    <div class="card-content is-paddingless">
+      <table class="table table is-striped is-hoverable is-fullwidth">
+        <thead>
+          <tr>
+            <th>
+              <%= link_to "Title", :sort => "title" %>
+            </th>
+            <th>
+              <%= link_to "Number", :sort => "number" %>
+            </th>
+            <th>
+              <%= link_to "Point of Contact", :sort => "point_of_contact" %>
+            </th>
+            <th>
+              <%= link_to "Vendor", :sort => "vendor" %>
+            </th>
+            <th>
+              <%= link_to "Start Date", :sort => "starts_at" %>
+            </th>
+            <th>
+              <%= link_to "End Date", :sort => "ends_at" %>
+            </th>
+            <th>
+              <%= link_to "Amount", :sort => "amount_dollar" %>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @contracts.each do |contract| %>
+            <tr>
+              <td>
+                <%= link_to contract.title, contract %>
+              </td>
+              <td><%= contract.number %></td>
+              <td><%= contract.point_of_contact.first_name %> <%= contract.point_of_contact.last_name %></td>
+              <td><%= contract.vendor.name %></td>
+              <td><%= contract.starts_at %></td>
+              <td><%= contract.ends_at %></td>
+              <td><%= number_to_currency(contract.amount_dollar) %> per <%= contract.amount_duration %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+</div>
