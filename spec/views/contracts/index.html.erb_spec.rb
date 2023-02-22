@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe "contracts/index", type: :view do
   include FactoryBot::Syntax::Methods
@@ -6,7 +6,7 @@ RSpec.describe "contracts/index", type: :view do
   before(:each) do
     assign(:contracts, [
       create(:contract),
-      create(:contract)
+      create(:contract),
     ])
   end
 

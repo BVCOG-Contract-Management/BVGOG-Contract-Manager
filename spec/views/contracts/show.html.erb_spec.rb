@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe "contracts/show", type: :view do
   include FactoryBot::Syntax::Methods

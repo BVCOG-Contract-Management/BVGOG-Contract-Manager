@@ -8,13 +8,27 @@
   <table class="table">
     <thead>
       <tr>
-        <th>Title</th>
-        <th>Number</th>
-        <th>Point of Contact</th>
-        <th>Vendor</th>
-        <th>Start Date</th>
-        <th>End Date</th>
-        <th>Amount</th>
+        <th>
+          <%= link_to "Title", :sort => "title" %>
+        </th>
+        <th>
+          <%= link_to "Number", :sort => "number" %>
+        </th>
+        <th>
+          <%= link_to "Point of Contact", :sort => "point_of_contact" %>
+        </th>
+        <th>
+          <%= link_to "Vendor", :sort => "vendor" %>
+        </th>
+        <th>
+          <%= link_to "Start Date", :sort => "starts_at" %>
+        </th>
+        <th>
+          <%= link_to "End Date", :sort => "ends_at" %>
+        </th>
+        <th>
+          <%= link_to "Amount", :sort => "amount_dollar" %>
+        </th>
       </tr>
     </thead>
     <tbody>

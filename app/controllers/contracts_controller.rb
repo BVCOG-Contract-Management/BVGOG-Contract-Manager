@@ -4,6 +4,10 @@ class ContractsController < ApplicationController
   # GET /contracts or /contracts.json
   def index
     @contracts = Contract.all
+    # Order by "sort" parameter in the query string
+    if params[:sort]
+      sort_contracts
+    end
   end
 
   # GET /contracts/1 or /contracts/1.json
@@ -58,13 +62,45 @@ class ContractsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_contract
-      @contract = Contract.find(params[:id])
+
+  # Use callbacks to share common setup or constraints between actions.
+  def set_contract
+    @contract = Contract.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def contract_params
+    params.fetch(:contract, {})
+  end
+
+  def sort_contracts
+    # Sorts by the query string parameter "sort"
+    # Since some columns are combinations or associations, we need to handle them separately
+    asc = session[:contracts_sort_by] == params[:sort] && session[:contracts_sort_order] == "asc" ? "desc" : "asc"
+    @contracts = case params[:sort]
+      when "point_of_contact"
+        # Sort by the name of the point of contact
+        Contract.joins(:point_of_contact).order("users.last_name #{asc}").order("users.first_name #{asc}")
+      when "vendor"
+        Contract.joins(:vendor).order("vendors.name #{asc}")
+      else
+        begin
+          # Sort by the specified column and direction
+          Contract.order(params[:sort] => asc.to_sym)
+        rescue ActiveRecord::StatementInvalid
+          # Otherwise, sort by title
+          # TODO: should we reconsider this?
+          Contract.order(title: :asc)
+        end
+      end
+
+    # Reverses the order if the user clicked the same column again
+    if params[:sort] == @sort_by
+      @contracts = @contracts.reverse_order
     end
 
-    # Only allow a list of trusted parameters through.
-    def contract_params
-      params.fetch(:contract, {})
-    end
+    # Stores the current sort order
+    session[:contracts_sort_by] = params[:sort]
+    session[:contracts_sort_order] = asc
+  end
 end

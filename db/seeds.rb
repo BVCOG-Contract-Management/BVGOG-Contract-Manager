@@ -21,37 +21,37 @@ program = FactoryBot.create(:program, name: "Program 1")
 vendor = FactoryBot.create(:vendor, name: "Vendor 1")
 
 # Create multiple contracts
-for i in 1..5 do
-    contract = FactoryBot.create(
-        :contract,
-        title: "Contract #{i}",
-        entity: entity,
-        program: program,
-        point_of_contact: user,
-        vendor: vendor,
-    )
+for i in 1..5
+  contract = FactoryBot.create(
+    :contract,
+    title: "Contract #{i}",
+    entity: entity,
+    program: program,
+    point_of_contact: user,
+    vendor: vendor,
+  )
 end
 
 # Create contract documents
 contract_document = FactoryBot.create(
-    :contract_document,
-    contract: contract,
-    file_name: "contract_doc1.pdf",
-    full_path: File.join(Rails.root, "~", "data", "contracts", "contract_document.pdf"),
+  :contract_document,
+  contract: contract,
+  file_name: "contract_doc1.pdf",
+  full_path: File.join(Rails.root, "~", "data", "contracts", "contract_document.pdf"),
 )
 
 contract_document = FactoryBot.create(
-    :contract_document,
-    contract: contract,
-    file_name: "contract_doc2.pdf",
-    full_path: File.join(Rails.root, "~", "data", "contracts", "contract_document.pdf"),
+  :contract_document,
+  contract: contract,
+  file_name: "contract_doc2.pdf",
+  full_path: File.join(Rails.root, "~", "data", "contracts", "contract_document.pdf"),
 )
 
 # Create vendor reviews
 vendor_review = FactoryBot.create(
-    :vendor_review,
-    vendor: vendor,
-    user: user,
-    rating: 5,
-    description: "This is a vendor review.",
+  :vendor_review,
+  vendor: vendor,
+  user: user,
+  rating: 5,
+  description: "This is a vendor review.",
 )
