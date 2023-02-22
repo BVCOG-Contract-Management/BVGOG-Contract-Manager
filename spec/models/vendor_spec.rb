@@ -5,7 +5,7 @@ RSpec.describe Vendor, type: :model do
 
   it "should not save vendor without name" do
     vendor = build(:vendor, name: nil)
-    expect { vendor.save! }.to raise_error(ActiveRecord::NotNullViolation)
+    expect { vendor.save! }.to raise_error(ActiveRecord::RecordInvalid)
   end
 
   it "should save vendor with name" do

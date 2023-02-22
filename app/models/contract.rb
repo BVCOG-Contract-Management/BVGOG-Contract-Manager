@@ -6,6 +6,13 @@ class Contract < ApplicationRecord
   validates :vendor_id, presence: true
   validates :contract_type, presence: true
   validates :starts_at, presence: true
+  validates :amount_dollar, numericality: { greater_than_or_equal_to: 0 }
+  validates :initial_term_amount, numericality: { greater_than_or_equal_to: 0 }
+  validates :contract_type, inclusion: { in: ContractType.list }
+  validates :contract_status, inclusion: { in: ContractStatus.list }
+  validates :amount_duration, inclusion: { in: TimePeriod.list }
+  validates :initial_term_duration, inclusion: { in: TimePeriod.list }
+  validates :end_trigger, inclusion: { in: EndTrigger.list }
 
   belongs_to :entity, class_name: "Entity", foreign_key: "entity_id"
   belongs_to :program, class_name: "Program", foreign_key: "program_id"

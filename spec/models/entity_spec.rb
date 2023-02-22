@@ -5,12 +5,17 @@ RSpec.describe Entity, type: :model do
 
   it "should not save entity without name" do
     entity = build(:entity, name: nil)
-    expect { entity.save! }.to raise_error(ActiveRecord::NotNullViolation)
+    expect { entity.save! }.to raise_error(ActiveRecord::RecordInvalid)
   end
 
   it "should save entity with name" do
     entity = build(:entity, name: "New Vendor")
     expect { entity.save! }.not_to raise_error
+  end
+
+  it "should not save entity with name longer than 255 characters" do
+    entity = build(:entity, name: "a" * 256)
+    expect { entity.save! }.to raise_error(ActiveRecord::RecordInvalid)
   end
 
   it "should not save entity with duplicate name" do

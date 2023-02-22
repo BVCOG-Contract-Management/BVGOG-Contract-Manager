@@ -43,6 +43,11 @@ RSpec.describe Contract, type: :model do
         expect { contract.save! }.to raise_error(ActiveRecord::RecordInvalid)
     end
 
+    it "should not save a model with a title longer than 255 characters" do
+        contract = build(:contract, title: "a" * 256)
+        expect { contract.save! }.to raise_error(ActiveRecord::RecordInvalid)
+    end
+
     it "should query all documents for a contract" do
         contract = create(:contract)
         contract_document = create(:contract_document, contract: contract)

@@ -15,7 +15,7 @@ RSpec.describe VendorReview, type: :model do
 
   it "should not save vendor review without rating" do
     vendor_review = build(:vendor_review, rating: nil)
-    expect { vendor_review.save! }.to raise_error(ActiveRecord::NotNullViolation)
+    expect { vendor_review.save! }.to raise_error(ActiveRecord::RecordInvalid)
   end
 
   it "should save vendor review without description" do

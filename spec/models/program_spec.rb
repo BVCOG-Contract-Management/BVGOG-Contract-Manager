@@ -5,12 +5,17 @@ RSpec.describe Program, type: :model do
 
   it "should not save program without name" do
     program = build(:program, name: nil)
-    expect { program.save! }.to raise_error(ActiveRecord::NotNullViolation)
+    expect { program.save! }.to raise_error(ActiveRecord::RecordInvalid)
   end
 
   it "should save program with name" do
     program = build(:program, name: "New Vendor")
     expect { program.save! }.not_to raise_error
+  end
+
+  it "should not save program with name longer than 255 characters" do
+    program = build(:program, name: "a" * 256)
+    expect { program.save! }.to raise_error(ActiveRecord::RecordInvalid)
   end
 
   it "should not save program with duplicate name" do

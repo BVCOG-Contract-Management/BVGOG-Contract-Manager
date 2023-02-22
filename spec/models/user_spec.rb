@@ -5,27 +5,57 @@ RSpec.describe User, type: :model do
 
   it "should not save user without email" do
     user = build(:user, email: nil)
-    expect { user.save! }.to raise_error(ActiveRecord::NotNullViolation)
+    expect { user.save! }.to raise_error(ActiveRecord::RecordInvalid)
   end
 
   it "should not save user without password" do
     user = build(:user, password: nil)
-    expect { user.save! }.to raise_error(ActiveRecord::NotNullViolation)
+    expect { user.save! }.to raise_error(ActiveRecord::RecordInvalid)
   end
 
   it "should not save user without first name" do
     user = build(:user, first_name: nil)
-    expect { user.save! }.to raise_error(ActiveRecord::NotNullViolation)
+    expect { user.save! }.to raise_error(ActiveRecord::RecordInvalid)
   end
 
   it "should not save user without last name" do
     user = build(:user, last_name: nil)
-    expect { user.save! }.to raise_error(ActiveRecord::NotNullViolation)
+    expect { user.save! }.to raise_error(ActiveRecord::RecordInvalid)
   end
 
   it "should not save user without level" do
     user = build(:user, level: nil)
-    expect { user.save! }.to raise_error(ActiveRecord::NotNullViolation)
+    expect { user.save! }.to raise_error(ActiveRecord::RecordInvalid)
+  end
+
+  it "should not save user with invalid level" do
+    user = build(:user, level: "invalid")
+    expect { user.save! }.to raise_error(ActiveRecord::RecordInvalid)
+  end
+
+  it "should not save user with email longer than 255 characters" do
+    user = build(:user, email: "a" * 256)
+    expect { user.save! }.to raise_error(ActiveRecord::RecordInvalid)
+  end
+
+  it "should not save user with first name longer than 255 characters" do
+    user = build(:user, first_name: "a" * 256)
+    expect { user.save! }.to raise_error(ActiveRecord::RecordInvalid)
+  end
+
+  it "should not save user with last name longer than 255 characters" do
+    user = build(:user, last_name: "a" * 256)
+    expect { user.save! }.to raise_error(ActiveRecord::RecordInvalid)
+  end
+
+  it "should not save user with password shorter than 8 characters" do
+    user = build(:user, password: "a" * 7)
+    expect { user.save! }.to raise_error(ActiveRecord::RecordInvalid)
+  end
+
+  it "should not save user with password longer than 255 characters" do
+    user = build(:user, password: "a" * 256)
+    expect { user.save! }.to raise_error(ActiveRecord::RecordInvalid)
   end
 
   it "should save user with email, password, first name, and last name" do
