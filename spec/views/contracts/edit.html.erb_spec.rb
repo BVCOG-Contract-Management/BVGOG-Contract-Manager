@@ -1,8 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe "contracts/edit", type: :view do
+  include FactoryBot::Syntax::Methods
+
   before(:each) do
-    @contract = assign(:contract, Contract.create!())
+    @contract = assign(:contract, create(:contract))
   end
 
   it "renders the edit contract form" do

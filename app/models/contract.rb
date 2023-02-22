@@ -6,12 +6,11 @@ class Contract < ApplicationRecord
   validates :program_id, presence: true
   validates :point_of_contact_id, presence: true
   validates :vendor_id, presence: true
-  validates :contract_type, presence: true
   validates :starts_at, presence: true
   validates :ends_at, comparison: { greater_than_or_equal_to: :starts_at }
   validates :amount_dollar, numericality: { greater_than_or_equal_to: 0 }
   validates :initial_term_amount, numericality: { greater_than_or_equal_to: 0 }
-  validates :contract_type, inclusion: { in: ContractType.list }
+  validates :contract_type, presence:true, inclusion: { in: ContractType.list }
   validates :contract_status, inclusion: { in: ContractStatus.list }
   validates :amount_duration, inclusion: { in: TimePeriod.list }
   validates :initial_term_duration, inclusion: { in: TimePeriod.list }

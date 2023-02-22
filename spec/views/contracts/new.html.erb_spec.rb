@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe "contracts/new", type: :view do
+  include FactoryBot::Syntax::Methods
+  
   before(:each) do
     assign(:contract, Contract.new())
   end
