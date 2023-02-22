@@ -5,6 +5,34 @@
 <% end %>
 
 <div id="contracts">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Number</th>
+        <th>Point of Contact</th>
+        <th>Vendor</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @contracts.each do |contract| %>
+        <tr>
+          <td><%= contract.title %></td>
+          <td><%= contract.number %></td>
+          <td><%= contract.point_of_contact.name %></td>
+          <td><%= contract.vendor.name %></td>
+          <td><%= contract.start_date %></td>
+          <td><%= contract.end_date %></td>
+          <td>$<%= contract.amount_dollar %> per <%= contract.amount_duration %></td>
+        </tr>
+      <% end %>
+    </tbody>
+        
+
+
   <% @contracts.each do |contract| %>
     <%= render contract %>
     <p>
