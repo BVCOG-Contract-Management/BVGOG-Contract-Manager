@@ -19,7 +19,9 @@ FactoryBot.define do
         requires_rebid { false }
 
         starts_at { Faker::Date.between(from: 2.years.ago, to: Date.today) }
-        ends_at { Faker::Date.between(from: 2.years.ago, to: Date.today) }
+
+        # Set date very far in the future to avoid validation errors
+        ends_at { Faker::Date.between(from: 20.years.from_now, to: 30.years.from_now) }
 
         contract_type { ContractType::CONTRACT }
         contract_status { ContractStatus::IN_PROGRESS }

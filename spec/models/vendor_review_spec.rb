@@ -18,6 +18,11 @@ RSpec.describe VendorReview, type: :model do
     expect { vendor_review.save! }.to raise_error(ActiveRecord::RecordInvalid)
   end
 
+  it "should not save vendor review with invalid rating" do
+    vendor_review = build(:vendor_review, rating: 6)
+    expect { vendor_review.save! }.to raise_error(ActiveRecord::RecordInvalid)
+  end
+
   it "should save vendor review without description" do
     vendor_review = build(:vendor_review, description: nil)
     expect { vendor_review.save! }.not_to raise_error
