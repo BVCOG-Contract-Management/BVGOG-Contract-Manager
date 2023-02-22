@@ -2,10 +2,12 @@
 
 FactoryBot.define do
     factory :contract do
-        entity
-        program
-        vendor
+        association :entity, factory: :entity
+        association :program, factory: :program
+        association :vendor, factory: :vendor
         association :point_of_contact, factory: :user
+
+        id { Faker::Number.positive }
         title { Faker::Lorem.sentence }
         description { Faker::Lorem.paragraph }
         key_words { Faker::Lorem.words }

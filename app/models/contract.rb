@@ -1,4 +1,12 @@
 class Contract < ApplicationRecord
+  validates :title, presence: true, length: { maximum: 255 }
+  validates :entity_id, presence: true
+  validates :program_id, presence: true
+  validates :point_of_contact_id, presence: true
+  validates :vendor_id, presence: true
+  validates :contract_type, presence: true
+  validates :starts_at, presence: true
+
   belongs_to :entity, class_name: "Entity", foreign_key: "entity_id"
   belongs_to :program, class_name: "Program", foreign_key: "program_id"
   belongs_to :point_of_contact, class_name: "User", foreign_key: "point_of_contact_id"

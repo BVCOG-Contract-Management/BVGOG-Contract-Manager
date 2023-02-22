@@ -10,9 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_21_174315) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_21_175315) do
   create_table "bvcog_configs", force: :cascade do |t|
     t.text "contracts_path", null: false
+    t.text "reports_path", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

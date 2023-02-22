@@ -2,8 +2,10 @@
 
 FactoryBot.define do
   factory :vendor_review do
-    vendor
-    user
+    association :vendor, factory: :vendor
+    association :user, factory: :user
+
+    id { Faker::Number.positive }
     rating { rand(1..5) }
     description { Faker::Lorem.paragraph }
   end

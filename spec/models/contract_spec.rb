@@ -30,17 +30,17 @@ RSpec.describe Contract, type: :model do
 
     it "should not save contract without title" do
         contract = build(:contract, title: nil)
-        expect { contract.save! }.to raise_error(ActiveRecord::NotNullViolation)
+        expect { contract.save! }.to raise_error(ActiveRecord::RecordInvalid)
     end
 
     it "should not save contract without starts_at" do
         contract = build(:contract, starts_at: nil)
-        expect { contract.save! }.to raise_error(ActiveRecord::NotNullViolation)
+        expect { contract.save! }.to raise_error(ActiveRecord::RecordInvalid)
     end
 
     it "should not save contract without contract_type" do
         contract = build(:contract, contract_type: nil)
-        expect { contract.save! }.to raise_error(ActiveRecord::NotNullViolation)
+        expect { contract.save! }.to raise_error(ActiveRecord::RecordInvalid)
     end
 
     it "should query all documents for a contract" do
