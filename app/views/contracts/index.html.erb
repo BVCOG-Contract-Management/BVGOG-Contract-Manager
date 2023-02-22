@@ -20,25 +20,18 @@
     <tbody>
       <% @contracts.each do |contract| %>
         <tr>
-          <td><%= contract.title %></td>
+          <td>
+            <%= link_to contract.title, contract %>
+          </td>
           <td><%= contract.number %></td>
-          <td><%= contract.point_of_contact.name %></td>
+          <td><%= contract.point_of_contact.first_name %> <%= contract.point_of_contact.last_name %></td>
           <td><%= contract.vendor.name %></td>
-          <td><%= contract.start_date %></td>
-          <td><%= contract.end_date %></td>
-          <td>$<%= contract.amount_dollar %> per <%= contract.amount_duration %></td>
+          <td><%= contract.starts_at %></td>
+          <td><%= contract.ends_at %></td>
+          <td><%= number_to_currency(contract.amount_dollar) %> per <%= contract.amount_duration %></td>
         </tr>
       <% end %>
     </tbody>
-        
-
-
-  <% @contracts.each do |contract| %>
-    <%= render contract %>
-    <p>
-      <%= link_to "Show this contract", contract %>
-    </p>
-  <% end %>
 </div>
 
 <%= link_to "New contract", new_contract_path %>

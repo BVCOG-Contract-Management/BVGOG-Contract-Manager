@@ -20,15 +20,17 @@ program = FactoryBot.create(:program, name: "Program 1")
 # Create a vendor
 vendor = FactoryBot.create(:vendor, name: "Vendor 1")
 
-# Create a contract
-contract = FactoryBot.create(
-    :contract,
-    title: "Contract 1",
-    entity: entity,
-    program: program,
-    vendor: vendor,
-    point_of_contact: user,
-)
+# Create multiple contracts
+for i in 1..5 do
+    contract = FactoryBot.create(
+        :contract,
+        title: "Contract #{i}",
+        entity: entity,
+        program: program,
+        point_of_contact: user,
+        vendor: vendor,
+    )
+end
 
 # Create contract documents
 contract_document = FactoryBot.create(
