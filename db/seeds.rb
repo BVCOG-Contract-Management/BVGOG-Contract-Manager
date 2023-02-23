@@ -10,7 +10,7 @@ require "factory_bot_rails"
 
 # Create users
 for i in 1..5
-  FactoryBot.create(:user)
+  FactoryBot.create(:user, id: i)
 end
 
 # Create entities
@@ -25,6 +25,7 @@ end
 for i in 1..5
   FactoryBot.create(
     :program,
+    id: i,
     name: "Program #{i}",
   )
 end
@@ -33,6 +34,7 @@ end
 for i in 1..5
   FactoryBot.create(
     :vendor,
+    id: i,
     name: "Vendor #{i}",
   )
 end
@@ -42,6 +44,7 @@ end
 for i in 1..50
   FactoryBot.create(
     :contract,
+    id: i,
     title: "Contract #{i}",
     entity: Entity.all.sample,
     program: Program.all.sample,
@@ -51,23 +54,27 @@ for i in 1..50
 end
 
 # Create contract documents
-for i in 1..5
+for i in 1..500
   FactoryBot.create(
     :contract_document,
+    id: i,
     contract: Contract.all.sample,
   )
 end
 
-# Create vendor reviews
-for i in 1..5
-    # If a null constraint is violated, retry
-    begin
-        vendor_review = FactoryBot.create(
-            :vendor_review,
-            user: User.all.sample,
-            vendor: Vendor.all.sample,  
-        )   
-    rescue ActiveRecord::NotNullViolation
-        retry
-    end
+# Create vendor reviews manually since they have a (user, vendor) unique index
+used_user_vendor_combos = []
+for i in 1..10
+  user = User.all.sample
+  vendor = Vendor.all.sample
+  if used_user_vendor_combos.include?([user.id, vendor.id])
+    redo
+  end
+  FactoryBot.create(
+    :vendor_review,
+    id: i,
+    user: user,
+    vendor: vendor,
+  )
+  used_user_vendor_combos << [user.id, vendor.id]
 end
