@@ -1,9 +1,13 @@
+
 <div id="contract-show">
     <div class="columns is-desktop">
         <div class="column is-6">
             <div class="card">
                 <header class="card-header">
                     <p class="card-header-title">
+                        <span class="icon">
+                            <i class="fas fa-list"></i>
+                        </span>
                         Contract Details
                     </p>
                 </header>
@@ -63,7 +67,7 @@
                 </div>
                 <footer class="card-footer">
                     <%= link_to "Edit this contract", edit_contract_path(@contract), class: "card-footer-item" %>
-                    <%= link_to edit_contract_path(@contract), class: "card-footer-item" do %>
+                    <%= link_to contract_path(@contract, params: { contract: { contract_status: contract_opposite_status(@contract) } }), data: {"turbo-method": :put}, class: "card-footer-item", id: "card-change-status" do %>
                         <span>
                             <% if @contract.contract_status == ContractStatus::IN_PROGRESS %>
                                 <span class="icon">
@@ -81,59 +85,65 @@
             </div>
         </div>
         <div class="column is-6">
-        <div class="column is-12 is-paddingless">
-            <div class="card">
-                <header class="card-header">
-                    <p class="card-header-title">
-                        Description
-                    </p>
-                </header>
-                <div class="card-content is-paddingless">
-                    <table class="table is-striped is-hoverable is-fullwidth">
-                        <tbody>
-                            <tr>
-                                <td><strong>Key Words:</strong></td>
-                                <td><%= @contract.key_words %></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Description:</strong></td>
-                                <td><%= @contract.description %></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <div class="column is-12 is-paddingless">
-            <div class="card">
-                <header class="card-header">
-                    <p class="card-header-title">
-                        Contract Files
-                    </p>
-                </header>
-                <div class="card-content is-paddingless">
-                    <table class="table is-striped is-hoverable is-fullwidth">
-                        <tbody>
-                            <% @contract.contract_documents.each do |contract_doc| %>
+            <div class="column is-12 is-paddingless">
+                <div class="card">
+                    <header class="card-header">
+                        <p class="card-header-title">
+                            <span class="icon">
+                                <i class="fas fa-info-circle"></i>
+                            </span>
+                            Description
+                        </p>
+                    </header>
+                    <div class="card-content is-paddingless">
+                        <table class="table is-striped is-hoverable is-fullwidth">
+                            <tbody>
                                 <tr>
-                                    <td>
-                                        <%= file_type_icon(contract_doc.file_name) %>
-                                        <strong><%= contract_doc.file_name %></strong>
-                                    </td>
-                                    <td class="download-file-button">
-                                    <%# TODO: fix this to work through downloads controller %>
-                                        <%= link_to contract_doc.full_path do %>
-                                            <span class="icon">
-                                                <i class="fas fa-download"></i>
-                                            </span>
-                                        <% end %>
-                                    </td>
+                                    <td><strong>Key Words:</strong></td>
+                                    <td><%= @contract.key_words %></td>
                                 </tr>
-                            <% end %>
-                        </tbody>
-                    </table>
+                                <tr>
+                                    <td><strong>Description:</strong></td>
+                                    <td><%= @contract.description %></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
+            <div class="column is-12 is-paddingless">
+                <div class="card">
+                    <header class="card-header">
+                        <p class="card-header-title">
+                            <span class="icon">
+                                <i class="fas fa-file"></i>
+                            </span>
+                            Contract Files
+                        </p>
+                    </header>
+                    <div class="card-content is-paddingless">
+                        <table class="table is-striped is-hoverable is-fullwidth">
+                            <tbody>
+                                <% @contract.contract_documents.each do |contract_doc| %>
+                                    <tr>
+                                        <td>
+                                            <%= file_type_icon(contract_doc.file_name) %>
+                                            <strong><%= contract_doc.file_name %></strong>
+                                        </td>
+                                        <td class="download-file-button">
+                                        <%# TODO: fix this to work through downloads controller %>
+                                            <%= link_to contract_doc.full_path do %>
+                                                <span class="icon">
+                                                    <i class="fas fa-download"></i>
+                                                </span>
+                                            <% end %>
+                                        </td>
+                                    </tr>
+                                <% end %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
 </div>

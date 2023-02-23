@@ -48,10 +48,13 @@ class ContractsController < ApplicationController
   # PATCH/PUT /contracts/1 or /contracts/1.json
   def update
     respond_to do |format|
+      puts contract_params
       if @contract.update(contract_params)
+        puts "Contract updated successfully"
         format.html { redirect_to contract_url(@contract), notice: "Contract was successfully updated." }
         format.json { render :show, status: :ok, location: @contract }
       else
+        puts @contract.errors.full_messages
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @contract.errors, status: :unprocessable_entity }
       end
@@ -77,7 +80,8 @@ class ContractsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def contract_params
-    params.fetch(:contract, {})
+    allowed = [:title, :description, :key_words, :start_date, :end_date, :contract_status, :entity_id, :program_id, :point_of_contact_id, :vendor_id]
+    params.require(:contract).permit(allowed)
   end
 
   def sort_contracts
