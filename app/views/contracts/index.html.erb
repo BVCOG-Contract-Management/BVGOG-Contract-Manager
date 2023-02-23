@@ -6,7 +6,6 @@
 
 
 <div id="contracts">
-  <%= link_to "New contract", new_contract_path, class: "button is-primary" %>
   <% if @contracts.empty? %>
   <%# TODO: replace with a reusable placeholder for empty sets %>
     <p>
@@ -16,7 +15,7 @@
   <div class="card">
     <header class="card-header">
       <div class="columns is-justify-content-space-between">
-        <div class="column is-6">
+        <div class="column is-7">
           <p class="card-header-title">
             <span class="icon">
               <i class="fa-solid fa-file-contract"></i>
@@ -24,8 +23,11 @@
             Contracts
           </p>
         </div>
-        <div class="column is-6">
-          <input class="input" type="text" placeholder="Search by title or point of contact">
+        <div id="contracts-table-header-inputs" class="column is-5">
+          <div>
+            <input class="input" type="text" placeholder="Search by title or point of contact">
+            <%= link_to "New contract", new_contract_path, class: "button is-primary" %>
+          </div>
         </div>
       </div>
       
@@ -69,8 +71,8 @@
               <td><%= contract.number %></td>
               <td><%= contract.point_of_contact.first_name %> <%= contract.point_of_contact.last_name %></td>
               <td><%= contract.vendor.name %></td>
-              <td><%= contract.starts_at %></td>
-              <td><%= contract.ends_at %></td>
+              <td><%= contract.starts_at.strftime('%B %d, %Y') %></td>
+              <td><%= contract.ends_at.strftime('%B %d, %Y') %></td>
               <td><%= number_to_currency(contract.amount_dollar) %> per <%= contract.amount_duration %></td>
               <td><%= contract_status_icon(contract) %></td>
             </tr>
@@ -78,6 +80,9 @@
         </tbody>
       </table>
     </div>
+    <footer class="card-footer">
+      <%= paginate @contracts %>
+    </footer>
 </div>
 <% end %>
 </div>

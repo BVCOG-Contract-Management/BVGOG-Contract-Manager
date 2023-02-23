@@ -39,7 +39,7 @@ end
 
 
 # Create multiple contracts
-for i in 1..5
+for i in 1..50
   FactoryBot.create(
     :contract,
     title: "Contract #{i}",

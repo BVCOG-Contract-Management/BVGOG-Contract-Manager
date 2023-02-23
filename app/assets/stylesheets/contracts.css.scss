@@ -23,11 +23,30 @@
 
             .columns {
                 width: 100%;
-                .column {
-                    input {
-                        margin: $table-header-input-margin;
+                #contracts-table-header-inputs {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+
+                    div {
+                        display: flex;
+                        justify-content: space-between;
+
+                        .input {
+                            width: 70%;
+                        }
                     }
                 }
+            }
+        }
+
+        .card-footer {
+            background-color: $table-card-header-background-color;
+            border-top: $table-card-header-border;
+            padding: 0.5rem 1rem;
+
+            .pagination {
+                margin: auto;
             }
         }
     }

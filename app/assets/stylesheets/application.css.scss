@@ -23,6 +23,10 @@
    background-color: $body-background-color;
  }
 
+ #app-content-column {
+   padding: $app-content-column-padding;
+ }
+
  // Bread crumbs
  .breadcrumb {
    font-size: 1.1rem !important;

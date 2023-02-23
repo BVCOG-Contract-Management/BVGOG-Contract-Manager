@@ -38,7 +38,7 @@
                 <%= render_breadcrumbs :tag => :li, :separator => "" %> 
               </ul>
             </nav>
-            <div class="container mt-6">
+            <div id="app-content-column" class="container">
               <% if content_for?(:title) %>
                 <h3 class="title is-3"><%= yield(:title) %></h1>
               <% end %>
