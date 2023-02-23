@@ -28,7 +28,7 @@
                             </tr>
                             <tr>
                                 <td><strong>Initial Term:</strong></td>
-                                <td><%= @contract.initial_term_amount %> <%= @contract.initial_term_duration_humanize %><%=@contract.initial_term_amount > 1 ? 's' : ''%></td>
+                                <td><%= @contract.initial_term_amount %> <%= @contract.initial_term_duration_humanize %><%= @contract.initial_term_amount > 1 ? "s" : "" %></td>
                             </tr>
                             <tr>
                                 <td><strong>End Trigger:</strong></td>
@@ -44,15 +44,15 @@
                             </tr>
                             <tr>
                                 <td><strong>Start Date:</strong></td>
-                                <td><%= @contract.starts_at.strftime('%B %d, %Y') %></td>
+                                <td><%= @contract.starts_at.strftime("%B %d, %Y") %></td>
                             </tr>
                             <tr>
                                 <td><strong>End Date:</strong></td>
-                                <td><%= @contract.ends_at.strftime('%B %d, %Y') %></td>
+                                <td><%= @contract.ends_at.strftime("%B %d, %Y") %></td>
                             </tr>
                             <tr>
                                 <td><strong>Requires Rebid:</strong></td>
-                                <td><%= @contract.requires_rebid ? 'Yes' : 'No' %></td>
+                                <td><%= @contract.requires_rebid ? "Yes" : "No" %></td>
                             </tr>
                             <tr>
                                 <td><strong>Amount:</strong></td>
@@ -67,7 +67,7 @@
                 </div>
                 <footer class="card-footer">
                     <%= link_to "Edit this contract", edit_contract_path(@contract), class: "card-footer-item" %>
-                    <%= link_to contract_path(@contract, params: { contract: { contract_status: contract_opposite_status(@contract) } }), data: {"turbo-method": :put}, class: "card-footer-item", id: "card-change-status" do %>
+                    <%= link_to contract_path(@contract, params: { contract: { contract_status: contract_opposite_status(@contract) } }), data: { "turbo-method": :put }, class: "card-footer-item", id: "card-change-status" do %>
                         <span>
                             <% if @contract.contract_status == ContractStatus::IN_PROGRESS %>
                                 <span class="icon">
@@ -131,7 +131,7 @@
                                             <strong><%= contract_doc.file_name %></strong>
                                         </td>
                                         <td class="download-file-button">
-                                        <%# TODO: fix this to work through downloads controller %>
+                                        <% # TODO: fix this to work through downloads controller %>
                                             <%= link_to contract_doc.full_path do %>
                                                 <span class="icon">
                                                     <i class="fas fa-download"></i>

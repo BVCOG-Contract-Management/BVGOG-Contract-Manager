@@ -1,5 +1,4 @@
 class ContractsController < ApplicationController
-  
   before_action :set_contract, only: %i[ show edit update destroy ]
 
   # GET /contracts or /contracts.json
@@ -91,21 +90,21 @@ class ContractsController < ApplicationController
     contracts = case params[:sort]
       when "point_of_contact"
         # Sort by the name of the point of contact
-         Contract.joins(:point_of_contact).order("users.last_name #{asc}").order("users.first_name #{asc}")
+        Contract.joins(:point_of_contact).order("users.last_name #{asc}").order("users.first_name #{asc}")
       when "vendor"
-         Contract.joins(:vendor).order("vendors.name #{asc}")
+        Contract.joins(:vendor).order("vendors.name #{asc}")
       else
         begin
           # Sort by the specified column and direction
-           params[:sort] ? Contract.order(params[:sort] => asc.to_sym) : Contract.order(created_at: :asc)
+          params[:sort] ? Contract.order(params[:sort] => asc.to_sym) : Contract.order(created_at: :asc)
         rescue ActiveRecord::StatementInvalid
           # Otherwise, sort by title
           # TODO: should we reconsider this?
-           Contract.order(title: :asc)
+          Contract.order(title: :asc)
         end
       end
 
     # Returns the sorted contracts
-      contracts
+    contracts
   end
 end

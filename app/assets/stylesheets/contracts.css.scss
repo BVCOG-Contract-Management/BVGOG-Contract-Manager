@@ -27,3 +27,7 @@
         justify-content: flex-end;
     }
 }
+
+#contract-form {
+    @include table-card($table-card-header-background-color, $table-card-header-border, $table-border);
+}

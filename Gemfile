@@ -94,4 +94,4 @@ gem "bulma-rails", "~> 0.9.3"
 
 gem "breadcrumbs_on_rails", "~> 4.1.0"
 
-gem 'kaminari' , '~> 1.2.1'
+gem "kaminari", "~> 1.2.1"

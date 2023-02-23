@@ -51,8 +51,8 @@
               </td>
               <td><%= contract.number %></td>
               <td><%= contract.point_of_contact.first_name %> <%= contract.point_of_contact.last_name %></td>
-              <td><%= contract.starts_at.strftime('%B %d, %Y') %></td>
-              <td><%= contract.ends_at.strftime('%B %d, %Y') %></td>
+              <td><%= contract.starts_at.strftime("%B %d, %Y") %></td>
+              <td><%= contract.ends_at.strftime("%B %d, %Y") %></td>
               <td><%= number_to_currency(contract.amount_dollar) %> per <%= contract.amount_duration %></td>
               <td><%= contract_status_icon(contract) %></td>
             </tr>
