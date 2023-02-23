@@ -7,6 +7,12 @@
 
 <div id="contracts">
   <%= link_to "New contract", new_contract_path, class: "button is-primary" %>
+  <% if @contracts.empty? %>
+  <%# TODO: replace with a reusable placeholder for empty sets %>
+    <p>
+      No contracts found.
+    </p>
+  <% else %>
   <div class="card">
     <header class="card-header">
       <div class="columns is-justify-content-space-between">
@@ -49,6 +55,9 @@
             <th>
               <%= link_to "Amount", :sort => "amount_dollar" %>
             </th>
+            <th>
+              <%= link_to "Status", :sort => "status" %>
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -63,9 +72,12 @@
               <td><%= contract.starts_at %></td>
               <td><%= contract.ends_at %></td>
               <td><%= number_to_currency(contract.amount_dollar) %> per <%= contract.amount_duration %></td>
+              <td><%= contract_status_icon(contract) %></td>
             </tr>
           <% end %>
         </tbody>
       </table>
     </div>
+</div>
+<% end %>
 </div>

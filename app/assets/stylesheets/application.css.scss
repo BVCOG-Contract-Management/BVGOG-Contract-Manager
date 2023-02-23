@@ -27,9 +27,8 @@
  .breadcrumb {
    font-size: 1.1rem !important;
    background-color: $breadcrumb-background-color;
+   border: 1px solid #e3e6f0;
    padding: $breadcrumb-padding;
-   border-radius: $breadcrumb-border-radius;
-   box-shadow: $breadcrumb-box-shadow;
    font-weight: $breadcrumb-font-weight;
 
    li {

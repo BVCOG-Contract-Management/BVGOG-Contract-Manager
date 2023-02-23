@@ -4,6 +4,7 @@
     .card {
         margin-top: 1rem;
         border-radius: 0.5rem;
+        border: $table-card-header-border;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         overflow: hidden;
         /* To prevent the table from overflowing */

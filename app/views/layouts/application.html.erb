@@ -33,13 +33,12 @@
             <div id="header-bar">
               Header Bar Goes Here
             </div>
+            <nav class="breadcrumb has-arrow-separator" aria-label="breadcrumbs">
+              <ul>
+                <%= render_breadcrumbs :tag => :li, :separator => "" %> 
+              </ul>
+            </nav>
             <div class="container mt-6">
-              <nav class="breadcrumb" aria-label="breadcrumbs">
-                <ul>
-                  <%= render_breadcrumbs :tag => :li, :separator => "" %> 
-                </ul>
-              </nav>
-
               <% if content_for?(:title) %>
                 <h3 class="title is-3"><%= yield(:title) %></h1>
               <% end %>
