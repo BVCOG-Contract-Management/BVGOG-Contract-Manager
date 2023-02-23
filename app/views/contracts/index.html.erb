@@ -36,32 +36,15 @@
       <table class="table table is-striped is-hoverable is-fullwidth">
         <thead>
           <tr>
-            <th>
-              <%= link_to "Title", :sort => "title" %>
-            </th>
-            <th>
-              <%= link_to "Number", :sort => "number" %>
-            </th>
-            <th>
-              <%= link_to "Point of Contact", :sort => "point_of_contact" %>
-            </th>
-            <th>
-              <%= link_to "Vendor", :sort => "vendor" %>
-            </th>
-            <th>
-              <%= link_to "Start Date", :sort => "starts_at" %>
-            </th>
-            <th>
-              <%= link_to "End Date", :sort => "ends_at" %>
-            </th>
-            <th>
-              <%= link_to "Amount", :sort => "amount_dollar" %>
-            </th>
-            <th>
-              <%= link_to "Status", :sort => "contract_status" %>
-            </th>
+            <% columns = [["Title", "title"], ["Number", "number"], ["Point of Contact", "point_of_contact"], ["Vendor", "vendor"], ["Start Date", "starts_at"], ["End Date", "ends_at"], ["Amount", "amount_dollar"], ["Status", "contract_status"]] %>
+            <% columns.each do |col| %>
+              <th>
+                <%= link_to col[0], sort: col[1], order: (params[:order] == "asc" ? "desc" : "asc") %>
+              </th>
+            <% end %>
           </tr>
         </thead>
+
         <tbody>
           <% @contracts.each do |contract| %>
             <tr>

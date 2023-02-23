@@ -83,7 +83,7 @@ class ContractsController < ApplicationController
   def sort_contracts
     # Sorts by the query string parameter "sort"
     # Since some columns are combinations or associations, we need to handle them separately
-    asc = session[:contracts_sort_by] == params[:sort] && session[:contracts_sort_order] == "asc" ? "desc" : "asc"
+    asc = params[:order] ? params[:order] : "asc"
     contracts = case params[:sort]
       when "point_of_contact"
         # Sort by the name of the point of contact
@@ -93,22 +93,13 @@ class ContractsController < ApplicationController
       else
         begin
           # Sort by the specified column and direction
-           params[:sort] ? Contract.order(params[:sort] => asc.to_sym) : Contract
+           params[:sort] ? Contract.order(params[:sort] => asc.to_sym) : Contract.order(created_at: :asc)
         rescue ActiveRecord::StatementInvalid
           # Otherwise, sort by title
           # TODO: should we reconsider this?
            Contract.order(title: :asc)
         end
       end
-
-    # Reverses the order if the user clicked the same column again
-    if params[:sort] == @sort_by
-      contracts = contracts.reverse_order
-    end
-
-    # Stores the current sort order
-    session[:contracts_sort_by] = params[:sort]
-    session[:contracts_sort_order] = asc
 
     # Returns the sorted contracts
       contracts
