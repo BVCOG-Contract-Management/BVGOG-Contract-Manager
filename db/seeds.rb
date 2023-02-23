@@ -8,50 +8,66 @@
 
 require "factory_bot_rails"
 
-# Create a user
-user = FactoryBot.create(:user, email: "john.doe@email.com", password: "password")
+# Create users
+for i in 1..5
+  FactoryBot.create(:user)
+end
 
-# Create an entity
-entity = FactoryBot.create(:entity, name: "Entity 1")
+# Create entities
+for i in 1..5
+  FactoryBot.create(
+    :entity,
+    name: "Entity #{i}",
+  )
+end
 
-# Create a program
-program = FactoryBot.create(:program, name: "Program 1")
+# Create programs
+for i in 1..5
+  FactoryBot.create(
+    :program,
+    name: "Program #{i}",
+  )
+end
 
-# Create a vendor
-vendor = FactoryBot.create(:vendor, name: "Vendor 1")
+# Create vendors
+for i in 1..5
+  FactoryBot.create(
+    :vendor,
+    name: "Vendor #{i}",
+  )
+end
+
 
 # Create multiple contracts
 for i in 1..5
-  contract = FactoryBot.create(
+  FactoryBot.create(
     :contract,
     title: "Contract #{i}",
-    entity: entity,
-    program: program,
-    point_of_contact: user,
-    vendor: vendor,
+    entity: Entity.all.sample,
+    program: Program.all.sample,
+    point_of_contact: User.all.sample,
+    vendor: Vendor.all.sample,
   )
 end
 
 # Create contract documents
-contract_document = FactoryBot.create(
-  :contract_document,
-  contract: contract,
-  file_name: "contract_doc1.pdf",
-  full_path: File.join(Rails.root, "~", "data", "contracts", "contract_document.pdf"),
-)
-
-contract_document = FactoryBot.create(
-  :contract_document,
-  contract: contract,
-  file_name: "contract_doc2.pdf",
-  full_path: File.join(Rails.root, "~", "data", "contracts", "contract_document.pdf"),
-)
+for i in 1..5
+  FactoryBot.create(
+    :contract_document,
+    contract: Contract.all.sample,
+  )
+end
 
 # Create vendor reviews
-vendor_review = FactoryBot.create(
-  :vendor_review,
-  vendor: vendor,
-  user: user,
-  rating: 5,
-  description: "This is a vendor review.",
-)
+for i in 1..5
+    # If a null constraint is violated, retry
+    begin
+        vendor_review = FactoryBot.create(
+            :vendor_review,
+            user: User.all.sample,
+            vendor: Vendor.all.sample,  
+        )   
+    rescue ActiveRecord::NotNullViolation
+        retry
+    end
+end

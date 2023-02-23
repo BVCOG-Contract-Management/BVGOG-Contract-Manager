@@ -15,7 +15,7 @@ FactoryBot.define do
     amount_duration { TimePeriod::MONTH }
     initial_term_amount { Faker::Number.positive }
     initial_term_duration { TimePeriod::MONTH }
-    number { "123456abcde" }
+    number { Faker::Alphanumeric.alphanumeric(number: 10) }
     requires_rebid { false }
 
     starts_at { Faker::Date.between(from: 2.years.ago, to: Date.today) }
@@ -23,8 +23,8 @@ FactoryBot.define do
     # Set date very far in the future to avoid validation errors
     ends_at { Faker::Date.between(from: 20.years.from_now, to: 30.years.from_now) }
 
-    contract_type { ContractType::CONTRACT }
-    contract_status { ContractStatus::IN_PROGRESS }
-    end_trigger { EndTrigger::LIMITED_TERM }
+    contract_type { ContractType.list.sample }
+    contract_status { ContractStatus.list.sample }
+    end_trigger { EndTrigger.list.sample }
   end
 end
