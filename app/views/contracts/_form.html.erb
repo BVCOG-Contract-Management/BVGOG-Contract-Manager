@@ -96,6 +96,7 @@
               <%= form.label :vendor_id %>
               <%= form.select :vendor_id, options_from_collection_for_select(Vendor.all, "id", "name"), {:include_blank => true}, class: "input" %>
             </div>
+            
             <%# Program %>
             <div class="field">
               <%= form.label :program_id %>
