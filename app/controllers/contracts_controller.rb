@@ -77,6 +77,10 @@ class ContractsController < ApplicationController
     @contract = Contract.find(params[:id])
   end
 
+  def set_users
+    @users = User.all
+  end
+
   # Only allow a list of trusted parameters through.
   def contract_params
     allowed = [:title, :description, :key_words, :start_date, :end_date, :contract_status, :entity_id, :program_id, :point_of_contact_id, :vendor_id]
