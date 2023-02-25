@@ -1,10 +1,7 @@
-<p style="color: green"><%= notice %></p>
-
+<%= content_for :title do %>
+  <span class="icon">
+    <i class="fa-solid users"></i>
+  </span> 
+  <%= @user.first_name + " " + @user.last_name %>
+<% end %>
 <%= render @user %>
-
-<div>
-  <%= link_to "Edit this user", edit_user_path(@user) %> |
-  <%= link_to "Back to users", users_path %>
-
-  <%= button_to "Destroy this user", @user, method: :delete %>
-</div>

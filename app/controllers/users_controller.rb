@@ -21,7 +21,7 @@ class UsersController < ApplicationController
   # GET /users/new
   def new
     add_breadcrumb "Users", users_path
-    add_breadcrumb "New User", new_user_path
+    add_breadcrumb "Invite User", new_user_path
 
     @user = User.new
   end

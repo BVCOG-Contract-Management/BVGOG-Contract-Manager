@@ -1,2 +1,45 @@
-<div id="<%= dom_id user %>">
+<div id="user-show">
+    <div class="columns is-desktop">
+        <div class="column is-6">
+            <div class="card">
+                <header class="card-header">
+                    <p class="card-header-title">
+                        User Details
+                    </p>
+                </header>
+                <div class="card-content is-paddingless">
+                    <table class="table is-striped is-hoverable is-fullwidth">
+                        <tbody>
+                            <tr>
+                                <td><strong>First Name:</strong></td>
+                                <td><%= @user.first_name %></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Last Name:</strong></td>
+                                <td><%= @user.last_name %></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Email:</strong></td>
+                                <td><%= @user.email %></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Level:</strong></td>
+                                <td><%= @user.level %></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Program Manager:</strong></td>
+                                <td><%= @user.is_program_manager %></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Active:</strong></td>
+                                <td><%= @user.is_active %></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <footer class="card-footer">
+                    <%= link_to "Edit this user", edit_user_path(@user), class: "card-footer-item" %>
+                </footer>
+            </div>
+        </div>
 </div>
