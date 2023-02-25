@@ -1,0 +1,73 @@
+@import "main";
+#users {
+    .card {
+        margin-top: 1rem;
+        border-radius: 0.5rem;
+        border: $table-card-header-border;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        /* To prevent the table from overflowing */
+        .card-header {
+            background-color: $table-card-header-background-color;
+            border-bottom: $table-card-header-border;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            .card-header-title {
+                // to make the title and search bar align
+                height: 100%;
+            }
+
+            .columns {
+                width: 100%;
+                #users-table-header-inputs {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+
+                    div {
+                        display: flex;
+                        justify-content: space-between;
+
+                        .input {
+                            width: 70%;
+                        }
+                    }
+                }
+            }
+        }
+
+        .card-footer {
+            background-color: $table-card-header-background-color;
+            border-top: $table-card-header-border;
+            padding: 0.5rem 1rem;
+
+            .pagination {
+                margin: auto;
+            }
+        }
+    }
+
+    .table {
+        @include link-hover($color: #000, $hover-color: gray);
+        border-collapse: collapse;
+        border-spacing: 0;
+        margin-bottom: 0;
+        border: $table-border;
+        thead {
+            tr {
+                border: inherit;
+                th {
+                    border: inherit;
+                }   
+            }
+        }
+        tr {
+            border: inherit;
+            
+            td {
+                border: inherit;
+            }
+        }
+    }
+}

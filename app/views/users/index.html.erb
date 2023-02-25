@@ -1,14 +1,52 @@
 <p style="color: green"><%= notice %></p>
 
-<h1>Users</h1>
+<% content_for :title do %>
+  View Users
+<% end %>
 
 <div id="users">
-  <% @users.each do |user| %>
-    <%= render user %>
-    <p>
-      <%= link_to "Show this user", user %>
-    </p>
-  <% end %>
-</div>
+<div class="card">
+  <header class="card-header">
+    <div class="columns is-justify-content-space-between">
+      <div class="column is-7">
+        <p class="card-header-title">
+          <span class="icon">
+            <i class="fa-solid users"></i>
+          </span>
+          Users
+        </p>
+      </div>
+      <div id="users-table-header-inputs" class="column is-5">
+          <div>
+            <input class="input" type="text" placeholder="Search by first or last name">
+            <%= link_to "New user", new_user_path, class: "button is-primary" %>
+          </div>
+      </div>
+    </div>
 
-<%= link_to "New user", new_user_path %>
+  </header>
+  <div class="card-content is-paddingless">
+    <table class="table table is-striped is-hoverable is-fullwidth">
+      <thead>
+        <tr>
+          <th><%= link_to "First Name", :sort => "first_name" %></th>
+          <th><%= link_to "Last Name", :sort => "last_name" %></th>
+          <th><%= link_to "Level", :sort => "level" %></th>
+          <th><%= link_to "Program", :sort => "program" %></th>
+          <th><%= "" %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @users.each do |user| %>
+          <tr>
+            <td><%= user.first_name %></td>
+            <td><%= user.last_name %></td>
+            <td><%= user.level %></td>
+            <td><%= "<program>" %></td>
+            <th><%= link_to "->", user %></th>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
