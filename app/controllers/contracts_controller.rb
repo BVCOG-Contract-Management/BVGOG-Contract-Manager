@@ -5,7 +5,10 @@ class ContractsController < ApplicationController
   def index
     add_breadcrumb "Contracts", contracts_path
 
+    # Sort contracts
     @contracts = sort_contracts().page params[:page]
+    # Search contracts
+    @contracts = search_contracts(@contracts) if params[:search].present?
   end
 
   # GET /contracts/1 or /contracts/1.json
@@ -110,5 +113,11 @@ class ContractsController < ApplicationController
 
     # Returns the sorted contracts
     contracts
+  end
+
+  def search_contracts(contracts)
+    # Search by the query string parameter "search"
+    # Search in "title", "description", and "key_words"
+    contracts.where("title LIKE ? OR description LIKE ? OR key_words LIKE ?", "%#{params[:search]}%", "%#{params[:search]}%", "%#{params[:search]}%")
   end
 end

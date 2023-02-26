@@ -4,12 +4,6 @@
 
 
 <div id="contracts">
-  <% if @contracts.empty? %>
-  <%# TODO: replace with a reusable placeholder for empty sets %>
-    <p>
-      No contracts found.
-    </p>
-  <% else %>
   <div class="card">
     <header class="card-header">
       <div class="columns is-justify-content-space-between">
@@ -23,7 +17,9 @@
         </div>
         <div id="contracts-table-header-inputs" class="column is-7">
           <div>
-            <input class="input" type="text" placeholder="Search by title or point of contact">
+            <%= form_with(url: contracts_path, method: "GET", data: { controller: "form-submission", turbo_frame: "contracts", turbo_action: "advance" }) do |form| %>
+              <%= form.text_field :search, data: { action: "input->form-submission#search" }, class: "input", placeholder: "Search by title or key-words", value: params[:search], autofocus: !params[:search].blank? %>
+            <% end %>
             <%= link_to "New contract", new_contract_path, class: "button is-primary" %>
           </div>
         </div>
@@ -31,6 +27,7 @@
       
     </header>
     <div class="card-content is-paddingless">
+      <%= turbo_frame_tag "contracts" do %>
       <table class="table table is-striped is-hoverable is-fullwidth">
         <thead>
           <tr>
@@ -59,10 +56,10 @@
           <% end %>
         </tbody>
       </table>
+      <% end %>
     </div>
     <footer class="card-footer">
       <%= paginate @contracts %>
     </footer>
 </div>
-<% end %>
 </div>
