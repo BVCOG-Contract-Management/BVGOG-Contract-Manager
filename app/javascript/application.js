@@ -23,4 +23,15 @@ document.addEventListener("turbo:load", () => {
             }
         });
     }
+
+    // Set cursor blink in contracts search table
+    const searchInput = document.querySelector('#contracts-search-input');
+    if (searchInput) {
+        // Check if the search input field is empty
+        if (searchInput.value !== '') {
+            // Set the cursor blink
+            searchInput.focus();
+            searchInput.setSelectionRange(searchInput.value.length, searchInput.value.length);
+        }
+    }
 });
