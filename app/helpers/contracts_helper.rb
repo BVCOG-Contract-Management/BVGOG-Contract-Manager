@@ -105,3 +105,21 @@ module ContractsHelper
     end
   end
 end
+
+def user_select_options
+  options = User.all.map { |user| [user.full_name, user.id] }
+end
+
+def vendor_select_options
+  options = Vendor.all.map { |vendor| [vendor.name, vendor.id] }
+  # Add a "New Vendor" option to the bottom of the list
+  options.push(["New Vendor", "new"])
+end
+
+def program_select_options
+  options = Program.all.map { |program| [program.name, program.id] }
+end
+
+def entity_select_options
+  options = Entity.all.map { |entity| [entity.name, entity.id] }
+end

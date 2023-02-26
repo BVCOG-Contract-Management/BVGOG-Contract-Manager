@@ -34,9 +34,13 @@ class ContractsController < ApplicationController
 
   # POST /contracts or /contracts.json
   def create
-    @contract = Contract.new(contract_params)
+    @contract = Contract.new(contract_params.merge(contract_status: ContractStatus::IN_PROGRESS))
+
+    handle_if_new_vendor
+    handle_contract_documents
 
     respond_to do |format|
+      puts contract_params
       if @contract.save
         format.html { redirect_to contract_url(@contract), notice: "Contract was successfully created." }
         format.json { render :show, status: :created, location: @contract }
@@ -49,14 +53,16 @@ class ContractsController < ApplicationController
 
   # PATCH/PUT /contracts/1 or /contracts/1.json
   def update
+
+    handle_if_new_vendor
+    handle_contract_documents
+
     respond_to do |format|
-      puts contract_params
       if @contract.update(contract_params)
         puts "Contract updated successfully"
         format.html { redirect_to contract_url(@contract), notice: "Contract was successfully updated." }
         format.json { render :show, status: :ok, location: @contract }
       else
-        puts @contract.errors.full_messages
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @contract.errors, status: :unprocessable_entity }
       end
@@ -86,7 +92,27 @@ class ContractsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def contract_params
-    allowed = [:title, :description, :key_words, :start_date, :end_date, :contract_status, :entity_id, :program_id, :point_of_contact_id, :vendor_id]
+    allowed = [
+      :title, 
+      :description, 
+      :key_words, 
+      :starts_at, 
+      :ends_at, 
+      :contract_status, 
+      :entity_id, 
+      :program_id, 
+      :point_of_contact_id, 
+      :vendor_id,
+      :amount_dollar,
+      :amount_duration,
+      :initial_term_amount,
+      :initial_term_duration,
+      :end_trigger,
+      :contract_type,
+      :requires_rebid,
+      :number,
+      :contract_documents,
+    ]
     params.require(:contract).permit(allowed)
   end
 
@@ -120,4 +146,25 @@ class ContractsController < ApplicationController
     # Search in "title", "description", and "key_words"
     contracts.where("title LIKE ? OR description LIKE ? OR key_words LIKE ?", "%#{params[:search]}%", "%#{params[:search]}%", "%#{params[:search]}%")
   end
+end
+
+def handle_if_new_vendor
+  # Check if the vendor is new
+  if params[:contract][:vendor_id] == "new"
+    # Create a new vendor
+    vendor = Vendor.new(name: params[:contract][:new_vendor_name])
+    # If the vendor is saved successfully
+    if vendor.save
+      # Set the contract's vendor to the new vendor
+      @contract.vendor = vendor
+    end
+  end
+  # Remove the new_vendor_name parameter
+  params[:contract].delete(:new_vendor_name)
+end
+
+# TODO: This is a temporary solution
+# File upload is a seperate issue that will be handled with a dropzone 
+def handle_contract_documents
+  params[:contract].delete(:contract_documents)
 end
