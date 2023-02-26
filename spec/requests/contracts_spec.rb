@@ -78,20 +78,20 @@ RSpec.describe "/contracts", type: :request do
 
   describe "POST /create" do
     context "with valid parameters" do
-      pending "creates a new Contract" do
+      it "creates a new Contract" do
         expect {
           post contracts_url, params: { contract: valid_attributes }
         }.to change(Contract, :count).by(1)
       end
 
       pending "redirects to the created contract" do
-        post contracts_url, params: { contract: valid_attributes }
+        it contracts_url, params: { contract: valid_attributes }
         expect(response).to redirect_to(contract_url(Contract.last))
       end
     end
 
     context "with invalid parameters" do
-      pending "does not create a new Contract" do
+      it "does not create a new Contract" do
         expect {
           post contracts_url, params: { contract: invalid_attributes }
         }.to change(Contract, :count).by(0)
