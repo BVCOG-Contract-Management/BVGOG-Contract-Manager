@@ -23,15 +23,23 @@
   </head>
 
   <body>
+      
+
       <div class="columns">
-        <div id="sidebar-column" class="column is-2 is-paddingless">
-          <%= render partial: "layouts/sidebar", locals: { page_list: page_list } %>
-        </div>
+        <% if user_signed_in? %>
+          <div id="sidebar-column" class="column is-2 is-paddingless">
+            <%= render partial: "layouts/sidebar", locals: { page_list: page_list } %>
+          </div>
+        <%end%>
         <div class="column">
           <div class="container">
             <div>
               Header Bar Goes Here
             </div>
+            <!--<div>
+              <p class="alert alert-notice", style="color: yellow"><%= notice %></p>
+              <p class="alert alert-success", style="color: green"><%= alert %></p>
+            </div>-->
             <div class="mt-3">
               <%= yield %>
             </div>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_21_175315) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_27_175821) do
   create_table "bvcog_configs", force: :cascade do |t|
     t.text "contracts_path", null: false
     t.text "reports_path", null: false
@@ -71,16 +71,20 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_21_175315) do
   create_table "users", force: :cascade do |t|
     t.text "first_name", null: false
     t.text "last_name", null: false
-    t.text "email", null: false
-    t.text "password", null: false
     t.boolean "is_program_manager", default: false, null: false
     t.boolean "is_active", default: true, null: false
     t.text "level", default: "three", null: false
     t.integer "redirect_user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["redirect_user_id"], name: "index_users_on_redirect_user_id"
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
   create_table "vendor_reviews", force: :cascade do |t|
