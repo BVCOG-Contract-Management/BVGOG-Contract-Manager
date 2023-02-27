@@ -1,4 +1,5 @@
 @import "main";
+
 #users {
     @include table-card($table-card-header-background-color, $table-card-header-border, $table-border);
     #users-table-header-inputs {
@@ -11,7 +12,7 @@
             display: flex;
             justify-content: right;
 
-            .input {
+            form {
                 margin-right: 20px;
                 width: 70%;
             }
@@ -25,4 +26,8 @@
         display: flex;
         justify-content: flex-end;
     }
+}
+
+#user-form {
+    @include table-card($table-card-header-background-color, $table-card-header-border, $table-border);
 }

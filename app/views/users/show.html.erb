@@ -1,7 +1,7 @@
 <%= content_for :title do %>
   <span class="icon">
-    <i class="fa-solid users"></i>
+    <i class="fa-solid fa-users"></i>
   </span> 
-  <%= @user.first_name + " " + @user.last_name %>
+  <%= @user.full_name %>
 <% end %>
 <%= render @user %>

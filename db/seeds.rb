@@ -8,6 +8,11 @@
 
 require "factory_bot_rails"
 
+# Create users
+for i in 1..50
+  FactoryBot.create(:user, id: i)
+end
+
 # Create entities
 for i in 1..5
   FactoryBot.create(
