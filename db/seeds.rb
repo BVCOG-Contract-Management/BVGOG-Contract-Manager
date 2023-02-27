@@ -9,7 +9,7 @@
 require "factory_bot_rails"
 
 # Create users
-for i in 1..5
+for i in 1..50
   FactoryBot.create(:user, id: i)
 end
 

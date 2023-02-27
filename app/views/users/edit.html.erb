@@ -1,10 +1,7 @@
-<h1>Editing user</h1>
-
+<%= content_for :title do %>
+  <span class="icon">
+    <i class="fa-solid fa-pencil"></i>
+  </span> 
+  Edit <%= @user.full_name %>
+<% end %>
 <%= render "form", user: @user %>
-
-<br>
-
-<div>
-  <%= link_to "Show this user", @user %> |
-  <%= link_to "Back to users", users_path %>
-</div>

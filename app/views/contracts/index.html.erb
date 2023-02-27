@@ -18,7 +18,7 @@
         <div id="contracts-table-header-inputs" class="column is-7">
           <div>
             <%= form_with(url: contracts_path, method: "GET", data: { controller: "form-submission", turbo_frame: "contracts", turbo_action: "advance" }) do |form| %>
-              <%= form.text_field :search, data: { action: "input->form-submission#search" }, class: "input", placeholder: "Search by title or key-words", value: params[:search], autofocus: !params[:search].blank? , id: "contracts-search-input" %>
+              <%= form.text_field :search, data: { action: "input->form-submission#search" }, class: "input", placeholder: "Search by title or key-words", value: params[:search], autofocus: !params[:search].blank? , id: "search-input" %>
             <% end %>
             <%= link_to "New contract", new_contract_path, class: "button is-primary" %>
           </div>

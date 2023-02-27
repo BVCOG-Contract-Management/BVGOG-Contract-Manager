@@ -24,8 +24,8 @@ document.addEventListener("turbo:load", () => {
         });
     }
 
-    // Set cursor blink in contracts search table
-    const searchInput = document.querySelector('#contracts-search-input');
+    // Set cursor blink in search table
+    const searchInput = document.querySelector('#search-input');
     if (searchInput) {
         // Check if the search input field is empty
         if (searchInput.value !== '') {

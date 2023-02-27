@@ -9,14 +9,16 @@
       <div class="column is-5">
         <p class="card-header-title">
           <span class="icon">
-            <i class="fa-solid users"></i>
+            <i class="fa-solid fa-users"></i>
           </span>
           Users
         </p>
       </div>
       <div id="users-table-header-inputs" class="column is-7">
           <div>
-            <input class="input" type="text" placeholder="Search by first or last name">
+          <%= form_with(url: users_path, method: "GET", data: { controller: "form-submission", turbo_frame: "users", turbo_action: "advance" }) do |form| %>
+            <%= form.text_field :search, data: { action: "input->form-submission#search" }, class: "input", placeholder: "Search by first or last name", value: params[:search], autofocus: !params[:search].blank? , id: "search-input" %>
+          <% end %>
             <%= link_to "Invite user", new_user_path, class: "button is-primary" %>
           </div>
       </div>
@@ -24,15 +26,19 @@
 
   </header>
   <div class="card-content is-paddingless">
+  <%= turbo_frame_tag "users" do %>
     <table class="table table is-striped is-hoverable is-fullwidth">
       <thead>
         <tr>
-          <th><%= link_to "First Name", :sort => "first_name" %></th>
-          <th><%= link_to "Last Name", :sort => "last_name" %></th>
-          <th><%= link_to "Level", :sort => "level" %></th>
-          <th><%= link_to "Program", :sort => "program" %></th>
-          <th><%= "" %></th>
-        </tr>
+        <% columns = [["First Name", "first_name"], ["Last Name", "last_name"], ["Level", "level"]] %>
+        <% columns.each do |col| %>
+          <th>
+            <%= link_to col[0], sort: col[1], order: (params[:order] == "asc" ? "desc" : "asc") %>
+          </th>
+        <% end %>
+        <th><%= link_to "Program(s)", :sort => "program" %></th>
+        <th><%= "" %></th>
+      </tr>
       </thead>
       <tbody>
         <% @users.each do |user| %>
@@ -46,5 +52,9 @@
         <% end %>
       </tbody>
     </table>
+    <% end %>
+    <footer class="card-footer">
+      <%= paginate @users %>
+    </footer>
   </div>
 </div>
