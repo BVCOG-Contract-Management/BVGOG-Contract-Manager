@@ -48,6 +48,8 @@ RSpec.describe User, type: :model do
     expect { user.save! }.to raise_error(ActiveRecord::RecordInvalid)
   end
 
+
+  #Not currently relevant since db only stores password hashes, checking should be done in user form.
   #it "should not save user with password shorter than 8 characters" do
   #  user = build(:user, password: "a" * 7)
   #  expect { user.save! }.to raise_error(ActiveRecord::RecordInvalid)
@@ -63,6 +65,7 @@ RSpec.describe User, type: :model do
     expect { user.save! }.not_to raise_error
   end
 
+  #Username is a unique key through devise, and this test doesn't work
   #it "should not save user with duplicate email" do
   #  user_one = create(:user)
   #  user_two = build(:user, email: user_one.email)
