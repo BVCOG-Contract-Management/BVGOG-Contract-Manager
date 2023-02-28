@@ -67,12 +67,6 @@ jobs:
         run: |
           bundle exec rails db:prepare
           bundle exec rails db:migrate
-      - name: Run RSpec tests
-        env: 
-          RAILS_ENV: test
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
-        run: |
-          sleep 5
           bundle exec rspec spec
 
       
