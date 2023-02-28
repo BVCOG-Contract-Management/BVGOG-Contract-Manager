@@ -68,5 +68,6 @@ jobs:
           bundle exec rails db:prepare
           bundle exec rails db:migrate
           bundle exec rspec spec
+          ActiveRecord::Base.connection.close
 
       
