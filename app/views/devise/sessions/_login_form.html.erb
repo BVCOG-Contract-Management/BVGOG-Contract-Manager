@@ -21,7 +21,7 @@
 
   <div class="field">
     <%= f.label :password, style: "display: block" %>
-    <%= f.password_field :password, autocomplete: "current-password", class: "input" %>
+    <%= f.password_field :password, autocomplete: "current-password", class: "input"  %>
   </div>
 
   <% if devise_mapping.rememberable? %>
@@ -32,7 +32,7 @@
   <% end %>
 
   <div class="actions">
-    <%= f.submit "Log in", class: "button is-success" %>
+    <%= f.submit "Log in", class: "button is-success"%>
     <%= render "devise/shared/links" %>
   </div>
 <% end %>

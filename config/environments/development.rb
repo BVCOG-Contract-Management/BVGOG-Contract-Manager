@@ -37,12 +37,9 @@ Rails.application.configure do
   config.active_storage.service = :local
 
   # Don't care if the mailer can't send.
-<<<<<<< HEAD
 
-  config.action_mailer.default_url_options = { host: "localhost", port: 3000 }
-
-=======
->>>>>>> parent of 8fdf88e (added devise and user login form)
+  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+  
   config.action_mailer.raise_delivery_errors = false
 
   config.action_mailer.perform_caching = false
