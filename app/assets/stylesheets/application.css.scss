@@ -16,7 +16,31 @@
 
 @import "main";
 @import "sidebar";
+@import "headerbar";
 
  body {
     font-family: 'Nunito Sans', sans-serif !important;
+   background-color: $body-background-color;
+ }
+
+ #app-content-column {
+   padding: $app-content-column-padding;
+ }
+
+ // Bread crumbs
+ .breadcrumb {
+   font-size: 1.1rem !important;
+   background-color: $breadcrumb-background-color;
+   border: 1px solid #e3e6f0;
+   padding: $breadcrumb-padding;
+   font-weight: $breadcrumb-font-weight;
+
+   li {
+      a {
+         padding: 0;
+      }
+   }
+   ::before {
+      margin: 0 0.5rem;
+   }
  }

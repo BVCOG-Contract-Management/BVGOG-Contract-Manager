@@ -16,15 +16,17 @@
       <ul class="menu-list">
         <% page[:subpaths].each do |item| %>
           <% if url_for(only_path: true) == item[:path] %>
-            <a href="<% item[:path] %>" class="sidebar-item has-background-light menu-item has-text-black-bis">
+            <%= link_to(url_for(item[:path]), class: "sidebar-item has-background-light menu-item has-text-black-bis") do %>
+              <%= raw("<i class=\"fa-regular fa-#{item[:icon]}\"></i>") %>
+              <%= item[:name] %>
+            <% end %>
+
           <% else %>
-            <a href="<% item[:path] %>" class="sidebar-item menu-item has-text-link-light">
-          <% end %>
-            <span class="icon">
+            <%= link_to(url_for(item[:path]), class: "sidebar-item menu-item has-text-link-light") do %>
               <i class="fa-regular fa-<%= item[:icon] %>"></i>
-            </span>
-            <%= item[:name] %>
-          </a>
+              <%= item[:name] %>
+            <% end %>
+          <% end %>
         <% end %>
       </ul>
     <% end %>

@@ -1,0 +1,149 @@
+
+<div id="contract-show">
+    <div class="columns is-desktop">
+        <div class="column is-6">
+            <div class="card">
+                <header class="card-header">
+                    <p class="card-header-title">
+                        <span class="icon">
+                            <i class="fas fa-list"></i>
+                        </span>
+                        Contract Details
+                    </p>
+                </header>
+                <div class="card-content is-paddingless">
+                    <table class="table is-striped is-hoverable is-fullwidth">
+                        <tbody>
+                            <tr>
+                                <td><strong>Title:</strong></td>
+                                <td><%= @contract.title %></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Number:</strong></td>
+                                <td><%= @contract.number %></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Contract Type:</strong></td>
+                                <td><%= @contract.contract_type_humanize %></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Initial Term:</strong></td>
+                                <td><%= @contract.initial_term_amount %> <%= @contract.initial_term_duration_humanize %><%= @contract.initial_term_amount > 1 ? "s" : "" %></td>
+                            </tr>
+                            <tr>
+                                <td><strong>End Trigger:</strong></td>
+                                <td><%= @contract.end_trigger_humanize %></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Point of Contact:</strong></td>
+                                <td><%= @contract.point_of_contact.first_name %> <%= @contract.point_of_contact.last_name %></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Vendor:</strong></td>
+                                <td><%= @contract.vendor.name %></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Start Date:</strong></td>
+                                <td><%= @contract.starts_at.strftime("%B %d, %Y") %></td>
+                            </tr>
+                            <tr>
+                                <td><strong>End Date:</strong></td>
+                                <td><%= @contract.ends_at.strftime("%B %d, %Y") %></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Requires Rebid:</strong></td>
+                                <td><%= @contract.requires_rebid ? "Yes" : "No" %></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Amount:</strong></td>
+                                <td><%= number_to_currency(@contract.amount_dollar) %> per <%= @contract.amount_duration %></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Status:</strong></td>
+                                <td><%= contract_status_icon(@contract) %></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <footer class="card-footer">
+                    <%= link_to "Edit this contract", edit_contract_path(@contract), class: "card-footer-item" %>
+                    <%= link_to contract_path(@contract, params: { contract: { contract_status: contract_opposite_status(@contract) } }), data: { "turbo-method": :put }, class: "card-footer-item", id: "card-change-status" do %>
+                        <span>
+                            <% if @contract.contract_status == ContractStatus::IN_PROGRESS %>
+                                <span class="icon">
+                                    <i class="fas fa-check"></i>
+                                </span>
+                                <span>Approve this contract</span>
+                            <% else %>
+                                <span class="icon">
+                                    <i class="fas fa-clock"></i>
+                                </span>
+                                <span>Set contract to pending review</span>
+                            <% end %>
+                    <% end %>
+                </footer>
+            </div>
+        </div>
+        <div class="column is-6">
+            <div class="column is-12 is-paddingless">
+                <div class="card">
+                    <header class="card-header">
+                        <p class="card-header-title">
+                            <span class="icon">
+                                <i class="fas fa-info-circle"></i>
+                            </span>
+                            Description
+                        </p>
+                    </header>
+                    <div class="card-content is-paddingless">
+                        <table class="table is-striped is-hoverable is-fullwidth">
+                            <tbody>
+                                <tr>
+                                    <td><strong>Key Words:</strong></td>
+                                    <td><%= @contract.key_words %></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Description:</strong></td>
+                                    <td><%= @contract.description %></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="column is-12 is-paddingless">
+                <div class="card">
+                    <header class="card-header">
+                        <p class="card-header-title">
+                            <span class="icon">
+                                <i class="fas fa-file"></i>
+                            </span>
+                            Contract Files
+                        </p>
+                    </header>
+                    <div class="card-content is-paddingless">
+                        <table class="table is-striped is-hoverable is-fullwidth">
+                            <tbody>
+                                <% @contract.contract_documents.each do |contract_doc| %>
+                                    <tr>
+                                        <td>
+                                            <%= file_type_icon(contract_doc.file_name) %>
+                                            <strong><%= contract_doc.file_name %></strong>
+                                        </td>
+                                        <td class="download-file-button">
+                                        <% # TODO: fix this to work through downloads controller %>
+                                            <%= link_to contract_doc.full_path do %>
+                                                <span class="icon">
+                                                    <i class="fas fa-download"></i>
+                                                </span>
+                                            <% end %>
+                                        </td>
+                                    </tr>
+                                <% end %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>

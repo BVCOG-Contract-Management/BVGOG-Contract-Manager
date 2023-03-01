@@ -31,16 +31,22 @@
           <%= render partial: "layouts/sidebar", locals: { page_list: page_list } %>
         </div>
 
-        <div class="column">
-          <div class="container">
-            <div>
+        <div class="column is-paddingless">
+        <% # Main content here %>
+          <div>
+            <div id="header-bar">
               Header Bar Goes Here
             </div>
-            <!--<div>
-              <p class="alert alert-notice", style="color: yellow"><%= notice %></p>
-              <p class="alert alert-success", style="color: green"><%= alert %></p>
-            </div>-->
-            <div class="mt-3">
+            <nav class="breadcrumb has-arrow-separator" aria-label="breadcrumbs">
+              <ul>
+                <%= render_breadcrumbs :tag => :li, :separator => "" %> 
+              </ul>
+            </nav>
+            <div id="app-content-column" class="container">
+              <% if content_for?(:title) %>
+                <h3 class="title is-3"><%= yield(:title) %></h1>
+              <% end %>
+       
               <%= yield %>
             </div>
           </div>

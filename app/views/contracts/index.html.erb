@@ -1,0 +1,65 @@
+<% content_for :title do %>
+  View Contracts
+<% end %>
+
+
+<div id="contracts">
+  <div class="card">
+    <header class="card-header">
+      <div class="columns is-justify-content-space-between">
+        <div class="column is-5">
+          <p class="card-header-title">
+            <span class="icon">
+              <i class="fa-solid fa-file-contract"></i>
+            </span>
+            Contracts
+          </p>
+        </div>
+        <div id="contracts-table-header-inputs" class="column is-7">
+          <div>
+            <%= form_with(url: contracts_path, method: "GET", data: { controller: "form-submission", turbo_frame: "contracts", turbo_action: "advance" }) do |form| %>
+              <%= form.text_field :search, data: { action: "input->form-submission#search" }, class: "input", placeholder: "Search by title or key-words", value: params[:search], autofocus: !params[:search].blank? , id: "contracts-search-input" %>
+            <% end %>
+            <%= link_to "New contract", new_contract_path, class: "button is-primary" %>
+          </div>
+        </div>
+      </div>
+      
+    </header>
+    <div class="card-content is-paddingless">
+      <%= turbo_frame_tag "contracts" do %>
+      <table class="table table is-striped is-hoverable is-fullwidth">
+        <thead>
+          <tr>
+            <% columns = [["Title", "title"], ["Number", "number"], ["Point of Contact", "point_of_contact"], ["Start Date", "starts_at"], ["End Date", "ends_at"], ["Amount", "amount_dollar"], ["Status", "contract_status"]] %>
+            <% columns.each do |col| %>
+              <th>
+                <%= link_to col[0], sort: col[1], order: (params[:order] == "asc" ? "desc" : "asc") %>
+              </th>
+            <% end %>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @contracts.each do |contract| %>
+            <tr>
+              <td>
+                <%= link_to contract.title, contract %>
+              </td>
+              <td><%= contract.number %></td>
+              <td><%= contract.point_of_contact.first_name %> <%= contract.point_of_contact.last_name %></td>
+              <td><%= contract.starts_at.strftime("%B %d, %Y") %></td>
+              <td><%= contract.ends_at.strftime("%B %d, %Y") %></td>
+              <td><%= number_to_currency(contract.amount_dollar) %> per <%= contract.amount_duration %></td>
+              <td><%= contract_status_icon(contract) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <% end %>
+    </div>
+    <footer class="card-footer">
+      <%= paginate @contracts %>
+    </footer>
+</div>
+</div>

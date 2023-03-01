@@ -91,4 +91,13 @@ gem "sass-rails", "~> 6.0.0"
 
 gem "enumerate_it", "~> 3.2.4"
 
+
 gem "devise"
+
+gem "bulma-rails", "~> 0.9.3"
+
+gem "breadcrumbs_on_rails", "~> 4.1.0"
+
+gem "kaminari", "~> 1.2.1"
+
+gem "rails_12factor"
