@@ -13,8 +13,8 @@ module ApplicationHelper
         { name: "Home", path: root_path, icon: "home" },
       ] },
       { title: "Contracts", subpaths: [
-        { name: "View Contracts", path: "#", icon: "file-contract" },
-        { name: "Create a Contract", path: "#", icon: "pencil" },
+        { name: "View Contracts", path: contracts_path, icon: "file-contract" },
+        { name: "Create a Contract", path: new_contract_path, icon: "pencil" },
       ] },
       { title: "Vendors", subpaths: [
         { name: "View Vendors", path: "#", icon: "address-book" },

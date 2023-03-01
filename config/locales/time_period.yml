@@ -1,10 +1,10 @@
 en:
   enumerations:
     time_period:
-      second: 'Second'
-      minute: 'Minute'
-      hour: 'Hour'
-      day: 'Day'
-      week: 'Week'
-      month: 'Month'
-      year: 'Year'
+      second: 'second'
+      minute: 'minute'
+      hour: 'hour'
+      day: 'day'
+      week: 'week'
+      month: 'month'
+      year: 'year'
