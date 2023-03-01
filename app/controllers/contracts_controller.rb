@@ -4,7 +4,6 @@ class ContractsController < ApplicationController
   # GET /contracts or /contracts.json
   def index
     add_breadcrumb "Contracts", contracts_path
-    flash.now.notice = "Welcome to the Contracts Management System!"
     # Sort contracts
     @contracts = sort_contracts().page params[:page]
     # Search contracts
@@ -46,7 +45,6 @@ class ContractsController < ApplicationController
     respond_to do |format|
       ActiveRecord::Base.transaction do
         if @contract.save
-          puts "Contract saved successfully"
           if contract_documents_upload.present?
             handle_contract_documents(contract_documents_upload)
           end
