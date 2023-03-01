@@ -48,12 +48,6 @@ RSpec.describe User, type: :model do
     expect { user.save! }.to raise_error(ActiveRecord::RecordInvalid)
   end
 
-  #Not currently relevant since db only stores password hashes, checking should be done in user form.
-  #it "should not save user with password shorter than 8 characters" do
-  #  user = build(:user, password: "a" * 7)
-  #  expect { user.save! }.to raise_error(ActiveRecord::RecordInvalid)
-  #end
-
   it "should not save user with password longer than 255 characters" do
     user = build(:user, password: "a" * 256)
     expect { user.save! }.to raise_error(ActiveRecord::RecordInvalid)
