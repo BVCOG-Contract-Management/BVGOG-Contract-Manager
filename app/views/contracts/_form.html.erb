@@ -155,18 +155,25 @@
                 <%= form.label :contract_documents %>
                 <div class="file">
                   <label class="file-label">
-                    <%= form.file_field :contract_documents, multiple: true, class: "file-input" %>
+                    <%= form.file_field :contract_documents, multiple: true, class: "file-input", id: "contract-documents-file-input" %>
                     <span class="file-cta">
                       <span class="file-icon">
                         <i class="fas fa-upload"></i>
                       </span>
                       <span class="file-label">
-                        Choose a file…
+                        Choose files...
                       </span>
                     </span>
                   </label>
                 </div>
               </div>
+              <%# Display the uploaded contract documents %>
+              <table id="uploaded-contract-documents-table" class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+                <tbody>
+                  <%# Javascript adds to this table as files are uploaded %>
+                  <%# Ruby is annoying and doesn't do this nicely... %>
+                </tbody>
+              </table>
             </div>
           </div>
 
