@@ -17,6 +17,7 @@
 @import "main";
 @import "sidebar";
 @import "headerbar";
+@import "toastr";
 
  body {
     font-family: 'Nunito Sans', sans-serif !important;
@@ -42,5 +43,35 @@
    }
    ::before {
       margin: 0 0.5rem;
+   }
+ }
+
+ .flash-notice{
+   @include fade-out();
+
+   // Make the flash notice look like a toast
+   // By having it in the upper right hand corner and 
+   // being displayed "above" the rest of the content with 
+   // a higher z-index
+   
+   position: fixed !important;
+   top: 0 !important;
+   right: 0 !important;
+   z-index: 1000 !important;
+   margin: 1rem !important;
+
+   max-width: $toast-max-width;
+   box-shadow: $toast-box-shadow;
+
+   .icon {
+      position: absolute;
+      top: 0;
+      right: 0;
+      margin: 1px;
+      
+      :hover {
+         cursor: pointer;
+         opacity: 0.5;
+      }
    }
  }

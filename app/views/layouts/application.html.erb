@@ -39,6 +39,14 @@
               </ul>
             </nav>
             <div id="app-content-column" class="container">
+              <% flash.each do |type, msg| %>
+                <div class="flash-notice notification <%= flash_type_to_bulma_class(type) %>">
+                  <%= msg %>
+                  <span class="icon">
+                    <i class="fas fa-times-circle"></i>
+                  </span>
+                </div>
+              <% end %>
               <% if content_for?(:title) %>
                 <h3 class="title is-3"><%= yield(:title) %></h1>
               <% end %>

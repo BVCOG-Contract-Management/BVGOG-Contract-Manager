@@ -3,9 +3,31 @@ import "@hotwired/turbo-rails"
 import "controllers"
 import { fileIcon } from "./helpers/file-helper"
 
-// On turbo:load
+// Helpers
+function clearNotice() {
+    const notice = document.querySelector('.flash-notice');
+    if (notice) {
+        // Add event listener to the notice's span
+        notice.querySelector('span').addEventListener('click', (event) => {
+            notice.remove();
+        });
+        // Animate the notice to fade out
+        setTimeout(() => {
+            notice.classList.add('faded-out');
+        }, 5000);
+        // Remove the notice after opacity is 0
+        notice.addEventListener('transitionend', (event) => {
+            notice.remove();
+        }
+        );
+    }
+}
 
+
+// On turbo:load
 document.addEventListener("turbo:load", () => {
+    // Clear notice
+    clearNotice();
     // New vendor option selected in contracts
     // Get references to the vendor select field and the new vendor input field
     const vendorSelect = document.querySelector('#vendor_id');

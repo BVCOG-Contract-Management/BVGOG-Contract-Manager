@@ -1,15 +1,14 @@
 <table class="table is-striped is-hoverable is-fullwidth">
     <tbody>
-        <% contract.contract_documents.each do |contract_doc| %>
+        <% contract.contract_documents.each do |contract_document| %>
             <tr>
                 <td>
-                    <%= file_type_icon(contract_doc.file_name) %>
-                    <strong><%= contract_doc.file_name %></strong>
+                    <%= file_type_icon(contract_document.file_name) %>
+                    <strong><%= contract_document.file_name %></strong>
                 </td>
                 <td class="download-file-button">
                     <% if action == "download" %>
-                        <% # TODO: fix this to work through downloads controller %>
-                        <%= link_to contract_doc.full_path do %>
+                        <%= link_to download_contract_document_path(id: contract_document.id) do %>
                             <span class="icon">
                                 <i class="fas fa-download"></i>
                             </span>

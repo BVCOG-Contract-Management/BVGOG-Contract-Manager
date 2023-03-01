@@ -82,3 +82,12 @@
     }
   }
 }
+
+@mixin fade-out($duration: 0.3s, $timing: ease) {
+  opacity: 1;
+  @include transition(opacity, $duration, $timing);
+
+  &.faded-out {
+    opacity: 0;
+  }
+}

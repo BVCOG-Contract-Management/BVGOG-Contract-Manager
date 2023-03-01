@@ -172,6 +172,16 @@
                 <tbody>
                   <%# Javascript adds to this table as files are uploaded %>
                   <%# Ruby is annoying and doesn't do this nicely... %>
+
+                  <%# Files that are already uploaded are not removable %>
+                    <% @contract.contract_documents.each do |contract_document| %>
+                      <tr class="is-disabled" id="contract-document-<%= contract_document.id %>">
+                        <td>
+                        <%= file_type_icon(contract_document.file_name) %>
+                        <strong><%= contract_document.file_name %></strong>
+                        </td>
+                      </tr>
+                    <% end %>
                 </tbody>
               </table>
             </div>

@@ -30,3 +30,14 @@ module ApplicationHelper
     ]
   end
 end
+
+def flash_type_to_bulma_class(type)
+  case type
+  when "alert"
+    "is-danger"
+  when "notice"
+    "is-success"
+  else
+    "is-info"
+  end
+end
