@@ -7,19 +7,23 @@ import { fileIcon } from "./helpers/file-helper"
 function clearNotice() {
     const notice = document.querySelector('.flash-notice');
     if (notice) {
+        // First have the toast slide out by removing the 'slid-out' class
+        notice.classList.remove('slid-out');
         // Add event listener to the notice's span
         notice.querySelector('span').addEventListener('click', (event) => {
-            notice.remove();
+            notice.classList.add('slid-out');
+            // Add event listener earlier than the transitionend event listener
+            setTimeout(() => {
+                notice.remove();
+            }, 5000);
         });
-        // Animate the notice to fade out
+        // Animate the notice to fade out if it is not clicked
         setTimeout(() => {
-            notice.classList.add('faded-out');
+            notice.classList.add('slid-out');
+            setTimeout(() => {
+                notice.remove();
+            }, 5000);
         }, 5000);
-        // Remove the notice after opacity is 0
-        notice.addEventListener('transitionend', (event) => {
-            notice.remove();
-        }
-        );
     }
 }
 

@@ -40,7 +40,7 @@
             </nav>
             <div id="app-content-column" class="container">
               <% flash.each do |type, msg| %>
-                <div class="flash-notice notification <%= flash_type_to_bulma_class(type) %>">
+                <div class="flash-notice slid-out notification <%= flash_type_to_bulma_class(type) %>">
                   <%= msg %>
                   <span class="icon">
                     <i class="fas fa-times"></i>

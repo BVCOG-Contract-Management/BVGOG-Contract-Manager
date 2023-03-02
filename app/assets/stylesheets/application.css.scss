@@ -46,7 +46,7 @@
  }
 
  .flash-notice{
-   @include fade-out();
+   @include slide-out(0.2s);
 
    // Make the flash notice look like a toast
    // By having it in the upper right hand corner and 
@@ -55,7 +55,7 @@
    
    position: fixed !important;
    top: 0 !important;
-   right: 0 !important;
+   right: 0;
    z-index: 1000 !important;
    margin: 1rem !important;
 

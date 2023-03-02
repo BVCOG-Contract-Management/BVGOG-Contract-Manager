@@ -83,11 +83,11 @@
   }
 }
 
-@mixin fade-out($duration: 0.3s, $timing: ease) {
+@mixin slide-out($duration: 0.5s, $timing: ease-in-out) {
   opacity: 1;
-  @include transition(opacity, $duration, $timing);
+  @include transition(all, $duration, $timing);
 
-  &.faded-out {
-    opacity: 0;
+  &.slid-out {
+    right: -500px !important;
   }
 }
