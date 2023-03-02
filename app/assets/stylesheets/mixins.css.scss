@@ -82,3 +82,12 @@
     }
   }
 }
+
+@mixin slide-out($duration: 0.5s, $timing: ease-in-out) {
+  opacity: 1;
+  @include transition(all, $duration, $timing);
+
+  &.slid-out {
+    right: -500px !important;
+  }
+}

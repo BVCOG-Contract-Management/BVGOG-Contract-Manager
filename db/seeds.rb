@@ -77,3 +77,15 @@ for i in 1..10
   )
   used_user_vendor_combos << [user.id, vendor.id]
 end
+
+# BVCOG Config
+# Create the directories if they don't exist
+Dir.mkdir(Rails.root.join("public/contracts")) unless Dir.exist?(Rails.root.join("public/contracts"))
+Dir.mkdir(Rails.root.join("public/reports")) unless Dir.exist?(Rails.root.join("public/reports"))
+
+# Create the config
+BvcogConfig.create(
+  id: 1,
+  contracts_path: Rails.root.join("public/contracts"),
+  reports_path: Rails.root.join("public/reports"),
+) 

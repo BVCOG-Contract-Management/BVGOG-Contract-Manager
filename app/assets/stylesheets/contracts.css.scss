@@ -2,6 +2,7 @@
 
 #contracts {
     @include table-card($table-card-header-background-color, $table-card-header-border, $table-border);
+
     #contracts-table-header-inputs {
         display: flex;
         flex-direction: column;
@@ -22,6 +23,7 @@
 
 #contract-show {
     @include table-card($table-card-header-background-color, $table-card-header-border, $table-border);
+
     .download-file-button {
         display: flex;
         justify-content: flex-end;
@@ -30,4 +32,8 @@
 
 #contract-form {
     @include table-card($table-card-header-background-color, $table-card-header-border, $table-border);
+
+    tr.is-disabled {
+        opacity: 0.5;
+    }
 }

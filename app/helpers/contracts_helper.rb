@@ -123,3 +123,41 @@ end
 def entity_select_options
   options = Entity.all.map { |entity| [entity.name, entity.id] }
 end
+
+def contract_document_filename(contract, file_extension)
+  # Sample file name:  EEEEE-PPP-VVV-NNNNN-XXXXX
+  # Where,
+  #   EEEEE = 5 characters for the Entity Name
+  #   PPP = 3 characters for the Program Name
+  #   NNNNN = 5 characters for the Contract Number. 
+  #           If there is no Contract Number, use the first 5 characters of the Contract Title. 
+  #           If the actual Contract Number is longer than 5 characters, use the last 5 characters of the Contract Number.
+  #   XXXXX = 5 characters for a unique identifier. 
+  #           These 5 characters prevent any two files from having an identical name, which prevents any file from overwriting another file.
+  
+  # Replace all spaces with underscores
+  # Make all characters lowercase
+
+  # Take the first 5 characters of the entity name
+  e = contract.entity.name.gsub(" ", "_").slice(0, 5).downcase
+
+  # Take the first 3 characters of the program name
+  p = contract.program.name.gsub(" ", "_").slice(0, 3).downcase
+
+  # Take the last 5 characters of the contract number or the first 5 characters of the contract title
+  n = ""
+  if contract.number && contract.number.length >= 5
+    n = contract.number.gsub(" ", "_").slice(-5, 5).downcase
+  else
+    n = contract.title.gsub(" ", "_").slice(0, 5).downcase
+  end
+
+  # Generate a random 5 character string
+  x = SecureRandom.alphanumeric(5).downcase
+
+  # Concatenate the 3 parts together
+  file_name = "#{e}-#{p}-#{n}-#{x}#{file_extension}"
+
+  # Return the file name
+  file_name
+end
