@@ -8,6 +8,7 @@ class ContractsController < ApplicationController
     @contracts = sort_contracts().page params[:page]
     # Search contracts
     @contracts = search_contracts(@contracts) if params[:search].present?
+    puts params[:search].inspect
   end
 
   # GET /contracts/1 or /contracts/1.json
