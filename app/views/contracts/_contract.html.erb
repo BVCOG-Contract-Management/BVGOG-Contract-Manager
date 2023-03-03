@@ -122,26 +122,7 @@
                         </p>
                     </header>
                     <div class="card-content is-paddingless">
-                        <table class="table is-striped is-hoverable is-fullwidth">
-                            <tbody>
-                                <% @contract.contract_documents.each do |contract_doc| %>
-                                    <tr>
-                                        <td>
-                                            <%= file_type_icon(contract_doc.file_name) %>
-                                            <strong><%= contract_doc.file_name %></strong>
-                                        </td>
-                                        <td class="download-file-button">
-                                        <% # TODO: fix this to work through downloads controller %>
-                                            <%= link_to contract_doc.full_path do %>
-                                                <span class="icon">
-                                                    <i class="fas fa-download"></i>
-                                                </span>
-                                            <% end %>
-                                        </td>
-                                    </tr>
-                                <% end %>
-                            </tbody>
-                        </table>
+                        <%= render partial: "contracts/contract_documents", locals: { contract: @contract, action: "download" } %>
                     </div>
                 </div>
             </div>
