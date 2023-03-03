@@ -23,10 +23,14 @@
   </head>
 
   <body>
+      
+
       <div class="columns">
+
         <div id="sidebar-column" class="column is-2 is-paddingless">
           <%= render partial: "layouts/sidebar", locals: { page_list: page_list } %>
         </div>
+
         <div class="column is-paddingless">
         <% # Main content here %>
           <div>
@@ -50,7 +54,7 @@
               <% if content_for?(:title) %>
                 <h3 class="title is-3"><%= yield(:title) %></h1>
               <% end %>
-          
+       
               <%= yield %>
             </div>
           </div>

@@ -1,8 +1,12 @@
 class User < ApplicationRecord
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :validatable
   validates :first_name, presence: true, length: { maximum: 255 }
   validates :last_name, presence: true, length: { maximum: 255 }
   validates :email, presence: true, length: { maximum: 255 }
-  validates :password, presence: true, length: { minimum: 8, maximum: 255 }
+  validates :encrypted_password, presence: true
   validates :level, presence: true, inclusion: { in: UserLevel.list }
 
   # Add associations here
