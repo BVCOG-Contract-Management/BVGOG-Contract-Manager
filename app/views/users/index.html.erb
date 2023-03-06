@@ -47,7 +47,7 @@
             <td><%= user.last_name %></td>
             <td><%= user.level %></td>
             <td><%= "<program>" %></td>
-            <th><%= link_to "->", user %></th>
+            <td><%= link_to user, class: 'nav-btn' do %><i class="fa-solid fa-arrow-right"></i><% end %></td>
           </tr>
         <% end %>
       </tbody>
