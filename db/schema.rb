@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-
-ActiveRecord::Schema[7.0].define(version: 2023_03_01_204716) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_06_165342) do
   create_table "bvcog_configs", force: :cascade do |t|
     t.text "contracts_path", null: false
     t.text "reports_path", null: false
@@ -84,7 +83,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_01_204716) do
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
+    t.integer "program_id", default: 1, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["program_id"], name: "index_users_on_program_id"
     t.index ["redirect_user_id"], name: "index_users_on_redirect_user_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
@@ -113,6 +114,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_01_204716) do
   add_foreign_key "contracts", "programs"
   add_foreign_key "contracts", "users", column: "point_of_contact_id"
   add_foreign_key "contracts", "vendors"
+  add_foreign_key "users", "programs"
   add_foreign_key "users", "users", column: "redirect_user_id"
   add_foreign_key "vendor_reviews", "users"
   add_foreign_key "vendor_reviews", "vendors"

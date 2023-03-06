@@ -36,7 +36,7 @@
             <%= link_to col[0], sort: col[1], order: (params[:order] == "asc" ? "desc" : "asc") %>
           </th>
         <% end %>
-        <th><%= link_to "Program(s)", :sort => "program" %></th>
+        <th><%= link_to "Program", :sort => "program" %></th>
         <th><%= "" %></th>
       </tr>
       </thead>
@@ -46,7 +46,7 @@
             <td><%= user.first_name %></td>
             <td><%= user.last_name %></td>
             <td><%= user.level %></td>
-            <td><%= "<program>" %></td>
+            <td><%= user.program.name %></td>
             <td><%= link_to user, class: 'nav-btn' do %><i class="fa-solid fa-arrow-right"></i><% end %></td>
           </tr>
         <% end %>
