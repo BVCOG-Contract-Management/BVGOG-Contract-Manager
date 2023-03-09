@@ -83,7 +83,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_06_165342) do
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer "program_id", default: 1, null: false
+    t.integer "program_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["program_id"], name: "index_users_on_program_id"
     t.index ["redirect_user_id"], name: "index_users_on_redirect_user_id"

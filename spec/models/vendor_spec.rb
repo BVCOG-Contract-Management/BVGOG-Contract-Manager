@@ -29,8 +29,8 @@ RSpec.describe Vendor, type: :model do
 
   it "should query all contracts for a vendor" do
     vendor = create(:vendor)
-    contract_one = create(:contract, vendor: vendor)
-    contract_two = create(:contract, vendor: vendor)
+    contract_one = create(:contract, vendor: vendor, program: create(:program, id: 1))
+    contract_two = create(:contract, vendor: vendor, program: create(:program, id: 2))
     expect(vendor.contracts).to include(contract_one)
     expect(vendor.contracts).to include(contract_two)
   end

@@ -26,8 +26,9 @@ RSpec.describe Entity, type: :model do
 
   it "should query all contracts for a entity" do
     entity = create(:entity)
-    contract_one = create(:contract, entity: entity)
-    contract_two = create(:contract, entity: entity)
+    program = create(:program, id: 1)
+    contract_one = create(:contract, entity: entity, program: program)
+    contract_two = create(:contract, entity: entity, program: program)
     expect(entity.contracts).to include(contract_one)
     expect(entity.contracts).to include(contract_two)
   end
