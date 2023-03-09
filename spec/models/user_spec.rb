@@ -53,21 +53,21 @@ RSpec.describe User, type: :model do
     expect { user.save! }.to raise_error(ActiveRecord::RecordInvalid)
   end
 
-  it "should save user with email, password, first name, and last name" do
-    user = build(:user)
+  it "should save user with email, password, first name, last name, and program" do
+    user = build(:user, first_name: "first_name", last_name: "last_name", email: "user@example.com", program: create(:program, id: 1))
     expect { user.save! }.not_to raise_error
   end
 
   it "should not save user with duplicate email" do
     email = 'user@example.com'
-    user1 = create(:user, email: email)
-    user2 = build(:user, email: email)
+    user1 = create(:user, email: email, program: create(:program, id: 1))
+    user2 = build(:user, email: email, program: create(:program, id: 2))
 
     expect { user2.save! }.to raise_error(ActiveRecord::RecordInvalid)
   end
 
   it "should query all reviews for a user" do
-    user = create(:user)
+    user = create(:user, program: create(:program, id: 1))
     vendor_review_one = create(:vendor_review, user: user)
     vendor_review_two = create(:vendor_review, user: user)
     expect(user.vendor_reviews).to include(vendor_review_one)
@@ -75,7 +75,7 @@ RSpec.describe User, type: :model do
   end
 
   it "should query all contracts a user is the point of contact for" do
-    user = create(:user)
+    user = create(:user, program: create(:program, id: 1))
     contract_one = create(:contract, point_of_contact: user)
     contract_two = create(:contract, point_of_contact: user)
     expect(user.contracts).to include(contract_one)
