@@ -4,7 +4,7 @@ RSpec.describe Contract, type: :model do
   include FactoryBot::Syntax::Methods
 
   it "should save a factory-generated contract" do
-    contract = build(:contract)
+    contract = build(:contract, program: create(:program, id: 1))
     expect { contract.save! }.not_to raise_error
   end
 
@@ -89,7 +89,7 @@ RSpec.describe Contract, type: :model do
   end
 
   it "should query all documents for a contract" do
-    contract = create(:contract)
+    contract = create(:contract, program: create(:program, id: 1))
     contract_document = create(:contract_document, contract: contract)
     expect(contract.contract_documents).to include(contract_document)
   end

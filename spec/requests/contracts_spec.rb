@@ -20,7 +20,7 @@ RSpec.describe "/contracts", type: :request do
   # adjust the attributes here as well.
   let(:valid_attributes) {
     entity = create(:entity)
-    program = create(:program)
+    program = create(:program, id: 1)
     point_of_contact = create(:user)
     vendor = create(:vendor)
     return build(

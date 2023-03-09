@@ -25,7 +25,7 @@ RSpec.describe Program, type: :model do
   end
 
   it "should query all contracts for a program" do
-    program = create(:program)
+    program = create(:program, id: 1)
     contract_one = create(:contract, program: program)
     contract_two = create(:contract, program: program)
     expect(program.contracts).to include(contract_one)

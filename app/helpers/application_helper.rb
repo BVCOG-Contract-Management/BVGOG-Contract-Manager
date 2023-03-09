@@ -21,8 +21,8 @@ module ApplicationHelper
         { name: "Review a Vendor", path: "#", icon: "star" },
       ] },
       { title: "Users", subpaths: [
-        { name: "View Users", path: "#", icon: "users" },
-        { name: "Invite a User", path: "#", icon: "user-plus" },
+        { name: "View Users", path: users_path, icon: "users" },
+        { name: "Invite a User", path: new_user_path, icon: "user-plus" },
       ] },
       { title: "Admin", subpaths: [
         { name: "Platform Settings", path: "#", icon: "cog" },
