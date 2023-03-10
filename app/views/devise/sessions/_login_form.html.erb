@@ -1,6 +1,6 @@
-<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+<%= form_for(resource, as: resource_name, url: session_path(resource_name), validate:true) do |f| %>
 
-  <% if flash[:success] %>
+    <% if flash[:success] %>
     <div class="alert alert-success", style="color: green">
       <%= flash[:success] %>
     </div>
@@ -13,6 +13,16 @@
       <%= flash[:alert] %>
     </div>
   <% end %>
+
+  <% flash.each do |type, msg| %>
+    <div class="flash-notice slid-out notification <%= flash_type_to_bulma_class(type) %>">
+      <%= msg %>
+      <span class="icon">
+        <i class="fas fa-times"></i>
+      </span>
+    </div>
+  <% end %>
+
 
   <div class="field">
     <%= f.label :email, style: "display: block" %>
