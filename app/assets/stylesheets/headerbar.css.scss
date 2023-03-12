@@ -1,0 +1,12 @@
+@import "main";
+
+#header-bar {
+    background: $header-background-color;
+    color: #fff;
+    padding: $header-padding;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: $header-height;
+}

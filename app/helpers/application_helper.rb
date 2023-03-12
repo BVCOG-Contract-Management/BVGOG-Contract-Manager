@@ -13,8 +13,8 @@ module ApplicationHelper
         { name: "Home", path: root_path, icon: "home" },
       ] },
       { title: "Contracts", subpaths: [
-        { name: "View Contracts", path: "#", icon: "file-contract" },
-        { name: "Create a Contract", path: "#", icon: "pencil" },
+        { name: "View Contracts", path: contracts_path, icon: "file-contract" },
+        { name: "Create a Contract", path: new_contract_path, icon: "pencil" },
       ] },
       { title: "Vendors", subpaths: [
         { name: "View Vendors", path: "#", icon: "address-book" },
@@ -28,5 +28,16 @@ module ApplicationHelper
         { name: "Platform Settings", path: "#", icon: "cog" },
       ] },
     ]
+  end
+end
+
+def flash_type_to_bulma_class(type)
+  case type
+  when "alert"
+    "is-danger"
+  when "notice"
+    "is-success"
+  else
+    "is-info"
   end
 end

@@ -1,0 +1,5 @@
+en:
+  enumerations:
+    contract_status:
+      approved: 'Approved'
+      in_progress: 'In progress'

@@ -54,6 +54,10 @@ group :development, :test do
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
   # Use sqlite3 as the database for Active Record
   gem "sqlite3", "~> 1.4"
+
+  gem "factory_bot_rails", "~> 6.2.0"
+
+  gem "faker", "~> 2.19.0"
 end
 
 group :development do
@@ -72,6 +76,7 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
   gem "webdrivers"
+  gem "simplecov", require: false
 end
 
 gem "rubocop", "~> 1.45"
@@ -80,4 +85,19 @@ gem "rubocop-rails", "~> 2.17"
 
 gem "rspec", "~> 3.12"
 
+gem "rspec-rails", "~> 5.0"
+
 gem "sass-rails", "~> 6.0.0"
+
+gem "enumerate_it", "~> 3.2.4"
+
+
+gem "devise"
+
+gem "bulma-rails", "~> 0.9.3"
+
+gem "breadcrumbs_on_rails", "~> 4.1.0"
+
+gem "kaminari", "~> 1.2.1"
+
+gem "rails_12factor"
