@@ -1,9 +1,4 @@
 Rails.application.routes.draw do
-  resources :vendors
-  # Map root path to pages/home
+  resources :vendors, param: :name # add this line to use name as a parameter for the show action
   root :to => "pages#home"
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
-  # Defines the root path route ("/")
-  # root "articles#index"
 end

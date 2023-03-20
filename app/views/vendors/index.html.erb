@@ -19,7 +19,7 @@
       <tbody>
         <% @vendors.each do |vendor| %>
           <tr>
-            <td><%= vendor.name %></td>
+            <td><%= link_to vendor.name, vendor_path(vendor.name) %></td>
             <td><%= vendor.average_rating %></td>
           </tr>
         <% end %>
@@ -27,3 +27,4 @@
     </table>
   </div>
 </div>
+

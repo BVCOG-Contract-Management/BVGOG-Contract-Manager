@@ -57,10 +57,17 @@ class VendorsController < ApplicationController
     end
   end
 
+  # GET /vendors/:name
+  def show_by_name
+    @vendor = Vendor.find_by(name: params[:name])
+    render :show
+  end
+
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_vendor
-      @vendor = Vendor.find(params[:id])
+      @vendor = Vendor.find_by(name: params[:name])
     end
 
     # Only allow a list of trusted parameters through.

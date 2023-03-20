@@ -1,6 +1,7 @@
 <p style="color: green"><%= notice %></p>
 
-<%= render @vendor %>
+<h1><%= link_to @vendor.name, vendor_path(@vendor.name) %></h1>
+<p>Average rating: <%= @vendor.average_rating %></p>
 
 <div>
   <%= link_to "Edit this vendor", edit_vendor_path(@vendor) %> |
