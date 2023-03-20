@@ -1,0 +1,29 @@
+<% content_for :title do %>
+  Vendors
+<% end %>
+
+<div class="card">
+  <header class="card-header">
+    <p class="card-header-title">
+      Vendors
+    </p>
+  </header>
+  <div class="card-content">
+    <table class="table is-fullwidth">
+      <thead>
+        <tr>
+          <th>Vendor Name</th>
+          <th>Average Rating</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @vendors.each do |vendor| %>
+          <tr>
+            <td><%= vendor.name %></td>
+            <td><%= vendor.average_rating %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
