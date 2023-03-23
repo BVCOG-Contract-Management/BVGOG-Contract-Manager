@@ -30,13 +30,12 @@
     <table class="table table is-striped is-hoverable is-fullwidth">
       <thead>
         <tr>
-        <% columns = [["First Name", "first_name"], ["Last Name", "last_name"], ["Level", "level"]] %>
+        <% columns = [["First Name", "first_name"], ["Last Name", "last_name"], ["Level", "level"], ["Program", "program"]] %>
         <% columns.each do |col| %>
           <th>
             <%= link_to col[0], sort: col[1], order: (params[:order] == "asc" ? "desc" : "asc") %>
           </th>
         <% end %>
-        <th><%= link_to "Program", :sort => "program" %></th>
         <th><%= "" %></th>
       </tr>
       </thead>
@@ -46,7 +45,11 @@
             <td><%= user.first_name %></td>
             <td><%= user.last_name %></td>
             <td><%= user.level %></td>
-            <td><%= user.program.name %></td>
+            <% if user.program.blank? %>
+              <td><%= "-" %></td>
+            <% else %>
+              <td><%= user.program.name %></td>
+            <% end %>
             <td><%= link_to user, class: 'nav-btn' do %><i class="fa-solid fa-arrow-right"></i><% end %></td>
           </tr>
         <% end %>

@@ -84,8 +84,25 @@ class UsersController < ApplicationController
 
   def sort_users
     # Sorts by the query string parameter "sort"
+    # Since some columns are combinations or associations, we need to handle them separately
     asc = params[:order] ? params[:order] : "asc"
-    users = params[:sort] ? User.order(params[:sort] => asc.to_sym) : User.order(created_at: :asc)
+    users = case params[:sort]
+      when "program"
+        # Sort by the name of the program
+        User.joins(:program).order("name #{asc}")
+      else
+        begin
+          # Sort by the specified column and direction
+          params[:sort] ? User.order(params[:sort] => asc.to_sym) : User.order(created_at: :asc)
+        rescue ActiveRecord::StatementInvalid
+          # Otherwise, sort by title
+          # TODO: should we reconsider this?
+          User.order(title: :asc)
+        end
+      end
+
+    # Returns the sorted users
+    users
   end
 
   def search_users(users)
