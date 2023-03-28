@@ -1,9 +1,3 @@
-<% # This is the main application sidebar %>
-<% # It should have a tab highlighted depending on the active page %>
-
-<% # The sidebar is a Bulma panel %> 
-<% # https://bulma.io/documentation/components/panel/ %>
-
 <div>
   <div id="sidebar-header" class="sidebar-logo">
     <h3 class="subtitle is-6">Contract Manager</h3>
@@ -15,11 +9,7 @@
       </p>
       <ul class="menu-list">
         <% page[:subpaths].each do |item| %>
-          <% if url_for(only_path: true) == item[:path] then %>
-            <a href="<% item[:path] %>" class="sidebar-item has-background-light menu-item has-text-black-bis">
-          <% else %>
-            <a href="<% item[:path] %>" class="sidebar-item menu-item has-text-link-light">
-          <% end %>
+          <a href="<%= item[:path] %>" class="sidebar-item menu-item has-text-link-light">
             <span class="icon">
               <i class="fa-regular fa-<%= item[:icon] %>"></i>
             </span>
@@ -30,3 +20,7 @@
     <% end %>
   </aside>
 </div>
+
+  </aside>
+</div>
+

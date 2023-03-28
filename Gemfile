@@ -74,6 +74,8 @@ group :test do
   gem "webdrivers"
 end
 
+gem 'faker', '2.19.0'
+
 gem "rubocop", "~> 1.45"
 
 gem "rubocop-rails", "~> 2.17"

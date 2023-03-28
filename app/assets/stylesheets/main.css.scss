@@ -2,14 +2,41 @@
 
 // Colors
 $dark-gray: #333;
+$light-gray: #f5f5f5;
+$very-light-gray: #f9f9f9;
 $asphalt: #17191e;
+$white: #fff;
+
+// App
+ $body-background-color: $white;
+ $app-content-column-padding: 1rem 1.5rem;
 
 // Sidebar
 $aside-background-color: $dark-gray;
 $aside-border: 1px solid #e3e6f0;
 $aside-width: fit-content;
 $aside-padding: 25px;
-
-$aside-header-background-color: $asphalt;
 $aside-header-text-color: white;
-$aside-header-padding: 20px 0 10px 0;
+
+// Header Bar + Sidebar Header
+$header-background-color: $asphalt;
+$header-padding: 20px 0 10px 0;
+$header-height: 70px;
+
+// Tables
+$table-border: 0;
+$table-card-header-background-color: $light-gray;
+$table-card-header-border: 1px solid #e3e6f0;
+$table-header-input-margin: 0.5rem 0;
+$table-card-border-radius: 0.5rem;
+
+// Bread crumbs
+$breadcrumb-background-color: $very-light-gray;
+$breadcrumb-padding: 0.5rem 1rem;
+$breadcrumb-border-radius: $table-card-border-radius;
+$breadcrumb-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+$breadcrumb-font-weight: 400;
+
+// Toasts
+$toast-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+$toast-max-width: 500px;

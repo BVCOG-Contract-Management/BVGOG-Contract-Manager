@@ -17,6 +17,20 @@
 @import "main";
 @import "sidebar";
 
+// Define variables
+$aside-background-color: #f5f5f5;
+$aside-width: 250px;
+$aside-border: 1px solid #dbdbdb;
+$aside-padding: 20px;
+$aside-header-background-color: #ffffff;
+$aside-header-padding: 20px;
+$aside-header-text-color: #363636;
+$aside-active-item-background-color: #00d1b2; // add this line
+
  body {
     font-family: 'Nunito Sans', sans-serif !important;
+ }
+
+ .main-content {
+   margin-left: 340px;
  }

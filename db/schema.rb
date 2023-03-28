@@ -10,7 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_20_060330) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_28_130140) do
+  create_table "vendor_reviews", force: :cascade do |t|
+    t.integer "vendor_id", null: false
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["vendor_id"], name: "index_vendor_reviews_on_vendor_id"
+  end
+
   create_table "vendors", force: :cascade do |t|
     t.string "title"
     t.text "content"
@@ -18,6 +26,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_20_060330) do
     t.datetime "updated_at", null: false
     t.float "average_rating"
     t.string "name"
+    t.text "all_reviews"
   end
 
+  add_foreign_key "vendor_reviews", "vendors"
 end

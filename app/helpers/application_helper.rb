@@ -17,7 +17,7 @@ module ApplicationHelper
         { name: "Create a Contract", path: "#", icon: "pencil" },
       ] },
       { title: "Vendors", subpaths: [
-        { name: "View Vendors", path: "#", icon: "address-book" },
+        { name: "View Vendors", path: "http://127.0.0.1:3000/vendors", icon: "address-book" },
         { name: "Review a Vendor", path: "#", icon: "star" },
       ] },
       { title: "Users", subpaths: [

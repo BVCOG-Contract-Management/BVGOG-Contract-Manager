@@ -3,6 +3,11 @@
 #sidebar-column {
   background-color: $aside-background-color;
   width: $aside-width !important;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
 }
 
 .sidebar-main{
@@ -17,9 +22,10 @@
 }
 
 #sidebar-header {
-  background-color: $aside-header-background-color;
+  background-color: $header-background-color;
   border-bottom: $aside-border;
-  padding: $aside-header-padding;
+  padding: $header-padding;
+  height: $header-height;
   border: none;
   display: flex;
   justify-content: center;
