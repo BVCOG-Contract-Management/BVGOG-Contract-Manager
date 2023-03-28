@@ -14,16 +14,6 @@
     </div>
   <% end %>
 
-  <% flash.each do |type, msg| %>
-    <div class="flash-notice slid-out notification <%= flash_type_to_bulma_class(type) %>">
-      <%= msg %>
-      <span class="icon">
-        <i class="fas fa-times"></i>
-      </span>
-    </div>
-  <% end %>
-
-
   <div class="field">
     <%= f.label :email, style: "display: block" %>
     <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "input" %>
