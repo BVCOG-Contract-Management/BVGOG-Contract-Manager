@@ -79,8 +79,12 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
   gem "webdrivers"
+  gem 'cucumber-rails', require: false
+  gem 'database_cleaner'
+  gem 'rails-controller-testing'
   gem "simplecov", require: false
 end
+
 
 gem "rubocop", "~> 1.45"
 
