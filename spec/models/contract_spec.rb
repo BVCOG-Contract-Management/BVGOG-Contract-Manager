@@ -4,7 +4,7 @@ RSpec.describe Contract, type: :model do
   include FactoryBot::Syntax::Methods
 
   it "should save a factory-generated contract" do
-    contract = build(:contract)
+    contract = build(:contract, entity: create(:entity), program: create(:program), vendor: create(:vendor), point_of_contact: create(:user))
     expect { contract.save! }.not_to raise_error
   end
 

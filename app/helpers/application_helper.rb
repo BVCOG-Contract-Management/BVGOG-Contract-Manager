@@ -16,6 +16,9 @@ module ApplicationHelper
         { name: "View Contracts", path: contracts_path, icon: "file-contract" },
         { name: "Create a Contract", path: new_contract_path, icon: "pencil" },
       ] },
+      { title: "Reports", subpaths: [
+        { name: "Create a Report", path: new_report_path, icon: "file-alt" },
+      ] },
       { title: "Vendors", subpaths: [
         { name: "View Vendors", path: "#", icon: "address-book" },
         { name: "Review a Vendor", path: "#", icon: "star" },

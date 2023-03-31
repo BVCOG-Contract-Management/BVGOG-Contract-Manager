@@ -108,3 +108,7 @@ gem "breadcrumbs_on_rails", "~> 4.1.0"
 gem "kaminari", "~> 1.2.1"
 
 gem "rails_12factor"
+
+gem 'prawn'
+
+gem 'prawn-table', '~> 0.2.0'

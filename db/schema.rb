@@ -10,6 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+
 ActiveRecord::Schema[7.0].define(version: 2023_03_01_204716) do
   create_table "bvcog_configs", force: :cascade do |t|
     t.text "contracts_path", null: false
@@ -69,6 +70,24 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_01_204716) do
     t.index ["name"], name: "index_programs_on_name", unique: true
   end
 
+  create_table "reports", force: :cascade do |t|
+    t.text "title", null: false
+    t.text "file_name", null: false
+    t.text "full_path", null: false
+    t.integer "entity_id"
+    t.integer "program_id"
+    t.integer "point_of_contact_id"
+    t.integer "expiring_in_days"
+    t.text "report_type", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["entity_id"], name: "index_reports_on_entity_id"
+    t.index ["point_of_contact_id"], name: "index_reports_on_point_of_contact_id"
+    t.index ["program_id"], name: "index_reports_on_program_id"
+    t.index ["user_id"], name: "index_reports_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.text "first_name", null: false
     t.text "last_name", null: false
@@ -112,6 +131,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_01_204716) do
   add_foreign_key "contracts", "programs"
   add_foreign_key "contracts", "users", column: "point_of_contact_id"
   add_foreign_key "contracts", "vendors"
+  add_foreign_key "reports", "entities"
+  add_foreign_key "reports", "programs"
+  add_foreign_key "reports", "users"
+  add_foreign_key "reports", "users", column: "point_of_contact_id"
   add_foreign_key "users", "users", column: "redirect_user_id"
   add_foreign_key "vendor_reviews", "users"
   add_foreign_key "vendor_reviews", "vendors"
