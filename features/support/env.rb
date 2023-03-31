@@ -4,8 +4,11 @@
 # instead of editing this one. Cucumber will automatically load all features/**/*.rb
 # files.
 
+require 'simplecov'
 require 'cucumber/rails'
 
+SimpleCov.start 'rails'
+SimpleCov.coverage_dir 'coverage/cucumber'
 # features/support/env.rb
 if Rails.env.test?
   # Disable logging of database changes during Cucumber tests
@@ -35,7 +38,6 @@ end
 # recommended as it will mask a lot of errors for you!
 #
 ActionController::Base.allow_rescue = false
-system("rails db:reset RAILS_ENV=test")
 # Remove/comment out the lines below if your app doesn't have a database.
 # For some databases (like MongoDB and CouchDB) you may need to use :truncation instead.
 begin
