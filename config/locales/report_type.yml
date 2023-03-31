@@ -1,0 +1,5 @@
+en:
+  enumerations:
+    report_type:
+      contracts: 'Contracts'
+      users: 'Users'
