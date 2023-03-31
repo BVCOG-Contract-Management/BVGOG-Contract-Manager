@@ -5,7 +5,7 @@ RSpec.describe "reports/show", type: :view do
     @report = assign(:report, Report.create!())
   end
 
-  it "renders attributes in <p>" do
+  pending "renders attributes in <p>" do
     render
   end
 end

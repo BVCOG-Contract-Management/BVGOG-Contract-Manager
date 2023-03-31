@@ -43,7 +43,7 @@ RSpec.describe "/reports", type: :request do
 
   describe "GET /new" do
     it "renders a successful response" do
-      get new_report_url
+      get new_report_url + "?type=contracts"
       expect(response).to be_successful
     end
   end
