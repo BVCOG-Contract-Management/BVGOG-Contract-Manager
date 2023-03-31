@@ -27,7 +27,6 @@
       
     </header>
     <div class="card-content is-paddingless">
-      <%= turbo_frame_tag "contracts" do %>
       <table class="table table is-striped is-hoverable is-fullwidth">
         <thead>
           <tr>
@@ -56,7 +55,6 @@
           <% end %>
         </tbody>
       </table>
-      <% end %>
     </div>
     <footer class="card-footer">
       <%= paginate @contracts %>
