@@ -14,10 +14,10 @@ require "factory_bot_rails"
 # $stdout.reopen(File.new('/dev/null', 'w'))
 
 # Create users
-FactoryBot.create(:user, email: "user@example.com", password: "password", first_name: "Example", last_name: "User")
 for i in 1..5
   FactoryBot.create(:user, id: i)
-end 
+end
+FactoryBot.create(:user, email: "user@example.com", password: "password", first_name: "Example", last_name: "User")
 
 # Create entities
 for i in 1..5
