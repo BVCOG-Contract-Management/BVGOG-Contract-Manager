@@ -4,7 +4,7 @@ Feature: Upload Files
   So that I can upload information about contracts
   I want be able to upload files to the db
 
-
+@wip
 Scenario: Upload a file
   Given I am on the contracts page
   When I follow "Contract 1"

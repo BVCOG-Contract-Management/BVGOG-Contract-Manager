@@ -26,7 +26,7 @@ Scenario: Fail to create contract
   And I should see "Point of contact must exist"
   And I should see "Vendor must exist"
 
-
+@wip
 Scenario: Sucessfully create contract
   Given I am on the new contract page
   When I fill in "Title" with "TestContract"

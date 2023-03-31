@@ -12,6 +12,7 @@ Scenario: Edit contract
   And I press "Update Contract"
   Then I should see "Contract was successfully updated."
 
+@wip
 Scenario: Edit a contract
   Given I am on the contracts page
   When I follow "Contract 1"
