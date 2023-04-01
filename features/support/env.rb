@@ -10,10 +10,7 @@ require 'cucumber/rails'
 SimpleCov.start 'rails'
 SimpleCov.coverage_dir 'coverage/cucumber'
 # features/support/env.rb
-if Rails.env.test?
-  # Disable logging of database changes during Cucumber tests
-  Rails.logger.level = 1
-end
+
 
 # frozen_string_literal: true
 
