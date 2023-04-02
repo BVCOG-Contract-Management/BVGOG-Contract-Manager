@@ -42,7 +42,7 @@
       <tbody>
         <% @users.each do |user| %>
           <tr>
-            <td><%= user.first_name %></td>
+            <td><%= link_to user.first_name, user %></td>
             <td><%= user.last_name %></td>
             <td><%= user.level %></td>
             <% if user.program.blank? %>
@@ -50,7 +50,6 @@
             <% else %>
               <td><%= user.program.name %></td>
             <% end %>
-            <td><%= link_to user, class: 'nav-btn' do %><i class="fa-solid fa-arrow-right"></i><% end %></td>
           </tr>
         <% end %>
       </tbody>
