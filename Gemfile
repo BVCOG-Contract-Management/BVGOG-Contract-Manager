@@ -58,6 +58,8 @@ group :development, :test do
   gem "factory_bot_rails", "~> 6.2.0"
 
   gem "faker", "~> 2.19.0"
+
+  gem "byebug"
 end
 
 group :development do

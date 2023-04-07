@@ -4,10 +4,6 @@ Feature: log in to website
   So that I can securely access contracts
   I want to be able to securely log in and out to the contract manager
 
-Given the following users exist:
-  | email              | password  | first_name     | last_name |
-  | "user@example.com" |"password" | "Example"      | "User"    |
-
 Scenario: fail login
     Given I am on the sign_in page
     When I fill in "Email" with "user@example.com"
@@ -17,10 +13,12 @@ Scenario: fail login
 
 Scenario: User logs in successfully
     Given I am on the sign_in page
+    Given an example user exists
     When I fill in "Email" with "user@example.com"
     And I fill in "Password" with "password"
     And I press "Log in"
-    Then I should see "Signed in successfully."
+    Then I should see "Signed in successfully"
+
 
 #Scenario: User logs out
 #    Given I am on the home page

@@ -1,8 +1,6 @@
-
 require 'uri'
 require 'cgi'
-require "factory_bot_rails"
-
+require 'factory_bot_rails'
 
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'support', 'paths'))
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'support', 'selectors'))
@@ -14,23 +12,18 @@ module WithinHelpers
 end
 World(WithinHelpers)
 
-Then('I should see {string} element') do |element_name|
-  expect(page).to have_selector(:xpath, "//strong[contains(., '#{element_name}')]")
-end
-
 When(/^I upload "([^"]*)" to the contract documents field$/) do |filename|
   # Find the input element by name attribute
   input_element = find('input[id="contract-documents-file-input"]', visible: false)
-  File.new(filename, "w")
+  File.new(filename, 'w')
   # Attach the file to the input element
   input_element.attach_file(filename, make_visible: true)
 end
 
-
-And("I attach a file with a random name") do
+And('I attach a file with a random name') do
   filename = "file_#{Time.now.to_i}.txt"
-  File.new(filename, "w")
-  attach_file("upload", Rails.root.join(filename))
+  File.new(filename, 'w')
+  attach_file('upload', Rails.root.join(filename))
 end
 
 # Single-line step scoper
@@ -73,7 +66,7 @@ When(/^(?:|I )fill in the following:$/) do |fields|
   end
 end
 
-When("I select {string} from the {string} select box") do |option, select_name|
+When('I select {string} from the {string} select box') do |option, select_name|
   select option, from: select_name
 end
 

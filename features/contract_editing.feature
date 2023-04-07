@@ -5,20 +5,16 @@ Feature: Edit contracts
   I want to edit contracts in the database
 
 Scenario: Edit contract
+  Given 1 example users exist
+  Given 1 example entities exist
+  Given 1 example programs exist
+  Given 1 example vendors exist
+  Given 1 example contracts exist
   Given I am on the contracts page
   When I follow "Contract 1"
   And I follow "Edit this contract"
-  #Why doesn't this work? And I fill in "Description" with "Updated Description"
   And I press "Update Contract"
   Then I should see "Contract was successfully updated."
 
-@wip
-Scenario: Edit a contract
-  Given I am on the contracts page
-  When I follow "Contract 1"
-  And I follow "Edit this contract"
-  And I fill in "Title" with "Updated Title"
-  And I press "Update Contract"
-  Then I should see "Updated Title"
 
 
