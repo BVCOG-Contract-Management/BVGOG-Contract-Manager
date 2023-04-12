@@ -31,6 +31,10 @@ for i in 1..5
   FactoryBot.create(:user)
 end
 
+#Create example user for some tests
+FactoryBot.create(:user, email: 'user@example.com', password: 'password', first_name: 'Example', last_name: 'User')
+
+
 # Create vendors
 for i in 1..5
   FactoryBot.create(
@@ -61,6 +65,17 @@ for i in 1..500
     contract: Contract.all.sample,
   )
 end
+
+#Create some documents with nearby expiries to test expiring docs mailer
+for i in 1..100
+  FactoryBot.create(
+    :contract, 
+    point_of_contact: contact_person, 
+    ends_at: Date.today + 1.days * i
+  )
+end
+
+contact_person = User.find_by(email: 'user@example.com')
 
 # Create vendor reviews manually since they have a (user, vendor) unique index
 used_user_vendor_combos = []
