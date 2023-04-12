@@ -30,6 +30,9 @@ module ApplicationHelper
       { title: "Admin", subpaths: [
         { name: "Platform Settings", path: "#", icon: "cog" },
       ] },
+      { title: "Profile", subpaths: [
+        { name: "Sign Out", path: destroy_user_session_path, icon: "cog" },
+      ] },
     ]
   end
 end
