@@ -5,7 +5,8 @@ RSpec.describe "contracts/index", type: :view do
 
   before(:each) do
     contracts = []
-    for i in 1..15
+    #This test was failing because contracts were being created elsewhere, and the unique_id check was failing. Please advise. 
+    for i in 100..115
       contracts << create(:contract, id: i, entity: create(:entity, id: i), program: create(:program, id: i), point_of_contact: create(:user, id: i), vendor: create(:vendor, id: i))
     end
     @contracts = Kaminari.paginate_array(contracts).page(1).per(10)
