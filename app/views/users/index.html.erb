@@ -26,7 +26,6 @@
 
   </header>
   <div class="card-content is-paddingless">
-  <%= turbo_frame_tag "users" do %>
     <table class="table table is-striped is-hoverable is-fullwidth">
       <thead>
         <tr>
@@ -54,7 +53,6 @@
         <% end %>
       </tbody>
     </table>
-    <% end %>
     <footer class="card-footer">
       <%= paginate @users %>
     </footer>
