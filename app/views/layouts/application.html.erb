@@ -8,7 +8,7 @@
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
-    
+
     <% # Bulma CSS %>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
@@ -23,13 +23,14 @@
   </head>
 
   <body>
-      
+
 
       <div class="columns">
-
-        <div id="sidebar-column" class="column is-2 is-paddingless">
-          <%= render partial: "layouts/sidebar", locals: { page_list: page_list } %>
-        </div>
+        <% if user_signed_in? %>
+          <div id="sidebar-column" class="column is-2 is-paddingless">
+            <%= render partial: "layouts/sidebar", locals: { page_list: page_list } %>
+          </div>
+        <% end %>
 
         <div class="column is-paddingless">
         <% # Main content here %>
@@ -39,7 +40,7 @@
             </div>
             <nav class="breadcrumb has-arrow-separator" aria-label="breadcrumbs">
               <ul>
-                <%= render_breadcrumbs :tag => :li, :separator => "" %> 
+                <%= render_breadcrumbs :tag => :li, :separator => "" %>
               </ul>
             </nav>
             <div id="app-content-column" class="container">
@@ -54,7 +55,7 @@
               <% if content_for?(:title) %>
                 <h3 class="title is-3"><%= yield(:title) %></h1>
               <% end %>
-       
+
               <%= yield %>
             </div>
           </div>
