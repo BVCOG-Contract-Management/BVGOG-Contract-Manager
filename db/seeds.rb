@@ -8,7 +8,6 @@
 
 require "factory_bot_rails"
 
-
 # Redirect stdout to a null device
 # orig_stdout = $stdout.clone
 # $stdout.reopen(File.new('/dev/null', 'w'))
@@ -27,7 +26,6 @@ for i in 1..5
     name: "Entity #{i}",
   )
 end
-
 # Create programs
 for i in 1..5
   FactoryBot.create(
