@@ -94,8 +94,6 @@ gem "sass-rails", "~> 6.0.0"
 
 gem "enumerate_it", "~> 3.2.4"
 
-gem "whenever"
-
 gem "devise"
 
 gem "bulma-rails", "~> 0.9.3"
