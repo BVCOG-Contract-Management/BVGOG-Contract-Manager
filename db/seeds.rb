@@ -8,6 +8,17 @@
 
 require "factory_bot_rails"
 
+
+# Redirect stdout to a null device
+# orig_stdout = $stdout.clone
+# $stdout.reopen(File.new('/dev/null', 'w'))
+
+# Create users
+for i in 1..5
+  FactoryBot.create(:user, id: i)
+end
+FactoryBot.create(:user, email: "user@example.com", password: "password", first_name: "Example", last_name: "User")
+
 # Create entities
 for i in 1..5
   FactoryBot.create(
@@ -25,15 +36,6 @@ for i in 1..5
     name: "Program #{i}",
   )
 end
-
-# Create users
-for i in 1..5
-  FactoryBot.create(:user)
-end
-
-#Create example user for some tests
-FactoryBot.create(:user, email: 'user@example.com', password: 'password', first_name: 'Example', last_name: 'User')
-
 
 # Create vendors
 for i in 1..5
@@ -108,4 +110,6 @@ BvcogConfig.create(
   id: 1,
   contracts_path: Rails.root.join("public/contracts"),
   reports_path: Rails.root.join("public/reports"),
-) 
+)
+
+# $stdout.reopen(orig_stdout)
