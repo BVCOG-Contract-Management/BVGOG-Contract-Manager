@@ -8,15 +8,6 @@
 
 require "factory_bot_rails"
 
-# Create entities
-for i in 1..5
-  FactoryBot.create(
-    :entity,
-    id: i,
-    name: "Entity #{i}",
-  )
-end
-
 # Create programs
 for i in 1..5
   FactoryBot.create(
@@ -27,8 +18,20 @@ for i in 1..5
 end
 
 # Create users
+for i in 1..50
+  FactoryBot.create(
+    :user,
+    id: i,
+    program: Program.all.sample)
+end
+
+# Create entities
 for i in 1..5
-  FactoryBot.create(:user)
+  FactoryBot.create(
+    :entity,
+    id: i,
+    name: "Entity #{i}",
+  )
 end
 
 # Create vendors
