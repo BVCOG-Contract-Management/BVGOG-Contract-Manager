@@ -59,7 +59,7 @@ RSpec.describe User, type: :model do
   end
 
   it "should not save user with duplicate email" do
-    email = 'user@example.com'
+    email = 'ExampleUser@example.com'
     user1 = create(:user, email: email)
     user2 = build(:user, email: email)
 

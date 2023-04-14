@@ -8,22 +8,15 @@
 
 require "factory_bot_rails"
 
-# Create programs
-for i in 1..5
-  FactoryBot.create(
-    :program,
-    id: i,
-    name: "Program #{i}",
-  )
-end
+# Redirect stdout to a null device
+# orig_stdout = $stdout.clone
+# $stdout.reopen(File.new('/dev/null', 'w'))
 
 # Create users
-for i in 1..50
-  FactoryBot.create(
-    :user,
-    id: i,
-    program: Program.all.sample)
+for i in 1..5
+  FactoryBot.create(:user, id: i)
 end
+FactoryBot.create(:user, email: "user@example.com", password: "password", first_name: "Example", last_name: "User")
 
 # Create entities
 for i in 1..5
@@ -31,6 +24,14 @@ for i in 1..5
     :entity,
     id: i,
     name: "Entity #{i}",
+  )
+end
+# Create programs
+for i in 1..5
+  FactoryBot.create(
+    :program,
+    id: i,
+    name: "Program #{i}",
   )
 end
 
@@ -53,6 +54,21 @@ for i in 1..50
     program: Program.all.sample,
     point_of_contact: User.all.sample,
     vendor: Vendor.all.sample,
+  )
+end
+
+contact_person = User.find_by(email: 'user@example.com')
+#Create some documents with nearby expiries to test expiring docs mailer
+for i in 1..100
+  FactoryBot.create(
+    :contract, 
+    id: 50+i,
+    point_of_contact: contact_person, 
+    title: "Expiry Contract #{i}",
+    program: Program.all.sample,
+    vendor: Vendor.all.sample,
+    entity: Entity.all.sample,
+    ends_at: Date.today + 1.days * i
   )
 end
 
@@ -92,4 +108,6 @@ BvcogConfig.create(
   id: 1,
   contracts_path: Rails.root.join("public/contracts"),
   reports_path: Rails.root.join("public/reports"),
-) 
+)
+
+# $stdout.reopen(orig_stdout)
