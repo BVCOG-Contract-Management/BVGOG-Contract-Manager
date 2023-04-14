@@ -12,6 +12,15 @@ require "factory_bot_rails"
 # orig_stdout = $stdout.clone
 # $stdout.reopen(File.new('/dev/null', 'w'))
 
+# Create programs
+for i in 1..5
+  FactoryBot.create(
+    :program,
+    id: i,
+    name: "Program #{i}",
+  )
+end
+
 # Create users
 for i in 1..50
   FactoryBot.create(
@@ -28,14 +37,6 @@ for i in 1..5
     :entity,
     id: i,
     name: "Entity #{i}",
-  )
-end
-# Create programs
-for i in 1..5
-  FactoryBot.create(
-    :program,
-    id: i,
-    name: "Program #{i}",
   )
 end
 
