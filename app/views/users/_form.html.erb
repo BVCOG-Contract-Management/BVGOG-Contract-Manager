@@ -43,7 +43,7 @@
             <%# Level %>
             <div class="field">
               <%= form.label :level %>
-              <%= form.text_field :level, class: "input" %>
+              <%= form.select :level, UserLevel.to_a.reject { |level| level[0] == "Zero" }, {:include_blank => true}, class: "input" %>
             </div>
           </div>
         </div>
