@@ -59,6 +59,21 @@ for i in 1..50
   )
 end
 
+contact_person = User.find_by(email: 'user@example.com')
+#Create some documents with nearby expiries to test expiring docs mailer
+for i in 1..100
+  FactoryBot.create(
+    :contract, 
+    id: 50+i,
+    point_of_contact: contact_person, 
+    title: "Expiry Contract #{i}",
+    program: Program.all.sample,
+    vendor: Vendor.all.sample,
+    entity: Entity.all.sample,
+    ends_at: Date.today + 1.days * i
+  )
+end
+
 # Create contract documents
 for i in 1..500
   FactoryBot.create(

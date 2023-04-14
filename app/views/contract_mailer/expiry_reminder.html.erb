@@ -1,0 +1,73 @@
+<!-- Define the styles in a separate <style> section -->
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #333333;
+  }
+
+  table {
+    border-collapse: collapse;
+    mso-table-lspace: 0pt;
+    mso-table-rspace: 0pt;
+  }
+
+  td {
+    padding: 0;
+    vertical-align: top;
+  }
+
+  a {
+    color: #3273dc;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  /* Button style */
+  .button {
+    display: inline-block;
+    padding: 1rem 2rem;
+    background-color: #3273dc;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.2s ease-in-out;
+  }
+
+  .button:hover {
+    background-color: #265da7;
+  }
+</style>
+
+<!-- Use the styles in the email template -->
+<table width="100%" cellspacing="0" cellpadding="0">
+  <tr>
+    <td align="center">
+      <table cellpadding="0" cellspacing="0" width="600" style="max-width: 600px;">
+        <tr>
+          <td align="left" bgcolor="#ffffff" style="padding: 40px;">
+            <h1>Good morning!</h1>
+            <p>This is a friendly reminder that your contract, <%= @contract.title %>, with <%= @contract.vendor.name %> will be expiring on <%= @contract.ends_at.strftime('%B %d, %Y') %>.</p>
+            <p>You have <%= "<Number of extensions>" %> extensions remaining on this contract.</p>
+            <p>Please take the appropriate actions to end or renew this contract.</p>
+            <table border="0" cellpadding="0" cellspacing="0">
+              <tr>
+                <td>
+                  <p style="margin-bottom: 1rem;">
+                    <a href="<%= contract_url(@contract) %>" class="button">View Contract</a>
+                  </p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
