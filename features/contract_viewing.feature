@@ -17,6 +17,11 @@ Scenario: View contracts
   Then I should see "Contract 1"
   And I should see "Contract 2"
 
+Scenario: Search contracts
+  Given I am on the contracts page
+  And I fill in "search" with "Contract 11"
+  And I follow "Contract 1"
+  Then I should see "Edit this contract"
 
 Scenario: Look at paginated contracts
   Given I am on the contracts page
