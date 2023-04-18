@@ -12,9 +12,22 @@ require "factory_bot_rails"
 # orig_stdout = $stdout.clone
 # $stdout.reopen(File.new('/dev/null', 'w'))
 
-# Create users
+# Create programs
 for i in 1..5
-  FactoryBot.create(:user, id: i)
+  FactoryBot.create(
+    :program,
+    id: i,
+    name: "Program #{i}",
+  )
+end
+
+# Create users
+for i in 1..50
+  FactoryBot.create(
+    :user,
+    id: i,
+    level: UserLevel.enumeration.except(:zero).keys.sample,
+    program: Program.all.sample)
 end
 FactoryBot.create(:user, email: "user@example.com", password: "password", first_name: "Example", last_name: "User")
 
@@ -24,14 +37,6 @@ for i in 1..5
     :entity,
     id: i,
     name: "Entity #{i}",
-  )
-end
-# Create programs
-for i in 1..5
-  FactoryBot.create(
-    :program,
-    id: i,
-    name: "Program #{i}",
   )
 end
 

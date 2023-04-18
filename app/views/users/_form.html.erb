@@ -1,66 +1,71 @@
 <div id="user-form">
-  <div class="card">
-    <header class="card-header">
-      <p class="card-header-title">
-        User Information
-      </p>
-    </header>
-    <div class="card-content">
+<div class="card">
+  <header class="card-header">
+    <p class="card-header-title">
+      User Information
+    </p>
+  </header>
+  <div class="card-content">
     <%= form_with(model: @user) do |form| %>
-        <% if @user.errors.any? %>
-          <article class="message is-danger">
-            <div class="message-header">
-              <p><%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</p>
-            </div>
-            <div class="message-body">
-              <ul>
-                <% user.errors.full_messages.each do |message| %>
-                  <li><%= message %></li>
-                <% end %>
-              </ul>
-            </div>
-          </article>
-        <% end %>
-
-        <%# Form starts here %>
-        <div class="columns">
-          <div class="column is-6">
-            <%# First Name %>
-            <div class="field">
-              <%= form.label :first_name %>
-              <%= form.text_field :first_name, class: "input" %>
-            </div>
-            <%# Last Name %>
-            <div class="field">
-              <%= form.label :last_name %>
-              <%= form.text_field :last_name, class: "input" %>
-            </div>
-            <%# Email %>
-            <div class="field">
-              <%= form.label :email %>
-              <%= form.text_field :email, class: "input" %>
-            </div>
-            <%# Level %>
-            <div class="field">
-              <%= form.label :level %>
-              <%= form.text_field :level, class: "input" %>
-            </div>
+    <% if @user.errors.any? %>
+    <article class="message is-danger">
+      <% error_counter = 0 %>
+      <% @user.errors.full_messages.each do |message| %>
+      <% unless message == "Level is not included in the list" %>
+      <% error_counter += 1 %>
+      <% end %>
+      <% end %>
+      <div class="message-header">
+        <p><%= pluralize(error_counter, "error") %> prohibited this user from being saved:</p>
+      </div>
+      <div class="message-body">
+        <ul>
+          <% @user.errors.full_messages.each do |message| %>
+          <% unless message == "Level is not included in the list" %>
+          <li><%= message %></li>
+          <% end %>
+          <% end %>
+        </ul>
+      </div>
+    </article>
+    <% end %>
+    <%# Form starts here %>
+    <div class="columns">
+      <div class="column is-6">
+        <%# First Name %>
+        <div class="field">
+          <%= form.label :first_name %>
+          <%= form.text_field :first_name, class: "input" %>
+        </div>
+        <%# Last Name %>
+        <div class="field">
+          <%= form.label :last_name %>
+          <%= form.text_field :last_name, class: "input" %>
+        </div>
+        <%# Email %>
+        <div class="field">
+          <%= form.label :email %>
+          <%= form.text_field :email, class: "input" %>
+        </div>
+        <%# Level %>
+        <div class="field">
+          <%= form.label :level %>
+          <%= form.select :level, UserLevel.to_a.reject { |level| level[0] == "Zero" }, {:include_blank => true}, class: "input" %>
+        </div>
+      </div>
+    </div>
+    <footer class="card-footer">
+      <div class="card-footer-item">
+        <div class="field is-grouped">
+          <div class="control">
+            <%= form.submit class: "button is-link" %>
+          </div>
+          <div class="control">
+            <%= link_to "Back to users", users_path, class: "button is-danger is-outlined" %>
           </div>
         </div>
-
-      <footer class="card-footer">
-        <div class="card-footer-item">
-          <div class="field is-grouped">
-            <div class="control">
-              <%= form.submit class: "button is-link" %>
-            </div>
-            <div class="control">
-              <%= link_to "Back to users", users_path, class: "button is-danger is-outlined" %>
-            </div>
-          </div>
-        </div>
-      </footer>
+      </div>
+    </footer>
     <% end %>
   </div>
 </div>
-

@@ -49,6 +49,10 @@ class UsersController < ApplicationController
 
   # PATCH/PUT /users/1 or /users/1.json
   def update
+    add_breadcrumb "Users", users_path
+    add_breadcrumb @user.full_name, user_path(@user)
+    add_breadcrumb "Edit", edit_user_path(@user)
+
     respond_to do |format|
       if @user.update(user_params)
         format.html { redirect_to user_url(@user), notice: "User was successfully updated." }
@@ -79,7 +83,7 @@ class UsersController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def user_params
-    params.require(:user).permit(:first_name, :last_name, :email)
+    params.require(:user).permit(:first_name, :last_name, :email, :level)
   end
 
   def sort_users
