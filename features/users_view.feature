@@ -30,7 +30,7 @@ Scenario: Invite a user
   When I fill in "First name" with "Liam"
   And I fill in "Last name" with "Berney"
   And I fill in "Email" with "liamrberney@tamu.edu"
-  And I fill in "Level" with "three"
+  And I select "Three" from the "user_level" select box
   And I press "Create User"
   Then I should be on the users page
 
