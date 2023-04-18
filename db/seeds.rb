@@ -41,7 +41,7 @@ for i in 1..5
 end
 
 # Create vendors
-for i in 1..5
+for i in 1..50
   FactoryBot.create(
     :vendor,
     id: i,

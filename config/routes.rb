@@ -1,9 +1,9 @@
 Rails.application.routes.draw do
-  resources :reports
-
   devise_for :users
 
   resources :users
+  resources :vendors
+  resources :reports
   resources :contracts
 
   # Contract Documents
