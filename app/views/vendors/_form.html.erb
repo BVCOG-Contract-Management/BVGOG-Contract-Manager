@@ -1,17 +1,47 @@
-<%= form_with(model: vendor) do |form| %>
-  <% if vendor.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(vendor.errors.count, "error") %> prohibited this vendor from being saved:</h2>
-
+<div id="vendor-form">
+<div class="card">
+<header class="card-header">
+  <p class="card-header-title">
+    Vendor Information
+  </p>
+</header>
+<div class="card-content">
+  <%= form_with(model: @vendor) do |form| %>
+  <% if @vendor.errors.any? %>
+  <article class="message is-danger">
+    <div class="message-header">
+      <p><%= pluralize(vendor.errors.count, "error") %> prohibited this vendor from being saved:</p>
+    </div>
+    <div class="message-body">
       <ul>
-        <% vendor.errors.each do |error| %>
-          <li><%= error.full_message %></li>
+        <% vendor.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
         <% end %>
       </ul>
     </div>
+  </article>
   <% end %>
-
-  <div>
-    <%= form.submit %>
+  <%# Form starts here %>
+  <div class="columns">
+    <div class="column is-6">
+      <%# Name %>
+      <div class="field">
+        <%= form.label :name %>
+        <%= form.text_field :name, class: "input" %>
+      </div>
+    </div>
   </div>
-<% end %>
+  <footer class="card-footer">
+    <div class="card-footer-item">
+      <div class="field is-grouped">
+        <div class="control">
+          <%= form.submit class: "button is-link" %>
+        </div>
+        <div class="control">
+          <%= link_to "Back to vendors", vendors_path, class: "button is-danger is-outlined" %>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <% end %>
+</div>

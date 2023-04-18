@@ -1,9 +1,7 @@
-<h1>New vendor</h1>
-
-<%= render "form", vendor: @vendor %>
-
-<br>
-
-<div>
-  <%= link_to "Back to vendors", vendors_path %>
-</div>
+<% content_for :title do %>
+  <span class="icon">
+  <i class="fa-solid fa-pencil"></i>
+  </span>
+  New Vendor
+  <% end %>
+  <%= render "form", vendor: @vendor %>

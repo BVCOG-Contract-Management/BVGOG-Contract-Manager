@@ -1,2 +1,69 @@
-<div id="<%= dom_id vendor %>">
+<div id="vendor-show">
+    <div class="columns is-desktop">
+        <div class="column is-6">
+            <div class="card">
+                <header class="card-header">
+                    <p class="card-header-title">
+                        Vendor Details
+                    </p>
+                </header>
+                <div class="card-content is-paddingless">
+                    <table class="table is-striped is-hoverable is-fullwidth">
+                        <tbody>
+                            <tr>
+                                <td><strong>Name:</strong></td>
+                                <td><%= @vendor.name %></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Rating:</strong></td>
+                                <td><%= 4.5 %></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Reviews:</strong></td>
+                                <td><%= 1 %></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <footer class="card-footer">
+                    <%= link_to "Edit this vendor", edit_vendor_path(@vendor), class: "card-footer-item" %>
+                    <%= link_to "Review this vendor", review_vendor_path(@vendor), class: "card-footer-item" %>
+                </footer>
+            </div>
+        </div>
+        <div class="column is-6">
+            <div class="column is-12 is-paddingless">
+                <div class="card">
+                    <header class="card-header">
+                        <p class="card-header-title">
+                            <span class="icon">
+                                <i class="fas fa-info-circle"></i>
+                            </span>
+                            Review #1
+                        </p>
+                    </header>
+                    <div class="card-content is-paddingless">
+                        <table class="table is-striped is-hoverable is-fullwidth">
+                            <tbody>
+                                <tr>
+                                    <td><strong>Reviewer:</strong></td>
+                                    <td><%= "TODO" %></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Rating:</strong></td>
+                                    <td><%= 4.5 %></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Reviewer:</strong></td>
+                                    <td><%= "TODO" %></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Description:</strong></td>
+                                    <td><%= "TODO" %></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
 </div>

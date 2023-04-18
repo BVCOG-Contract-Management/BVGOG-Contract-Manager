@@ -1,8 +1,13 @@
 Rails.application.routes.draw do
   devise_for :users
 
+  resources :vendors do
+    member do
+      get 'review'
+    end
+  end
+
   resources :users
-  resources :vendors
   resources :reports
   resources :contracts
 

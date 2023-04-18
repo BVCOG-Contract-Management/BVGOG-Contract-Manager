@@ -1,22 +1,41 @@
 class VendorsController < ApplicationController
-  before_action :set_vendor, only: %i[ show edit update destroy ]
+  before_action :set_vendor, only: %i[ show edit review update destroy ]
 
   # GET /vendors or /vendors.json
   def index
-    @vendors = Vendor.all
+    add_breadcrumb "Vendors", vendors_path
+
+    # Sort vendors
+    @vendors = sort_vendors().page params[:page]
+    # Search vendors
+    @vendors = search_vendors(@vendors) if params[:search].present?
   end
 
   # GET /vendors/1 or /vendors/1.json
   def show
+    add_breadcrumb "Vendors", vendors_path
+    add_breadcrumb @vendor.get_name, vendor_path(@vendor)
   end
 
   # GET /vendors/new
   def new
+    add_breadcrumb "Vendors", vendors_path
+    add_breadcrumb "New Vendor", new_vendor_path
     @vendor = Vendor.new
   end
 
   # GET /vendors/1/edit
   def edit
+    add_breadcrumb "Vendors", vendors_path
+    add_breadcrumb @vendor.get_name, vendor_path(@vendor)
+    add_breadcrumb "Edit", edit_vendor_path(@vendor)
+  end
+
+  # GET /vendors/1/review
+  def review
+    add_breadcrumb "Vendors", vendors_path
+    add_breadcrumb @vendor.get_name, vendor_path(@vendor)
+    add_breadcrumb "Review", review_vendor_path(@vendor)
   end
 
   # POST /vendors or /vendors.json
@@ -36,6 +55,10 @@ class VendorsController < ApplicationController
 
   # PATCH/PUT /vendors/1 or /vendors/1.json
   def update
+    add_breadcrumb "Vendors", vendors_path
+    add_breadcrumb @vendor.get_name, vendor_path(@vendor)
+    add_breadcrumb "Edit", edit_vendor_path(@vendor)
+
     respond_to do |format|
       if @vendor.update(vendor_params)
         format.html { redirect_to vendor_url(@vendor), notice: "Vendor was successfully updated." }
@@ -65,6 +88,18 @@ class VendorsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def vendor_params
-      params.fetch(:vendor, {})
+      params.require(:vendor).permit(:name)
+    end
+
+    def sort_vendors
+      # Sorts by the query string parameter "sort"
+      asc = params[:order] ? params[:order] : "asc"
+      vendors = params[:sort] ? Vendor.order(params[:sort] => asc.to_sym) : Vendor.order(created_at: :asc)
+    end
+
+    def search_vendors(vendors)
+      # Search by the query string parameter "search"
+      # Search in "name"
+      vendors.where("name LIKE ?", "%#{params[:search]}%")
     end
 end

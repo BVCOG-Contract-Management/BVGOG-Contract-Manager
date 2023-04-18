@@ -1,10 +1,7 @@
-<h1>Editing vendor</h1>
-
-<%= render "form", vendor: @vendor %>
-
-<br>
-
-<div>
-  <%= link_to "Show this vendor", @vendor %> |
-  <%= link_to "Back to vendors", vendors_path %>
-</div>
+<%= content_for :title do %>
+  <span class="icon">
+  <i class="fa-solid fa-pencil"></i>
+  </span> 
+  Edit <%= @vendor.get_name %>
+  <% end %>
+  <%= render "form", vendor: @vendor %>

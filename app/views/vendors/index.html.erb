@@ -1,14 +1,52 @@
 <p style="color: green"><%= notice %></p>
-
-<h1>Vendors</h1>
-
+<% content_for :title do %>
+View Vendors
+<% end %>
 <div id="vendors">
-  <% @vendors.each do |vendor| %>
-    <%= render vendor %>
-    <p>
-      <%= link_to "Show this vendor", vendor %>
-    </p>
-  <% end %>
+<div class="card">
+  <header class="card-header">
+    <div class="columns is-justify-content-space-between">
+      <div class="column is-1">
+        <p class="card-header-title">
+          <span class="icon">
+          <i class="fa-solid fa-address-book"></i>
+          </span>
+          Vendors
+        </p>
+      </div>
+      <div id="vendors-table-header-inputs" class="column is-7">
+        <div>
+          <%= form_with(url: vendors_path, method: "GET", data: { controller: "form-submission", turbo_frame: "vendors", turbo_action: "advance" }) do |form| %>
+          <%= form.text_field :search, data: { action: "input->form-submission#search" }, class: "input", placeholder: "Search by name", value: params[:search], autofocus: !params[:search].blank? , id: "search-input" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </header>
+  <div class="card-content is-paddingless">
+    <table class="table table is-striped is-hoverable is-fullwidth">
+      <thead>
+        <tr>
+          <% columns = [["Name", "name"], ["Reviews", "reviews"], ["Average Rating", "rating"]] %>
+          <% columns.each do |col| %>
+          <th>
+            <%= link_to col[0], sort: col[1], order: (params[:order] == "asc" ? "desc" : "asc") %>
+          </th>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody>
+        <% @vendors.each do |vendor| %>
+        <tr>
+          <td><%= link_to vendor.name, vendor %></td>
+          <td><%= 0 %></td>
+          <td><%= 4.5 %></td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <footer class="card-footer">
+      <%= paginate @vendors %>
+    </footer>
+  </div>
 </div>
-
-<%= link_to "New vendor", new_vendor_path %>
