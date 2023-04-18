@@ -33,6 +33,8 @@ class ContractsController < ApplicationController
 
   # POST /contracts or /contracts.json
   def create
+    add_breadcrumb "Contracts", contracts_path
+    add_breadcrumb "New Contract", new_contract_path
 
     contract_documents_upload = params[:contract][:contract_documents]
     # Delete the contract_documents from the params
@@ -67,6 +69,9 @@ class ContractsController < ApplicationController
 
   # PATCH/PUT /contracts/1 or /contracts/1.json
   def update
+    add_breadcrumb "Contracts", contracts_path
+    add_breadcrumb @contract.title, contract_path(@contract)
+    add_breadcrumb "Edit", edit_contract_path(@contract)
 
     handle_if_new_vendor
     contract_documents_upload = params[:contract][:contract_documents]
