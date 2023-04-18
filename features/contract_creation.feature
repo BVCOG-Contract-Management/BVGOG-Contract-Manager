@@ -4,6 +4,9 @@ Feature: Add a new contract
   So that I can create an new contract for approval
   I want to add a new contract entry to the database
 
+Background:
+  Given db is set up
+  Given an example user exists
 
 Scenario: Fail to create contract
   Given I am on the new contract page
@@ -28,10 +31,8 @@ Scenario: Fail to create contract
   And I should see "Vendor must exist"
 
 
-@wip
 Scenario: Sucessfully create contract
   Given I am on the new contract page
-  Given an example program exists
   When I fill in "Title" with "TestContract"
   And I select "Contract" from the "Contract type" select box
   And I select "Limited Term" from the "End trigger" select box
@@ -42,8 +43,8 @@ Scenario: Sucessfully create contract
   And I fill in "Amount dollar" with "100"
   And I fill in "Initial term amount" with "100"
 
-  And I fill in the "contract_starts_at" field with "03/30/2023"
-  And I fill in the "contract_ends_at" field with "03/30/2025"
+  And I fill in the "contract_starts_at" field with "2023-03-30"
+  And I fill in the "contract_ends_at" field with "2025-03-30"
 
   And I select "New Vendor" from the vendor dropdown
   And I fill in the "contract_new_vendor_name" field with "Test Vendor"

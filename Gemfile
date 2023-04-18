@@ -92,9 +92,9 @@ gem "rubocop", "~> 1.45"
 
 gem "rubocop-rails", "~> 2.17"
 
-gem "rspec", "~> 3.12"
+gem "rspec" #, "~> 3.12"
 
-gem "rspec-rails", "~> 5.0"
+gem "rspec-rails" #, "~> 5.0"
 
 gem "sass-rails", "~> 6.0.0"
 

@@ -14,10 +14,24 @@ World(WithinHelpers)
 
 When(/^I upload "([^"]*)" to the contract documents field$/) do |filename|
   # Find the input element by name attribute
-  input_element = find('input[id="contract-documents-file-input"]', visible: false)
+  # input_element = find('input[id="contract-documents-file-input"]', visible: false)
   File.new(filename, 'w')
   # Attach the file to the input element
-  input_element.attach_file(filename, make_visible: true)
+  page.attach_file(Rails.root.join(filename)) do
+    page.find('#contract-documents-file-input').click
+  end
+  # attach_file('contract[contract_documents][]', Rails.root.join(filename), make_visible: true)
+  # input_element.attach_file(filename, make_visible: true)
+end
+
+When('I click the remove button for {string}') do |_filename|
+  within(find('#uploaded-contract-documents-table', wait: 2)) do # waits up to 2 seconds for the file list to appear
+    find('button').click # assumes button text is 'Remove'
+  end
+end
+
+Then('I save and open the page') do
+  save_and_open_page
 end
 
 And('I attach a file with a random name') do
@@ -224,4 +238,11 @@ end
 
 Then(/^show me the page$/) do
   save_and_open_page
+end
+
+Then(/^(?:|I )should be on (.+)$/) do |page_name|
+  expected_path = path_to(page_name)
+  current_url = page.driver.browser.current_url
+  current_path = URI.parse(current_url).path
+  expect(current_path).to eq(expected_path)
 end
