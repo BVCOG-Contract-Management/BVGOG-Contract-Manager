@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "vendors/edit", type: :view do
   before(:each) do
-    @vendor = assign(:vendor, Vendor.create!())
+    @vendor = FactoryBot.create(:vendor)
   end
 
   it "renders the edit vendor form" do
