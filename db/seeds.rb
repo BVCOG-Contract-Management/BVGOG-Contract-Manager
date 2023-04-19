@@ -21,16 +21,6 @@ for i in 1..5
   )
 end
 
-# Create users
-for i in 1..50
-  FactoryBot.create(
-    :user,
-    id: i,
-    level: UserLevel.enumeration.except(:zero).keys.sample,
-    program: Program.all.sample)
-end
-FactoryBot.create(:user, email: "user@example.com", password: "password", first_name: "Example", last_name: "User")
-
 # Create entities
 for i in 1..5
   FactoryBot.create(
@@ -39,6 +29,17 @@ for i in 1..5
     name: "Entity #{i}",
   )
 end
+
+# Create users
+for i in 1..50
+  FactoryBot.create(
+    :user,
+    id: i,
+    program: Program.all.sample,
+    level: UserLevel.enumeration.except(:zero).keys.sample,
+  )
+end
+FactoryBot.create(:user, email: "user@example.com", password: "password", first_name: "Example", last_name: "User")
 
 # Create vendors
 for i in 1..5
