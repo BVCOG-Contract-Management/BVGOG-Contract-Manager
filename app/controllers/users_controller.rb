@@ -83,7 +83,7 @@ class UsersController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def user_params
-    params.require(:user).permit(:first_name, :last_name, :email, :level, :is_program_manager, :program_id)
+    params.require(:user).permit(:first_name, :last_name, :email, :level, :is_program_manager, :program_id, :entity_ids => [])
   end
 
   def sort_users

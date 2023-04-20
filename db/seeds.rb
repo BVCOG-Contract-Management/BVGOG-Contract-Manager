@@ -36,6 +36,7 @@ for i in 1..50
     :user,
     id: i,
     program: Program.all.sample,
+    entities: Entity.all.sample(rand(0..Entity.count)),
     level: UserLevel.enumeration.except(:zero).keys.sample,
   )
 end

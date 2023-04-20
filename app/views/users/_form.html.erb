@@ -71,7 +71,7 @@
           <%= form.label "Entities: " %>
           <% Entity.all.each do |entity| %>
             <label class="checkbox">
-              <%= form.check_box :entity_id, { multiple: true }, entity.id, nil %>
+              <%= form.check_box :entity_ids, { multiple: true }, entity.id, nil %>
               <%= entity.name %>
             </label>
           <% end %>
