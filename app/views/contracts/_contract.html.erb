@@ -81,7 +81,7 @@
                                 <span>Set contract to pending review</span>
                             <% end %>
                     <% end %>
-                    <%= link_to "Send expiry reminder", edit_contract_path(@contract), class: "card-footer-item" %>
+                    <%= link_to "Send expiry reminder", @contract.send_expiry_reminder, class: "card-footer-item" %>
                 </footer>
             </div>
         </div>
