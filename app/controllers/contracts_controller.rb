@@ -1,6 +1,15 @@
 class ContractsController < ApplicationController
   before_action :set_contract, only: %i[show edit update destroy]
 
+  def expiry_reminder
+    @contract = Contract.find(params[:id])
+    @contract.send_expiry_reminder
+    respond_to do |format|
+      format.html { redirect_to contract_url(@contract), notice: 'Expiry reminder sucessfully sent.' }
+      format.json { render :show, status: :ok, location: @contract }
+    end
+  end
+
   # GET /contracts or /contracts.json
   def index
     add_breadcrumb 'Contracts', contracts_path

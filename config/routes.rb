@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   resources :users
   resources :contracts
 
-  post 'send_expiry_reminder', to: 'contract#send_expiry_reminder', as: 'send_expiry_reminder'
+  get '/contracts/:id/expiry_reminder', to: 'contracts#expiry_reminder', as: 'expiry_reminder_contract'
 
   # Contract Documents
   # GET
