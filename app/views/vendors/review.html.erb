@@ -1,6 +1,45 @@
 <%= content_for :title do %>
-    <span class="icon">
-      <i class="fa-solid fa-star"></i>
-    </span>
-    Review <%= @vendor.name %>
-  <% end %>
+  <span class="icon">
+    <i class="fa-solid fa-star"></i>
+  </span>
+  Review <%= @vendor.name %>
+<% end %>
+
+<div class="card">
+  <div class="card-content">
+    <%= form_with(model: [@vendor, VendorReview.new]) do |f| %>
+      <% if f.object.errors.any? %>
+        <div class="notification is-danger">
+          <p><strong><%= pluralize(f.object.errors.count, "error") %> prohibited this review from being saved:</strong></p>
+          <ul>
+            <% f.object.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="field">
+        <%= f.label :rating %>
+        <%= f.range_field :rating, in: 1..5, step: 1, class: "slider" %>
+        <span class="range-value">3</span>
+      </div>
+
+      <div class="field">
+        <%= f.label :description %>
+        <%= f.text_area :description, class: "textarea" %>
+      </div>
+
+      <%= f.submit "Submit", class: "button is-primary" %>
+    <% end %>
+  </div>
+</div>
+
+<script>
+  var slider = document.querySelector(".slider");
+  var rangeValue = document.querySelector(".range-value");
+
+  slider.addEventListener("input", function() {
+    rangeValue.textContent = slider.value;
+  });
+</script>

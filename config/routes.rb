@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     member do
       get 'review'
     end
+    resources :vendor_reviews
   end
 
   resources :users
