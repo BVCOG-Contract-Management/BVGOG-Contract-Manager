@@ -18,15 +18,18 @@
         </header>
         <div class="card-content">
             <% if report.errors.any? %>
-                <div style="color: red">
-                <h2><%= pluralize(report.errors.count, "error") %> prohibited this report from being saved:</h2>
-
-                <ul>
-                    <% report.errors.each do |error| %>
-                    <li><%= error.full_message %></li>
-                    <% end %>
-                </ul>
-                </div>
+                <article class="message is-danger">
+                    <div class="message-header">
+                        <p><%= pluralize(report.errors.count, "error") %> prohibited this report from being saved:</p>
+                    </div>
+                    <div class="message-body">
+                        <ul>
+                        <% report.errors.full_messages.each do |message| %>
+                            <li><%= message %></li>
+                        <% end %>
+                        </ul>
+                    </div>
+                 </article>
             <% end %>
 
             <div class="field">
@@ -81,9 +84,6 @@
             <div class="field is-grouped">
               <div class="control">
                 <%= form.submit class: "button is-link" %>
-              </div>
-              <div class="control">
-                <%= link_to "Back to reports", reports_path, class: "button is-danger is-outlined" %>
               </div>
             </div>
           </div>
