@@ -101,7 +101,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_28_173948) do
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
+    t.integer "program_id"
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["program_id"], name: "index_users_on_program_id"
     t.index ["redirect_user_id"], name: "index_users_on_redirect_user_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
@@ -134,6 +136,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_28_173948) do
   add_foreign_key "reports", "programs"
   add_foreign_key "reports", "users"
   add_foreign_key "reports", "users", column: "point_of_contact_id"
+  add_foreign_key "users", "programs"
   add_foreign_key "users", "users", column: "redirect_user_id"
   add_foreign_key "vendor_reviews", "users"
   add_foreign_key "vendor_reviews", "vendors"

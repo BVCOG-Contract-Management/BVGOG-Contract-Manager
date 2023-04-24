@@ -1,6 +1,6 @@
-<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+<%= form_for(resource, as: resource_name, url: session_path(resource_name), validate:true) do |f| %>
 
-  <% if flash[:success] %>
+    <% if flash[:success] %>
     <div class="alert alert-success", style="color: green">
       <%= flash[:success] %>
     </div>

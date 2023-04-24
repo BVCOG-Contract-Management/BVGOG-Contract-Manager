@@ -1,0 +1,59 @@
+<% content_for :title do %>
+  View Users
+<% end %>
+
+<div id="users">
+<div class="card">
+  <header class="card-header">
+    <div class="columns is-justify-content-space-between">
+      <div class="column is-5">
+        <p class="card-header-title">
+          <span class="icon">
+            <i class="fa-solid fa-users"></i>
+          </span>
+          Users
+        </p>
+      </div>
+      <div id="users-table-header-inputs" class="column is-7">
+          <div>
+          <%= form_with(url: users_path, method: "GET", data: { controller: "form-submission", turbo_frame: "users", turbo_action: "advance" }) do |form| %>
+            <%= form.text_field :search, data: { action: "input->form-submission#search" }, class: "input", placeholder: "Search by first or last name", value: params[:search], autofocus: !params[:search].blank? , id: "search-input" %>
+          <% end %>
+            <%= link_to "Invite user", new_user_path, class: "button is-primary" %>
+          </div>
+      </div>
+    </div>
+
+  </header>
+  <div class="card-content is-paddingless">
+    <table class="table table is-striped is-hoverable is-fullwidth">
+      <thead>
+        <tr>
+        <% columns = [["First Name", "first_name"], ["Last Name", "last_name"], ["Level", "level"], ["Program", "program"]] %>
+        <% columns.each do |col| %>
+          <th>
+            <%= link_to col[0], sort: col[1], order: (params[:order] == "asc" ? "desc" : "asc") %>
+          </th>
+        <% end %>
+      </tr>
+      </thead>
+      <tbody>
+        <% @users.each do |user| %>
+          <tr>
+            <td><%= link_to user.first_name, user %></td>
+            <td><%= user.last_name %></td>
+            <td><%= user.level %></td>
+            <% if user.program.blank? %>
+              <td><%= "-" %></td>
+            <% else %>
+              <td><%= user.program.name %></td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <footer class="card-footer">
+      <%= paginate @users %>
+    </footer>
+  </div>
+</div>
