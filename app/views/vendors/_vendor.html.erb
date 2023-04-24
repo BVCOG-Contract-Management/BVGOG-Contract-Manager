@@ -15,12 +15,12 @@
                                 <td><%= @vendor.name %></td>
                             </tr>
                             <tr>
-                                <td><strong>Rating:</strong></td>
-                                <td><%= 4.5 %></td>
+                                <td><strong>Reviews:</strong></td>
+                                <td><%= @vendor.vendor_reviews.count %></td>
                             </tr>
                             <tr>
-                                <td><strong>Reviews:</strong></td>
-                                <td><%= 1 %></td>
+                                <td><strong>Rating:</strong></td>
+                                <td><%= @vendor.vendor_reviews.average(:rating).to_f.round(1) %></td>
                             </tr>
                         </tbody>
                     </table>

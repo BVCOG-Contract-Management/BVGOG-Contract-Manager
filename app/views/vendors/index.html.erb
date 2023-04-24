@@ -39,8 +39,8 @@ View Vendors
         <% @vendors.each do |vendor| %>
         <tr>
           <td><%= link_to vendor.name, vendor %></td>
-          <td><%= 0 %></td>
-          <td><%= 4.5 %></td>
+          <td><%= vendor.vendor_reviews.count %></td>
+          <td><%= vendor.vendor_reviews.average(:rating).to_f.round(1) %></td>
         </tr>
         <% end %>
       </tbody>
