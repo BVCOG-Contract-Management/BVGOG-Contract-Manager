@@ -10,6 +10,9 @@ Rails.application.routes.draw do
   # GET
   get "/contract_documents/:id", to: "contract_documents#download", as: "download_contract_document"
 
+  # Download Report
+  # GET
+  get "/reports/:id/download", to: "reports#download", as: "download_report"
 
   # Map root path to pages/home
   root :to => "pages#home"
