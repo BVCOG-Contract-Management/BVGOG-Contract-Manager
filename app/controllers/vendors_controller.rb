@@ -99,8 +99,18 @@ class VendorsController < ApplicationController
 
     def sort_vendors
       # Sorts by the query string parameter "sort"
-      asc = params[:order] ? params[:order] : "asc"
-      vendors = params[:sort] ? Vendor.order(params[:sort] => asc.to_sym) : Vendor.order(created_at: :asc)
+      order = params[:order] == "desc" ? :desc : :asc
+      if params[:sort] == "reviews"
+        Vendor.left_joins(:vendor_reviews)
+              .group(:id)
+              .order("COUNT(vendor_reviews.id) #{order}")
+      elsif params[:sort] == "rating"
+        Vendor.left_joins(:vendor_reviews)
+              .group(:id)
+              .order("AVG(vendor_reviews.rating) #{order}")
+      else
+        Vendor.order(created_at: order)
+      end
     end
 
     def search_vendors(vendors)
