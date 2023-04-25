@@ -15,6 +15,12 @@ class VendorsController < ApplicationController
   def show
     add_breadcrumb "Vendors", vendors_path
     add_breadcrumb @vendor.get_name, vendor_path(@vendor)
+
+    # Fetch all vendor reviews
+    @vendor = Vendor.find(params[:id])
+    # Fetch only the reviews that belong to the selected vendor
+    @vendor_reviews = @vendor.vendor_reviews.order(created_at: :desc).page(params[:page]).per(2)
+    @reviews_start_index = calculate_review_index(params[:page], 2)
   end
 
   # GET /vendors/new
@@ -101,5 +107,11 @@ class VendorsController < ApplicationController
       # Search by the query string parameter "search"
       # Search in "name"
       vendors.where("name LIKE ?", "%#{params[:search]}%")
+    end
+
+    def calculate_review_index(page, per_page)
+      page_number = page.to_i > 0 ? page.to_i : 1
+      per_page_number = per_page.to_i > 0 ? per_page.to_i : 1
+      (page_number - 1) * per_page_number
     end
 end

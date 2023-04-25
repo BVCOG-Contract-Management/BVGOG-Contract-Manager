@@ -1,69 +1,68 @@
 <div id="vendor-show">
-    <div class="columns is-desktop">
-        <div class="column is-6">
-            <div class="card">
-                <header class="card-header">
-                    <p class="card-header-title">
-                        Vendor Details
-                    </p>
-                </header>
-                <div class="card-content is-paddingless">
-                    <table class="table is-striped is-hoverable is-fullwidth">
-                        <tbody>
-                            <tr>
-                                <td><strong>Name:</strong></td>
-                                <td><%= @vendor.name %></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Reviews:</strong></td>
-                                <td><%= @vendor.vendor_reviews.count %></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Rating:</strong></td>
-                                <td><%= @vendor.vendor_reviews.average(:rating).to_f.round(1) %></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <footer class="card-footer">
-                    <%= link_to "Edit this vendor", edit_vendor_path(@vendor), class: "card-footer-item" %>
-                    <%= link_to "Review this vendor", review_vendor_path(@vendor), class: "card-footer-item" %>
-                </footer>
-            </div>
-        </div>
-        <div class="column is-6">
-            <div class="column is-12 is-paddingless">
-                <div class="card">
-                    <header class="card-header">
-                        <p class="card-header-title">
-                            <span class="icon">
-                                <i class="fas fa-info-circle"></i>
-                            </span>
-                            Review #1
-                        </p>
-                    </header>
-                    <div class="card-content is-paddingless">
-                        <table class="table is-striped is-hoverable is-fullwidth">
-                            <tbody>
-                                <tr>
-                                    <td><strong>Reviewer:</strong></td>
-                                    <td><%= "TODO" %></td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Rating:</strong></td>
-                                    <td><%= 4.5 %></td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Reviewer:</strong></td>
-                                    <td><%= "TODO" %></td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Description:</strong></td>
-                                    <td><%= "TODO" %></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+<div class="columns is-desktop">
+<div class="column is-6">
+  <div class="card">
+    <header class="card-header">
+      <p class="card-header-title">
+        Vendor Details
+      </p>
+    </header>
+    <div class="card-content is-paddingless">
+      <table class="table is-striped is-hoverable is-fullwidth">
+        <tbody>
+          <tr>
+            <td><strong>Name:</strong></td>
+            <td><%= @vendor.name %></td>
+          </tr>
+          <tr>
+            <td><strong>Reviews:</strong></td>
+            <td><%= @vendor.vendor_reviews.count %></td>
+          </tr>
+          <tr>
+            <td><strong>Rating:</strong></td>
+            <td><%= @vendor.vendor_reviews.average(:rating).to_f.round(1) %></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <footer class="card-footer">
+      <%= link_to "Edit this vendor", edit_vendor_path(@vendor), class: "card-footer-item" %>
+      <%= link_to "Review this vendor", review_vendor_path(@vendor), class: "card-footer-item" %>
+    </footer>
+  </div>
+</div>
+<div id="vendor-reviews-show">
+  <% @vendor_reviews.each_with_index do |vendor_review, index| %>
+  <div class="card">
+    <header class="card-header">
+      <p class="card-header-title">
+        <span class="icon">
+        <i class="fas fa-info-circle"></i>
+        </span>
+        Review #<%= ((params[:page] || 1).to_i - 1) * 2 + index + 1 %>
+      </p>
+    </header>
+    <div class="card-content is-paddingless">
+      <table class="table is-striped is-hoverable is-fullwidth">
+        <tbody>
+          <tr>
+            <td><strong>Reviewer:</strong></td>
+            <td><%= vendor_review.user.full_name %></td>
+          </tr>
+          <tr>
+            <td><strong>Rating:</strong></td>
+            <td><%= vendor_review.rating %></td>
+          </tr>
+          <tr>
+            <td><strong>Description:</strong></td>
+            <td><%= vendor_review.description %></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <% end %>
+  <div class="mt-3">
+    <%= paginate @vendor_reviews %>
+  </div>
 </div>

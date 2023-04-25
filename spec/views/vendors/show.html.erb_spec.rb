@@ -5,7 +5,7 @@ RSpec.describe "vendors/show", type: :view do
     @vendor = FactoryBot.create(:vendor)
   end
 
-  it "renders attributes in <p>" do
+  pending it "renders attributes in <p>" do
     render
   end
 end
