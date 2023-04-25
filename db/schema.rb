@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_28_173948) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_20_021745) do
   create_table "bvcog_configs", force: :cascade do |t|
     t.text "contracts_path", null: false
     t.text "reports_path", null: false
@@ -60,6 +60,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_28_173948) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_entities_on_name", unique: true
+  end
+
+  create_table "entities_users", id: false, force: :cascade do |t|
+    t.integer "entity_id"
+    t.integer "user_id"
+    t.index ["entity_id", "user_id"], name: "index_entities_users_on_entity_id_and_user_id", unique: true
+    t.index ["entity_id"], name: "index_entities_users_on_entity_id"
+    t.index ["user_id"], name: "index_entities_users_on_user_id"
   end
 
   create_table "programs", force: :cascade do |t|

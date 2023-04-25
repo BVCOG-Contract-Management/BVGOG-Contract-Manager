@@ -1,8 +1,9 @@
-<p style="color: green"><%= notice %></p>
+<%= content_for :title do %>
+  <span class="icon">
+    <i class="fa-solid fa-file-alt"></i>
+  </span> 
+  <%= @report.title %>
+<% end %>
 
 <%= render @report %>
 
-<div>
-  <%= link_to "Back to reports", reports_path %>
-  <%= button_to "Destroy this report", @report, method: :delete %>
-</div>
