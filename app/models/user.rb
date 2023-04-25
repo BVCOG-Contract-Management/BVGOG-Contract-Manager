@@ -26,4 +26,18 @@ class User < ApplicationRecord
     end
     @old_name
   end
+
+  # Virtual attribute to calculate integer level on the fly
+  def level_int
+    case level
+    when 'one'
+      1
+    when 'two'
+      2
+    when 'three'
+      3
+    else
+      nil
+    end
+  end
 end
