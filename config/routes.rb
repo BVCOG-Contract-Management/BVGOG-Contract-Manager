@@ -3,7 +3,11 @@ Rails.application.routes.draw do
 
   devise_for :users
 
-  resources :users
+  resources :users do
+    member do
+      get 'redirect'
+    end
+  end
   resources :contracts
 
   # Contract Documents
