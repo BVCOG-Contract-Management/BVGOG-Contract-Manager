@@ -209,14 +209,15 @@ class ContractsController < ApplicationController
       next if @contract.contract_documents.find_by(orig_file_name: doc.original_filename)
 
       # Write the file to the filesystem
-      File.open(Rails.root.join(@bvcog_config.contracts_path, official_file_name), 'wb') do |file|
+      bvcog_config = BvcogConfig.last
+      File.open(Rails.root.join(bvcog_config.contracts_path, official_file_name), 'wb') do |file|
         file.write(doc.read)
       end
       # Create a new contract_document
       contract_document = ContractDocument.new(
         orig_file_name: doc.original_filename,
         file_name: official_file_name,
-        full_path: Rails.root.join(@bvcog_config.contracts_path, official_file_name).to_s
+        full_path: Rails.root.join(bvcog_config.contracts_path, official_file_name).to_s
       )
       # Add the contract_document to the contract
       @contract.contract_documents << contract_document
