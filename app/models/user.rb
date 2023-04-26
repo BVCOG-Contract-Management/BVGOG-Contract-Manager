@@ -1,3 +1,4 @@
+
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
@@ -13,6 +14,9 @@ class User < ApplicationRecord
   has_one :redirect_user, class_name: "User", foreign_key: "redirect_user_id"
   has_many :contracts, class_name: "Contract", foreign_key: "point_of_contact_id"
   has_many :vendor_reviews, class_name: "VendorReview", foreign_key: "user_id"
+
+  has_and_belongs_to_many :entities
+
   # TODO: Should the program be optional?
   belongs_to :program, class_name: "Program", foreign_key: "program_id", optional: true
 
@@ -23,5 +27,9 @@ class User < ApplicationRecord
       @old_name = "#{first_name} #{last_name}"
     end
     @old_name
+  end
+
+  def has_entity?(entity_id)
+    self.entities.where(id: entity_id).exists?
   end
 end

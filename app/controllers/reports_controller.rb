@@ -72,6 +72,9 @@ class ReportsController < ApplicationController
       if @report.point_of_contact_id.present?
         query = query.where(point_of_contact_id: @report.point_of_contact_id)
       end
+      if current_user.level == UserLevel::THREE
+        query = query.where(entity_id: current_user.entities.pluck(:id))
+      end
       contracts = query
     end
 

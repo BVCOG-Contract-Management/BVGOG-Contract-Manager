@@ -6,6 +6,11 @@ class ContractsController < ApplicationController
     add_breadcrumb 'Contracts', contracts_path
     # Sort contracts
     @contracts = sort_contracts.page params[:page]
+    print reports_path
+    # Filter contracts based on allowed entities if user is level 3
+    if current_user.level == UserLevel::THREE
+      @contracts = @contracts.where(entity_id: current_user.entities.pluck(:id))
+    end
     # Search contracts
     @contracts = search_contracts(@contracts) if params[:search].present?
     puts params[:search].inspect
@@ -47,26 +52,34 @@ class ContractsController < ApplicationController
 
     respond_to do |format|
       ActiveRecord::Base.transaction do
-        if @contract.save
-          handle_contract_documents(contract_documents_upload) if contract_documents_upload.present?
-          format.html { redirect_to contract_url(@contract), notice: 'Contract was successfully created.' }
-          format.json { render :show, status: :created, location: @contract }
-        else
-          format.html { render :new, status: :unprocessable_entity }
-          format.json { render json: @contract.errors, status: :unprocessable_entity }
+        begin
+          OSO.authorize(current_user, 'create', @contract)
+          if @contract.save
+            handle_contract_documents(contract_documents_upload) if contract_documents_upload.present?
+            format.html { redirect_to contract_url(@contract), notice: 'Contract was successfully created.' }
+            format.json { render :show, status: :created, location: @contract }
+          else
+            format.html { render :new, status: :unprocessable_entity }
+            format.json { render json: @contract.errors, status: :unprocessable_entity }
+          end
         end
+      rescue StandardError => e
+        # If error type is Oso::ForbiddenError, then the user is not authorized
+        if e.class == Oso::ForbiddenError
+          status = :unauthorized
+          @contract.errors.add(:base, 'You are not authorized to create a contract')
+          message = 'You are not authorized to create a contract'
+        else
+          status = :unprocessable_entity
+          message = e.message
+        end
+        format.html { redirect_to contracts_path, alert: message }
       end
-    rescue StandardError => e
-      puts "Error: #{e}"
-      @contract.destroy if @contract.persisted?
-      format.html { render :new, status: :unprocessable_entity }
-      format.json { render json: @contract.errors, status: :unprocessable_entity }
     end
   end
 
   # PATCH/PUT /contracts/1 or /contracts/1.json
   def update
-
     add_breadcrumb "Contracts", contracts_path
     add_breadcrumb @contract.title, contract_path(@contract)
     add_breadcrumb "Edit", edit_contract_path(@contract)
@@ -78,24 +91,34 @@ class ContractsController < ApplicationController
     params[:contract].delete(:contract_documents)
 
     respond_to do |format|
-      ActiveRecord::Base.transaction do
-        if @contract.update(contract_params)
-          handle_contract_documents(contract_documents_upload) if contract_documents_upload.present?
-          puts 'Contract updated successfully'
-          format.html { redirect_to contract_url(@contract), notice: 'Contract was successfully updated.' }
-          format.json { render :show, status: :ok, location: @contract }
-        else
-          format.html { render :edit, status: :unprocessable_entity }
-          format.json { render json: @contract.errors, status: :unprocessable_entity }
+      begin 
+        ActiveRecord::Base.transaction do
+          OSO.authorize(current_user, 'update', @contract)
+          if @contract.update(contract_params)
+            handle_contract_documents(contract_documents_upload) if contract_documents_upload.present?
+            puts 'Contract updated successfully'
+            format.html { redirect_to contract_url(@contract), notice: 'Contract was successfully updated.' }
+            format.json { render :show, status: :ok, location: @contract }
+          else
+            format.html { render :edit, status: :unprocessable_entity }
+            format.json { render json: @contract.errors, status: :unprocessable_entity }
+          end
         end
       end
+    rescue StandardError => e
+      @contract.reload
+      # If error type is Oso::ForbiddenError, then the user is not authorized
+      if e.class == Oso::ForbiddenError
+        status = :unauthorized
+        @contract.errors.add(:base, 'You are not authorized to update this contract')
+        message = 'You are not authorized to update this contract'
+      else
+        status = :unprocessable_entity
+        message = e.message
+      end
+      # Rollback the transaction
+      format.html { redirect_to contract_url(@contract), alert: message }
     end
-  rescue StandardError => e
-    puts "Error: #{e}"
-    # Rollback the transaction
-    @contract.reload
-    format.html { render :edit, status: :unprocessable_entity }
-    format.json { render json: @contract.errors, status: :unprocessable_entity }
   end
 
   # DELETE /contracts/1 or /contracts/1.json
