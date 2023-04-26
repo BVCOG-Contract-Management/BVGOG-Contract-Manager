@@ -1,7 +1,7 @@
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :database_authenticatable, :registerable,
+  devise :invitable, :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
   validates :first_name, presence: true, length: { maximum: 255 }
   validates :last_name, presence: true, length: { maximum: 255 }
@@ -25,5 +25,19 @@ class User < ApplicationRecord
       @old_name = "#{first_name} #{last_name}"
     end
     @old_name
+  end
+
+  # Virtual attribute to calculate integer level on the fly
+  def level_int
+    case level
+    when 'one'
+      1
+    when 'two'
+      2
+    when 'three'
+      3
+    else
+      nil
+    end
   end
 end
