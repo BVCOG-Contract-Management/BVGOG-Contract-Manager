@@ -46,10 +46,12 @@ class ReportsController < ApplicationController
     # For now default to the first user (id = 1)
     @report.created_by = User.find(1).id
 
+    bvcog_config = BvcogConfig.last
+
     # Here we will generate the file path and PDF file
     # For now, we will just create the path
     @report.file_name = "#{SecureRandom.uuid}.pdf"
-    @report.full_path = Rails.root.join(@bvcog_config.reports_path, @report.file_name).to_s
+    @report.full_path = Rails.root.join(bvcog_config.reports_path, @report.file_name).to_s
 
     contracts = []
     # Collect contracts if needed
