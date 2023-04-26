@@ -7,6 +7,7 @@ Feature: Add a new contract
 Background:
   Given db is set up
   Given an example user exists
+  Given bvcog_config is set up
 
 
 Scenario: Sucessfully create contracts report
@@ -35,6 +36,14 @@ Scenario: Sucessfully create users report
   And I fill in "report[title]" with "Example User Report"
   And I press "Create Report"
   Then I should see "Report was successfully created."
+
+Scenario: Download Users Report
+  Given I am on the new report page
+  And I follow "Users Report"
+  And I fill in "report[title]" with "Example User Report"
+  And I press "Create Report"
+  And I follow "Export to PDF"
+
 
 
 

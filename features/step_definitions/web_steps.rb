@@ -12,6 +12,20 @@ module WithinHelpers
 end
 World(WithinHelpers)
 
+Given('bvcog_config is set up') do
+  # BVCOG Config
+  # Create the directories if they don't exist
+  Dir.mkdir(Rails.root.join('public/contracts')) unless Dir.exist?(Rails.root.join('public/contracts'))
+  Dir.mkdir(Rails.root.join('public/reports')) unless Dir.exist?(Rails.root.join('public/reports'))
+
+  # Create the config
+  BvcogConfig.create(
+    id: 1,
+    contracts_path: Rails.root.join('public/contracts'),
+    reports_path: Rails.root.join('public/reports')
+  )
+end
+
 When(/^I upload "([^"]*)" to the contract documents field$/) do |filename|
   # Find the input element by name attribute
   # input_element = find('input[id="contract-documents-file-input"]', visible: false)
