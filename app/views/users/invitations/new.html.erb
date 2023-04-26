@@ -1,0 +1,92 @@
+<% content_for :title do %>
+  <span class="icon">
+    <i class="fa-solid fa-pencil"></i>
+  </span>
+  New User
+<% end %>
+<div id="invitation-form">
+  <div class="card">
+    <header class="card-header">
+      <p class="card-header-title">
+        <%= "User Information" %>
+      </p>
+    </header>
+    <div class="card-content">
+      <%= form_for(resource, as: resource_name, url: invitation_path(resource_name), html: { method: :post }) do |f| %>
+        <% if resource.errors.any? %>
+          <div class="notification is-danger">
+            <button class="delete"></button>
+            <%= pluralize(resource.errors.count, "error") %> prohibited this user from being saved:
+            <ul>
+              <% resource.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <div class="columns">
+          <div class="column is-half">
+            <div class="field">
+              <%= f.label :first_name %>
+              <%= f.text_field :first_name, class: "input" %>
+            </div>
+
+            <div class="field">
+              <%= f.label :last_name %>
+              <%= f.text_field :last_name, class: "input" %>
+            </div>
+
+            <div class="field">
+              <%= f.label :email %>
+              <%= f.email_field :email, class: "input" %>
+            </div>
+
+            <div class="field">
+              <%= f.label :level %>
+              <%= f.select :level, UserLevel.to_a.reject { |level| level[0] == "Zero" }, { include_blank: true }, class: "input" %>
+            </div>
+          </div>
+
+          <div class="column is-half">
+            <div class="field">
+              <%= f.label :program_id %>
+              <%= f.select :program_id, program_select_options, {:include_blank => !@user.program.present?}, class: "input" %>
+            </div>
+
+            <div class="field">
+              <label for="program_manager">
+                <input type="hidden" name="user[is_program_manager]" value="0">
+                <input type="checkbox" id="program_manager" name="user[is_program_manager]" value="1" <%= @user.is_program_manager ? "checked" : "" %>> Program Manager
+              </label>
+            </div>
+
+            <div class="field">
+              <%= f.label "Entities: " %>
+              <% Entity.all.each do |entity| %>
+                <label class="checkbox">
+                  <%= f.check_box :entity_ids, { multiple: true }, entity.id, nil %>
+                  <%= entity.name %>
+                </label>
+              <% end %>
+            </div>
+          </div>
+        </div>
+
+        <footer class="card-footer">
+        <div class="card-footer-item">
+          <div class="field is-grouped">
+            <div class="control">
+              <%= f.submit t("devise.invitations.new.submit_button"), class: "button is-link" %>
+            </div>
+            <div class="control">
+              <%= link_to "Back to users", users_path, class: "button is-danger is-outlined" %>
+            </div>
+          </div>
+        </div>
+      </footer>
+
+      <% end %>
+    </div>
+  </div>
+</div>
