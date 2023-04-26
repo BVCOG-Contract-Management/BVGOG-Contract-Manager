@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   resources :reports
 
-  devise_for :users
+  devise_for :users, controllers: { invitations: 'invitations' }
 
   resources :users do
     member do
