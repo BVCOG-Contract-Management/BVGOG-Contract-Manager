@@ -23,7 +23,7 @@ module ApplicationHelper
       ] },
       { title: 'Users', subpaths: [
         { name: 'View Users', path: users_path, icon: 'users' },
-        { name: 'Invite a User', path: new_user_path, icon: 'user-plus' }
+        { name: 'Invite a User', path: new_user_invitation_path, icon: 'user-plus' }
       ] },
       { title: 'Admin', subpaths: [
         { name: 'Platform Settings', path: '#', icon: 'cog' }

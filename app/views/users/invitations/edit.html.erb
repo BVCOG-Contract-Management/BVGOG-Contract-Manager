@@ -1,0 +1,50 @@
+<div class="columns is-centered mt-6">
+  <div class="column is-one-third">
+    <div class="box has-background-light">
+      <h1 class="is-size-2 has-text-weight-bold mb-3">Sign up</h1>
+      <%= form_for(resource, as: resource_name, url: invitation_path(resource_name), validate:true, html: { method: :put }) do |f| %>
+      <%= f.hidden_field :invitation_token, readonly: true %>
+      <% if f.object.class.require_password_on_accepting %>
+      <div class="field">
+        <%= f.label :password, style: "display: block" %>
+        <%= f.password_field :password, class: "input", required: true, minlength: @minimum_password_length %>
+        <%= content_tag :span, "Password must be at least #{@minimum_password_length} characters long", class: "help is-danger", style: "display: none;" %>
+      </div>
+      <div class="field">
+        <%= f.label :password_confirmation, style: "display: block" %>
+        <%= f.password_field :password_confirmation, class: "input", required: true, minlength: @minimum_password_length %>
+        <%= content_tag :span, "Passwords do not match", class: "help is-danger", style: "display: none;" %>
+      </div>
+      <% end %>
+      <div class="actions">
+        <%= f.submit t("devise.invitations.edit.submit_button"), class: "button is-success"%>
+      </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+  const passwordField = document.querySelector('#user_password');
+  const passwordConfirmationField = document.querySelector('#user_password_confirmation');
+  const passwordError = document.querySelector('.help.is-danger');
+  const passwordConfirmationError = document.querySelectorAll('.help.is-danger')[1];
+  
+  passwordField.addEventListener('input', function() {
+    if (passwordField.value.length < <%= @minimum_password_length %>) {
+      passwordError.style.display = 'inline';
+    } else {
+      passwordError.style.display = 'none';
+    }
+  });
+  
+  passwordConfirmationField.addEventListener('input', function() {
+    if (passwordConfirmationField.value !== passwordField.value) {
+      passwordConfirmationError.style.display = 'inline';
+    } else {
+      passwordConfirmationError.style.display = 'none';
+    }
+  });
+  });
+</script>
