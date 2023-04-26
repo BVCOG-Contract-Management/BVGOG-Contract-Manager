@@ -107,14 +107,14 @@ class ContractsController < ApplicationController
   end
 
   # DELETE /contracts/1 or /contracts/1.json
-  def destroy
-    @contract.destroy
-
-    respond_to do |format|
-      format.html { redirect_to contracts_url, notice: 'Contract was successfully destroyed.' }
-      format.json { head :no_content }
-    end
-  end
+  # def destroy
+  #  @contract.destroy
+  #
+  #  respond_to do |format|
+  #    format.html { redirect_to contracts_url, notice: 'Contract was successfully destroyed.' }
+  #    format.json { head :no_content }
+  #  end
+  # end
 
   def get_file
     contract_document = ContractDocument.find(params[:id])
