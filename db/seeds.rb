@@ -43,7 +43,7 @@ end
 FactoryBot.create(:user, email: "user@example.com", password: "password", first_name: "Example", last_name: "User")
 
 # Create vendors
-for i in 1..5
+for i in 1..50
   FactoryBot.create(
     :vendor,
     id: i,

@@ -1,13 +1,28 @@
 Rails.application.routes.draw do
-  resources :reports
 
   devise_for :users, controllers: { invitations: 'invitations' }
+  
+  authenticated :user do
+    root :to => "pages#home"
+  end
+  
+  unauthenticated do
+    root to: redirect('/users/sign_in'), as: :unauthenticated_root
+  end
+
+  resources :vendors do
+    member do
+      get 'review'
+    end
+    resources :vendor_reviews
+  end
 
   resources :users do
     member do
       get 'redirect'
     end
   end
+  resources :reports
   resources :contracts
 
   # Contract Documents
@@ -18,8 +33,6 @@ Rails.application.routes.draw do
   # GET
   get "/reports/:id/download", to: "reports#download", as: "download_report"
 
-  # Map root path to pages/home
-  root :to => "pages#home"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Example of regular route:
