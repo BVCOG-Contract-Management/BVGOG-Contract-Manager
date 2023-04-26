@@ -1,8 +1,10 @@
 # Sends reminder emails for contract expiry
 class ContractMailer < ApplicationMailer
-  def expiry_reminder(contact_person, program_manager, contract, days)
+  def expiry_reminder(contract)
     @contract = contract
-    @days = days
-    mail(to: [contact_person.email, program_manager.email], subject: "REMINDER: Contract expiring in #{days} days ")
+    program_manager = contract.point_of_contact
+    days_remaining = (contract.ends_at.to_datetime - Date.today.to_datetime).to_i
+    mail(to: [contract.point_of_contact.email, program_manager.email],
+         subject: "REMINDER: Contract expiring in #{days_remaining} days ")
   end
 end

@@ -1,2 +1,145 @@
-<div id="<%= dom_id report %>">
+<div id="report-show">
+    <div class="columns is-desktop">
+        <div class="column is-6">
+            <div class="card">
+                <header class="card-header">
+                    <p class="card-header-title">
+                        <span class="icon">
+                            <i class="fas fa-list"></i>
+                        </span>
+                        Report Details
+                    </p>
+                </header>
+                <div class="card-content is-paddingless">
+                    <table class="table is-striped is-hoverable is-fullwidth">
+                        <tbody>
+                            <tr>
+                                <td><strong>Title:</strong></td>
+                                <td><%= @report.title %></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Report Type:</strong></td>
+                                <td><%= @report.report_type.capitalize() %></td>
+                            </tr>
+                            <% if @report.report_type == ReportType::CONTRACTS %>
+                                 <% if @report.entity_id.present? %>
+                                    <tr>
+                                        <td><strong>Entity:</strong></td>
+                                        <td><%= Entity.find(@report.entity_id).name.capitalize() %></td>
+                                    </tr>
+                                <% else %>
+                                    <tr>
+                                        <td><strong>Entity:</strong></td>
+                                        <td>All</td>
+                                    </tr>
+                                <% end %>
+                                <% if @report.program_id.present? %>
+                                    <tr>
+                                        <td><strong>Program:</strong></td>
+                                        <td><%= Program.find(@report.program_id).name.capitalize() %></td>
+                                    </tr>
+                                <% else %>
+                                    <tr>
+                                        <td><strong>Program:</strong></td>
+                                        <td>All</td>
+                                    </tr>
+                                <% end %>
+                                <% if @report.point_of_contact_id.present? %>
+                                    <tr>
+                                        <td><strong>Point of Contact:</strong></td>
+                                        <td><%= User.find(@report.point_of_contact_id).full_name %></td>
+                                    </tr>
+                                <% else %>
+                                    <tr>
+                                        <td><strong>Point of Contact:</strong></td>
+                                        <td>All</td>
+                                    </tr>
+                                <% end %>
+                                <% if @report.expiring_in_days.present? %>
+                                    <tr>
+                                        <td><strong>Expiring in:</strong></td>
+                                        <td><%= @report.expiring_in_days %> days</td>
+                                    </tr>
+                                <% else %>
+                                    <tr>
+                                        <td><strong>Expiring in:</strong></td>
+                                        <td>All</td>
+                                    </tr>
+                                <% end %>
+                            <% end %>
+                        </tbody>
+                    </table>
+                </div>
+                <footer class="card-footer">
+                    <%= link_to download_report_path(@report), class: "card-footer-item" do %>
+                        <span class="icon">
+                            <i class="fas fa-file-pdf"></i>
+                        </span>
+                        <span>Export to PDF</span>
+                    <% end %>
+                </footer>
+            </div>
+        </div>
+        <div class="column is-6">
+            <% if @report.report_type == ReportType::CONTRACTS %>
+                <div class="card">
+                    <header class="card-header">
+                        <p class="card-header-title">
+                            <span class="icon">
+                                <i class="fas fa-info-circle"></i>
+                            </span>
+                            <%= @report.report_type.capitalize() %>
+                        </p>
+                    </header>
+                    <div class="card-content is-paddingless">
+                        <table class="table is-striped is-hoverable is-fullwidth">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Number</th>
+                                    <th>End Date</th>
+                                </tr>  
+                            </thead>
+                            <% query_report_contracts(@report).each do |contract| %>
+                                <tr>
+                                    <td>
+                                        <%= link_to contract.title, contract_path(contract) %>
+                                    </td>
+                                    <td><%= contract.number %></td>
+                                    <td><%= contract.ends_at.strftime("%m/%d/%Y") %></td>
+                                </tr>
+                            <% end %>
+                        </table>
+                    </div>
+                </div>
+            <% else %>
+                <div class="card">
+                    <header class="card-header">
+                        <p class="card-header-title">
+                            <span class="icon">
+                                <i class="fas fa-info-circle"></i>
+                            </span>
+                                Users 
+                        </p>
+                    </header>
+                    <div class="card-content is-paddingless">
+                        <table class="table is-striped is-hoverable is-fullwidth">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Access Level</th>
+                                    <th>Status</th>
+                                </tr>  
+                            </thead>
+                            <% User.all.sort_by(&:is_active).each do |user| %>
+                                <tr>
+                                    <td><strong><%= user.full_name %></strong></td>
+                                    <td><%= user.level.capitalize() %></td>
+                                    <td><%= user.is_active ? "Active" : "Inactive" %></td>
+                                </tr>
+                            <% end %>
+                    </div>
+                </div>
+            <% end %>
+        </div>
 </div>

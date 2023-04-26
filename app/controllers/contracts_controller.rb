@@ -1,6 +1,15 @@
 class ContractsController < ApplicationController
   before_action :set_contract, only: %i[show edit update destroy]
 
+  def expiry_reminder
+    @contract = Contract.find(params[:id])
+    @contract.send_expiry_reminder
+    respond_to do |format|
+      format.html { redirect_to contract_url(@contract), notice: 'Expiry reminder sucessfully sent.' }
+      format.json { render :show, status: :ok, location: @contract }
+    end
+  end
+
   # GET /contracts or /contracts.json
   def index
     add_breadcrumb 'Contracts', contracts_path
@@ -33,8 +42,8 @@ class ContractsController < ApplicationController
 
   # POST /contracts or /contracts.json
   def create
-    add_breadcrumb "Contracts", contracts_path
-    add_breadcrumb "New Contract", new_contract_path
+    add_breadcrumb 'Contracts', contracts_path
+    add_breadcrumb 'New Contract', new_contract_path
 
     contract_documents_upload = params[:contract][:contract_documents]
     # Delete the contract_documents from the params
@@ -66,10 +75,9 @@ class ContractsController < ApplicationController
 
   # PATCH/PUT /contracts/1 or /contracts/1.json
   def update
-
-    add_breadcrumb "Contracts", contracts_path
+    add_breadcrumb 'Contracts', contracts_path
     add_breadcrumb @contract.title, contract_path(@contract)
-    add_breadcrumb "Edit", edit_contract_path(@contract)
+    add_breadcrumb 'Edit', edit_contract_path(@contract)
 
     handle_if_new_vendor
     contract_documents_upload = params[:contract][:contract_documents]
@@ -209,14 +217,15 @@ class ContractsController < ApplicationController
       next if @contract.contract_documents.find_by(orig_file_name: doc.original_filename)
 
       # Write the file to the filesystem
-      File.open(Rails.root.join(@bvcog_config.contracts_path, official_file_name), 'wb') do |file|
+      bvcog_config = BvcogConfig.last
+      File.open(Rails.root.join(bvcog_config.contracts_path, official_file_name), 'wb') do |file|
         file.write(doc.read)
       end
       # Create a new contract_document
       contract_document = ContractDocument.new(
         orig_file_name: doc.original_filename,
         file_name: official_file_name,
-        full_path: Rails.root.join(@bvcog_config.contracts_path, official_file_name).to_s
+        full_path: Rails.root.join(bvcog_config.contracts_path, official_file_name).to_s
       )
       # Add the contract_document to the contract
       @contract.contract_documents << contract_document
