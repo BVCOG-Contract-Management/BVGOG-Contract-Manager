@@ -4,20 +4,19 @@ Feature: Add a new contract
   So that I can get help managing contracts
   I want to be able to invite users
 
-
-#Run application controller, basically
-
-Scenario: Create a user
-  Given an example user exists
-  Then I should see the example user in the database
+Background:
+  Given db is set up
+  Given bvcog_config is set up
+  Given I am logged in
 
 Scenario: Create a user using UI
-  Given I am on the users page
-  When I follow "Invite user"
+  Given I have visited the user invite page
   When I fill in "user[first_name]" with "TestFirstName"
   When I fill in "user[last_name]" with "TestLastName"
   When I fill in "user[email]" with "FeaturedUser@example.com"
-  When I fill in "user[email]" with "FeaturedUser@example.com"
   And I select "Three" from the "user[level]" select box
-  And I press "Create User"
+  And I select "Program 1" from the "user[program_id]" select box
+  And I select the Entity 1 checkbox
+  And I press "commit"
+  Then I should see "User was successfully invited."
 

@@ -7,6 +7,7 @@ Feature: Add a new contract
 Background:
   Given db is set up
   Given an example user exists
+  Given bvcog_config is set up
 
 
 Scenario: Sucessfully create contracts report
@@ -19,6 +20,15 @@ Scenario: Sucessfully create contracts report
   And I press "Create Report"
   Then I should see "Report was successfully created."
 
+Scenario: view reports auto-redirects to new report
+  Given I am on the reports page
+  Then I should be on the new report page
+
+Scenario: Edit reports auto-redirects to a new report
+  Given 2 example reports exist
+  When I try to edit report 1
+  Then my url should be "/reports/1"
+
 Scenario: Fail to create report
   Given I am on the new report page
   And I press "Create Report"
@@ -28,6 +38,7 @@ Scenario: Go to users report page
   Given I am on the new report page
   And I follow "Users Report"
   Then I should see "Report Arguments"
+
 
 Scenario: Sucessfully create users report
   Given I am on the new report page

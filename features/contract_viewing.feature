@@ -23,6 +23,14 @@ Scenario: Search contracts
   And I follow "Contract 1"
   Then I should see "Edit this contract"
 
+Scenario: Sort by point of contact
+  Given I am on the contracts page
+  And I follow "Point of Contact"
+
+Scenario: Sort by title
+  Given I am on the contracts page
+  And I follow "Title"
+
 Scenario: Look at paginated contracts
   Given I am on the contracts page
   And I follow "Next"

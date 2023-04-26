@@ -68,6 +68,15 @@ Given('{int} example contract documents exist') do |num_contract_docs|
   end
 end
 
+Given('{int} example reports exist') do |num_reports|
+  (1..num_reports).each do |_i|
+    step 'I am on the new report page'
+    step 'I follow "Users Report"'
+    step 'I fill in "report[title]" with "Example User Report"'
+    step 'I press "Create Report"'
+  end
+end
+
 Given(/^db is set up$/) do
   step '5 example users exist'
   step '5 example programs exist'

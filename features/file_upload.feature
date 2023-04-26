@@ -10,6 +10,7 @@ Background:
   Given 1 example vendors exist
   Given 1 example users exist
   Given 1 example contracts exist
+  Given bvcog_config is set up
 
 Scenario: Upload a file
   Given I am on the contracts page

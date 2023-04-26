@@ -23,7 +23,7 @@ Scenario: Search for a user
   Given an example user exists
   Given I am on the users page
   When I fill in "search" with "Example"
-  Then I should see "three"
+  Then I should see "3"
 
 Scenario: Invite a user
   Given I am on the new user page
