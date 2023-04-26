@@ -3,14 +3,23 @@ Rails.application.routes.draw do
 
   devise_for :users
 
-  resources :users
+  resources :users do
+    member do
+      get 'redirect'
+    end
+  end
   resources :contracts
 
   get '/contracts/:id/expiry_reminder', to: 'contracts#expiry_reminder', as: 'expiry_reminder_contract'
 
   # Contract Documents
   # GET
-  get '/contract_documents/:id', to: 'contract_documents#download', as: 'download_contract_document'
+
+  get "/contract_documents/:id", to: "contract_documents#download", as: "download_contract_document"
+
+  # Download Report
+  # GET
+  get "/reports/:id/download", to: "reports#download", as: "download_report"
 
   # Map root path to pages/home
   root to: 'pages#home'

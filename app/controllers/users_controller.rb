@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: %i[ show edit update destroy ]
+  before_action :set_user, only: %i[ show edit update redirect destroy ]
 
   # GET /users or /users.json
   def index
@@ -32,6 +32,15 @@ class UsersController < ApplicationController
     add_breadcrumb "Edit", edit_user_path(@user)
   end
 
+  # GET /users/1/redirect
+  def redirect
+    add_breadcrumb "Users", users_path
+    add_breadcrumb @user.full_name, user_path(@user)
+    add_breadcrumb "Redirect", redirect_user_path(@user)
+
+    @users = User.where.not(id: @user.id).where(is_active: true)
+  end
+
   # POST /users or /users.json
   def create
     @user = User.new(user_params)
@@ -55,8 +64,14 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.update(user_params)
-        format.html { redirect_to user_url(@user), notice: "User was successfully updated." }
-        format.json { render :show, status: :ok, location: @user }
+        if user_params[:redirect_user_id].present?
+          @user.update(redirect_user_id: user_params[:redirect_user_id], is_active: false)
+          format.html { redirect_to user_url(@user), notice: "User was successfully redirected." }
+          format.json { render :show, status: :ok, location: @user }
+        else
+          format.html { redirect_to user_url(@user), notice: "User was successfully updated." }
+          format.json { render :show, status: :ok, location: @user }
+        end
       else
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @user.errors, status: :unprocessable_entity }
@@ -83,7 +98,7 @@ class UsersController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def user_params
-    params.require(:user).permit(:first_name, :last_name, :email, :level)
+    params.require(:user).permit(:first_name, :last_name, :email, :level, :is_program_manager, :program_id, :redirect_user_id, :is_active, :entity_ids => [])
   end
 
   def sort_users

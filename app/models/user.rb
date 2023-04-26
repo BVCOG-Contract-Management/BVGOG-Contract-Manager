@@ -10,6 +10,8 @@ class User < ApplicationRecord
   validates :level, presence: true, inclusion: { in: UserLevel.list, allow_blank: false }
 
   # Add associations here
+  has_and_belongs_to_many :entities
+
   has_one :redirect_user, class_name: "User", foreign_key: "redirect_user_id"
   has_many :contracts, class_name: "Contract", foreign_key: "point_of_contact_id"
   has_many :vendor_reviews, class_name: "VendorReview", foreign_key: "user_id"
