@@ -8,11 +8,14 @@ namespace :contracts do
       puts contracts.all.inspect
       contracts.each do |contract|
         contact_person = contract.point_of_contact
-        # TODO: Fix this 
+        # TODO: Fix this
         # Don't have program_manager set up yet
         program_manager = contract.point_of_contact
-        # program_manager = contract.program_manager
-        ContractMailer.expiry_reminder(contact_person, program_manager, contract, days).deliver_now
+        # program_manager = contract.program_manager@contract.
+        # contract.send_expiry_email
+        # contract.send_expiry_email_action_contract_path
+        contract.send_expiry_reminder
+        # ContractMailer.expiry_reminder(contact_person, program_manager, contract, days).deliver_now
       end
     end
   end
