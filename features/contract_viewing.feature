@@ -11,6 +11,7 @@ Background:
   Given 1 example programs exist
   Given 1 example vendors exist
   Given 15 example contracts exist
+  Given I am logged in as a level 1 user
 
 Scenario: View contracts
   Given I am on the contracts page

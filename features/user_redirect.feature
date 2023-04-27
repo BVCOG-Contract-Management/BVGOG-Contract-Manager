@@ -7,6 +7,7 @@ Feature: Add a new contract
 Background:
   Given 5 example users exist
   Given an example user exists
+  Given I am logged in as a level 1 user
 
 Scenario: Redirect a user
   Given I am on the users page

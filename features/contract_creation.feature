@@ -7,6 +7,7 @@ Feature: Add a new contract
 Background:
   Given db is set up
   Given an example user exists
+  Given I am logged in as a level 1 user
 
 Scenario: Fail to create contract
   Given I am on the new contract page

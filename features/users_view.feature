@@ -6,6 +6,7 @@ Feature: View and Invite Users
 
 Background:
   Given an example user exists
+  Given I am logged in as a level 1 user
 
 Scenario: View a user
   Given I am on the users page
@@ -13,7 +14,7 @@ Scenario: View a user
 
 Scenario: Get to user invite page
   Given I am on the users page
-  And I follow "Invite user"
+  And I follow "Invite a user"
   Then I should be on the new user page
 
 Scenario: Get back to view users page from new user page

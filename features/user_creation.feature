@@ -7,7 +7,8 @@ Feature: Add a new contract
 Background:
   Given db is set up
   Given bvcog_config is set up
-  Given I am logged in
+  Given an example user exists
+  Given I am logged in as a level 1 user
 
 Scenario: Create a user using UI
   Given I have visited the user invite page

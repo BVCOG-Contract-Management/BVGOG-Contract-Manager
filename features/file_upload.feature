@@ -11,6 +11,7 @@ Background:
   Given 1 example users exist
   Given 1 example contracts exist
   Given bvcog_config is set up
+  Given I am logged in as a level 1 user
 
 Scenario: Upload a txt file
   Given I am on the contracts page
