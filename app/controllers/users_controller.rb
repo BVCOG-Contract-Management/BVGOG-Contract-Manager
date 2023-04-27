@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: %i[ show edit update redirect destroy ]
+  before_action :set_user, only: %i[ show edit update redirect destroy redirect ]
 
   # GET /users or /users.json
   def index
@@ -32,15 +32,6 @@ class UsersController < ApplicationController
     add_breadcrumb "Edit", edit_user_path(@user)
   end
 
-  # GET /users/1/redirect
-  def redirect
-    add_breadcrumb "Users", users_path
-    add_breadcrumb @user.full_name, user_path(@user)
-    add_breadcrumb "Redirect", redirect_user_path(@user)
-
-    @users = User.where.not(id: @user.id).where(is_active: true)
-  end
-
   # POST /users or /users.json
   def create
     @user = User.new(user_params)
@@ -64,7 +55,11 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       begin
-        OSO.authorize(current_user, 'edit', @contract)
+        OSO.authorize(current_user, 'edit', @user)
+        if user_params[:is_active].present? && user_params[:is_active]
+          # Remove redirect_user_id if user is being activated
+          @user.update(redirect_user_id: nil)
+        end
         if @user.update(user_params)
           if user_params[:redirect_user_id].present?
             @user.update(redirect_user_id: user_params[:redirect_user_id], is_active: false)
@@ -77,6 +72,55 @@ class UsersController < ApplicationController
         else
           format.html { render :edit, status: :unprocessable_entity }
           format.json { render json: @user.errors, status: :unprocessable_entity }
+        end
+      rescue Oso::Error => e
+        format.html { redirect_to user_url(@user), alert: "You are not authorized to modify users." }
+        format.json { render json: { error: e.message }, status: :forbidden }
+      end
+    end
+  end
+
+  # PUT /users/1/redirect
+  def redirect
+    respond_to do |format|
+      begin
+        OSO.authorize(current_user, 'edit', @user)
+        # Cannot redirect active user
+        if @user.is_active
+          format.html { redirect_to user_url(@user), alert: "User is active and cannot be redirected." }
+          format.json { render json: { error: "User is active and cannot be redirected." }, status: :unprocessable_entity }
+
+        # Cannot redirect to self
+        elsif @user.id == user_params[:redirect_user_id].to_i
+          format.html { redirect_to user_url(@user), alert: "User cannot be redirected to themselves." }
+          format.json { render json: { error: "User cannot be redirected to themselves." }, status: :unprocessable_entity }
+        
+        # Cannot redirect an already redirected user
+        elsif @user.redirect_user_id.present?
+          format.html { redirect_to user_url(@user), alert: "User is already redirected." }
+          format.json { render json: { error: "User is already redirected." }, status: :unprocessable_entity }
+        
+        # Cannot redirect to a user that is already redirected
+        elsif User.find(user_params[:redirect_user_id]).redirect_user_id.present?
+          format.html { redirect_to user_url(@user), alert: "User being redirected to is already redirected." }
+          format.json { render json: { error: "User being redirected to is already redirected." }, status: :unprocessable_entity }
+        
+        # Cannot redirect yourself
+        elsif @user.id == current_user.id
+          format.html { redirect_to user_url(@user), alert: "You cannot redirect yourself." }
+          format.json { render json: { error: "You cannot redirect yourself." }, status: :unprocessable_entity }
+        else
+          # If no errors, redirect the user
+          # Change point of contact for all of user's contracts to new user
+          user_contracts = Contract.where(point_of_contact_id: @user.id)
+          user_contracts.each do |contract|
+            contract.update(point_of_contact_id: user_params[:redirect_user_id])
+          end
+          # Change user's redirect_user_id to new user
+          @user.update(redirect_user_id: user_params[:redirect_user_id])
+
+          format.html { redirect_to user_url(@user), notice: "User was successfully redirected." }
+          format.json { render :show, status: :ok, location: @user }
         end
       rescue Oso::Error => e
         format.html { redirect_to user_url(@user), alert: "You are not authorized to modify users." }

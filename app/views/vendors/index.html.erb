@@ -27,7 +27,7 @@ View Vendors
     <table class="table table is-striped is-hoverable is-fullwidth">
       <thead>
         <tr>
-          <% columns = [["Name", "name"], ["Reviews", "reviews"], ["Average Rating", "rating"]] %>
+          <% columns = [["Name", "name"], ["Total Reviews", "reviews"], ["Average Rating", "rating"]] %>
           <% columns.each do |col| %>
           <th>
             <%= link_to col[0], sort: col[1], order: (params[:order] == "asc" ? "desc" : "asc") %>

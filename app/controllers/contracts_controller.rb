@@ -60,7 +60,17 @@ class ContractsController < ApplicationController
         begin
           OSO.authorize(current_user, 'write', @contract)
           handle_if_new_vendor
-          if @contract.save
+          if @contract.point_of_contact_id.present? && User.find(@contract.point_of_contact_id).redirect_user_id.present?
+            @contract.errors.add(:base,
+                                 User.find(@contract.point_of_contact_id).full_name + ' is not active, use ' + User.find(User.find(@contract.point_of_contact_id).redirect_user_id).full_name + ' instead')
+            format.html { render :new, status: :unprocessable_entity }
+            format.json { render json: @contract.errors, status: :unprocessable_entity }
+          elsif !User.find(@contract.point_of_contact_id).entities.include?(@contract.entity)
+            @contract.errors.add(:base,
+                                 User.find(@contract.point_of_contact_id).full_name + ' is not associated with ' + @contract.entity.name)
+            format.html { render :new, status: :unprocessable_entity }
+            format.json { render json: @contract.errors, status: :unprocessable_entity }
+          elsif @contract.save
             handle_contract_documents(contract_documents_upload) if contract_documents_upload.present?
             format.html { redirect_to contract_url(@contract), notice: 'Contract was successfully created.' }
             format.json { render :show, status: :created, location: @contract }
@@ -99,7 +109,20 @@ class ContractsController < ApplicationController
     respond_to do |format|
       ActiveRecord::Base.transaction do
         OSO.authorize(current_user, 'edit', @contract)
-        if @contract.update(contract_params)
+        if contract_params[:point_of_contact_id].present? && User.find(contract_params[:point_of_contact_id]).redirect_user_id.present?
+          @contract.errors.add(:base,
+                               User.find(contract_params[:point_of_contact_id]).full_name + ' is not active, use ' + User.find(User.find(contract_params[:point_of_contact_id]).redirect_user_id).full_name + ' instead')
+          format.html { render :edit, status: :unprocessable_entity }
+          format.json { render json: @contract.errors, status: :unprocessable_entity }
+
+        # Excuse this monster if statement, it's just checking if the user is associated with the entity, and for
+        # some reason nested-if statements don't work here when you use format (ie. UnkownFormat error)
+        elsif !User.find(contract_params[:point_of_contact_id].present? ? contract_params[:point_of_contact_id] : @contract.point_of_contact_id).entities.include?(Entity.find(contract_params[:entity_id].present? ? contract_params[:entity_id] : @contract.entity_id))
+          @contract.errors.add(:base,
+                               User.find(contract_params[:point_of_contact_id].present? ? contract_params[:point_of_contact_id] : @contract.point_of_contact_id).full_name + ' is not associated with ' + Entity.find(contract_params[:entity_id].present? ? contract_params[:entity_id] : @contract.entity_id).name)
+          format.html { render :edit, status: :unprocessable_entity }
+          format.json { render json: @contract.errors, status: :unprocessable_entity }
+        elsif @contract.update(contract_params)
           handle_contract_documents(contract_documents_upload) if contract_documents_upload.present?
           puts 'Contract updated successfully'
           format.html { redirect_to contract_url(@contract), notice: 'Contract was successfully updated.' }

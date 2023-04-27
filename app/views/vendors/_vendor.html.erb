@@ -15,7 +15,7 @@
                 <td><%= @vendor.name %></td>
               </tr>
               <tr>
-                <td><strong>Reviews:</strong></td>
+                <td><strong>Total Reviews:</strong></td>
                 <td><%= @vendor.vendor_reviews.count %></td>
               </tr>
               <tr>
@@ -42,7 +42,7 @@
         <header class="card-header">
           <p class="card-header-title">
             <span class="icon">
-              <i class="fas fa-info-circle"></i>
+              <i class="fas fa-commenting"></i>
             </span>
             Latest Review of <%= @vendor.name %>
           </p>
@@ -107,5 +107,23 @@
         </div>
       </div>
     </div>
+
+    <%# Bar Percenateg Graph Column %>
+    <div class="column is-4">
+      <div class="card">
+        <header class="card-header">
+          <p class="card-header-title">
+            <span class="icon">
+              <i class="fas fa-bar-chart"></i>
+            </span>
+            Review Metrics for <%= @vendor.name %>
+          </p>
+        </header>
+        <div class="card-content">
+            <%= bar_chart_reviews_html(@vendor) %>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>

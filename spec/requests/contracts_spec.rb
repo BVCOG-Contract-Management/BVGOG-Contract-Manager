@@ -27,7 +27,7 @@ RSpec.describe "/contracts", type: :request do
   let(:valid_attributes) {
     entity = create(:entity)
     program = create(:program)
-    point_of_contact = create(:user)
+    point_of_contact = create(:user, entities: [entity], level: UserLevel::TWO)
     vendor = create(:vendor)
     return build(
              :contract,
