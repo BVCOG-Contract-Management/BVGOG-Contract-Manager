@@ -12,6 +12,9 @@ module ReportsHelper
         if @report.expiring_in_days.present?
           contracts = contracts.where("ends_at <= ?", report.expiring_in_days.days.from_now)
         end
+        if current_user.level == UserLevel::THREE
+          contracts = contracts.where(entity_id: current_user.entities.pluck(:id))
+        end
         # Return the contracts
         contracts
     end
