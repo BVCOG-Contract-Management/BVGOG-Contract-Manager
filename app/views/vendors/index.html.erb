@@ -9,7 +9,7 @@ View Vendors
       <div class="column is-1">
         <p class="card-header-title">
           <span class="icon">
-          <i class="fa-solid fa-address-book"></i>
+          <i class="fa-solid fa-address-book"></i> 
           </span>
           Vendors
         </p>
@@ -31,8 +31,21 @@ View Vendors
           <% columns.each do |col| %>
           <th>
             <%= link_to col[0], sort: col[1], order: (params[:order] == "asc" ? "desc" : "asc") %>
+            <%# Sort Icon %>
+            <% if params[:order] == "asc" and params[:sort] == col[1] %>
+              <span class="icon">
+                <i class="fas fa-sort-up"></i>
+              </span>
+            <% elsif params[:order] == "desc" and params[:sort] == col[1] %>
+              <span class="icon">
+                <i class="fas fa-sort-down"></i>
+              </span>
+            <% end %>
           </th>
           <% end %>
+          <th>
+            Last Reviewer
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -40,7 +53,16 @@ View Vendors
         <tr>
           <td><%= link_to vendor.name, vendor %></td>
           <td><%= vendor.vendor_reviews.count %></td>
-          <td><%= vendor.vendor_reviews.average(:rating).to_f.round(1) %></td>
+          <td>
+          <%= average_rating_stars(vendor) %>
+          (<%= vendor.vendor_reviews.average(:rating).to_f.round(1) %>)
+          </td>
+          <td>
+            <% if vendor.vendor_reviews.count > 0 %>
+            <%= vendor.vendor_reviews.last.user.full_name %>
+            <% else %>
+            N/A
+            <% end %>
         </tr>
         <% end %>
       </tbody>

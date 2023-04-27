@@ -33,6 +33,7 @@ Rails.application.routes.draw do
   # GET
   get "/reports/:id/download", to: "reports#download", as: "download_report"
 
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Example of regular route:

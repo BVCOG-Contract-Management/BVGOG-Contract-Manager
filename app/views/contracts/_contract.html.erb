@@ -43,6 +43,13 @@
                                 <td><%= @contract.vendor.name %></td>
                             </tr>
                             <tr>
+                                <td><strong>Entity:</strong></td>
+                                <td><%= @contract.entity.name %></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Program:</strong></td>
+                                <td><%= @contract.program.name %></td>
+                            <tr>
                                 <td><strong>Start Date:</strong></td>
                                 <td><%= @contract.starts_at.strftime("%B %d, %Y") %></td>
                             </tr>
@@ -52,7 +59,13 @@
                             </tr>
                             <tr>
                                 <td><strong>Requires Rebid:</strong></td>
-                                <td><%= @contract.requires_rebid ? "Yes" : "No" %></td>
+                                <td>
+                                    <% if @contract.requires_rebid%>
+                                        <span class="tag is-success">Yes</span>
+                                    <% else %>
+                                        <span class="tag is-danger">No</span>
+                                    <% end %>
+                                </td>
                             </tr>
                             <tr>
                                 <td><strong>Amount:</strong></td>
@@ -65,23 +78,25 @@
                         </tbody>
                     </table>
                 </div>
-                <footer class="card-footer">
-                    <%= link_to "Edit this contract", edit_contract_path(@contract), class: "card-footer-item" %>
-                    <%= link_to contract_path(@contract, params: { contract: { contract_status: contract_opposite_status(@contract) } }), data: { "turbo-method": :put }, class: "card-footer-item", id: "card-change-status" do %>
-                        <span>
-                            <% if @contract.contract_status == ContractStatus::IN_PROGRESS %>
-                                <span class="icon">
-                                    <i class="fas fa-check"></i>
-                                </span>
-                                <span>Approve this contract</span>
-                            <% else %>
-                                <span class="icon">
-                                    <i class="fas fa-clock"></i>
-                                </span>
-                                <span>Set contract to pending review</span>
-                            <% end %>
-                    <% end %>
-                </footer>
+                <% if current_user.present? && current_user.level != UserLevel::THREE %>
+                    <footer class="card-footer">
+                        <%= link_to "Edit this contract", edit_contract_path(@contract), class: "card-footer-item" %>
+                        <%= link_to contract_path(@contract, params: { contract: { contract_status: contract_opposite_status(@contract) } }), data: { "turbo-method": :put }, class: "card-footer-item", id: "card-change-status" do %>
+                            <span>
+                                <% if @contract.contract_status == ContractStatus::IN_PROGRESS %>
+                                    <span class="icon">
+                                        <i class="fas fa-check"></i>
+                                    </span>
+                                    <span>Approve this contract</span>
+                                <% else %>
+                                    <span class="icon">
+                                        <i class="fas fa-clock"></i>
+                                    </span>
+                                    <span>Set contract to pending review</span>
+                                <% end %>
+                        <% end %>
+                    </footer>
+                <% end %>
             </div>
         </div>
         <div class="column is-6">
