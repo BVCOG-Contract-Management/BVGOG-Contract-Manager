@@ -53,7 +53,7 @@ class ContractsController < ApplicationController
     respond_to do |format|
       ActiveRecord::Base.transaction do
         begin
-          OSO.authorize(current_user, 'create', @contract)
+          OSO.authorize(current_user, 'write', @contract)
           if @contract.save
             handle_contract_documents(contract_documents_upload) if contract_documents_upload.present?
             format.html { redirect_to contract_url(@contract), notice: 'Contract was successfully created.' }
@@ -93,7 +93,7 @@ class ContractsController < ApplicationController
     respond_to do |format|
       begin 
         ActiveRecord::Base.transaction do
-          OSO.authorize(current_user, 'update', @contract)
+          OSO.authorize(current_user, 'edit', @contract)
           if @contract.update(contract_params)
             handle_contract_documents(contract_documents_upload) if contract_documents_upload.present?
             puts 'Contract updated successfully'
@@ -107,6 +107,7 @@ class ContractsController < ApplicationController
       end
     rescue StandardError => e
       @contract.reload
+      print e
       # If error type is Oso::ForbiddenError, then the user is not authorized
       if e.class == Oso::ForbiddenError
         status = :unauthorized

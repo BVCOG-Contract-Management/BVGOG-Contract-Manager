@@ -37,10 +37,12 @@
                         </tbody>
                     </table>
                 </div>
-                <footer class="card-footer">
-                    <%= link_to "Edit this user", edit_user_path(@user), class: "card-footer-item" %>
-                    <%= link_to "Redirect this user", redirect_user_path(@user), class: "card-footer-item" %>
-                </footer>
+                <% if current_user.level != UserLevel::THREE %>
+                    <footer class="card-footer">
+                        <%= link_to "Edit this user", edit_user_path(@user), class: "card-footer-item" %>
+                        <%= link_to "Redirect this user", redirect_user_path(@user), class: "card-footer-item" %>
+                    </footer>
+                <% end %>
             </div>
         </div>
 </div>

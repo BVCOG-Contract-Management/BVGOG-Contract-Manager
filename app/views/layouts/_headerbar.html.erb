@@ -1,0 +1,13 @@
+<nav class="navbar" role="navigation" aria-label="main navigation" id="header-bar">
+
+    <div class="navbar-end">
+      <div class="navbar-item">
+        <div class="buttons">
+        <% if current_user %>
+            <p class=" has-text-light">Welcome, <%= current_user.full_name %>!</p>
+        <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>

@@ -35,9 +35,7 @@
         <div class="column is-paddingless">
         <% # Main content here %>
           <div>
-            <div id="header-bar">
-              Header Bar Goes Here
-            </div>
+            <%= render partial: "layouts/headerbar" %> 
             <nav class="breadcrumb has-arrow-separator" aria-label="breadcrumbs">
               <ul>
                 <%= render_breadcrumbs :tag => :li, :separator => "" %>

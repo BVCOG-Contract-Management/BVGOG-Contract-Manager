@@ -63,18 +63,24 @@ class UsersController < ApplicationController
     add_breadcrumb "Edit", edit_user_path(@user)
 
     respond_to do |format|
-      if @user.update(user_params)
-        if user_params[:redirect_user_id].present?
-          @user.update(redirect_user_id: user_params[:redirect_user_id], is_active: false)
-          format.html { redirect_to user_url(@user), notice: "User was successfully redirected." }
-          format.json { render :show, status: :ok, location: @user }
+      begin
+        OSO.authorize(current_user, 'edit', @contract)
+        if @user.update(user_params)
+          if user_params[:redirect_user_id].present?
+            @user.update(redirect_user_id: user_params[:redirect_user_id], is_active: false)
+            format.html { redirect_to user_url(@user), notice: "User was successfully redirected." }
+            format.json { render :show, status: :ok, location: @user }
+          else
+            format.html { redirect_to user_url(@user), notice: "User was successfully updated." }
+            format.json { render :show, status: :ok, location: @user }
+          end
         else
-          format.html { redirect_to user_url(@user), notice: "User was successfully updated." }
-          format.json { render :show, status: :ok, location: @user }
+          format.html { render :edit, status: :unprocessable_entity }
+          format.json { render json: @user.errors, status: :unprocessable_entity }
         end
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
+      rescue Oso::Error => e
+        format.html { redirect_to user_url(@user), alert: "You are not authorized to modify users." }
+        format.json { render json: { error: e.message }, status: :forbidden }
       end
     end
   end

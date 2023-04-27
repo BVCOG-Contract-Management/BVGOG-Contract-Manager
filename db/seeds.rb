@@ -50,6 +50,17 @@ FactoryBot.create(
   entities: Entity.all.sample(rand(0..Entity.count)),
   level: UserLevel.enumeration.except(:zero).keys.sample,
   )
+  # Create a level 1 user
+  FactoryBot.create(
+    :user,
+    email: "admin@example.com",
+    password: "password",
+    first_name: "Admin",
+    last_name: "User",
+    program: Program.all.sample,
+    entities: Entity.all.sample(rand(0..Entity.count)),
+    level: UserLevel::ONE,
+  )
 
 # Create vendors
 for i in 1..50

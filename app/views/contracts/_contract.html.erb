@@ -72,6 +72,7 @@
                         </tbody>
                     </table>
                 </div>
+                <% if current_user.level != UserLevel::THREE %>
                     <footer class="card-footer">
                         <%= link_to "Edit this contract", edit_contract_path(@contract), class: "card-footer-item" %>
                         <%= link_to contract_path(@contract, params: { contract: { contract_status: contract_opposite_status(@contract) } }), data: { "turbo-method": :put }, class: "card-footer-item", id: "card-change-status" do %>
@@ -89,6 +90,7 @@
                                 <% end %>
                         <% end %>
                     </footer>
+                <% end %>
             </div>
         </div>
         <div class="column is-6">

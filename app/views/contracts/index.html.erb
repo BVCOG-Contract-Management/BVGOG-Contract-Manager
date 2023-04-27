@@ -20,7 +20,9 @@
             <%= form_with(url: contracts_path, method: "GET", data: { controller: "form-submission", turbo_frame: "contracts", turbo_action: "advance" }) do |form| %>
               <%= form.text_field :search, data: { action: "input->form-submission#search" }, class: "input", placeholder: "Search by title or key-words", value: params[:search], autofocus: params[:search] != nil , id: "search-input" %>
             <% end %>
-            <%= link_to "New contract", new_contract_path, class: "button is-primary", disabled: current_user.level == UserLevel::THREE %>
+            <% if current_user.level != UserLevel::THREE %>
+              <%= link_to "New contract", new_contract_path, class: "button is-primary" %>
+            <% end %>
           </div>
         </div>
       </div>
