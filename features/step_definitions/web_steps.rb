@@ -34,6 +34,10 @@ When('I try to edit report {int}') do |num|
   visit "/reports/#{num}/edit"
 end
 
+When('I try to edit vendor {int}') do |num|
+  visit "/vendors/#{num}/edit"
+end
+
 When('I select the Entity {int} checkbox') do |num|
   find("#user_entity_ids_#{num}").set(true)
 end
