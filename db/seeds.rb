@@ -35,15 +35,35 @@ for i in 1..50
   FactoryBot.create(
     :user,
     id: i,
-    program: Program.all.sample,
-    entities: Entity.all.sample(rand(0..Entity.count)),
     level: UserLevel.enumeration.except(:zero).keys.sample,
+    program: Program.all.sample,
+    entities: Entity.all.sample(rand(1..3)),
   )
 end
-FactoryBot.create(:user, email: "user@example.com", password: "password", first_name: "Example", last_name: "User")
+FactoryBot.create(
+  :user, 
+  email: "user@example.com", 
+  password: "password", 
+  first_name: "Example", 
+  last_name: "User", 
+  program: Program.all.sample,
+  entities: Entity.all.sample(rand(0..Entity.count)),
+  level: UserLevel.enumeration.except(:zero).keys.sample,
+  )
+  # Create a level 1 user
+  FactoryBot.create(
+    :user,
+    email: "admin@example.com",
+    password: "password",
+    first_name: "Admin",
+    last_name: "User",
+    program: Program.all.sample,
+    entities: Entity.all.sample(rand(0..Entity.count)),
+    level: UserLevel::ONE,
+  )
 
 # Create vendors
-for i in 1..5
+for i in 1..50
   FactoryBot.create(
     :vendor,
     id: i,
@@ -90,7 +110,7 @@ end
 
 # Create vendor reviews manually since they have a (user, vendor) unique index
 used_user_vendor_combos = []
-for i in 1..10
+for i in 1..100
   user = User.all.sample
   vendor = Vendor.all.sample
   if used_user_vendor_combos.include?([user.id, vendor.id])

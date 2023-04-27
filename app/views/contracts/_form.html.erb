@@ -6,7 +6,7 @@
       </p>
     </header>
     <div class="card-content">
-      <%= form_with(model: @contract) do |form| %>
+      <%= form_with(model: @contract, data: { turbo: false }) do |form| %>
           <% if @contract.errors.any? %>
             <article class="message is-danger">
               <div class="message-header">

@@ -19,7 +19,9 @@
           <%= form_with(url: users_path, method: "GET", data: { controller: "form-submission", turbo_frame: "users", turbo_action: "advance" }) do |form| %>
             <%= form.text_field :search, data: { action: "input->form-submission#search" }, class: "input", placeholder: "Search by first or last name", value: params[:search], autofocus: !params[:search].blank? , id: "search-input" %>
           <% end %>
-            <%= link_to "Invite user", new_user_path, class: "button is-primary" %>
+          <% if current_user.level != UserLevel::THREE %>
+            <%= link_to "Invite a user", new_user_path, class: "button is-primary" %>
+          <% end %>
           </div>
       </div>
     </div>
@@ -42,7 +44,7 @@
           <tr>
             <td><%= link_to user.first_name, user %></td>
             <td><%= user.last_name %></td>
-            <td><%= user.level %></td>
+            <td><%= user.level_int %></td>
             <% if user.program.blank? %>
               <td><%= "-" %></td>
             <% else %>

@@ -1,7 +1,8 @@
+
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :database_authenticatable, :registerable,
+  devise :invitable, :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
   validates :first_name, presence: true, length: { maximum: 255 }
   validates :last_name, presence: true, length: { maximum: 255 }
@@ -15,6 +16,9 @@ class User < ApplicationRecord
   has_one :redirect_user, class_name: "User", foreign_key: "redirect_user_id"
   has_many :contracts, class_name: "Contract", foreign_key: "point_of_contact_id"
   has_many :vendor_reviews, class_name: "VendorReview", foreign_key: "user_id"
+
+  has_and_belongs_to_many :entities
+
   # TODO: Should the program be optional?
   belongs_to :program, class_name: "Program", foreign_key: "program_id", optional: true
 
@@ -25,5 +29,22 @@ class User < ApplicationRecord
       @old_name = "#{first_name} #{last_name}"
     end
     @old_name
+  end
+
+  def has_entity?(entity_id)
+    self.entities.where(id: entity_id).exists?
+  end
+  # Virtual attribute to calculate integer level on the fly
+  def level_int
+    case level
+    when 'one'
+      1
+    when 'two'
+      2
+    when 'three'
+      3
+    else
+      nil
+    end
   end
 end

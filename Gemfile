@@ -102,6 +102,8 @@ gem "enumerate_it", "~> 3.2.4"
 
 gem "devise"
 
+gem 'devise_invitable'
+
 gem "bulma-rails", "~> 0.9.3"
 
 gem "breadcrumbs_on_rails", "~> 4.1.0"
@@ -113,3 +115,5 @@ gem "rails_12factor"
 gem 'prawn'
 
 gem 'prawn-table', '~> 0.2.0'
+
+gem 'oso-oso', '~> 0.27.0'
