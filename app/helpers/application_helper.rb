@@ -42,6 +42,11 @@ module ApplicationHelper
         { name: 'Invite a User', path: new_user_invitation_path, icon: 'user-plus' }
       ] }
     end
+    if current_user.level == UserLevel::ONE
+      pages << { title: 'Admin', subpaths: [
+        { name: 'Administration', path: admin_path, icon: 'lock' }
+      ] }
+    end
     # Sign out is always present
     pages << { title: 'Profile', subpaths: [
       { name: 'Sign Out', path: destroy_user_session_path, icon: 'sign-out-alt', method: :delete }
