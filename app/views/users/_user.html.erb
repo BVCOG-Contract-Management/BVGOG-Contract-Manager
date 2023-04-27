@@ -46,6 +46,16 @@
                                     <% end %>
                                 </td>
                             </tr>
+                            <tr>
+                                <td><strong>Inviation Accepted:</strong></td>
+                                <td>
+                                    <% if @user.invitation_accepted_at.present? %>
+                                        <span class="tag is-success">Yes</span>
+                                    <% else %>
+                                        <span class="tag is-danger">No</span>
+                                    <% end %>
+                                </td>
+                            </tr>
                             <% if user.redirect_user_id.present? %>
                                 <tr>
                                     <td><strong>Redirected to:</strong></td>
@@ -55,7 +65,7 @@
                         </tbody>
                     </table>
                 </div>
-                <% if current_user.level != UserLevel::THREE %>
+                <% if current_user.level == UserLevel::ONE %>
                     <footer class="card-footer">
                         <%= link_to "Edit this user", edit_user_path(@user), class: "card-footer-item" %>
                         <div class= "card-footer-item" id="redirect-user-modal-open-btn">
@@ -68,6 +78,9 @@
                                 Enable this user
                             <% end %>
                         </div>
+                        <% if !@user.invitation_accepted_at.present? %>
+                            <%= link_to "Resend invitation", reinvite_user_path(@user), method: :get, class: "card-footer-item" %>
+                        <% end %>
                     </footer>
                 <% end %>
             </div>

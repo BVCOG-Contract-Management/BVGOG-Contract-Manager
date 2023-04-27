@@ -25,6 +25,7 @@ Rails.application.routes.draw do
     # PUT /users/1/redirect
     member do
       put 'redirect', to: 'users#redirect', as: 'redirect'
+      get 'reinvite', to: 'users#reinvite', as: 'reinvite'
     end
   end
   resources :reports

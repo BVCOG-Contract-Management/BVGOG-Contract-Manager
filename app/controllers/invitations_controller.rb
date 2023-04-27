@@ -32,7 +32,7 @@ class InvitationsController < Devise::InvitationsController
       end
     end
   end
-
+  
   protected
 
   # Permit the new params here.

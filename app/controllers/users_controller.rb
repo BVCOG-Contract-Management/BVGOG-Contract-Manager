@@ -138,6 +138,17 @@ class UsersController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def reinvite
+    @user = User.find(params[:id])
+    if !@user.is_active 
+      redirect_to user_url(@user), alert: "User is not active and cannot be re-invited."
+    else
+      @user.invite!
+      redirect_to user_url(@user), notice: "User was successfully re-invited."
+    end
+  end
+
   private
 
   # Use callbacks to share common setup or constraints between actions.

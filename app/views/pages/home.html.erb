@@ -44,7 +44,7 @@
                         </tr>
                         <tr>
                             <td><strong>Joined:</strong></td>
-                            <td><%= current_user.created_at.strftime("%B %d, %Y") %></td>
+                            <td><%= current_user.invitation_accepted_at.present? ? current_user.invitation_accepted_at.strftime("%B %d, %Y") : current_user.created_at.strftime("%B %d, %Y") %></td>
                         </tr>
                     </tbody>
                 </table>
