@@ -110,7 +110,7 @@ end
 
 # Create vendor reviews manually since they have a (user, vendor) unique index
 used_user_vendor_combos = []
-for i in 1..10
+for i in 1..100
   user = User.all.sample
   vendor = Vendor.all.sample
   if used_user_vendor_combos.include?([user.id, vendor.id])

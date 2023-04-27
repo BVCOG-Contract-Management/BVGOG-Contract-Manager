@@ -34,7 +34,6 @@
 .vendor-review-star {
     @include transition(all, 0.3s, ease);
     font-size: 1.5rem;
-    margin: 0 0.2rem;
 }
 
 .vendor-review-star:hover {

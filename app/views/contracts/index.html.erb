@@ -36,6 +36,15 @@
             <% columns.each do |col| %>
               <th>
                 <%= link_to col[0], sort: col[1], order: (params[:order] == "asc" ? "desc" : "asc") %>
+                <% if params[:order] == "asc" and params[:sort] == col[1] %>
+                  <span class="icon">
+                    <i class="fas fa-sort-up"></i>
+                  </span>
+                <% elsif params[:order] == "desc" and params[:sort] == col[1] %>
+                  <span class="icon">
+                    <i class="fas fa-sort-down"></i>
+                  </span>
+                <% end %>
               </th>
             <% end %>
           </tr>
