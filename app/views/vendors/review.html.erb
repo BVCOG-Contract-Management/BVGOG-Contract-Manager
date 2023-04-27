@@ -21,8 +21,18 @@
 
       <div class="field">
         <%= f.label :rating %>
-        <%= f.range_field :rating, in: 1..5, step: 0.5, class: "slider" %>
-        <span class="range-value">3</span>
+        <%# Star rating input %>
+        <%# Use 5 fontawesome icons as inputs, on click update the :rating field in the form %>
+        <%# Use a hidden field to store the value of the rating %>
+        <div class="field">
+          <div class="control">
+            <input type="hidden" name="vendor_review[rating]" value="0" id="vendor_review_rating">
+            <% for i in 1..5 %>
+              <span class="icon">
+                  <i class="fa-solid fa-star vendor-review-star" id=<%= i %>></i>
+              </span>
+            <% end %>
+          </div>
       </div>
 
       <div class="field">
@@ -34,12 +44,3 @@
     <% end %>
   </div>
 </div>
-
-<script>
-  var slider = document.querySelector(".slider");
-  var rangeValue = document.querySelector(".range-value");
-
-  slider.addEventListener("input", function() {
-    rangeValue.textContent = slider.value;
-  });
-</script>

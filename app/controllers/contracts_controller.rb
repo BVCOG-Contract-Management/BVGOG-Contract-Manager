@@ -48,12 +48,11 @@ class ContractsController < ApplicationController
 
     @contract = Contract.new(contract_params.merge(contract_status: ContractStatus::IN_PROGRESS))
 
-    handle_if_new_vendor
-
     respond_to do |format|
       ActiveRecord::Base.transaction do
         begin
           OSO.authorize(current_user, 'write', @contract)
+          handle_if_new_vendor
           if @contract.save
             handle_contract_documents(contract_documents_upload) if contract_documents_upload.present?
             format.html { redirect_to contract_url(@contract), notice: 'Contract was successfully created.' }
@@ -209,6 +208,8 @@ class ContractsController < ApplicationController
     # Check if the vendor is new
     if params[:contract][:vendor_id] == 'new'
       # Create a new vendor
+      # Make vendor name Name Case
+      params[:contract][:new_vendor_name] = params[:contract][:new_vendor_name].titlecase
       vendor = Vendor.new(name: params[:contract][:new_vendor_name])
       # If the vendor is saved successfully
       if vendor.save
