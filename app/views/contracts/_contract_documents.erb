@@ -4,7 +4,7 @@
             <tr>
                 <td>
                     <%= file_type_icon(contract_document.file_name) %>
-                    <strong><%= contract_document.file_name %></strong>
+                    <strong><%= contract_document.orig_file_name %></strong>
                 </td>
                 <td class="download-file-button">
                     <% if action == "download" %>
