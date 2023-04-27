@@ -25,14 +25,16 @@ Rails.application.routes.draw do
   resources :reports
   resources :contracts
 
+  get '/contracts/:id/expiry_reminder', to: 'contracts#expiry_reminder', as: 'expiry_reminder_contract'
+
   # Contract Documents
   # GET
+
   get "/contract_documents/:id", to: "contract_documents#download", as: "download_contract_document"
 
   # Download Report
   # GET
   get "/reports/:id/download", to: "reports#download", as: "download_report"
-
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
