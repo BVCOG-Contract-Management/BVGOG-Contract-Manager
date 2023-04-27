@@ -1,9 +1,93 @@
-<h1 class="title is-3">Home</h1>
-<p>
-    Find me in app/views/pages/home.html.erb
-    This is the home page. It is still a work in progress.
-</p>
+<h1 class="title is-3">Welcome to BVCOG's Contract Management System!</h1>
 
-<%= link_to "Sign Out", destroy_user_session_path, 'data-turbo-method': :delete%>
+<div class="columns is-desktop" id="home-about-you">
+    <div class="column is-4">
+        <div class="card">
+            <div class="card-header">
+                <p class="card-header-title">
+                    <span class="icon">
+                        <i class="fas fa-user"></i>
+                    </span>
+                    About You
+                </p>
+            </div>
+            <div class="card-content is-paddingless">
+                <table class="table is-striped is-hoverable is-fullwidth">
+                    <tbody>
+                        <tr>
+                            <td><strong>Name:</strong></td>
+                            <td><%= current_user.full_name %></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Email:</strong></td>
+                            <td><%= current_user.email %></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Level:</strong></td>
+                            <td><%= current_user.level_int %></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Program:</strong></td>
+                            <td><%= current_user.program.name %></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Program Manager:</strong></td>
+                            <td>
+                                <% if @current_user.is_program_manager%>
+                                    <span class="tag is-success">Yes</span>
+                                <% else %>
+                                    <span class="tag is-danger">No</span>
+                                <% end %>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Joined:</strong></td>
+                            <td><%= current_user.created_at.strftime("%B %d, %Y") %></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
+    <%# Latest contracts, show based on user's level, and allow level 1/2 users to filter by in-review %>
+    <div class="column is-8">
+        <div class="card">
+            <div class="card-header">
+                <p class="card-header-title">
+                    <span class="icon">
+                        <i class="fas fa-file-contract"></i>
+                    </span>
+                    <% if current_user.level == UserLevel::THREE %>
+                        Latest Contracts
+                    <% else %>
+                        Contracts in Review
+                    <% end %>
+                </p>
+            </div>
+            <div class="card-content is-paddingless" id="home-page-contracts-table-container">
+                <table class="table is-striped is-hoverable is-fullwidth">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Number</th>
+                            <th>Point of Contact</th>
+                            <th>Created At</th>    
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% @contracts.each do |contract| %>
+                            <tr>
+                                <td><%= link_to contract.title, contract_path(contract) %></td>
+                                <td><%= contract.number %></td>
+                                <td><%= contract.point_of_contact.full_name %></td>
+                                <td><%= contract.created_at.strftime("%B %d, %Y") %></td>
+                            </tr>
+                        <% end %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 

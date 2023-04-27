@@ -46,15 +46,101 @@
                                     <% end %>
                                 </td>
                             </tr>
+                            <% if user.redirect_user_id.present? %>
+                                <tr>
+                                    <td><strong>Redirected to:</strong></td>
+                                    <td><%= User.find(user.redirect_user_id).full_name %></td>
+                                </tr>
+                            <% end %>
                         </tbody>
                     </table>
                 </div>
                 <% if current_user.level != UserLevel::THREE %>
                     <footer class="card-footer">
                         <%= link_to "Edit this user", edit_user_path(@user), class: "card-footer-item" %>
-                        <%= link_to "Redirect this user", redirect_user_path(@user), class: "card-footer-item" %>
+                        <div class= "card-footer-item" id="redirect-user-modal-open-btn">
+                            Redirect this user
+                        </div>
+                        <div class= "card-footer-item" id="disable-user-modal-open-btn">
+                            <% if @user.is_active %>
+                                Disable this user
+                            <% else %>
+                                Enable this user
+                            <% end %>
+                        </div>
                     </footer>
                 <% end %>
             </div>
         </div>
 </div>
+
+<%# Disable user modal %>
+<div class="modal" id="disable-user-modal">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+        <% if @user.is_active %>
+            <p class="modal-card-title">Disable <%= @user.full_name %></p>
+        <% else %>
+            <p class="modal-card-title">Enable <%= @user.full_name %></p>
+        <% end %>
+    </header>
+    <section class="modal-card-body">
+      <% if @user.is_active %>
+            <p><strong>Are you sure you want to disable <%= @user.full_name %>?</strong></p>
+            <p>This will prevent them from logging in and using the system.</p>
+        <% else %>
+            <p><strong>Are you sure you want to enable <%= @user.full_name %>?</strong></p>
+            <p>This will allow them to log in and use the system.</p>
+            <p>Note that reactivated users that have been redirected will have their redirection removed.</p>
+        <% end %>
+    </section>
+    <footer class="modal-card-foot">
+    <%= link_to user_path(@user, params: { user: { is_active: !@user.is_active } }), data: { "turbo-method": :put }, class: @user.is_active ? "button is-danger" : "button is-success" do %>
+        <% if @user.is_active %>
+            Disable
+        <% else %>
+            Enable
+        <% end %>
+    <% end %>
+      <button class="button modal-close-btn">Cancel</button>
+    </footer>
+  </div>
+</div>
+
+<%# Redirect user modal %>
+<div class="modal" id="redirect-user-modal">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">Redirect <%= @user.full_name %></p>
+    </header>
+    <%= form_with(model: @user, method: :put, url: redirect_user_path(@user)) do |form| %>
+    <section class="modal-card-body">
+        <p><strong>Only inactive users can be redirected!</strong></p>
+        <p>
+          Redirecting <%= @user.full_name %> will permanently change the point of contact
+          for all of their contracts to another user. This action cannot be reverted!
+        </p>
+
+        <hr/>
+        <div class="field">
+          <%= form.label :redirect_user_id, "Redirect to User", class: "label" %>
+          <%= form.select :redirect_user_id, user_select_options, {:include_blank => true}, class: "input" %>
+        </div>
+      </section>
+      <footer class="modal-card-foot">
+        <%= form.submit "Redirect", class: "button is-success" %>
+        <button id="redirect-user-modal-cancel-btn" class="button modal-close-btn">Cancel</button>
+      </footer>
+      <% end %>
+  </div>
+</div>
+
+<script>
+    // Prevent form submission on cancel user redirect
+    // Hacky but required given rails submits on any button click
+    document.getElementById("redirect-user-modal-cancel-btn").addEventListener("click", function(event){
+        event.preventDefault()
+    });
+</script>

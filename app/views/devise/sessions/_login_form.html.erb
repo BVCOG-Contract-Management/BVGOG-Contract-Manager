@@ -1,19 +1,4 @@
 <%= form_for(resource, as: resource_name, url: session_path(resource_name), validate:true) do |f| %>
-
-  <% if flash[:success] %>
-    <div class="alert alert-success", style="color: green">
-      <%= flash[:success] %>
-    </div>
-  <% elsif flash[:error] %>
-    <div class="alert alert-danger", style="color: red">
-      <%= flash[:error] %>
-    </div>
-  <% elsif flash[:alert] %>
-    <div style="color: red">
-      <%= flash[:alert] %>
-    </div>
-  <% end %>
-
   <div class="field">
     <%= f.label :email, style: "display: block" %>
     <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "input" %>
