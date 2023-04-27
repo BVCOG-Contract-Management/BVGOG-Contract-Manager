@@ -121,7 +121,10 @@ def program_select_options
 end
 
 def entity_select_options
-  if current_user.level == UserLevel::THREE
+  if current_user.nil?
+    # return empty array
+    options = []
+  elsif current_user.level == UserLevel::THREE
     options = current_user.entities.map { |entity| [entity.name, entity.id] }
   else
     options = options = Entity.all.map { |entity| [entity.name, entity.id] }
