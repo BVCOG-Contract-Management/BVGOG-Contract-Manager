@@ -46,13 +46,15 @@ FactoryBot.create(
   password: "password", 
   first_name: "Example", 
   last_name: "User", 
-  level: UserLevel::THREE,
   program: Program.all.sample,
-  entities: Entity.all.sample(rand(1..3)),
-)
+  entities: Entity.all.sample(rand(0..Entity.count)),
+  level: UserLevel.enumeration.except(:zero).keys.sample,
+  )
+end
+FactoryBot.create(:user, email: "user@example.com", password: "password", first_name: "Example", last_name: "User")
 
 # Create vendors
-for i in 1..5
+for i in 1..50
   FactoryBot.create(
     :vendor,
     id: i,

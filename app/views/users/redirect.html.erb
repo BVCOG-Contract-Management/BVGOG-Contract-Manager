@@ -1,0 +1,23 @@
+<%= content_for :title do %>
+  <span class="icon">
+    <i class="fa-solid fa-user"></i>
+  </span> 
+  Redirect <%= @user.full_name %>
+
+  <%= form_for @user, url: user_path(@user), method: :put, html: { id: "redirect-form" } do |f| %>
+    <%= f.select :redirect_user_id, options_for_select(@users.reject { |u| u.id == @user.id }.map { |u| [u.full_name, u.id] }), {}, { class: 'form-select' } %>
+    <%= f.submit "Redirect", class: 'btn btn-primary', data: { confirm: "Are you sure you want to redirect this user?" } %>
+  <% end %>
+<% end %>
+
+<script>
+  const redirectForm = document.getElementById("redirect-form");
+  const redirectButton = redirectForm.querySelector('input[type="submit"]');
+
+  redirectButton.addEventListener("click", (event) => {
+    const isConfirmed = confirm("Are you sure you want to redirect this user?");
+    if (!isConfirmed) {
+      event.preventDefault();
+    }
+  });
+</script>

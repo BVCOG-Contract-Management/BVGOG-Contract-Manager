@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_25_014920) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_25_203435) do
   create_table "bvcog_configs", force: :cascade do |t|
     t.text "contracts_path", null: false
     t.text "reports_path", null: false
@@ -63,8 +63,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_25_014920) do
   end
 
   create_table "entities_users", id: false, force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.integer "entity_id", null: false
+    t.integer "entity_id"
+    t.integer "user_id"
+    t.index ["entity_id", "user_id"], name: "index_entities_users_on_entity_id_and_user_id", unique: true
     t.index ["entity_id"], name: "index_entities_users_on_entity_id"
     t.index ["user_id"], name: "index_entities_users_on_user_id"
   end
@@ -119,7 +120,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_25_014920) do
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
     t.integer "program_id"
+    t.string "invitation_token"
+    t.datetime "invitation_created_at"
+    t.datetime "invitation_sent_at"
+    t.datetime "invitation_accepted_at"
+    t.integer "invitation_limit"
+    t.string "invited_by_type"
+    t.integer "invited_by_id"
+    t.integer "invitations_count", default: 0
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true
+    t.index ["invited_by_id"], name: "index_users_on_invited_by_id"
+    t.index ["invited_by_type", "invited_by_id"], name: "index_users_on_invited_by"
     t.index ["program_id"], name: "index_users_on_program_id"
     t.index ["redirect_user_id"], name: "index_users_on_redirect_user_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

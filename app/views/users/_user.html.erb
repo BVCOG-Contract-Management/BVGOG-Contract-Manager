@@ -24,7 +24,7 @@
                             </tr>
                             <tr>
                                 <td><strong>Level:</strong></td>
-                                <td><%= @user.level %></td>
+                                <td><%= @user.level_int %></td>
                             </tr>
                             <tr>
                                 <td><strong>Program Manager:</strong></td>
@@ -39,6 +39,7 @@
                 </div>
                 <footer class="card-footer">
                     <%= link_to "Edit this user", edit_user_path(@user), class: "card-footer-item" %>
+                    <%= link_to "Redirect this user", redirect_user_path(@user), class: "card-footer-item" %>
                 </footer>
             </div>
         </div>

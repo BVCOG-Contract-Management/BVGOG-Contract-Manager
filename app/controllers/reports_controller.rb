@@ -1,22 +1,22 @@
 
 class ReportsController < ApplicationController
-  before_action :set_report, only: %i[ show edit update destroy ]
+  include ReportsHelper
+  before_action :set_report, only: %i[ show edit update destroy download ]
 
   # GET /reports or /reports.json
   def index
-    add_breadcrumb "Reports", reports_path
-    @reports = Report.all
+    redirect_to new_report_path(type: ReportType::CONTRACTS)
   end
 
   # GET /reports/1 or /reports/1.json
   def show
-    add_breadcrumb "Reports", reports_path
+    add_breadcrumb "Reports"
     add_breadcrumb @report.title, report_path(@report)
   end
 
   # GET /reports/new
   def new
-    add_breadcrumb "Reports", reports_path
+    add_breadcrumb "Reports"
     add_breadcrumb "New Report", new_report_path
     # Get the query param "type" (either "contract" or "user")
     # and create the correct report model subclass
@@ -46,36 +46,17 @@ class ReportsController < ApplicationController
     # For now default to the first user (id = 1)
     @report.created_by = User.find(1).id
 
+    bvcog_config = BvcogConfig.last
+
     # Here we will generate the file path and PDF file
     # For now, we will just create the path
     @report.file_name = "#{SecureRandom.uuid}.pdf"
-    @report.full_path = Rails.root.join(@bvcog_config.reports_path, @report.file_name).to_s
+    @report.full_path = Rails.root.join(bvcog_config.reports_path, @report.file_name).to_s
 
     contracts = []
     # Collect contracts if needed
     if @report.report_type == ReportType::CONTRACTS
-      # Build query depending on the filters that were chosen
-      query = Contract.all
-      if @report.expiring_in_days.present?
-        date = Date.today + @report.expiring_in_days.days
-        query = query.where("ends_at <= ?", date)
-      end
-      if @report.entity_id.present?
-        # TODO: make sure the entity chosen is allowed to be seen by the current user
-        # In practice the UI should only show entities that the user is allowed to see
-        # But we should still check here in case a manual request is made
-        query = query.where(entity_id: @report.entity_id)
-      end
-      if @report.program_id.present?
-        query = query.where(program_id: @report.program_id)
-      end
-      if @report.point_of_contact_id.present?
-        query = query.where(point_of_contact_id: @report.point_of_contact_id)
-      end
-      if current_user.level == UserLevel::THREE
-        query = query.where(entity_id: current_user.entities.pluck(:id))
-      end
-      contracts = query
+      contracts = query_report_contracts(@report)
     end
 
     # Build the PDF
@@ -205,6 +186,11 @@ class ReportsController < ApplicationController
       format.html { redirect_to reports_url, notice: "Report was successfully destroyed." }
       format.json { head :no_content }
     end
+  end
+
+  def download
+    # Send the file to the user
+    send_file @report.full_path, type: "application/pdf", x_sendfile: true
   end
 
   private

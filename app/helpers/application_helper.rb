@@ -18,13 +18,12 @@ module ApplicationHelper
       { title: 'Reports', subpaths: [
         { name: 'Create a Report', path: new_report_path, icon: 'file-alt' }
       ] },
-      { title: 'Vendors', subpaths: [
-        { name: 'View Vendors', path: '#', icon: 'address-book' },
-        { name: 'Review a Vendor', path: '#', icon: 'star' }
+      { title: "Vendors", subpaths: [
+        { name: "View Vendors", path: vendors_path, icon: "address-book" },
       ] },
       { title: 'Users', subpaths: [
         { name: 'View Users', path: users_path, icon: 'users' },
-        { name: 'Invite a User', path: new_user_path, icon: 'user-plus' }
+        { name: 'Invite a User', path: new_user_invitation_path, icon: 'user-plus' }
       ] },
       { title: 'Admin', subpaths: [
         { name: 'Platform Settings', path: '#', icon: 'cog' }
