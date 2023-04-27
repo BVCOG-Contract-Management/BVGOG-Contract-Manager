@@ -49,12 +49,14 @@ module VendorsHelper
           ratings[rating] = reviews_by_rating[rating] || 0
         end
 
-        print ratings
-
         # Create a hash of ratings with the percentage of reviews for each rating
         ratings_percentages = {}
         ratings.each do |rating, count|
-          ratings_percentages[rating] = (count.to_f / total_reviews * 100).round
+            if vendor_reviews.empty?
+                ratings_percentages[rating] = 0
+                next
+            end
+            ratings_percentages[rating] = (count.to_f / total_reviews * 100).round
         end
 
         print ratings_percentages
