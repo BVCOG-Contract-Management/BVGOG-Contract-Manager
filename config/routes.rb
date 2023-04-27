@@ -18,8 +18,9 @@ Rails.application.routes.draw do
   end
 
   resources :users do
+    # PUT /users/1/redirect
     member do
-      get 'redirect'
+      put 'redirect', to: 'users#redirect', as: 'redirect'
     end
   end
   resources :reports
