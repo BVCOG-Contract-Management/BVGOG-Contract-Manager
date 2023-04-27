@@ -86,15 +86,9 @@
                         <%= link_to contract_path(@contract, params: { contract: { contract_status: contract_opposite_status(@contract) } }), data: { "turbo-method": :put }, class: "card-footer-item", id: "card-change-status" do %>
                             <span>
                                 <% if @contract.contract_status == ContractStatus::IN_PROGRESS %>
-                                    <span class="icon">
-                                        <i class="fas fa-check"></i>
-                                    </span>
-                                    <span>Approve this contract</span>
+                                    <span>Set to "Approved"</span>
                                 <% else %>
-                                    <span class="icon">
-                                        <i class="fas fa-clock"></i>
-                                    </span>
-                                    <span>Set contract to pending review</span>
+                                    <span>Set to "In Review"</span>
                                 <% end %>
                         <% end %>
                     <% end %>

@@ -66,7 +66,7 @@ class ContractsController < ApplicationController
             @contract.errors.add(:base, User.find(@contract.point_of_contact_id).full_name + ' is not active, use ' + User.find(User.find(@contract.point_of_contact_id).redirect_user_id).full_name + ' instead')
             format.html { render :new, status: :unprocessable_entity }
             format.json { render json: @contract.errors, status: :unprocessable_entity }
-          elsif !User.find(@contract.point_of_contact_id).entities.include?(@contract.entity)
+          elsif User.find(@contract.point_of_contact_id).level == UserLevel::THREE && !User.find(@contract.point_of_contact_id).entities.include?(@contract.entity)
             @contract.errors.add(:base, User.find(@contract.point_of_contact_id).full_name + ' is not associated with ' + @contract.entity.name)
             format.html { render :new, status: :unprocessable_entity }
             format.json { render json: @contract.errors, status: :unprocessable_entity }
@@ -117,7 +117,7 @@ class ContractsController < ApplicationController
 
           # Excuse this monster if statement, it's just checking if the user is associated with the entity, and for
           # some reason nested-if statements don't work here when you use format (ie. UnkownFormat error)
-          elsif !User.find(contract_params[:point_of_contact_id].present? ? contract_params[:point_of_contact_id] : @contract.point_of_contact_id).entities.include?(Entity.find(contract_params[:entity_id].present? ? contract_params[:entity_id] : @contract.entity_id))
+          elsif User.find(@contract.point_of_contact_id).level == UserLevel::THREE && !User.find(contract_params[:point_of_contact_id].present? ? contract_params[:point_of_contact_id] : @contract.point_of_contact_id).entities.include?(Entity.find(contract_params[:entity_id].present? ? contract_params[:entity_id] : @contract.entity_id))
               @contract.errors.add(:base, User.find(contract_params[:point_of_contact_id].present? ? contract_params[:point_of_contact_id] : @contract.point_of_contact_id).full_name + ' is not associated with ' + Entity.find(contract_params[:entity_id].present? ? contract_params[:entity_id] : @contract.entity_id).name)
               format.html { render :edit, status: :unprocessable_entity }
               format.json { render json: @contract.errors, status: :unprocessable_entity }
