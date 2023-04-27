@@ -7,6 +7,6 @@ FactoryBot.define do
 
     id { Faker::Number.positive }
     rating { rand(1..5) }
-    description { Faker::Lorem.paragraph }
+    description { Faker::Lorem.paragraph(sentence_count: 5) }
   end
 end

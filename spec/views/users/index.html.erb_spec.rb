@@ -1,8 +1,13 @@
 require 'rails_helper'
+require 'auth_helper'
 
 RSpec.describe "users/index", type: :view do
+  include Devise::Test::IntegrationHelpers
+  include Devise::Test::ControllerHelpers
   include FactoryBot::Syntax::Methods
+
   before(:each) do
+    login_user
     users = []
     program =  FactoryBot.create(:program)
     for i in 1..15

@@ -41,19 +41,17 @@
                 <div class="column is-6">
                     <% if report.report_type == ReportType::CONTRACTS %>
 
-                    <%# Expiration of contract %>
-                    <div class="field">
-                        <%= form.label :days_to_expiration %>
-                        <%= form.select :expiring_in_days, Report::EXPIRATION_OPTIONS, {:include_blank => true}, class: "input" %>
-                    </div>
+                        <%# Expiration of contract %>
+                        <div class="field">
+                            <%= form.label :days_to_expiration %>
+                            <%= form.select :expiring_in_days, Report::EXPIRATION_OPTIONS, {:include_blank => true}, class: "input" %>
+                        </div>
 
-                    <%# Entity %>
-                    <div class="field">
-                        <%= form.label :entity_id %>
-                        <%= form.select :entity_id, entity_select_options, {:include_blank => true}, class: "input" %>
-                    </div>
-                    <% elsif report.report_type == ReportType::USERS %>
-
+                        <%# Entity %>
+                        <div class="field">
+                            <%= form.label :entity_id %>
+                            <%= form.select :entity_id, entity_select_options, {:include_blank => true}, class: "input" %>
+                        </div>
                     <% end %>
                 </div>
 
@@ -61,19 +59,17 @@
                 <div class="column is-6">
                     <% if report.report_type == ReportType::CONTRACTS %>
 
-                    <%# Expiration of contract %>
-                    <div class="field">
-                        <%= form.label :program_id %>
-                        <%= form.select :program_id, program_select_options, {:include_blank => true}, class: "input" %>
-                    </div>
+                        <%# Expiration of contract %>
+                        <div class="field">
+                            <%= form.label :program_id %>
+                            <%= form.select :program_id, program_select_options, {:include_blank => true}, class: "input" %>
+                        </div>
 
-                    <%# Point of Contact %>
-                    <div class="field">
-                        <%= form.label :point_of_contact_id %>
-                        <%= form.select :point_of_contact_id, user_select_options, {:include_blank => true}, class: "input" %>
-                    </div>
-                    <% elsif report.report_type == ReportType::USERS %>
-
+                        <%# Point of Contact %>
+                        <div class="field">
+                            <%= form.label :point_of_contact_id %>
+                            <%= form.select :point_of_contact_id, user_select_options, {:include_blank => true}, class: "input" %>
+                        </div>
                     <% end %>
                 </div>
             </div>

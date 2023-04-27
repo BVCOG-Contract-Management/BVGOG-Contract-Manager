@@ -115,3 +115,5 @@ gem "rails_12factor"
 gem 'prawn'
 
 gem 'prawn-table', '~> 0.2.0'
+
+gem 'oso-oso', '~> 0.27.0'

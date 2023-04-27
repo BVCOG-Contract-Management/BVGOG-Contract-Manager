@@ -15,6 +15,9 @@ class ContractsController < ApplicationController
     add_breadcrumb 'Contracts', contracts_path
     # Sort contracts
     @contracts = sort_contracts.page params[:page]
+    print reports_path
+    # Filter contracts based on allowed entities if user is level 3
+    @contracts = @contracts.where(entity_id: current_user.entities.pluck(:id)) if current_user.level == UserLevel::THREE
     # Search contracts
     @contracts = search_contracts(@contracts) if params[:search].present?
     puts params[:search].inspect
@@ -52,24 +55,32 @@ class ContractsController < ApplicationController
 
     @contract = Contract.new(contract_params.merge(contract_status: ContractStatus::IN_PROGRESS))
 
-    handle_if_new_vendor
-
     respond_to do |format|
       ActiveRecord::Base.transaction do
-        if @contract.save
-          handle_contract_documents(contract_documents_upload) if contract_documents_upload.present?
-          format.html { redirect_to contract_url(@contract), notice: 'Contract was successfully created.' }
-          format.json { render :show, status: :created, location: @contract }
-        else
-          format.html { render :new, status: :unprocessable_entity }
-          format.json { render json: @contract.errors, status: :unprocessable_entity }
+        begin
+          OSO.authorize(current_user, 'write', @contract)
+          handle_if_new_vendor
+          if @contract.save
+            handle_contract_documents(contract_documents_upload) if contract_documents_upload.present?
+            format.html { redirect_to contract_url(@contract), notice: 'Contract was successfully created.' }
+            format.json { render :show, status: :created, location: @contract }
+          else
+            format.html { render :new, status: :unprocessable_entity }
+            format.json { render json: @contract.errors, status: :unprocessable_entity }
+          end
         end
+      rescue StandardError => e
+        # If error type is Oso::ForbiddenError, then the user is not authorized
+        if e.instance_of?(Oso::ForbiddenError)
+          status = :unauthorized
+          @contract.errors.add(:base, 'You are not authorized to create a contract')
+          message = 'You are not authorized to create a contract'
+        else
+          status = :unprocessable_entity
+          message = e.message
+        end
+        format.html { redirect_to contracts_path, alert: message }
       end
-    rescue StandardError => e
-      puts "Error: #{e}"
-      @contract.destroy if @contract.persisted?
-      format.html { render :new, status: :unprocessable_entity }
-      format.json { render json: @contract.errors, status: :unprocessable_entity }
     end
   end
 
@@ -87,6 +98,7 @@ class ContractsController < ApplicationController
 
     respond_to do |format|
       ActiveRecord::Base.transaction do
+        OSO.authorize(current_user, 'edit', @contract)
         if @contract.update(contract_params)
           handle_contract_documents(contract_documents_upload) if contract_documents_upload.present?
           puts 'Contract updated successfully'
@@ -97,13 +109,22 @@ class ContractsController < ApplicationController
           format.json { render json: @contract.errors, status: :unprocessable_entity }
         end
       end
+
+    rescue StandardError => e
+      @contract.reload
+      print e
+      # If error type is Oso::ForbiddenError, then the user is not authorized
+      if e.instance_of?(Oso::ForbiddenError)
+        status = :unauthorized
+        @contract.errors.add(:base, 'You are not authorized to update this contract')
+        message = 'You are not authorized to update this contract'
+      else
+        status = :unprocessable_entity
+        message = e.message
+      end
+      # Rollback the transaction
+      format.html { redirect_to contract_url(@contract), alert: message }
     end
-  rescue StandardError => e
-    puts "Error: #{e}"
-    # Rollback the transaction
-    @contract.reload
-    format.html { render :edit, status: :unprocessable_entity }
-    format.json { render json: @contract.errors, status: :unprocessable_entity }
   end
 
   # DELETE /contracts/1 or /contracts/1.json
@@ -193,6 +214,8 @@ class ContractsController < ApplicationController
     # Check if the vendor is new
     if params[:contract][:vendor_id] == 'new'
       # Create a new vendor
+      # Make vendor name Name Case
+      params[:contract][:new_vendor_name] = params[:contract][:new_vendor_name].titlecase
       vendor = Vendor.new(name: params[:contract][:new_vendor_name])
       # If the vendor is saved successfully
       if vendor.save

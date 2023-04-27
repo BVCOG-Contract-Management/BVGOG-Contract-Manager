@@ -15,14 +15,20 @@ class InvitationsController < Devise::InvitationsController
     @user.password = SecureRandom.hex(8)
 
     respond_to do |format|
-      if @user.save
-        # Send invitation email
-        @user.invite!
-        format.html { redirect_to user_url(@user), notice: "User was successfully invited." }
-        format.json { render :show, status: :created, location: @user }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
+        begin
+          OSO.authorize(current_user, 'write', @user)
+          if @user.save
+            # Send invitation email
+            @user.invite!
+            format.html { redirect_to user_url(@user), notice: "User was successfully invited." }
+            format.json { render :show, status: :created, location: @user }
+          else
+            format.html { render :new, status: :unprocessable_entity }
+            format.json { render json: @user.errors, status: :unprocessable_entity }
+          end
+        rescue Oso::Error => e
+          format.html { redirect_to users_url, alert: "You are not authorized to invite users." }
+          format.json { render json: { error: e.message }, status: :unprocessable_entity }
       end
     end
   end

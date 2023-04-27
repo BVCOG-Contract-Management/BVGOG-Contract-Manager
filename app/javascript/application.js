@@ -1,7 +1,9 @@
-// Configure your import map in config/importmap.rb. Read more: https://github.com/rails/importmap-rails
-import "@hotwired/turbo-rails"
-import "controllers"
-import { fileIcon } from "./helpers/file-helper"
+// Configure your import map in config/importmap.rb. Read more:
+// https://github.com/rails/importmap-rails
+import '@hotwired/turbo-rails'
+import 'controllers'
+
+import { fileIcon } from './helpers/file-helper'
 
 // Helpers
 function clearNotice() {
@@ -29,7 +31,7 @@ function clearNotice() {
 
 
 // On turbo:load
-document.addEventListener("turbo:load", () => {
+document.addEventListener('turbo:load', () => {
     // Clear notice
     clearNotice();
     // New vendor option selected in contracts
@@ -58,16 +60,20 @@ document.addEventListener("turbo:load", () => {
         if (searchInput.value !== '') {
             // Set the cursor blink
             searchInput.focus();
-            searchInput.setSelectionRange(searchInput.value.length, searchInput.value.length);
+            searchInput.setSelectionRange(
+                searchInput.value.length, searchInput.value.length);
         }
     }
 
     // Contract uploaded documents
-    const uploadedContractDocumentsInput = document.querySelector('#contract-documents-file-input');
+    const uploadedContractDocumentsInput =
+        document.querySelector('#contract-documents-file-input');
     if (uploadedContractDocumentsInput) {
-        const uploadedContractDocumentsTable = document.querySelector('#uploaded-contract-documents-table');
+        const uploadedContractDocumentsTable =
+            document.querySelector('#uploaded-contract-documents-table');
         // Get tbody element of the table
-        const uploadedContractDocumentsTableBody = uploadedContractDocumentsTable.querySelector('tbody');
+        const uploadedContractDocumentsTableBody =
+            uploadedContractDocumentsTable.querySelector('tbody');
         // for each file that is uploaded, add a new row to the table
         uploadedContractDocumentsInput.addEventListener('change', (event) => {
             for (let i = 0; i < event.target.files.length; i++) {
@@ -77,7 +83,8 @@ document.addEventListener("turbo:load", () => {
                 fileRow.innerHTML = `
                     <td>
                         ${fileIcon(file.type)} 
-                        <strong>${file.name.length > 30 ? file.name.substring(0, 30) + '...' : file.name}</strong>
+                        <strong>${file.name.length > 30 ? file.name.substring(0, 30) + '...' :
+                        file.name}</strong>
                     </td>
                     <td>
                         <button type="button" class="button is-danger is-small" data-file-name="${file.name} class="${file.name}">
@@ -93,7 +100,8 @@ document.addEventListener("turbo:load", () => {
                 const button = fileRow.querySelector(`button[type=button]`);
                 button.addEventListener('click', (event) => {
                     // Remove the file from the input
-                    const filtered = Array.from(uploadedContractDocumentsInput.files).filter((f) => f.name !== file.name);
+                    const filtered = Array.from(uploadedContractDocumentsInput.files)
+                        .filter((f) => f.name !== file.name);
                     const fileList = new DataTransfer();
                     filtered.forEach((f) => fileList.items.add(f));
                     uploadedContractDocumentsInput.files = fileList.files;
@@ -101,9 +109,51 @@ document.addEventListener("turbo:load", () => {
                     fileRow.remove();
                 });
             }
-        }
-        );
+        });
+    }
+
+    // Vendor review star rating input
+    const vendorReviewStars = document.querySelectorAll('.vendor-review-star');
+    if (vendorReviewStars) {
+        const input = document.querySelector('#vendor_review_rating');
+        vendorReviewStars.forEach((star) => {
+            console.log(star.parentElement);
+            star.addEventListener('click', (event) => {
+                // Get the value of the star (the id of the star converted to an
+                // integer)
+                const value = parseInt(event.target.id);
+                // Set the value of the hidden input
+                input.value = value;
+                // Set the color of the stars
+                vendorReviewStars.forEach((s) => {
+                    if (parseInt(s.id) <= value) {
+                        s.parentElement.classList.add('has-text-warning');
+                    } else {
+                        s.parentElement.classList.remove('has-text-warning');
+                    }
+                });
+            });
+            // On mouseover, set the color of the stars
+            star.addEventListener('mouseover', (event) => {
+                const value = parseInt(event.target.id);
+                vendorReviewStars.forEach((s) => {
+                    if (parseInt(s.id) <= value) {
+                        s.parentElement.classList.add('has-text-warning');
+                    } else {
+                        s.parentElement.classList.remove('has-text-warning');
+                    }
+                });
+            });
+            // On mouseout, set the color of the stars
+            star.addEventListener('mouseout', (event) => {
+                vendorReviewStars.forEach((s) => {
+                    if (parseInt(s.id) <= input.value) {
+                        s.parentElement.classList.add('has-text-warning');
+                    } else {
+                        s.parentElement.classList.remove('has-text-warning');
+                    }
+                });
+            });
+        });
     }
 });
-
-

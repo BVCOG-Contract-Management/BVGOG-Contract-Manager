@@ -1,9 +1,13 @@
 require "rails_helper"
+require "auth_helper"
 
 RSpec.describe "contracts/edit", type: :view do
+  include Devise::Test::IntegrationHelpers
+  include Devise::Test::ControllerHelpers
   include FactoryBot::Syntax::Methods
 
   before(:each) do
+    login_user
     @contract = assign(:contract, create(:contract))
   end
 

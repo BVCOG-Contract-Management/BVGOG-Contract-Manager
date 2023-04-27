@@ -95,6 +95,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_25_203435) do
     t.index ["user_id"], name: "index_reports_on_user_id"
   end
 
+  create_table "user_entities", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "entity_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["entity_id"], name: "index_user_entities_on_entity_id"
+    t.index ["user_id", "entity_id"], name: "index_user_entities_on_user_id_and_entity_id", unique: true
+    t.index ["user_id"], name: "index_user_entities_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.text "first_name", null: false
     t.text "last_name", null: false
@@ -155,6 +165,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_25_203435) do
   add_foreign_key "reports", "programs"
   add_foreign_key "reports", "users"
   add_foreign_key "reports", "users", column: "point_of_contact_id"
+  add_foreign_key "user_entities", "entities"
+  add_foreign_key "user_entities", "users"
   add_foreign_key "users", "programs"
   add_foreign_key "users", "users", column: "redirect_user_id"
   add_foreign_key "vendor_reviews", "users"
