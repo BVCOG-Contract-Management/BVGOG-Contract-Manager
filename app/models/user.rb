@@ -33,6 +33,7 @@ class User < ApplicationRecord
 
   def has_entity?(entity_id)
     self.entities.where(id: entity_id).exists?
+  end
   # Virtual attribute to calculate integer level on the fly
   def level_int
     case level
