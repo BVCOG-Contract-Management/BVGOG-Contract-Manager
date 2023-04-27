@@ -3,20 +3,20 @@ module ContractsHelper
     case contract.contract_status
     when ContractStatus::IN_PROGRESS
       "" "
-          <span class=\"icon has-text-warning\">
-            <i class=\"fas fa-clock\"></i>
+          <span class=\"tag is-warning\">
+            In Review
           </span>
           " "".html_safe
     when ContractStatus::APPROVED
       "" "
-          <span class=\"icon has-text-success\">
-            <i class=\"fas fa-check\"></i>
+          <span class=\"tag is-success\">
+            Approved
           </span>
           " "".html_safe
     else
       "" "
-          <span class=\"icon has-text-danger\">
-            <i class=\"fas fa-times\"></i>
+          <span class=\"tag is-danger\">
+            Rejected
           </span>
           " "".html_safe
     end

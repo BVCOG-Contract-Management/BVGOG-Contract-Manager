@@ -28,11 +28,23 @@
                             </tr>
                             <tr>
                                 <td><strong>Program Manager:</strong></td>
-                                <td><%= @user.is_program_manager %></td>
+                                <td>
+                                    <% if @user.is_program_manager%>
+                                        <span class="tag is-success">Yes</span>
+                                    <% else %>
+                                        <span class="tag is-danger">No</span>
+                                    <% end %>
+                                </td>
                             </tr>
                             <tr>
                                 <td><strong>Active:</strong></td>
-                                <td><%= @user.is_active %></td>
+                                <td>
+                                    <% if @user.is_active%>
+                                        <span class="tag is-success">Yes</span>
+                                    <% else %>
+                                        <span class="tag is-danger">No</span>
+                                    <% end %>
+                                </td>
                             </tr>
                         </tbody>
                     </table>

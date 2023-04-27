@@ -59,7 +59,13 @@
                             </tr>
                             <tr>
                                 <td><strong>Requires Rebid:</strong></td>
-                                <td><%= @contract.requires_rebid ? "Yes" : "No" %></td>
+                                <td>
+                                    <% if @contract.requires_rebid%>
+                                        <span class="tag is-success">Yes</span>
+                                    <% else %>
+                                        <span class="tag is-danger">No</span>
+                                    <% end %>
+                                </td>
                             </tr>
                             <tr>
                                 <td><strong>Amount:</strong></td>
