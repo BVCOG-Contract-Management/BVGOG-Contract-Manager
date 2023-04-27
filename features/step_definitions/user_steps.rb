@@ -24,10 +24,10 @@ Given('I am logged in as a level 3 user') do
   step 'I am on the sign_in page'
   FactoryBot.create(
     :user,
-    email: 'level1@example.com',
+    email: 'level3@example.com',
     password: 'password',
     first_name: 'Level',
-    last_name: 'One',
+    last_name: 'Three',
     level: UserLevel::THREE
   )
 

@@ -34,6 +34,10 @@ When('I try to edit report {int}') do |num|
   visit "/reports/#{num}/edit"
 end
 
+When('I try to edit contract {int}') do |num|
+  visit "/contracts/#{num}/edit"
+end
+
 When('I try to edit vendor {int}') do |num|
   visit "/vendors/#{num}/edit"
 end
