@@ -156,4 +156,49 @@ document.addEventListener('turbo:load', () => {
             });
         });
     }
+
+    // Modals handler
+    const modal = document.querySelector('.modal');
+    if (modal) {
+        // Get the modal close button
+        const modalCloseButtons = modal.querySelectorAll('.modal-close-btn');
+        // Get the modal background
+        const modalBackground = modal.querySelector('.modal-background');
+        // Add event listener to the modal close button
+        modalCloseButtons.forEach((button) => {
+            button.addEventListener('click', (event) => {
+                console.log('close button clicked');
+                modal.classList.remove('is-active');
+            });
+        });
+        // Add event listener to the modal background
+        modalBackground.addEventListener('click', (event) => {
+            console.log('background clicked');
+            modal.classList.remove('is-active');
+        });
+    }
+
+    // Specific buttons to open modals
+    // Disable user model
+    const disableUserModalButton = document.querySelector('#disable-user-modal-open-btn');
+    if (disableUserModalButton) {
+        // Make the button behave like an <a> tag
+        // We do this to avoid making an actual <a> tag which causses redirection when we try to
+        // open the modal
+        // Make cursor a pointer
+        disableUserModalButton.style.cursor = 'pointer';
+        // Make the button look like a link (Blue text and no underline, remove blue text on hover)
+        disableUserModalButton.classList.add('has-text-link', 'has-text-decoration-none');
+        // Add event listener to the button
+        disableUserModalButton.addEventListener('hover', (event) => {
+            disableUserModalButton.classList.remove('has-text-link');
+        });
+
+
+        // ID of the modal is id of the button with -open-btn removed
+        const disableUserModal = document.querySelector('#disable-user-modal');
+        disableUserModalButton.addEventListener('click', (event) => {
+            disableUserModal.classList.add('is-active');
+        });
+    }
 });

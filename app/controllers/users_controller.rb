@@ -64,7 +64,7 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       begin
-        OSO.authorize(current_user, 'edit', @contract)
+        OSO.authorize(current_user, 'edit', @user)
         if @user.update(user_params)
           if user_params[:redirect_user_id].present?
             @user.update(redirect_user_id: user_params[:redirect_user_id], is_active: false)
