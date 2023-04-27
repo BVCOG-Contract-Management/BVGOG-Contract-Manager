@@ -39,13 +39,29 @@ Scenario: Go to users report page
   And I follow "Users Report"
   Then I should see "Report Arguments"
 
-
 Scenario: Sucessfully create users report
   Given I am on the new report page
   And I follow "Users Report"
   And I fill in "report[title]" with "Example User Report"
   And I press "Create Report"
   Then I should see "Report was successfully created."
+
+Scenario: Delete a report
+  Given 2 example reports exist
+  Given I send a DELETE request to "/reports/1"
+  Then I should see "You are being redirected."
+
+Scenario: Update a report
+  Given 2 example reports exist
+  Given I send a PUT request to "/reports/1"
+  Then I should see "You are being redirected."
+
+Scenario: Download a report
+  Given I am on the new report page
+  And I follow "Users Report"
+  And I fill in "report[title]" with "Example User Report"
+  And I press "Create Report"
+  And I follow "Export to PDF"
 
 
 

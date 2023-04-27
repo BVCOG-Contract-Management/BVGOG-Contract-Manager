@@ -23,6 +23,10 @@ Scenario: Search contracts
   And I follow "Contract 1"
   Then I should see "Edit this contract"
 
+Scenario: Search contracts
+  Given I am on the contracts page
+  And I fill in "search" with "lorem"
+
 Scenario: Sort by point of contact
   Given I am on the contracts page
   And I follow "Point of Contact"

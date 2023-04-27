@@ -20,3 +20,11 @@ Scenario: Create a user using UI
   And I press "commit"
   Then I should see "User was successfully invited."
 
+Scenario: Edit a user
+  Given I am on the users page
+  When I follow "Example"
+  And I follow "Edit this user"
+  And I fill in "Email" with "user2@example.com"
+  And I press "Update User"
+  Then I should see "User was successfully updated."
+  And I should see "user2@example.com"

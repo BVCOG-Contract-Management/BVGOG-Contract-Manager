@@ -4,8 +4,10 @@ Feature: View and Invite Users
   So that I can get help managing contracts
   I want to be able to view and invite users to the contract manager
 
-Scenario: View a user
+Background:
   Given an example user exists
+
+Scenario: View a user
   Given I am on the users page
   Then I should see "Example"
 
@@ -20,7 +22,6 @@ Scenario: Get back to view users page from new user page
   Then I should be on the users page
 
 Scenario: Search for a user
-  Given an example user exists
   Given I am on the users page
   When I fill in "search" with "Example"
   Then I should see "3"
@@ -35,28 +36,19 @@ Scenario: Invite a user
   Then I should be on the users page
 
 Scenario: View a user
-  Given an example user exists
   Given I am on the users page
   When I follow "Example"
   Then I should see "user@example.com"
 
 Scenario: Reach Edit User Page
-  Given an example user exists
   Given I am on the users page
   When I follow "Example"
   And I follow "Edit this user"
   Then I should see "Edit Example User"
 
-Scenario: Edit a user
-  Given an example user exists
+Scenario: Sort users by program
   Given I am on the users page
-  When I follow "Example"
-  And I follow "Edit this user"
-  And I fill in "Email" with "user2@example.com"
-  And I press "Update User"
-  Then I should see "User was successfully updated."
-  And I should see "user2@example.com"
-
+  When I follow "Program"
 
 
 
