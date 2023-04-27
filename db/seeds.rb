@@ -50,8 +50,6 @@ FactoryBot.create(
   entities: Entity.all.sample(rand(0..Entity.count)),
   level: UserLevel.enumeration.except(:zero).keys.sample,
   )
-end
-FactoryBot.create(:user, email: "user@example.com", password: "password", first_name: "Example", last_name: "User")
 
 # Create vendors
 for i in 1..50
