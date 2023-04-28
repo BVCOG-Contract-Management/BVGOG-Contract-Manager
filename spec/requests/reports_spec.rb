@@ -12,6 +12,19 @@ require 'rails_helper'
 # of tools you can use to make these specs even more expressive, but we're
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
+# BVCOG Config
+# Create the directories if they don't exist
+Dir.mkdir(Rails.root.join('public/contracts')) unless Dir.exist?(Rails.root.join('public/contracts'))
+Dir.mkdir(Rails.root.join('public/reports')) unless Dir.exist?(Rails.root.join('public/reports'))
+
+unless BvcogConfig.exists?(id: 1)
+  BvcogConfig.create(
+    id: 1,
+    contracts_path: Rails.root.join('public/contracts'),
+    reports_path: Rails.root.join('public/reports')
+  )
+end
+
 RSpec.describe '/reports', type: :request do
   # This should return the minimal set of attributes required to create a valid
   # Report. As you add validations to Report, be sure to
@@ -122,6 +135,21 @@ RSpec.describe ReportsController, type: :controller do
     end
   end
 
+  describe 'GET #show' do
+    let(:report) do
+      FactoryBot.create(:report, title: 'test',
+                                 file_name: 'abc',
+                                 full_path: 'abc',
+                                 report_type: ReportType::CONTRACTS,
+                                 user_id: 1)
+    end
+
+    it 'renders the show template' do
+      get :show, params: { id: report.id }
+      expect(response).to render_template(:show)
+    end
+  end
+
   describe 'GET #new' do
     context 'when type is contract' do
       it 'assigns a new report as @report' do
@@ -144,4 +172,66 @@ RSpec.describe ReportsController, type: :controller do
       end
     end
   end
+
+  describe 'POST #create' do
+    unless User.exists?(email: 'admin@example.com')
+      user = FactoryBot.create(
+        :user,
+        email: 'admin@example.com',
+        password: 'password',
+        first_name: 'Admin',
+        last_name: 'User',
+        program: Program.all.sample,
+        entities: Entity.all.sample(rand(0..Entity.count)),
+        level: UserLevel::ONE
+      )
+    end
+
+    context 'with valid parameters' do
+      it 'creates a new report' do
+        sign_in User.find_by(email: 'admin@example.com')
+        expect do
+          post :create, params: { report: { title: 'Test Report', report_type: ReportType::CONTRACTS } }
+        end.to change(Report, :count).by(1)
+      end
+
+      it 'redirects to the created report' do
+        sign_in User.find_by(email: 'admin@example.com')
+        post :create, params: { report: { title: 'Test Report', report_type: ReportType::CONTRACTS } }
+        expect(response).to redirect_to(Report.last)
+      end
+    end
+
+    context 'with invalid parameters' do
+      it 'does not create a new report' do
+        sign_in User.find_by(email: 'admin@example.com')
+        expect do
+          post :create, params: { report: { title: nil, report_type: ReportType::CONTRACTS } }
+        end.to_not change(Report, :count)
+      end
+
+      it 'renders the new template' do
+        sign_in User.find_by(email: 'admin@example.com')
+        sign_in User.find_by(email: 'admin@example.com')
+        post :create, params: { report: { title: nil, report_type: ReportType::CONTRACTS } }
+        expect(response).to render_template(:new)
+      end
+    end
+  end
+
+  ''"describe 'GET #edit' do
+    report = FactoryBot.create(:report, title: 'testReport') unless Report.exists?(title: 'testReport')
+
+    it 'renders the edit template' do
+      report = Report.find_by(title: 'test')
+      get :edit, params: { id: report.id }
+      expect(response).to render_template(:edit)
+    end
+
+    it 'redirects to the show page' do
+      report = Report.find_by(title: 'test')
+      get :edit, params: { id: report.id }
+      expect(response).to redirect_to(report_path(report))
+    end
+  end"''
 end
