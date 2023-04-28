@@ -83,7 +83,7 @@ Rails.application.configure do
   ActionMailer::Base.smtp_settings = {
     :user_name => 'apikey', # This is the string literal 'apikey', NOT the ID of your API key
     :password => Rails.application.credentials.sendgrid_api_key, # This is the secret sendgrid API key which was issued during API key creation
-    :domain => 'tamu.edu',
+    :domain => 'gmail.com',
     :address => 'smtp.sendgrid.net',
     :port => 587,
     :authentication => :plain,
@@ -92,6 +92,7 @@ Rails.application.configure do
   config.action_mailer.perform_caching = false
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.delivery_method = :smtp
 
   # Use a different logger for distributed setups.
   # require "syslog/logger"
