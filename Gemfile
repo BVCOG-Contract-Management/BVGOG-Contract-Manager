@@ -56,8 +56,6 @@ group :development, :test do
   # Use sqlite3 as the database for Active Record
   gem "sqlite3", "~> 1.4"
 
-  gem "factory_bot_rails", "~> 6.2.0"
-
   gem "faker", "~> 2.19.0"
 
   gem "byebug"
@@ -120,3 +118,5 @@ gem 'prawn-table', '~> 0.2.0'
 gem 'oso-oso', '~> 0.27.0'
 
 gem 'erb-formatter'
+
+gem "factory_bot_rails", "~> 6.2.0"
