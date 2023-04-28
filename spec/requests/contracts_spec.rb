@@ -140,3 +140,69 @@ RSpec.describe '/contracts', type: :request do
     end
   end
 end
+
+RSpec.describe ContractsController, type: :controller do
+  let(:user) { FactoryBot.create(:user) }
+  let(:contract) { FactoryBot.create(:contract) }
+
+  describe '#expiry_reminder' do
+    before { sign_in user }
+
+    it 'sends expiry reminder and redirects to contract page' do
+      allow_any_instance_of(Contract).to receive(:send_expiry_reminder).and_return(true)
+
+      get :expiry_reminder, params: { id: contract.id }
+
+      expect(assigns(:contract)).to eq(contract)
+      expect(flash[:notice]).to eq('Expiry reminder sucessfully sent.')
+      expect(response).to redirect_to(contract_url(contract))
+    end
+  end
+end
+
+require 'rails_helper'
+
+RSpec.describe ContractsController, type: :controller do
+  describe '#sort_contracts' do
+    let(:user) { FactoryBot.create(:user) }
+
+    before { sign_in(user) }
+
+    it 'returns a list of contracts sorted by expiration date' do
+      contract1 = FactoryBot.create(:contract, ends_at: 10.days.from_now, point_of_contact: user)
+      contract2 = FactoryBot.create(:contract, ends_at: 20.days.from_now, point_of_contact: user)
+
+      get :index, params: { sort: 'expiration_date_asc' }
+      get :index, params: { sort: 'point_of_contact' }
+      get :index, params: { sort: 'vendor' }
+      get :index, params: { sort: 'potato' }
+    end
+  end
+end
+
+require 'rails_helper'
+
+RSpec.describe ContractsController, type: :controller do
+  describe '#handle_if_new_vendor' do
+    context "when the contract's vendor is new" do
+      let(:contract) { FactoryBot.create(:contract, vendor_id: 'new', new_vendor_name: 'vendor uno') }
+    end
+
+    context "when the contract's vendor already exists" do
+      let(:existing_vendor) { FactoryBot.create(:vendor) }
+      let(:user) { FactoryBot.create(:user) }
+      let(:contract_attributes) { FactoryBot.attributes_for(:contract, vendor_id: existing_vendor.id) }
+
+      before do
+        sign_in user
+        post :create, params: { contract: contract_attributes }
+      end
+
+      it 'does not create a new vendor' do
+        expect(Vendor.count).to eq(1)
+      end
+    end
+  end
+end
+
+require 'rails_helper'
