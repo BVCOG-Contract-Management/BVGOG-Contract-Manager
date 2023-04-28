@@ -144,6 +144,48 @@ unless Rails.env.production?
 # ------------ PROD SEEDS ------------
 
 else
+
+  PROGRAM_NAMES = [
+    "9-1-1",
+    "AAA",
+    "Admin",
+    "CIHC",
+    "ECD",
+    "Energy-CSBG",
+    "Fiber",
+    "Head Start",
+    "HIV",
+    "Housing",
+    "PSP",
+    "PSA",
+    "Solid Waste",
+    "Transportation",
+    "WIC",
+    "Workforce",
+  ]
+
+  # Create programs
+  PROGRAM_NAMES.each do |program_name|
+    FactoryBot.create(
+      :program,
+      name: program_name,
+    )
+  end
+
+  ENTITY_NAMES = [
+    "BVCOG",
+    "BVCAP",
+    "Brazos2020",
+  ]
+
+  # Create entities
+  ENTITY_NAMES.each do |entity_name|
+    FactoryBot.create(
+      :entity,
+      name: entity_name,
+    )
+  end
+
   # Create admin user
   FactoryBot.create(
     :user,
@@ -151,6 +193,8 @@ else
     password: "password",
     first_name: "BVCOG",
     last_name: "Dev",
+    program: Program.first,
   )
-  
+
+
 end 
