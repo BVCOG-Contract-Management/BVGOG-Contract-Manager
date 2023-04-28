@@ -17,3 +17,4 @@ Scenario: Send reminder email
   When I follow "Send expiry reminder"
   Then I should see "Expiry reminder sucessfully sent."
 
+

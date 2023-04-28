@@ -30,7 +30,6 @@ Scenario: Edit a vendor
   And I press "commit"
   Then I should see "Vendor was successfully updated."
 
-
 Scenario: Back to vendors
   Given I am on the new vendor page
   And I follow "Back to vendors"
@@ -39,6 +38,9 @@ Scenario: Back to vendors
 Scenario: Destroy a vendor
   When I send a DELETE request to "/vendors/1"
   Then I should see "You are being redirected."
+
+Scenario: Get Name
+  When I get the name of Vendor 1
 
 
 

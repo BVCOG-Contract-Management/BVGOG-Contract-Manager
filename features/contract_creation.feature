@@ -22,14 +22,11 @@ Scenario: Sucessfully create contract
   And I select "Limited Term" from the "End trigger" select box
   And I select "hour" from the "Amount duration" select box
   And I select "day" from the "Initial term duration" select box
-
   And I fill in "Number" with "23"
   And I fill in "Amount dollar" with "100"
   And I fill in "Initial term amount" with "100"
-
   And I fill in the "contract_starts_at" field with "2023-03-30"
   And I fill in the "contract_ends_at" field with "2025-03-30"
-
   And I select "New Vendor" from the vendor dropdown
   And I fill in the "contract_new_vendor_name" field with "Test Vendor"
   And I select "Program 1" from the program dropdown

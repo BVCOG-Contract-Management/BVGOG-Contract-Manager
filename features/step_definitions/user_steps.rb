@@ -7,6 +7,15 @@ When('I show user {int}') { |int| visit "/users/#{int}" }
 When('I visit user invites') do
   visit '/users/invitation/new'
 end
+
+When('I try to redirect this user') do
+  find('div.card-footer-item:contains("Redirect this user")').click
+end
+
+When('I try to disable this user') do
+  find('div.card-footer-item:contains("Disable this user")').click
+end
+
 Given('I am logged in as a level 1 user') do
   step 'I am on the sign_in page'
   FactoryBot.create(

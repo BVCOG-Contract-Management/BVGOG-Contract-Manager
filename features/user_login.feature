@@ -24,8 +24,11 @@ Scenario: User logs in successfully
     And I press "Log in"
     Then I should see "Signed in successfully"
 
-
-#Scenario: User logs out
-#    Given I am on the home page
-#    And I follow "Sign Out"
-#    Then I should be on the sign_in page
+Scenario: User logs out
+    Given an example user exists
+    Given I am on the sign_in page
+    When I fill in "Email" with "user@example.com"
+    And I fill in "Password" with "password"
+    And I press "Log in"
+    And I follow "Sign Out"
+    Then I should be on the sign_in page
