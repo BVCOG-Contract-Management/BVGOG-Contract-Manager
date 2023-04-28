@@ -56,8 +56,6 @@ group :development, :test do
   # Use sqlite3 as the database for Active Record
   gem "sqlite3", "~> 1.4"
 
-  gem "faker", "~> 2.19.0"
-
   gem "byebug"
 end
 
@@ -119,4 +117,8 @@ gem 'oso-oso', '~> 0.27.0'
 
 gem 'erb-formatter'
 
+
+# These need to move into development or not be used in production
 gem "factory_bot_rails", "~> 6.2.0"
+
+gem "faker", "~> 2.19.0"
