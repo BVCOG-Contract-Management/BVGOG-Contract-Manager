@@ -40,11 +40,7 @@ class ReportsController < ApplicationController
   # POST /reports or /reports.json
   def create
     @report = Report.new(report_params)
-
-    # Here we will assign the "created_by" attribute to be the current logged in user
-    # First we need to fix up authentication
-    # For now default to the first user (id = 1)
-    @report.created_by = User.find(1).id
+    @report.created_by = current_user.id
 
     bvcog_config = BvcogConfig.last
 
