@@ -47,6 +47,7 @@ gem "bootsnap", require: false
 
 group :production do
   gem "pg", "~> 1.4"
+  gem "matrix"
 end
 
 group :development, :test do
@@ -117,3 +118,5 @@ gem 'prawn'
 gem 'prawn-table', '~> 0.2.0'
 
 gem 'oso-oso', '~> 0.27.0'
+
+gem 'erb-formatter'
