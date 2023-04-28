@@ -32,3 +32,13 @@ Scenario: User logs out
     And I press "Log in"
     And I follow "Sign Out"
     Then I should be on the sign_in page
+
+Scenario: Try to log in as inactive user
+    Given an example user exists
+    Then deactivate example user
+    Given I am on the sign_in page
+    When I fill in "Email" with "user@example.com"
+    And I fill in "Password" with "password"
+    And I press "Log in"
+    Then I should see "Your account is not currently active."
+

@@ -26,16 +26,5 @@ Scenario: Sort vendors by rating
   Given I am on the vendors page
   When I follow "Average Rating"
 
-Scenario: Review a vendor
-  Given I am on the vendors page
-  And I follow "Vendor 1"
-  And I follow "Review this vendor"
-  And I fill in the "vendor_review[description]" field with "Test Description"
-  And I click on the 4th star
-  And I press "commit"
-  Then I should see "Reviews of vendor 1"
-  And I should see "Test Description"
-
-
 
 

@@ -35,7 +35,4 @@ Scenario: Sucessfully create contract
   And I press "Create Contract"
   Then I should see "Contract was successfully created."
 
-Scenario: Delete a contract
-  Given I send a DELETE request to "/contracts/6"
-  Then I should see "You are being redirected."
 

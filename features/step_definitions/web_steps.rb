@@ -26,6 +26,9 @@ Given('I am logged in') do
   step 'I press "Log in"'
 end
 
+Given('I have visited the user registration page') do
+  visit '/users/sign_up'
+end
 Given('I have visited the user invite page') do
   visit '/users/invitation/new'
 end
@@ -40,6 +43,10 @@ end
 
 When('I try to edit vendor {int}') do |num|
   visit "/vendors/#{num}/edit"
+end
+
+When('I try to edit user {int}') do |num|
+  visit "/users/#{num}/edit"
 end
 
 When('I select the Entity {int} checkbox') do |num|

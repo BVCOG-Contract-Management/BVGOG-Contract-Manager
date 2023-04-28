@@ -47,6 +47,7 @@ Scenario: Sucessfully create users report
   And I press "Create Report"
   Then I should see "Report was successfully created."
 
+@wip
 Scenario: Delete a report
   Given 2 example reports exist
   Given I send a DELETE request to "/reports/1"

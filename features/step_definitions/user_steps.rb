@@ -84,3 +84,8 @@ Then('I should see the following users in the console') do |_table|
   puts 'users: '
   puts users
 end
+
+Then('deactivate example user') do
+  user = User.find(1)
+  user.update(is_active: false)
+end

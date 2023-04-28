@@ -34,6 +34,16 @@ Scenario: Disable and redirect a user
   And I press "commit"
   Then I should see "User was successfully redirected"
 
+Scenario: Redirect a user to themselves
+  Given I am on the users page
+  When I show user 6
+  And I try to disable this user
+  And I follow "Disable"
+  And I try to redirect this user
+  And I select "Example User" from the "user[redirect_user_id]" select box
+  And I press "commit"
+  Then I should see "User cannot be redirected to themselves."
+
 @wip
 Scenario: Destroy a user
   Given I send a DELETE request to "/users/1"

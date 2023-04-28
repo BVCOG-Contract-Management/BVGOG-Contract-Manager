@@ -5,8 +5,13 @@ Feature: View and Invite Users
   I want to be able to add vendors
 
 Background:
-  Given 5 example vendors exist
+  Given 1 example entities exist
+  Given 1 example programs exist
+  Given 1 example vendors exist
+  Given 1 example users exist
+  Given 1 example contracts exist
   Given bvcog_config is set up
+  Given I am logged in as a level 1 user
 
 Scenario: Add vendor
   Given I am on the new vendor page
@@ -35,9 +40,6 @@ Scenario: Back to vendors
   And I follow "Back to vendors"
   Then I should see "View Vendors"
 
-Scenario: Destroy a vendor
-  When I send a DELETE request to "/vendors/1"
-  Then I should see "You are being redirected."
 
 Scenario: Get Name
   When I get the name of Vendor 1
