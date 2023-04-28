@@ -113,3 +113,35 @@ RSpec.describe '/reports', type: :request do
     end
   end
 end
+
+RSpec.describe ReportsController, type: :controller do
+  describe 'GET #index' do
+    it 'redirects to new_report_path with type contracts' do
+      get :index
+      expect(response).to redirect_to(new_report_path(type: ReportType::CONTRACTS))
+    end
+  end
+
+  describe 'GET #new' do
+    context 'when type is contract' do
+      it 'assigns a new report as @report' do
+        get :new, params: { type: ReportType::CONTRACTS }
+        expect(assigns(:report)).to be_a_new(Report).with(report_type: ReportType::CONTRACTS)
+      end
+    end
+
+    context 'when type is user' do
+      it 'assigns a new report as @report' do
+        get :new, params: { type: ReportType::USERS }
+        expect(assigns(:report)).to be_a_new(Report).with(report_type: ReportType::USERS)
+      end
+    end
+
+    context 'when type is invalid' do
+      it 'redirects to new_report_path with type contracts' do
+        get :new, params: { type: 'invalid' }
+        expect(response).to redirect_to(new_report_path(type: ReportType::CONTRACTS))
+      end
+    end
+  end
+end
