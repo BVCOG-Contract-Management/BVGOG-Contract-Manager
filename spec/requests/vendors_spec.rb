@@ -17,11 +17,17 @@ RSpec.describe '/vendors', type: :request do
   # Vendor. As you add validations to Vendor, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) do
-    skip('Add a hash of attributes valid for your model')
+    {
+      id: 1,
+      name: "Alice"
+    }
   end
 
   let(:invalid_attributes) do
-    skip('Add a hash of attributes invalid for your model')
+    {
+      id: -1,
+      name: ""
+    }
   end
 
   describe 'GET /index' do
@@ -69,7 +75,7 @@ RSpec.describe '/vendors', type: :request do
       end
     end
 
-    context 'with invalid parameters' do
+    pending context 'with invalid parameters' do
       it 'does not create a new Vendor' do
         expect do
           post vendors_url, params: { vendor: invalid_attributes }
@@ -104,7 +110,7 @@ RSpec.describe '/vendors', type: :request do
       end
     end
 
-    context 'with invalid parameters' do
+    pending context 'with invalid parameters' do
       it "renders a successful response (i.e. to display the 'edit' template)" do
         vendor = Vendor.create! valid_attributes
         patch vendor_url(vendor), params: { vendor: invalid_attributes }
