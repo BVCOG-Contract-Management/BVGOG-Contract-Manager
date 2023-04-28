@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  before_action :verify_user unless Rails.env.development?
+  before_action :verify_user, if: -> { defined?(Cucumber::Glue) || Rails.env.production? }
 
   before_action :configure_permitted_parameters, if: :devise_controller?
 
