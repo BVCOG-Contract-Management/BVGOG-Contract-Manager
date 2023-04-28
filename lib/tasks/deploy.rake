@@ -10,4 +10,3 @@ namespace :deploy do
     end
   end
   
-  after 'deploy:updated', 'deploy:create_directories'
