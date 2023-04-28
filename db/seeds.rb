@@ -193,6 +193,7 @@ else
     password: "password",
     first_name: "BVCOG",
     last_name: "Dev",
+    level: UserLevel::ONE,
     program: Program.first,
   )
 
