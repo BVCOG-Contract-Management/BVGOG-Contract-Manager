@@ -17,14 +17,15 @@ Scenario: Get to user invite page
 
 
 Scenario: Invite a user
-  Given I am on the new user page
+  When I visit user invites
   When I fill in "First name" with "Liam"
   And I fill in "Last name" with "Berney"
   And I fill in "Email" with "liamrberney@tamu.edu"
   And I select "Three" from the "user_level" select box
   And I select "Program 1" from the "user[program_id]" select box
-  And I press "Create User"
-  Then I should be on the users page
+  And I check Entity 1
+  And I press "commit"
+  Then I should see "User was successfully invited."
 
 
 

@@ -5,7 +5,9 @@ Feature: View and Invite Users
   I want to be able to view and invite users to the contract manager
 
 Background:
+  Given db is set up
   Given an example user exists
+  Given bvcog_config is set up
   Given I am logged in as a level 1 user
 
 Scenario: View a user

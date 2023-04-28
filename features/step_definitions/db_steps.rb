@@ -5,7 +5,10 @@ require 'factory_bot_rails'
 Given('{int} example users exist') do |num_users|
   # Create users
   (1..num_users).each do |i|
-    FactoryBot.create(:user, id: i)
+    FactoryBot.create(:user,
+                      id: i,
+                      program: Program.all.sample,
+                      entities: Entity.all.sample(rand(1..3)))
   end
 end
 
@@ -78,9 +81,9 @@ Given('{int} example reports exist') do |num_reports|
 end
 
 Given(/^db is set up$/) do
-  step '5 example users exist'
   step '5 example programs exist'
   step '5 example entities exist'
+  step '5 example users exist'
   step '5 example vendors exist'
   step '10 example contracts exist'
   step '10 example contract documents exist'

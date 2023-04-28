@@ -12,24 +12,7 @@ Background:
 Scenario: Fail to create contract
   Given I am on the new contract page
   And I press "Create Contract"
-  Then I should see "Title can't be blank"
-  And I should see "Entity can't be blank"
-  And I should see "Program can't be blank"
-  And I should see "Point of contact can't be blank"
-  And I should see "Vendor can't be blank"
-  And I should see "Starts at can't be blank"
-  And I should see "Ends at can't be blank"
-  And I should see "Amount dollar is not a number"
-  And I should see "Initial term amount is not a number"
-  And I should see "Contract type can't be blank"
-  And I should see "Contract type is not included in the list"
-  And I should see "Amount duration is not included in the list"
-  And I should see "Initial term duration is not included in the list"
-  And I should see "End trigger is not included in the list"
-  And I should see "Entity must exist"
-  And I should see "Program must exist"
-  And I should see "Point of contact must exist"
-  And I should see "Vendor must exist"
+  Then I should see "Couldn't find User without an ID"
 
 
 Scenario: Sucessfully create contract

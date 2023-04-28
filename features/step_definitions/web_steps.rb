@@ -46,6 +46,10 @@ When('I select the Entity {int} checkbox') do |num|
   find("#user_entity_ids_#{num}").set(true)
 end
 
+When('I check Entity 1') do
+  check('user[entity_ids][]', option: '1')
+end
+
 Given('bvcog_config is set up') do
   # BVCOG Config
   # Create the directories if they don't exist

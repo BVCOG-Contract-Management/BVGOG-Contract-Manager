@@ -6,9 +6,9 @@ Feature: Edit contracts
 
 
 Background:
-  Given 1 example users exist
   Given 1 example entities exist
   Given 1 example programs exist
+  Given an example user exists
   Given 1 example vendors exist
   Given 1 example contracts exist
   Given I am logged in as a level 1 user

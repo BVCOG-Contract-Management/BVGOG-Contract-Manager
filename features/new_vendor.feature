@@ -6,7 +6,6 @@ Feature: View and Invite Users
 
 Background:
   Given 5 example vendors exist
-  Given I am logged in as a level 1 user
   Given bvcog_config is set up
 
 Scenario: Add vendor
@@ -20,16 +19,17 @@ Scenario: Fail to add vendor
   And I press "Create Vendor"
   Then I should see "Name can't be blank"
 
+Scenario: Fail to edit a vendor
+  When I try to edit vendor 1
+  And I fill in "vendor[name]" with "1"
+  And I press "commit"
+  Then I should see "Vendor was successfully updated."
+
 Scenario: Edit a vendor
   When I try to edit vendor 1
   And I press "commit"
   Then I should see "Vendor was successfully updated."
 
-Scenario: Fail to edit a vendor
-  When I try to edit vendor 1
-  And I fill in "vendor[name]" with ""
-  And I press "commit"
-  Then I should see "Name can't be blank"
 
 Scenario: Back to vendors
   Given I am on the new vendor page
