@@ -196,10 +196,6 @@ else
     level: UserLevel::ONE,
     program: Program.first,
   )
-
-  # Create a BVCOG Config object and create default directories
-  Dir.mkdir(Rails.root.join("public/contracts")) unless Dir.exist?(Rails.root.join("public/contracts"))
-  Dir.mkdir(Rails.root.join("public/reports")) unless Dir.exist?(Rails.root.join("public/reports"))
   
   BvcogConfig.create(
     contracts_path: Rails.root.join("public/contracts"),
