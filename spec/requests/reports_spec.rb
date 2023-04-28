@@ -202,6 +202,21 @@ RSpec.describe ReportsController, type: :controller do
       end
     end
 
+    context 'user with valid parameters' do
+      it 'creates a new report' do
+        sign_in User.find_by(email: 'admin@example.com')
+        expect do
+          post :create, params: { report: { title: 'Test Report', report_type: ReportType::USERS } }
+        end.to change(Report, :count).by(1)
+      end
+
+      it 'redirects to the created report' do
+        sign_in User.find_by(email: 'admin@example.com')
+        post :create, params: { report: { title: 'Test Report', report_type: ReportType::USERS } }
+        expect(response).to redirect_to(Report.last)
+      end
+    end
+
     context 'with invalid parameters' do
       it 'does not create a new report' do
         sign_in User.find_by(email: 'admin@example.com')
@@ -214,6 +229,22 @@ RSpec.describe ReportsController, type: :controller do
         sign_in User.find_by(email: 'admin@example.com')
         sign_in User.find_by(email: 'admin@example.com')
         post :create, params: { report: { title: nil, report_type: ReportType::CONTRACTS } }
+        expect(response).to render_template(:new)
+      end
+    end
+
+    context 'user with invalid parameters' do
+      it 'does not create a new report' do
+        sign_in User.find_by(email: 'admin@example.com')
+        expect do
+          post :create, params: { report: { title: nil, report_type: ReportType::USERS } }
+        end.to_not change(Report, :count)
+      end
+
+      it 'renders the new template' do
+        sign_in User.find_by(email: 'admin@example.com')
+        sign_in User.find_by(email: 'admin@example.com')
+        post :create, params: { report: { title: nil, report_type: ReportType::USERS } }
         expect(response).to render_template(:new)
       end
     end
