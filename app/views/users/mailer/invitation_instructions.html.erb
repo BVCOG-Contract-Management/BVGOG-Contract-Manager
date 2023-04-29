@@ -208,15 +208,19 @@ td .es-button-border:hover a.es-button-1 {
                                     ><br></p><p
                                       style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:'open sans', 'helvetica neue', helvetica, arial, sans-serif;line-height:24px;color:#333333;font-size:16px"
                                     >
-                                    We recieved a request to reset your password for the BVCOG Contract Management System.
-                                    If you made this request, please click the link below to reset your password.
-                                    </p>
+                                    You have been invited to join the BVCOG Contract Management System. Please click the link below to create your account and get started.</p>
                                     </p>
                                     
+                                    <% if @resource.invitation_due_at %>
+                                      <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:'open sans', 'helvetica neue', helvetica, arial, sans-serif;line-height:24px;color:#333333;font-size:16px">
+                                      Please note that this invitation will expire on <%= @resource.invitation_due_at.strftime("%B %d, %Y") %>. If you do not accept this invitation by that date, you will need to request a new invitation from a system administrator.
+                                      </p>
+                                      <br>
+                                    <% end %>
                                     <p
                                       style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:'open sans', 'helvetica neue', helvetica, arial, sans-serif;line-height:24px;color:#333333;font-size:16px"
                                     >
-                                    If you did not make this request, please ignore this email.
+                                    If you are were not expecting this invitation, please disregard this email.
                                     </p>
                                     <br>
                                     <p
@@ -295,8 +299,8 @@ td .es-button-border:hover a.es-button-1 {
                                         es-button-1
                                       "
                                       style="border-style:solid;background:#2CB543;border-width:0px 0px 2px 0px;display:inline-block;border-radius:14px;width:auto;mso-border-alt:10px;mso-hide:all;background-color:#990000"
-                                    ><%= link_to edit_password_url(@resource, reset_password_token: @token), { :class => "es-button es-button-1", :style => "mso-style-priority:100 !important;text-decoration:none;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;color:#FFFFFF;font-size:18px;display:inline-block;background:#31CB4B;border-radius:14px;font-family:'open sans', 'helvetica neue', helvetica, arial, sans-serif;font-weight:normal;font-style:normal;line-height:22px;width:auto;text-align:center;padding:10px 20px 10px 20px;background-color:#990000;border-color:#990000" } do %>
-                                        Reset Password
+                                    ><%= link_to accept_invitation_url(@resource, invitation_token: @token), { :class => "es-button es-button-1", :style => "mso-style-priority:100 !important;text-decoration:none;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;color:#FFFFFF;font-size:18px;display:inline-block;background:#31CB4B;border-radius:14px;font-family:'open sans', 'helvetica neue', helvetica, arial, sans-serif;font-weight:normal;font-style:normal;line-height:22px;width:auto;text-align:center;padding:10px 20px 10px 20px;background-color:#990000;border-color:#990000" } do %>
+                                        Accept Invitation
                                       <% end %>
                                         </span><!--<![endif]--></td>
                                 </tr>
