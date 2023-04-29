@@ -62,8 +62,12 @@ class ContractsController < ApplicationController
         begin
           OSO.authorize(current_user, 'write', @contract)
           handle_if_new_vendor
-          if @contract.point_of_contact_id.present? && User.find(@contract.point_of_contact_id).redirect_user_id.present?
-            @contract.errors.add(:base, User.find(@contract.point_of_contact_id).full_name + ' is not active, use ' + User.find(User.find(@contract.point_of_contact_id).redirect_user_id).full_name + ' instead')
+          if @contract.point_of_contact_id.present? && !User.find(@contract.point_of_contact_id).is_active
+            if User.find(@contract.point_of_contact_id).redirect_user_id.present?
+              @contract.errors.add(:base, User.find(@contract.point_of_contact_id).full_name + ' is not active, use ' + User.find(User.find(@contract.point_of_contact_id).redirect_user_id).full_name + ' instead')
+            else
+              @contract.errors.add(:base, User.find(@contract.point_of_contact_id).full_name + ' is not active')
+            end
             format.html { render :new, status: :unprocessable_entity }
             format.json { render json: @contract.errors, status: :unprocessable_entity }
           elsif User.find(@contract.point_of_contact_id).level == UserLevel::THREE && !User.find(@contract.point_of_contact_id).entities.include?(@contract.entity)
@@ -110,8 +114,12 @@ class ContractsController < ApplicationController
       begin 
         ActiveRecord::Base.transaction do
           OSO.authorize(current_user, 'edit', @contract)
-          if contract_params[:point_of_contact_id].present? && User.find(contract_params[:point_of_contact_id]).redirect_user_id.present?
-            @contract.errors.add(:base, User.find(contract_params[:point_of_contact_id]).full_name + ' is not active, use ' + User.find(User.find(contract_params[:point_of_contact_id]).redirect_user_id).full_name + ' instead')
+          if contract_params[:point_of_contact_id].present? && !User.find(contract_params[:point_of_contact_id]).is_active
+            if User.find(contract_params[:point_of_contact_id]).redirect_user_id.present?
+              @contract.errors.add(:base, User.find(contract_params[:point_of_contact_id]).full_name + ' is not active, use ' + User.find(User.find(contract_params[:point_of_contact_id]).redirect_user_id).full_name + ' instead')
+            else
+              @contract.errors.add(:base, User.find(contract_params[:point_of_contact_id]).full_name + ' is not active')
+            end
             format.html { render :edit, status: :unprocessable_entity }
             format.json { render json: @contract.errors, status: :unprocessable_entity }
 
