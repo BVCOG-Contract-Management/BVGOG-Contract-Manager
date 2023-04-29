@@ -227,44 +227,4 @@ document.addEventListener('turbo:load', () => {
             });
         });
     }
-
-
-    // Directory Fields (Admin Page)
-    const directoryFields = document.querySelectorAll('.directory-field');
-    if (directoryFields) {
-        function isInputDirSupported() {
-            var tmpInput = document.createElement('input');
-            if ('webkitdirectory' in tmpInput 
-                || 'mozdirectory' in tmpInput 
-                || 'odirectory' in tmpInput 
-                || 'msdirectory' in tmpInput 
-                || 'directory' in tmpInput) return true;
-        
-            return false;
-        }
-        directoryFields.forEach((field) => {
-            // Get the field input
-            const input = field.querySelector('.file-input');
-            // Get the value input
-            const value = field.querySelector('.directory-value');
-            // Add event listener to the input
-            input.addEventListener('change', (event) => {
-                console.log(input.files[0])
-                // Get the full path of the file without the file name
-                // if on windows, replace backslashes with forward slashes
-                if (navigator.appVersion.indexOf("Win")!=-1) {
-                    var fullPath = input.files[0].webkitRelativePath;
-                    fullPath = fullPath.replace(/\\/g, "/");
-                } else {
-                    var fullPath = input.files[0].webkitRelativePath;
-                }
-                console.log(fullPath);
-                // Remove the file name from the path
-                fullPath = fullPath.substring(0, fullPath.lastIndexOf('/'));
-                // Set the value of the value input
-                value.value = fullPath;
-                value.innerHTML = fullPath;
-            });
-        });
-    }
 });

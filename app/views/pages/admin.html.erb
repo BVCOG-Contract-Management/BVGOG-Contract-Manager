@@ -12,6 +12,9 @@
       </p>
     </header>
 
+
+    <%# Form %>
+    <%= form_with(model: @bvcog_config, url: admin_path, method: :put, data: { turbo: false }) do |form| %>
     <%# Card content %>
     <div class="card-content">
       <div class="content">
@@ -21,9 +24,6 @@
           </strong>
         </p>
       </div>
-
-      <%# Form %>
-      <%= form_with(model: @bvcog_config, url: admin_path, method: :put, data: { turbo: false }) do |form| %>
 
           <%# Errors %>
           <% if @bvcog_config.errors.any? %>
@@ -45,53 +45,56 @@
               
           <%# Contract Document Storage %>
           <div class="field">
-            <%= form.label :contract_document_storage, class: "directory-input-label" do %>
+            <%= form.label :contracts_path, class: "directory-input-label" do %>
               <div class="icon-text">
-                <span class="icon has-text-info" id="directory-upload-modal-open-btn">
+                <span class="icon has-text-info" id="directory-contracts-upload-modal-open-btn">
                   <i class="fas fa-circle-info"></i>
                 </span>
                 <span>Contract Document Storage</span>
               </div>
             <% end %>
               <span class="help">
-                Click the information icon above for instructions.
+                Click the information icon above for more information.
               </span>
-            <div class="directory-field">
-              <span class="input directory-value">
-                <%= @bvcog_config.contracts_path %>
-              </span>
-              <div class="file">
-                <label class="file-label">
-                  <input id="file" class="file-input" type="file" webkitdirectory directory />
-                  <span class="file-cta">
-                    <span class="file-icon">
-                      <i class="fas fa-folder"></i>
-                    </span>
-                  </span>
-                </label>
-              </div>
-            </div>
+              <p class="control">
+                <%= form.text_field :contracts_path, class: "input" %>
+              </p>
           </div>
 
-      <% end %>
-
+          <%# Reports Document Storage %>
+          <div class="field">
+            <%= form.label :reports_path, class: "directory-input-label" do %>
+              <div class="icon-text">
+                <span class="icon has-text-info" id="directory-reports-upload-modal-open-btn">
+                  <i class="fas fa-circle-info"></i>
+                </span>
+                <span>Reports Storage</span>
+              </div>
+            <% end %>
+              <span class="help">
+                Click the information icon above for more information.
+              </span>
+              <p class="control">
+                <%= form.text_field :reports_path, class: "input" %>
+              </p>
+          </div>
     </div>
 
     <%# Card Footer %>
     <footer class="card-footer">
       <div class="card-footer-item">
-        <button class="button is-primary" type="submit" form="admin-form">
-          Save
-        </button>
+        <%= form.submit "Save", class: "button is-primary" %>
       </div>
     </footer>
+
+    <% end %>
       
     
   </div>
 
 
 <%# Directory Upload Explanation Modal %>
-<div class="modal" id="directory-upload-modal">
+<div class="modal" id="directory-contracts-upload-modal">
   <div class="modal-background"></div>
   <div class="modal-card">
     <header class="modal-card-head">
@@ -99,25 +102,45 @@
           <span class="icon">
             <i class="fas fa-folder-open"></i>
           </span>
-          <p class="modal-card-title">How to Select a Directory</p>
+          <p class="modal-card-title">Contract Documents Directory</p>
         </div>
     </header>
     <section class="modal-card-body">
       <div class="content">
-        <strong>
-        In order to select a directory, you must first select a file.  The file will not be uploaded, but the directory it is in will be selected.
-        </strong>
-        <ol>
-          <li>Create a new directory on your computer.</li>
-          <li>Create or copy any file into the directory.</li>
-          <li>Click the button with the folder icon next to the input of your choosing.</li>
-          <li>When the file explorer opens, navigate to your chosen directory but
-            <strong>do not select any files</strong>.
-          </li>
-          <li>Click the "Upload" button.</li>
-          <li>The directory where your file is located will be selected.</li>
-          <li>Feel free to delete the file you created in [2].</li>
-        </ol>
+        This directory is where uploaded contract documents will be stored.
+        <hr>
+        Note that this directory must be accessible and writable by the web server.
+        <br>
+        Also, existing uploaded contract documents will not be moved to this directory.
+        Please be sure to contact an IT personell to move existing contract documents to this directory.
+      </div>
+    </section>
+    <footer class="modal-card-foot">
+      <button class="button modal-close-btn">Close</button>
+    </footer>
+  </div>
+</div>
+
+<%# Directory Upload Explanation Modal %>
+<div class="modal" id="directory-reports-upload-modal">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+        <div class="icon-text">
+          <span class="icon">
+            <i class="fas fa-folder-open"></i>
+          </span>
+          <p class="modal-card-title">Reports Directory</p>
+        </div>
+    </header>
+    <section class="modal-card-body">
+      <div class="content">
+        This directory is where generated reports will be stored.
+        <hr>
+        Note that this directory must be accessible and writable by the web server.
+        <br>
+        Also, existing reports will not be moved to this directory.
+        Please be sure to contact an IT personell to move existing reports to this directory.
       </div>
     </section>
     <footer class="modal-card-foot">

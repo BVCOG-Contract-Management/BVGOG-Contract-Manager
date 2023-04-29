@@ -131,7 +131,7 @@ class ContractsController < ApplicationController
       begin 
         ActiveRecord::Base.transaction do
           OSO.authorize(current_user, 'edit', @contract)
-          if !contract_params[:point_of_contact_id].present?
+          if !@contract[:point_of_contact_id].present? && !contract_params[:point_of_contact_id].present?
             @contract.errors.add(:base, 'Point of contact is required')
             format.html { render :edit, status: :unprocessable_entity }
             format.json { render json: @contract.errors, status: :unprocessable_entity }

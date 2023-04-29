@@ -9,21 +9,6 @@
     }
 }
 
-.directory-field {
-    display: flex;
-    justify-content: space-between;
-
-    .file {
-        width: fit-content;
-        margin: 0 10px;
-    }
-    .file-cta {
-        .file-icon {
-            margin: auto !important;
-        }
-    }
-}
-
 .directory-input-label{
     display: flex;
     
