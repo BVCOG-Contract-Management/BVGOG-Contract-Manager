@@ -18,8 +18,6 @@ class ApplicationController < ActionController::Base
         # If route is not the sign in page, check if user is signed in
         unless ['/users/sign_in', '/users/sign_out', '/users/password/new', '/users/password/edit', '/users/confirmation', '/users/invitation/accept', '/users/invitation', '/users/invitation/new'].include? request.path
             authenticate_user!
-        end
-            authenticate_user!
             unless current_user.is_active
                 sign_out current_user
                 redirect_to new_user_session_path, alert: "Your account is not currently active."
