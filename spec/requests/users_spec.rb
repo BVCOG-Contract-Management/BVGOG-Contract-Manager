@@ -29,24 +29,24 @@ RSpec.describe '/users', type: :request do
     {
       id: 100,
       email: Faker::Internet.email,
-      password: "password",
+      password: 'password',
       first_name: Faker::Name.first_name,
       last_name: Faker::Name.last_name,
       is_program_manager: false,
       is_active: true,
-      level: UserLevel::THREE,
+      level: UserLevel::THREE
     }
   end
 
   let(:invalid_attributes) do
     {
-      email: "",
-      password: "",
-      first_name: "",
-      last_name: "",
+      email: '',
+      password: '',
+      first_name: '',
+      last_name: '',
       is_program_manager: false,
       is_active: true,
-      level: UserLevel::ONE,
+      level: UserLevel::ONE
     }
   end
 
@@ -135,6 +135,23 @@ RSpec.describe '/users', type: :request do
         user = User.create! valid_attributes
         patch user_url(user), params: { user: invalid_attributes }
         expect(response).to be_successful
+      end
+    end
+  end
+end
+
+RSpec.describe UsersController, type: :controller do
+  let(:user) { FactoryBot.create(:user, level: UserLevel::ONE) }
+  let(:redirect_user) { FactoryBot.create(:user, level: UserLevel::ONE) }
+  before do
+    sign_in user
+  end
+
+  describe 'PUT #redirect' do
+    context 'when user is not active' do
+      it 'redirects the user' do
+        put :redirect, params: { id: user.id, redirect_user_id: redirect_user.id }
+        expect(response).to redirect_to(user_url(user))
       end
     end
   end
