@@ -16,7 +16,9 @@ class ApplicationController < ActionController::Base
 
     def verify_user
         # If route is not the sign in page, check if user is signed in
-        unless request.path == "/users/sign_in"
+        unless ['/users/sign_in', '/users/sign_out', '/users/password/new', '/users/password/edit', '/users/confirmation', '/users/invitation/accept', '/users/invitation', '/users/invitation/new'].include? request.path
+            authenticate_user!
+        end
             authenticate_user!
             unless current_user.is_active
                 sign_out current_user
