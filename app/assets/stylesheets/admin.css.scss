@@ -1,0 +1,38 @@
+@import "main";
+
+
+#admin-form{
+    @include table-card($table-card-header-background-color, $table-card-header-border, $table-border);
+
+    tr.is-disabled {
+        opacity: 0.5;
+    }
+}
+
+.directory-field {
+    display: flex;
+    justify-content: space-between;
+
+    .file {
+        width: fit-content;
+        margin: 0 10px;
+    }
+    .file-cta {
+        .file-icon {
+            margin: auto !important;
+        }
+    }
+}
+
+.directory-input-label{
+    display: flex;
+    
+    .icon {
+        @include transition(all, 0.3s, ease);
+        cursor: pointer;
+
+        :hover {
+            color: #81A2FF;
+        }
+    }
+}

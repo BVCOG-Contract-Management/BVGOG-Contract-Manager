@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_29_030056) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_29_193846) do
   create_table "bvcog_configs", force: :cascade do |t|
     t.text "contracts_path", null: false
     t.text "reports_path", null: false
@@ -25,6 +25,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_29_030056) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "orig_file_name"
+    t.text "document_type"
     t.index ["contract_id"], name: "index_contract_documents_on_contract_id"
   end
 

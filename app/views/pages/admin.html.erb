@@ -1,3 +1,127 @@
 <% content_for :title do %>
   Administration
 <% end %>
+
+<div id="admin-form">
+  <div class="card">
+
+    <%# Card header %>
+    <header class="card-header">
+      <p class="card-header-title">
+        BVCOG CMS Configuration
+      </p>
+    </header>
+
+    <%# Card content %>
+    <div class="card-content">
+      <div class="content">
+        <p>
+          <strong>
+            This page is for configuring the BVCOG CMS.  Please use caution when making changes.
+          </strong>
+        </p>
+      </div>
+
+      <%# Form %>
+      <%= form_with(model: @bvcog_config, url: admin_path, method: :put, data: { turbo: false }) do |form| %>
+
+          <%# Errors %>
+          <% if @bvcog_config.errors.any? %>
+              <article class="message is-danger">
+                <div class="message-header">
+                  <p><%= pluralize(@bvcog_config.errors.count, "error") %> prohibited this configuration from being saved:</p>
+                </div>
+                <div class="message-body">
+                  <ul>
+                    <% @bvcog_config.errors.full_messages.each do |message| %>
+                      <li><%= message %></li>
+                    <% end %>
+                  </ul>
+                </div>
+              </article>
+          <% end %>
+
+          <%# Form starts here %>
+              
+          <%# Contract Document Storage %>
+          <div class="field">
+            <%= form.label :contract_document_storage, class: "directory-input-label" do %>
+              <div class="icon-text">
+                <span class="icon has-text-info" id="directory-upload-modal-open-btn">
+                  <i class="fas fa-circle-info"></i>
+                </span>
+                <span>Contract Document Storage</span>
+              </div>
+            <% end %>
+              <span class="help">
+                Click the information icon above for instructions.
+              </span>
+            <div class="directory-field">
+              <span class="input directory-value">
+                <%= @bvcog_config.contracts_path %>
+              </span>
+              <div class="file">
+                <label class="file-label">
+                  <input id="file" class="file-input" type="file" webkitdirectory directory />
+                  <span class="file-cta">
+                    <span class="file-icon">
+                      <i class="fas fa-folder"></i>
+                    </span>
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+      <% end %>
+
+    </div>
+
+    <%# Card Footer %>
+    <footer class="card-footer">
+      <div class="card-footer-item">
+        <button class="button is-primary" type="submit" form="admin-form">
+          Save
+        </button>
+      </div>
+    </footer>
+      
+    
+  </div>
+
+
+<%# Directory Upload Explanation Modal %>
+<div class="modal" id="directory-upload-modal">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+        <div class="icon-text">
+          <span class="icon">
+            <i class="fas fa-folder-open"></i>
+          </span>
+          <p class="modal-card-title">How to Select a Directory</p>
+        </div>
+    </header>
+    <section class="modal-card-body">
+      <div class="content">
+        <strong>
+        In order to select a directory, you must first select a file.  The file will not be uploaded, but the directory it is in will be selected.
+        </strong>
+        <ol>
+          <li>Create a new directory on your computer.</li>
+          <li>Create or copy any file into the directory.</li>
+          <li>Click the button with the folder icon next to the input of your choosing.</li>
+          <li>When the file explorer opens, navigate to your chosen directory but
+            <strong>do not select any files</strong>.
+          </li>
+          <li>Click the "Upload" button.</li>
+          <li>The directory where your file is located will be selected.</li>
+          <li>Feel free to delete the file you created in [2].</li>
+        </ol>
+      </div>
+    </section>
+    <footer class="modal-card-foot">
+      <button class="button modal-close-btn">Close</button>
+    </footer>
+  </div>
+</div>

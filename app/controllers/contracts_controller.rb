@@ -51,18 +51,29 @@ class ContractsController < ApplicationController
     add_breadcrumb 'New Contract', new_contract_path
 
     contract_documents_upload = params[:contract][:contract_documents]
+    contract_documents_attributes = params[:contract][:contract_documents_attributes]
     # Delete the contract_documents from the params
     # so that it doesn't get saved as a contract attribute
     params[:contract].delete(:contract_documents)
+    params[:contract].delete(:contract_documents_attributes)
+    params[:contract].delete(:contract_document_type_hidden)
 
-    @contract = Contract.new(contract_params.merge(contract_status: ContractStatus::IN_PROGRESS))
+    contract_params_clean = contract_params
+    contract_params_clean.delete(:new_vendor_name)
+
+    @contract = Contract.new(contract_params_clean.merge(contract_status: ContractStatus::IN_PROGRESS))
 
     respond_to do |format|
       ActiveRecord::Base.transaction do
         begin
           OSO.authorize(current_user, 'write', @contract)
           handle_if_new_vendor
-          if @contract.point_of_contact_id.present? && !User.find(@contract.point_of_contact_id).is_active
+          #  Check specific for PoC since we use it down the line to check entity association
+          if !contract_params[:point_of_contact_id].present? 
+            @contract.errors.add(:base, 'Point of contact is required')
+            format.html { render :new, status: :unprocessable_entity }
+            format.json { render json: @contract.errors, status: :unprocessable_entity }
+          elsif @contract.point_of_contact_id.present? && !User.find(@contract.point_of_contact_id).is_active
             if User.find(@contract.point_of_contact_id).redirect_user_id.present?
               @contract.errors.add(:base, User.find(@contract.point_of_contact_id).full_name + ' is not active, use ' + User.find(User.find(@contract.point_of_contact_id).redirect_user_id).full_name + ' instead')
             else
@@ -75,7 +86,7 @@ class ContractsController < ApplicationController
             format.html { render :new, status: :unprocessable_entity }
             format.json { render json: @contract.errors, status: :unprocessable_entity }
           elsif @contract.save
-            handle_contract_documents(contract_documents_upload) if contract_documents_upload.present?
+            handle_contract_documents(contract_documents_upload, contract_documents_attributes) if contract_documents_upload.present?
             format.html { redirect_to contract_url(@contract), notice: 'Contract was successfully created.' }
             format.json { render :show, status: :created, location: @contract }
           else
@@ -84,6 +95,7 @@ class ContractsController < ApplicationController
           end
         end
       rescue StandardError => e
+        raise e
         # If error type is Oso::ForbiddenError, then the user is not authorized
         if e.class == Oso::ForbiddenError
           status = :unauthorized
@@ -105,16 +117,25 @@ class ContractsController < ApplicationController
     add_breadcrumb 'Edit', edit_contract_path(@contract)
 
     handle_if_new_vendor
+    # Remove the new vendor from the params
+    params[:contract].delete(:new_vendor_name)
     contract_documents_upload = params[:contract][:contract_documents]
+    contract_documents_attributes = params[:contract][:contract_documents_attributes]
     # Delete the contract_documents from the params
     # so that it doesn't get saved as a contract attribute
     params[:contract].delete(:contract_documents)
+    params[:contract].delete(:contract_documents_attributes)
+    params[:contract].delete(:contract_document_type_hidden)
 
     respond_to do |format|
       begin 
         ActiveRecord::Base.transaction do
           OSO.authorize(current_user, 'edit', @contract)
-          if contract_params[:point_of_contact_id].present? && !User.find(contract_params[:point_of_contact_id]).is_active
+          if !contract_params[:point_of_contact_id].present?
+            @contract.errors.add(:base, 'Point of contact is required')
+            format.html { render :edit, status: :unprocessable_entity }
+            format.json { render json: @contract.errors, status: :unprocessable_entity }
+          elsif contract_params[:point_of_contact_id].present? && !User.find(contract_params[:point_of_contact_id]).is_active
             if User.find(contract_params[:point_of_contact_id]).redirect_user_id.present?
               @contract.errors.add(:base, User.find(contract_params[:point_of_contact_id]).full_name + ' is not active, use ' + User.find(User.find(contract_params[:point_of_contact_id]).redirect_user_id).full_name + ' instead')
             else
@@ -130,7 +151,7 @@ class ContractsController < ApplicationController
               format.html { render :edit, status: :unprocessable_entity }
               format.json { render json: @contract.errors, status: :unprocessable_entity }
           elsif @contract.update(contract_params)
-            handle_contract_documents(contract_documents_upload) if contract_documents_upload.present?
+            handle_contract_documents(contract_documents_upload, contract_documents_attributes) if contract_documents_upload.present?
             puts 'Contract updated successfully'
             format.html { redirect_to contract_url(@contract), notice: 'Contract was successfully updated.' }
             format.json { render :show, status: :ok, location: @contract }
@@ -204,7 +225,10 @@ class ContractsController < ApplicationController
       contract_type
       requires_rebid
       number
+      new_vendor_name
       contract_documents
+      contract_documents_attributes
+      contract_document_type_hidden
     ]
     params.require(:contract).permit(allowed)
   end
@@ -259,7 +283,7 @@ class ContractsController < ApplicationController
 
   # TODO: This is a temporary solution
   # File upload is a seperate issue that will be handled with a dropzone
-  def handle_contract_documents(contract_documents_upload)
+  def handle_contract_documents(contract_documents_upload, contract_documents_attributes)
     for doc in contract_documents_upload
       next unless doc.present?
 
@@ -274,11 +298,14 @@ class ContractsController < ApplicationController
       File.open(Rails.root.join(bvcog_config.contracts_path, official_file_name), 'wb') do |file|
         file.write(doc.read)
       end
+      # Get document type
+      document_type = contract_documents_attributes[doc.original_filename][:document_type] || ContractDocumentType::OTHER
       # Create a new contract_document
       contract_document = ContractDocument.new(
         orig_file_name: doc.original_filename,
         file_name: official_file_name,
-        full_path: Rails.root.join(bvcog_config.contracts_path, official_file_name).to_s
+        full_path: Rails.root.join(bvcog_config.contracts_path, official_file_name).to_s,
+        document_type: document_type
       )
       # Add the contract_document to the contract
       @contract.contract_documents << contract_document
