@@ -93,7 +93,7 @@ Rails.application.configure do
   ActionMailer::Base.delivery_method = :smtp
   config.action_mailer.perform_caching = false
   config.action_mailer.perform_deliveries = true
-  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.raise_delivery_errors = false
 
   # Use a different logger for distributed setups.
   # require "syslog/logger"
