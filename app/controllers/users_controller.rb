@@ -56,11 +56,14 @@ class UsersController < ApplicationController
     respond_to do |format|
       begin
         OSO.authorize(current_user, 'edit', @user)
-        if user_params[:is_active].present? && user_params[:is_active]
-          # Remove redirect_user_id if user is being activated
-          @user.update(redirect_user_id: nil)
-        end
-        if @user.update(user_params)
+        if current_user.id == @user.id && user_params[:is_active].present? && user_params[:is_active] == "false"
+          format.html { redirect_to user_url(@user), alert: "You cannot deactivate yourself." }
+          format.json { render json: { error: "You cannot deactivate yourself." }, status: :unprocessable_entity }
+        elsif @user.update(user_params)
+          if user_params[:is_active].present? && user_params[:is_active] == "true"
+            # Remove redirect_user_id if user is being activated
+            @user.update(redirect_user_id: nil)
+          end
           if user_params[:redirect_user_id].present?
             @user.update(redirect_user_id: user_params[:redirect_user_id], is_active: false)
             format.html { redirect_to user_url(@user), notice: "User was successfully redirected." }
