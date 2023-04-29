@@ -36,11 +36,15 @@
                             </tr>
                             <tr>
                                 <td><strong>Point of Contact:</strong></td>
-                                <td><%= @contract.point_of_contact.first_name %> <%= @contract.point_of_contact.last_name %></td>
+                                <td>
+                                <%= link_to @contract.point_of_contact.full_name, user_path(@contract.point_of_contact) %>
+                                </td>
                             </tr>
                             <tr>
                                 <td><strong>Vendor:</strong></td>
-                                <td><%= @contract.vendor.name %></td>
+                                <td>
+                                <%= link_to @contract.vendor.name, vendor_path(@contract.vendor) %>
+                                </td>
                             </tr>
                             <tr>
                                 <td><strong>Entity:</strong></td>
