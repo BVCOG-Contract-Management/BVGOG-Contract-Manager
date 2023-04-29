@@ -111,9 +111,9 @@
     <footer class="modal-card-foot">
     <%= link_to user_path(@user, params: { user: { is_active: !@user.is_active } }), data: { "turbo-method": :put }, class: @user.is_active ? "button is-danger" : "button is-success" do %>
         <% if @user.is_active %>
-            Disable
+            Deactivate
         <% else %>
-            Enable
+            Activate
         <% end %>
     <% end %>
       <button class="button modal-close-btn">Cancel</button>
