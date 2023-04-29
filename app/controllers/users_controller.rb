@@ -56,6 +56,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       begin
         OSO.authorize(current_user, 'edit', @user)
+        # is_active passed as a string, this is why we check for "true" or "false"
         if current_user.id == @user.id && user_params[:is_active].present? && user_params[:is_active] == "false"
           format.html { redirect_to user_url(@user), alert: "You cannot deactivate yourself." }
           format.json { render json: { error: "You cannot deactivate yourself." }, status: :unprocessable_entity }
