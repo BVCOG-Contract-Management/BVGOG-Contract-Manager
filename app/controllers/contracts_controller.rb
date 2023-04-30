@@ -108,7 +108,6 @@ class ContractsController < ApplicationController
           end
         end
       rescue StandardError => e
-        raise e
         # If error type is Oso::ForbiddenError, then the user is not authorized
         if e.class == Oso::ForbiddenError
           status = :unauthorized
