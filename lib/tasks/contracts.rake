@@ -90,7 +90,7 @@ namespace :contracts do
       key_words: "[\"Test\", \"Contract\", \"Heroku\"]",
       entity_id: Entity.all.sample.id,
       program_id: Program.all.sample.id,
-      point_of_contact_id: User.where(email: 'admin@example.com').first.id,
+      point_of_contact_id: User.where(email: 'admin@bvcogdev.com').first.id,
       vendor_id: Vendor.all.sample.id,
       starts_at: Date.today,
       ends_at: Date.today + 1.year,
