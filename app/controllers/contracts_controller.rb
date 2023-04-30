@@ -280,8 +280,7 @@ class ContractsController < ApplicationController
     # Check if the vendor is new
     if params[:contract][:vendor_id] == 'new'
       # Create a new vendor
-      # Chnage all non-alphanumeric characters to spaces
-      params[:contract][:new_vendor_name].gsub!(/[^0-9A-Za-z]/, ' ')
+
       # Make vendor name Name Case
       params[:contract][:new_vendor_name] = params[:contract][:new_vendor_name].titlecase
       vendor = Vendor.new(name: params[:contract][:new_vendor_name])
