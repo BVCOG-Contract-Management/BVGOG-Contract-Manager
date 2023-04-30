@@ -68,6 +68,7 @@ class PagesController < ApplicationController
         # Create new programs
         new_programs.each do |program|
           # Check if program already exists
+          program = program.strip.titlecase
           if Program.where(name: program).count == 0
             Program.create(name: program)
           else 
@@ -83,6 +84,7 @@ class PagesController < ApplicationController
         # Create new entities
         new_entities.each do |entity|
           # Check if entity already exists
+          entity = entity.strip.titlecase
           if Entity.where(name: entity).count == 0
             Entity.create(name: entity)
           else
