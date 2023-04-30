@@ -77,8 +77,13 @@ class ReportsController < ApplicationController
   end
 
   def download
-    # Send the file to the user
-    send_file @report.full_path, type: "application/pdf", x_sendfile: true
+    # If the report file does not exist, redirect to the report show page
+    if !File.exist?(@report.full_path)
+      redirect_to report_path(@report), alert: "The report file does not exist."
+    else
+      # Send the file to the user
+      send_file @report.full_path, type: "application/pdf", x_sendfile: true
+    end
   end
 
   private

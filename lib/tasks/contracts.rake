@@ -77,7 +77,7 @@ namespace :contracts do
       end
     end
     file_name = "bvcog-auto-contracts-export-#{Date.today.strftime("%m-%d-%Y")}.csv"
-    File.write(Rails.root.join(BvcogConfig.last.reports_path, file_name), csv_data)
+    File.write(File.join(BvcogConfig.last.reports_path, file_name), csv_data)
   end
 
   # Test task for heroku

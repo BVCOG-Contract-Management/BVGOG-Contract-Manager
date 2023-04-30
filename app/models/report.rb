@@ -45,7 +45,7 @@ class Report < ApplicationRecord
         # Replace all non-alphanumeric characters with dashes
         report_title_slug = report.title.downcase.gsub(/[^a-z0-9\s]/i, '').gsub(/\s+/, '-')
         report.file_name = "#{report_title_slug}-#{uuid[0..7]}.pdf"
-        report.full_path = Rails.root.join(BvcogConfig.last.reports_path, report.file_name).to_s
+        report.full_path = File.join(BvcogConfig.last.reports_path, report.file_name).to_s
     end
 
     def generate_standard_users_report
@@ -170,7 +170,7 @@ class Report < ApplicationRecord
         report = self
         
         report.file_name = "bvcog-auto-contract-expiration-report-#{Date.today.strftime("%Y-%m-%d")}.pdf"
-        report.full_path = Rails.root.join(BvcogConfig.last.reports_path, report.file_name).to_s
+        report.full_path = File.join(BvcogConfig.last.reports_path, report.file_name).to_s
   
         # Collect contracts expiring in the next 30 days
         contracts_30_days = Contract.where("ends_at >= ? AND ends_at <= ?", Date.today, Date.today + 30.days).order(:ends_at)

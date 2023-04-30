@@ -36,6 +36,11 @@ class PagesController < ApplicationController
         # Check that path is valid, exists, is a directory, and is writable
         if File.directory?(bvcog_config_params[:contracts_path]) && File.writable?(bvcog_config_params[:contracts_path])
           @bvcog_config.contracts_path = bvcog_config_params[:contracts_path]
+          # Update all contract documents with new path
+          ContractDocument.all.each do |contract_document|
+            full_path = File.join(@bvcog_config.contracts_path, contract_document.file_name).to_s
+            contract_document.update(full_path: full_path)
+          end
         else
           @bvcog_config.errors.add(:contracts_path, "is invalid.")
         end
@@ -46,6 +51,11 @@ class PagesController < ApplicationController
         # Check that path is valid, exists, is a directory, and is writable
         if File.directory?(bvcog_config_params[:reports_path]) && File.writable?(bvcog_config_params[:reports_path])
           @bvcog_config.reports_path = bvcog_config_params[:reports_path]
+          # Update all report documents with new path
+          Report.all.each do |report|
+            full_path = File.join(@bvcog_config.reports_path, report.file_name).to_s
+            report.update(full_path: full_path)
+          end
         else
           @bvcog_config.errors.add(:reports_path, "is invalid.")
         end
