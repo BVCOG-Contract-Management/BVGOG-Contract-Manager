@@ -40,9 +40,3 @@ end
 every FIRST_OF_EACH_MONTH do
     rake "contracts:export_all_contract_data"
 end
-
-if ENV['ON_HEROKU']
-    ever 1.minute do
-        rake "contracts:test_task"
-    end
-end
