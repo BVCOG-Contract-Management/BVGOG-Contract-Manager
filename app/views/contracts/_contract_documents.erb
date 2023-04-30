@@ -1,10 +1,19 @@
 <table class="table is-striped is-hoverable is-fullwidth">
+    <thead>
+        <tr>
+            <th>File Name</th>
+            <th>Document Type</th>
+            <th></th>
+        </tr>
     <tbody>
         <% contract.contract_documents.each do |contract_document| %>
             <tr>
                 <td>
                     <%= file_type_icon(contract_document.file_name) %>
-                    <strong><%= contract_document.file_name %></strong>
+                    <strong><%= contract_document.orig_file_name.present? ? contract_document.orig_file_name.truncate(30) : contract_document.file_name.truncate(30) %></strong>
+                </td>
+                <td>
+                    <%= contract_document.document_type.present? ? contract_document.document_type.humanize : "Other" %>
                 </td>
                 <td class="download-file-button">
                     <% if action == "download" %>

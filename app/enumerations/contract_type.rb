@@ -3,8 +3,8 @@ class ContractType < EnumerateIt::Base
     :contract,
     :grant,
     :property_lease,
-    :ILA,
-    :MOU_MOA,
+    :ila,
+    :mou_moa,
     :letter_of_intent
   )
 end

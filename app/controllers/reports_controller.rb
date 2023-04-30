@@ -40,23 +40,23 @@ class ReportsController < ApplicationController
   # POST /reports or /reports.json
   def create
     @report = Report.new(report_params)
-
-    # Here we will assign the "created_by" attribute to be the current logged in user
-    # First we need to fix up authentication
-    # For now default to the first user (id = 1)
-    @report.created_by = User.find(1).id
+    @report.created_by = current_user.id
 
     bvcog_config = BvcogConfig.last
 
     # Here we will generate the file path and PDF file
     # For now, we will just create the path
-    @report.file_name = "#{SecureRandom.uuid}.pdf"
+    uuid = SecureRandom.uuid
+    # Take the first 8 characters of the UUID and use that as the file name
+    report_title_slug = @report.title.downcase.gsub(" ", "-")
+    @report.file_name = "#{report_title_slug}-#{uuid[0..7]}.pdf"
     @report.full_path = Rails.root.join(bvcog_config.reports_path, @report.file_name).to_s
 
     contracts = []
     # Collect contracts if needed
     if @report.report_type == ReportType::CONTRACTS
       contracts = query_report_contracts(@report)
+      contracts = contracts.order(:ends_at)
     end
 
     # Build the PDF
@@ -69,18 +69,19 @@ class ReportsController < ApplicationController
       report_pdf.text "Filters", align: :center, size: 18, style: :bold
       report_pdf.move_down 10
       table_data = []
-      table_data << ["Entity", "Program", "Point of Contact", "Expiring in Days"]
+      table_data << ["Entity", "Program", "Point of Contact", "Expiring in Days", "Show Expired"]
       poc = User.find(@report.point_of_contact_id) if @report.point_of_contact_id.present?
       table_data << [
         @report.entity_id.present? ? Entity.find(@report.entity_id).name: "All",
         @report.program_id.present? ? Program.find(@report.program_id).name : "All",
         @report.point_of_contact_id.present? ? "#{poc.first_name} #{poc.last_name}" : "All",
-        @report.expiring_in_days.present? ? @report.expiring_in_days : "All"
+        @report.expiring_in_days.present? ? @report.expiring_in_days : "All",
+        @report.show_expired_contracts.present? ? (@report.show_expired_contracts ? "Yes" : "No") : "No"
       ]
       # Add the table to the PDF
       report_pdf.table table_data, header: true, width: report_pdf.bounds.width do
         row(0).font_style = :bold
-        columns(0..3).align = :center
+        columns(0..4).align = :center
         self.row_colors = ["DDDDDD", "FFFFFF"]
       end
       report_pdf.move_down 20
@@ -97,7 +98,7 @@ class ReportsController < ApplicationController
           contract.number,
           contract.vendor.name,
           contract.contract_type_humanize,
-          "$#{contract.amount_dollar} per #{contract.amount_duration_humanize}",
+          "$#{contract.amount_dollar.round(2)} per #{contract.amount_duration_humanize}",
           contract.ends_at.strftime("%m/%d/%Y")
         ]
       end
@@ -110,8 +111,8 @@ class ReportsController < ApplicationController
       end
     elsif @report.report_type == ReportType::USERS
       # Collect users by active and not active
-      active_users = User.where(is_active: true)
-      inactive_users = User.where(is_active: false)
+      active_users = User.where(is_active: true).order(:first_name)
+      inactive_users = User.where(is_active: false).order(:first_name)
       # Build two tables
       report_pdf.text "Active users", align: :center, size: 18, style: :bold
       report_pdf.move_down 10
@@ -121,9 +122,8 @@ class ReportsController < ApplicationController
         table_data << [
           user.first_name,
           user.last_name,
-          # TODO: fix this to show the program name after users have been assigned to programs
-          "Dummy Program Name",
-          "Level #{user.level}"
+          user.program.name,
+          user.level
         ]
 
       end
@@ -210,6 +210,7 @@ class ReportsController < ApplicationController
         :entity_id,
         :program_id,
         :expiring_in_days,
+        :show_expired_contracts,
       ]
       params.fetch(:report, {}).permit(allowed)
     end

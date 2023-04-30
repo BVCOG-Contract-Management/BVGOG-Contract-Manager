@@ -10,6 +10,10 @@ Rails.application.routes.draw do
     root to: redirect('/users/sign_in'), as: :unauthenticated_root
   end
 
+  # GET /admin
+  get "/admin", to: "pages#admin", as: "admin"
+  put "/admin", to: "pages#update_admin", as: "update_admin"
+
   resources :vendors do
     member do
       get 'review'
@@ -21,6 +25,7 @@ Rails.application.routes.draw do
     # PUT /users/1/redirect
     member do
       put 'redirect', to: 'users#redirect', as: 'redirect'
+      get 'reinvite', to: 'users#reinvite', as: 'reinvite'
     end
   end
   resources :reports

@@ -167,6 +167,11 @@
                   </label>
                 </div>
               </div>
+
+
+              <%# Use a hidden select tag that JS can copy over for each uploaded file %>
+              <%= form.select :contract_document_type_hidden, ContractDocumentType.to_a, {:selected => ContractDocumentType::OTHER}, class: "input is-small is-hidden", id: "contract_document_type_hidden" %>
+
               <%# Display the uploaded contract documents %>
               <table id="uploaded-contract-documents-table" class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
                 <tbody>
@@ -178,7 +183,10 @@
                       <tr class="is-disabled" id="contract-document-<%= contract_document.id %>">
                         <td>
                         <%= file_type_icon(contract_document.file_name) %>
-                        <strong><%= contract_document.file_name %></strong>
+                        <strong><%= contract_document.orig_file_name.present? ? contract_document.orig_file_name.truncate(30) : contract_document.file_name.truncate(30) %></strong>
+                        </td>
+                        <td>
+                          <%= contract_document.document_type.present? ? contract_document.document_type.humanize : "Other" %>
                         </td>
                       </tr>
                     <% end %>

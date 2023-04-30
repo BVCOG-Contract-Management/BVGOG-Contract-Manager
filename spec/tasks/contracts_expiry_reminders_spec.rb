@@ -14,7 +14,7 @@ RSpec.describe 'contracts:send_expiration_reminders' do
     example_entity = FactoryBot.create(:entity)
   end
   unless contact_person
-    contact_person = FactoryBot.create(:user, email: 'user@example.com', password: 'password', first_name: 'Example', last_name: 'User')
+    contact_person = FactoryBot.create(:user, email: 'user@example.com', password: 'password', first_name: 'Example', last_name: 'User', program: example_program, entities: [example_entity], level: UserLevel::THREE)
   end
 
   let(:contract) do                                

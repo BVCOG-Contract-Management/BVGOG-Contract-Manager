@@ -27,6 +27,9 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
+    if current_user.level != UserLevel::ONE
+      redirect_to root_path, alert: "You do not have permission to access this page."
+    end
     add_breadcrumb "Users", users_path
     add_breadcrumb @user.full_name, user_path(@user)
     add_breadcrumb "Edit", edit_user_path(@user)
@@ -56,11 +59,15 @@ class UsersController < ApplicationController
     respond_to do |format|
       begin
         OSO.authorize(current_user, 'edit', @user)
-        if user_params[:is_active].present? && user_params[:is_active]
-          # Remove redirect_user_id if user is being activated
-          @user.update(redirect_user_id: nil)
-        end
-        if @user.update(user_params)
+        # is_active passed as a string, this is why we check for "true" or "false"
+        if current_user.id == @user.id && user_params[:is_active].present? && user_params[:is_active] == "false"
+          format.html { redirect_to user_url(@user), alert: "You cannot deactivate yourself." }
+          format.json { render json: { error: "You cannot deactivate yourself." }, status: :unprocessable_entity }
+        elsif @user.update(user_params)
+          if user_params[:is_active].present? && user_params[:is_active] == "true"
+            # Remove redirect_user_id if user is being activated
+            @user.update(redirect_user_id: nil)
+          end
           if user_params[:redirect_user_id].present?
             @user.update(redirect_user_id: user_params[:redirect_user_id], is_active: false)
             format.html { redirect_to user_url(@user), notice: "User was successfully redirected." }
@@ -138,6 +145,17 @@ class UsersController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def reinvite
+    @user = User.find(params[:id])
+    if !@user.is_active 
+      redirect_to user_url(@user), alert: "User is not active and cannot be re-invited."
+    else
+      @user.invite!
+      redirect_to user_url(@user), notice: "User was successfully re-invited."
+    end
+  end
+
   private
 
   # Use callbacks to share common setup or constraints between actions.

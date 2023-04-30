@@ -67,12 +67,16 @@
             </div>
             <div class="field">
               <%= f.label "Entities: " %>
-              <% Entity.all.each do |entity| %>
-              <label class="checkbox">
-              <%= f.check_box :entity_ids, { multiple: true }, entity.id, nil %>
-              <%= entity.name %>
-              </label>
-              <% end %>
+              <table class="table is-hoverable is-fullwidth" id="entity-table">
+                <tbody>
+                  <% Entity.all.each do |entity| %>
+                  <tr>
+                    <td><%= entity.name %></td>
+                    <td><%= f.check_box :entity_ids, { multiple: true }, entity.id, nil %></td>
+                  </tr>
+                  <% end %>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
