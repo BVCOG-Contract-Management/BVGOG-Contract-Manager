@@ -79,4 +79,31 @@ namespace :contracts do
     file_name = "bvcog-auto-contracts-export-#{Date.today.strftime("%m-%d-%Y")}.csv"
     File.write(Rails.root.join(BvcogConfig.last.reports_path, file_name), csv_data)
   end
+
+  # Test task for heroku
+  desc 'Test task'
+  task test_task: :environment do
+    # Create a dummy contract
+    contract = Contract.new(
+      title: "Test Contract Heroku #{SecureRandom.hex(5)}",
+      description: "Test Contract Heroku",
+      key_words: "[\"Test\", \"Contract\", \"Heroku\"]",
+      entity_id: Entity.all.sample.id,
+      program_id: Program.all.sample.id,
+      point_of_contact_id: User.where(email: 'admin@example.com').first.id,
+      vendor_id: Vendor.all.sample.id,
+      starts_at: Date.today,
+      ends_at: Date.today + 1.year,
+      amount_dollar: 100,
+      amount_duration: TimePeriod::MONTH,
+      initial_term_amount: 100,
+      initial_term_duration: TimePeriod::MONTH,
+      contract_type: ContractType::GRANT,
+      contract_status: ContractStatus::IN_PROGRESS,
+      end_trigger: EndTrigger::LIMITED_TERM,
+      created_at: Date.today,
+      updated_at: Date.today
+    )
+    contract.save
+  end
 end
