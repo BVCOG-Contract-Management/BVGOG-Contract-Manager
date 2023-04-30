@@ -27,12 +27,22 @@ class ContractsController < ApplicationController
 
   # GET /contracts/1 or /contracts/1.json
   def show
+    begin
+      OSO.authorize(current_user, 'read', @contract)
+    rescue Oso::Error => e
+      redirect_to root_path, alert: "You do not have permission to access this page."
+      return
+    end
     add_breadcrumb 'Contracts', contracts_path
     add_breadcrumb @contract.title, contract_path(@contract)
   end
 
   # GET /contracts/new
   def new
+    if current_user.level == UserLevel::THREE
+      redirect_to root_path, alert: "You do not have permission to access this page."
+      return
+    end
     add_breadcrumb 'Contracts', contracts_path
     add_breadcrumb 'New Contract', new_contract_path
     @contract = Contract.new
@@ -40,6 +50,10 @@ class ContractsController < ApplicationController
 
   # GET /contracts/1/edit
   def edit
+    if current_user.level == UserLevel::THREE
+      redirect_to root_path, alert: "You do not have permission to access this page."
+      return
+    end
     add_breadcrumb 'Contracts', contracts_path
     add_breadcrumb @contract.title, contract_path(@contract)
     add_breadcrumb 'Edit', edit_contract_path(@contract)

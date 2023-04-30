@@ -4,6 +4,12 @@ class InvitationsController < Devise::InvitationsController
   def new
     add_breadcrumb "Users", users_path
     add_breadcrumb "Invite User", new_user_path
+    begin
+      OSO.authorize(current_user, 'write', User)
+    rescue Oso::Error => e
+      redirect_to users_url, alert: "You are not authorized to invite users."
+      return
+    end
     super
   end
 

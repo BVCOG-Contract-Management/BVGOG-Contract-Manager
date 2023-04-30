@@ -13,6 +13,7 @@ class PagesController < ApplicationController
   def admin
     if current_user.level != UserLevel::ONE
       redirect_to root_path, alert: "You do not have permission to access this page."
+      return
     end
     add_breadcrumb "Administration", admin_path
     @bvcog_config = BvcogConfig.last
