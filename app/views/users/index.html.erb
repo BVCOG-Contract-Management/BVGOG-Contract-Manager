@@ -31,7 +31,7 @@
     <table class="table table is-striped is-hoverable is-fullwidth">
       <thead>
         <tr>
-        <% columns = [["First Name", "first_name"], ["Last Name", "last_name"], ["Level", "level"], ["Program", "program"]] %>
+        <% columns = [["First Name", "first_name"], ["Last Name", "last_name"], ["Level", "level"], ["Program", "program"], ["Program Manager", "is_program_manager"]] %>
         <% columns.each do |col| %>
           <th>
             <%= link_to col[0], sort: col[1], order: (params[:order] == "asc" ? "desc" : "asc") %>
@@ -46,9 +46,17 @@
             <td><%= user.last_name %></td>
             <td><%= user.level_int %></td>
             <% if user.program.blank? %>
-              <td><%= "-" %></td>
+              <td><%= "N/A" %></td>
+              <td><%= "N/A" %>
             <% else %>
               <td><%= user.program.name %></td>
+              <td>
+                <% if user.is_program_manager %>
+                    <span class="tag is-success">Yes</span>
+                <% else %>
+                    <span class="tag is-danger">No</span>
+                <% end %>
+            </td>
             <% end %>
           </tr>
         <% end %>
