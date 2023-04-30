@@ -20,8 +20,6 @@ class User < ApplicationRecord
   has_many :contracts, class_name: "Contract", foreign_key: "point_of_contact_id"
   has_many :vendor_reviews, class_name: "VendorReview", foreign_key: "user_id"
 
-  has_and_belongs_to_many :entities
-
   # TODO: Should the program be optional?
   belongs_to :program, class_name: "Program", foreign_key: "program_id"
 

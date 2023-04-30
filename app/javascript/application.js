@@ -227,4 +227,47 @@ document.addEventListener('turbo:load', () => {
             });
         });
     }
+
+    // Add program or entity on admin page
+    const addResourceFields = document.querySelectorAll('.add-resource-field');
+    if (addResourceFields) {
+        addResourceFields.forEach((addResourceField) => {
+            const id = addResourceField.id;
+            const textInput = addResourceField.querySelector(`input`);
+            const button = addResourceField.querySelector(`button`);
+            const table = document.querySelector(`#${id}_table`);
+            const hiddenInput = document.querySelector(`#${id}_field`);
+
+            console.log(id, textInput, button, table, hiddenInput)
+            
+            button.addEventListener('click', (event) => {
+                event.preventDefault();
+                const value = textInput.value;
+                if (value) {
+                    hiddenInput.value += `${value},`;
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${value}</td>
+                        <td>
+                            <button type="button" class="button is-danger is-small">
+                                <span class="icon is-small">
+                                    <i class="fas fa-times"></i>
+                                </span>
+                                <span>Remove</span>
+                            </button>
+                        </td>
+                    `;
+                    table.appendChild(row);
+                    textInput.value = '';
+                    const removeButton = row.querySelector('button');
+                    removeButton.addEventListener('click', (event) => {
+                        event.preventDefault();
+                        const value = row.querySelector('td').textContent;
+                        hiddenInput.value = hiddenInput.value.replace(`${value},`, '');
+                        row.remove();
+                    });
+                }
+            });
+        });
+    }
 });

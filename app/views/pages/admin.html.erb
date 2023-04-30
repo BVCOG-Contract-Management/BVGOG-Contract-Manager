@@ -17,13 +17,13 @@
     <%= form_with(model: @bvcog_config, url: admin_path, method: :put, data: { turbo: false }) do |form| %>
     <%# Card content %>
     <div class="card-content">
-      <div class="content">
-        <p>
-          <strong>
-            This page is for configuring the BVCOG CMS.  Please use caution when making changes.
-          </strong>
-        </p>
-      </div>
+          <div class="content">
+            <p>
+              <strong>
+                This page is for configuring the BVCOG CMS.  Please use caution when making changes.
+              </strong>
+            </p>
+          </div>
 
           <%# Errors %>
           <% if @bvcog_config.errors.any? %>
@@ -78,6 +78,109 @@
                 <%= form.text_field :reports_path, class: "input" %>
               </p>
           </div>
+
+          <div class="columns">
+            <div class="column is-6">
+              <div class="field">
+
+                <%# New Programs %>
+                <%= form.label :new_programs, "Add Programs" %>
+                  <p class="control add-resource-field" id="new_programs">
+                    <input type="text" class="input" id="new_program" placeholder="Program Name">
+                    <%# Plus Button %>
+                    <button class="button is-primary" id="add_program">
+                      <span class="icon">
+                        <i class="fas fa-plus"></i>
+                      </span>
+                    </button>
+                  </p>
+              </div>
+
+              <%#  Hidden field for new programs %>
+              <%= form.text_field :new_programs, id: "new_programs_field", class: "is-hidden" %>
+
+              <table class="table is-fullwidth">
+                <tbody id="new_programs_table">
+                </tbody>
+              </table>
+
+              <%# Delete Programs %>
+              <div class="field">
+                <%= form.label :delete_programs, "Delete Programs" %>
+                <table class="table is-hoverable is-fullwidth">
+                  <tbody>
+                    <% Program.all.each do |program| %>
+                    <tr>
+                      <td><%= program.name %></td>
+                      <td><%= form.check_box :delete_programs, { multiple: true }, program.id, nil %></td>
+                    </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="column is-6">
+              <div class="field">
+
+                <%# New Entities %>
+                <%= form.label :new_entities, "Add Entities" %>
+                  <p class="control add-resource-field" id="new_entities">
+                    <input type="text" class="input" id="new_entity" placeholder="Entity Name">
+                    <%# Plus Button %>
+                    <button class="button is-primary" id="add_entity">
+                      <span class="icon">
+                        <i class="fas fa-plus"></i>
+                      </span>
+                    </button>
+                  </p>
+              </div>
+
+              <%#  Hidden field for new entities %>
+              <%= form.text_field :new_entities, id: "new_entities_field", class: "is-hidden" %>
+
+              <table class="table is-fullwidth">
+                <tbody id="new_entities_table">
+                </tbody>
+              </table>
+
+              <%# Delete Entities %>
+              <div class="field">
+                <%= form.label :delete_entities, "Delete Entities" %>
+                <table class="table is-hoverable is-fullwidth">
+                  <tbody>
+                    <% Entity.all.each do |entity| %>
+                    <tr>
+                      <td><%= entity.name %></td>
+                      <td><%= form.check_box :delete_entities, { multiple: true }, entity.id, nil %></td>
+                    </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        <%# Automated Expiration Users %>
+              <div class="field">
+                <%= form.label :user_ids, "Automated Expiration Report Recipients" %>
+                <div class="columns">
+                    <% User.all.each_slice((User.count/4.0).ceil) do |user_group| %>
+                    <div class="column">
+                      <table class="table is-hoverable">
+                        <tbody>
+                          <% user_group.each do |user| %>
+                            <tr>
+                              <td><%= user.full_name %></td>
+                              <td><%= form.check_box :user_ids, { multiple: true }, user.id, nil  %></td>
+                            </tr>
+                          <% end %>
+                        </tbody>
+                      </table>
+                    </div>
+                    <% end %>
+                </div>
+              </div>
     </div>
 
     <%# Card Footer %>
