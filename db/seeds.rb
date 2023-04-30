@@ -44,6 +44,7 @@ unless Rails.env.production?
       entities: Entity.all.sample(rand(1..3)),
     )
   end
+  # Create a level 3 user
   FactoryBot.create(
     :user, 
     email: "user@example.com", 
@@ -52,7 +53,7 @@ unless Rails.env.production?
     last_name: "User", 
     program: Program.all.sample,
     entities: Entity.all.sample(rand(0..Entity.count)),
-    level: UserLevel.enumeration.except(:zero).keys.sample,
+    level: UserLevel::THREE,
     )
     # Create a level 1 user
     FactoryBot.create(

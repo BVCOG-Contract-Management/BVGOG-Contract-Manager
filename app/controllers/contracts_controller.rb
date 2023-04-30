@@ -15,7 +15,6 @@ class ContractsController < ApplicationController
     add_breadcrumb 'Contracts', contracts_path
     # Sort contracts
     @contracts = sort_contracts.page params[:page]
-    print reports_path
     # Filter contracts based on allowed entities if user is level 3
     if current_user.level == UserLevel::THREE
       @contracts = @contracts.where(entity_id: current_user.entities.pluck(:id))

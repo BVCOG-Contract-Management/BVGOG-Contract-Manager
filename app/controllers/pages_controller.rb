@@ -23,6 +23,11 @@ class PagesController < ApplicationController
 
   # PUT /admin
   def update_admin
+    if current_user.level != UserLevel::ONE
+      redirect_to root_path, alert: "You do not have permission to access this page."
+      return
+    end
+    
     @bvcog_config = BvcogConfig.last
     respond_to do |format|
 
