@@ -32,26 +32,51 @@ require 'csv'
 namespace :contracts do
   desc 'Export contracts'
   task export_all_contract_data: :environment do
-    headers = %w[id title description key_words entity_id entity_name program_id program_name
-                 point_of_contact_id point_of_contact_name vendor_id vendor_name starts_at ends_at
-                 amount_dollar initial_term_amount contract_type contract_status amount_duration
-                 initial_term_duration end_trigger created_at updated_at]
+    headers = [
+      'ID',
+      'Title',
+      'Description',
+      'Key Words',
+      'Entity Name',
+      'Program Name',
+      'Point of Contact',
+      'Vendor',
+      'Start Date',
+      'End Date',
+      'Amount',
+      'Initial Term',
+      'Contract Type',
+      'Contract Status',
+      'End Trigger',
+      'Created At',
+      'Updated At'
+    ]
     contracts = Contract.all
     csv_data = CSV.generate(headers: true) do |csv|
       csv << headers
       contracts.each do |contract|
-        csv << [contract.id, contract.title, contract.description, contract.key_words, contract.entity_id,
-                contract.entity.name, contract.program_id, contract.program.name, contract.point_of_contact_id,
-                "#{contract.point_of_contact.first_name} #{contract.point_of_contact.last_name}",
-                contract.vendor_id, contract.vendor.name, contract.starts_at, contract.ends_at,
-                contract.amount_dollar, contract.initial_term_amount, contract.contract_type,
-                contract.contract_status, contract.amount_duration, contract.initial_term_duration,
-                contract.end_trigger, contract.created_at, contract.updated_at]
+        csv << [
+          contract.id,
+          contract.title,
+          contract.description,
+          contract.key_words,
+          contract.entity.name,
+          contract.program.name,
+          contract.point_of_contact.full_name,
+          contract.vendor.name,
+          contract.starts_at.strftime("%m/%d/%Y"),
+          contract.ends_at.strftime("%m/%d/%Y"),
+          "$#{contract.amount_dollar.round(2)} per #{contract.amount_duration}",
+          "$#{contract.initial_term_amount.round(2)} per #{contract.initial_term_duration}",
+          contract.contract_type.humanize,
+          contract.contract_status.humanize,
+          contract.end_trigger.humanize,
+          contract.created_at.strftime("%m/%d/%Y"),
+          contract.updated_at.strftime("%m/%d/%Y")
+        ]
       end
     end
-    # TODO: Set using admin panel
-    current_date = Date.today
-    save_path = "contract_csvs/contracts_#{current_date}.csv"
-    File.write(save_path, csv_data)
+    file_name = "bvcog-auto-contracts-export-#{Date.today.strftime("%m-%d-%Y")}.csv"
+    File.write(Rails.root.join(BvcogConfig.last.reports_path, file_name), csv_data)
   end
 end

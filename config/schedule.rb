@@ -23,8 +23,21 @@ set :output, "log/cron_log.log"
 env :PATH, ENV['PATH']
 set :bundle_command, "/Users/matanbroner/.rbenv/shims/bundle exec"
 
+EVERY_DAY_AT_5_AM = "0 5 * * *"
+FIRST_EACH_MONTH = "0 0 1 * *"
+
 # Send expiry reminders for contracts every day
-every 1.day do
+every EVERY_DAY_AT_5_AM do
     rake "contracts:send_expiration_reminders"
+end
+
+# Send expiration reports once a month
+every FIRST_EACH_MONTH do
+    rake "contracts:send_expiration_reports"
+end
+
+# Export contracts once a month
+every FIRST_EACH_MONTH do
+    rake "contracts:export_all_contract_data"
 end
 
