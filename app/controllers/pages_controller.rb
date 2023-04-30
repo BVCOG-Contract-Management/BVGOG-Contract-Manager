@@ -133,7 +133,6 @@ class PagesController < ApplicationController
         format.json { render json: @bvcog_config.errors, status: :unprocessable_entity }
       end
     rescue StandardError => e
-      raise e
       format.html { render 'pages/admin', alert: e.message }
       format.json { render json: @bvcog_config.errors, status: :unprocessable_entity }
     end
