@@ -66,6 +66,17 @@
                                         <td>All</td>
                                     </tr>
                                 <% end %>
+                                <% if @report.show_expired_contracts.present? %>
+                                    <tr>
+                                        <td><strong>Show Expired Contracts:</strong></td>
+                                        <td><%= @report.show_expired_contracts ? "Yes" : "No" %></td>
+                                    </tr>
+                                <% else %>
+                                    <tr>
+                                        <td><strong>Show Expired Contracts:</strong></td>
+                                        <td>No</td>
+                                    </tr>
+                                <% end %>
                             <% end %>
                         </tbody>
                     </table>
