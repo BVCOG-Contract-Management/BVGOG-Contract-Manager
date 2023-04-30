@@ -2,14 +2,13 @@ class InvitationsController < Devise::InvitationsController
   before_action :configure_permitted_parameters
 
   def new
-    add_breadcrumb "Users", users_path
-    add_breadcrumb "Invite User", new_user_path
-    begin
-      OSO.authorize(current_user, 'write', User)
-    rescue Oso::Error => e
+    if current_user.level != UserLevel::ONE
       redirect_to users_url, alert: "You are not authorized to invite users."
       return
     end
+    add_breadcrumb "Users", users_path
+    add_breadcrumb "Invite User", new_user_path
+    
     super
   end
 
