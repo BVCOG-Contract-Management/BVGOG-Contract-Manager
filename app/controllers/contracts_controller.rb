@@ -3,10 +3,16 @@ class ContractsController < ApplicationController
 
   def expiry_reminder
     @contract = Contract.find(params[:id])
-    @contract.send_expiry_reminder
     respond_to do |format|
-      format.html { redirect_to contract_url(@contract), notice: 'Expiry reminder sucessfully sent.' }
-      format.json { render :show, status: :ok, location: @contract }
+      # If contract already expired, redirect to contract show page
+      if @contract.expired?
+        format.html { redirect_to contract_url(@contract), alert: 'Contract has already expired.' }
+        format.json { render json: { error: 'Contract has already expired.' }, status: :unprocessable_entity }
+      else
+        @contract.send_expiry_reminder
+        format.html { redirect_to contract_url(@contract), notice: 'Expiry reminder sucessfully sent.' }
+        format.json { render :show, status: :ok, location: @contract }
+      end
     end
   end
 
