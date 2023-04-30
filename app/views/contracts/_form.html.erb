@@ -67,9 +67,9 @@
                 <div class="column is-6">
                   <%# Dollar Amount %>
                   <div class="field">
-                    <%= form.label :amount_dollar %>
+                    <%= form.label :amount_dollar, "Dollar amount" %>
                     <p class="control has-icons-left">
-                      <%= form.number_field :amount_dollar, class: "input" %>
+                      <%= form.number_field :amount_dollar, class: "input", id: "contract-form-dollar-amount" %>
                       <span class="icon is-small is-left">
                         <i class="fas fa-dollar"></i>
                       </span>
