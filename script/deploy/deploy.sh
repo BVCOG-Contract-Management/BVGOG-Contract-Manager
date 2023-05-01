@@ -11,7 +11,6 @@ if ! dpkg -s libpq-dev >/dev/null 2>&1; then
   exit 1
 else 
     echo "libpq-dev is installed."
-    fi
 fi
 
 # Set environment variables
