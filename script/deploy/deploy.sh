@@ -58,11 +58,6 @@ bundle exec whenever --clear-crontab
 # Use whenever to update the crontab
 bundle exec whenever --update-crontab
 
-# Kill the server if it's running
-if [ -f tmp/pids/server.pid ]; then
-  kill -9 $(cat tmp/pids/server.pid)
-fi
-
 # Start the server in the background
 bundle exec rails server --daemon
 
