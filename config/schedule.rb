@@ -21,7 +21,6 @@
 
 set :output, "log/cron_log.log"
 env :PATH, ENV['PATH']
-set :bundle_command, "/Users/matanbroner/.rbenv/shims/bundle exec"
 
 EVERY_DAY_AT_5_AM = "0 5 * * *"
 FIRST_OF_EACH_MONTH = "0 0 1 * *"
