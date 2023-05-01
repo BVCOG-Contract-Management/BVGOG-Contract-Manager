@@ -21,6 +21,7 @@
 
 set :output, "log/cron_log.log"
 env :PATH, ENV['PATH']
+env :HOST, "54.173.238.151:3000"
 
 EVERY_DAY_AT_5_AM = "0 5 * * *"
 FIRST_OF_EACH_MONTH = "0 0 1 * *"
