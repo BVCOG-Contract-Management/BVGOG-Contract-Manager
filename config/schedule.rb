@@ -53,6 +53,6 @@ every FIRST_OF_EACH_MONTH do
 end
 
 # Test task every minute
-every 1.minute do
-    rake "contracts:test"
-end
+# every 1.minute do
+#     rake "contracts:test"
+# end
