@@ -82,7 +82,7 @@ namespace :contracts do
 
   # Test task for heroku
   desc 'Test task'
-  task test_task: :environment do
+  task test: :environment do
     # Create a dummy contract
     contract = Contract.new(
       title: "Test Contract Heroku #{SecureRandom.hex(5)}",
