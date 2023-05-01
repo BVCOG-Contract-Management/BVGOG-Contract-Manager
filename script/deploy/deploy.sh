@@ -47,7 +47,7 @@ stop_server() {
   if [ -f tmp/pids/server.pid ]; then
     local server_pid=$(cat tmp/pids/server.pid)
     echo "Stopping the server (PID: $server_pid)..."
-    kill "$server_pid"
+    kill "$server_pid" || true
     sleep 5
   fi
 }
