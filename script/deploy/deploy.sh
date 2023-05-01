@@ -52,6 +52,9 @@ fi
 # Precompile assets
 bundle exec rake assets:precompile
 
+# Use whenever to update the crontab
+bundle exec whenever --update-crontab
+
 # Start the server in the background
 bundle exec rails server --daemon
 
