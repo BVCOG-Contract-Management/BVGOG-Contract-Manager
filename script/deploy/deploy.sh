@@ -9,6 +9,9 @@ set -e
 if ! dpkg -s libpq-dev >/dev/null 2>&1; then
   echo "libpq-dev is not installed. Please install it with 'sudo apt-get install libpq-dev' and try again."
   exit 1
+else 
+    echo "libpq-dev is installed."
+    fi
 fi
 
 # Set environment variables
