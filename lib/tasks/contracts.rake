@@ -83,6 +83,11 @@ namespace :contracts do
   # Test task for heroku
   desc 'Test task'
   task test: :environment do
+    # Create a dummy vendor if none exist
+    unless Vendor.any?
+      vendor = Vendor.new(name: "Test Vendor Cron #{SecureRandom.hex(5)}")
+      vendor.save
+    end
     # Create a dummy contract
     contract = Contract.new(
       title: "Test Contract Heroku #{SecureRandom.hex(5)}",
@@ -105,5 +110,7 @@ namespace :contracts do
       updated_at: Date.today
     )
     contract.save
+    # Send an expiry reminder to test email
+    contract.send_expiry_reminder
   end
 end
