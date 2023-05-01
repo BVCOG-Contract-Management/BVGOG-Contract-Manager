@@ -36,6 +36,11 @@ class PagesController < ApplicationController
         # Check that path is valid, exists, is a directory, and is writable
         if File.directory?(bvcog_config_params[:contracts_path]) && File.writable?(bvcog_config_params[:contracts_path])
           @bvcog_config.contracts_path = bvcog_config_params[:contracts_path]
+          # Update all contract documents with new path
+          ContractDocument.all.each do |contract_document|
+            full_path = File.join(@bvcog_config.contracts_path, contract_document.file_name).to_s
+            contract_document.update(full_path: full_path)
+          end
         else
           @bvcog_config.errors.add(:contracts_path, "is invalid.")
         end
@@ -46,6 +51,11 @@ class PagesController < ApplicationController
         # Check that path is valid, exists, is a directory, and is writable
         if File.directory?(bvcog_config_params[:reports_path]) && File.writable?(bvcog_config_params[:reports_path])
           @bvcog_config.reports_path = bvcog_config_params[:reports_path]
+          # Update all report documents with new path
+          Report.all.each do |report|
+            full_path = File.join(@bvcog_config.reports_path, report.file_name).to_s
+            report.update(full_path: full_path)
+          end
         else
           @bvcog_config.errors.add(:reports_path, "is invalid.")
         end
@@ -58,6 +68,7 @@ class PagesController < ApplicationController
         # Create new programs
         new_programs.each do |program|
           # Check if program already exists
+          program = program.strip.titlecase
           if Program.where(name: program).count == 0
             Program.create(name: program)
           else 
@@ -73,6 +84,7 @@ class PagesController < ApplicationController
         # Create new entities
         new_entities.each do |entity|
           # Check if entity already exists
+          entity = entity.strip.titlecase
           if Entity.where(name: entity).count == 0
             Entity.create(name: entity)
           else
@@ -133,7 +145,6 @@ class PagesController < ApplicationController
         format.json { render json: @bvcog_config.errors, status: :unprocessable_entity }
       end
     rescue StandardError => e
-      raise e
       format.html { render 'pages/admin', alert: e.message }
       format.json { render json: @bvcog_config.errors, status: :unprocessable_entity }
     end

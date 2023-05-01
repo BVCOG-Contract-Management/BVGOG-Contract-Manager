@@ -79,11 +79,10 @@ Rails.application.configure do
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
 
-  # SendGrid
   ActionMailer::Base.default :from => ENV['MAIL_DEFAULT_FROM']
   ActionMailer::Base.smtp_settings = {
-    :user_name => 'apikey', # This is the string literal 'apikey', NOT the ID of your API key
-    :password => Rails.application.credentials.sendgrid_api_key, # This is the secret sendgrid API key which was issued during API key creation
+    :user_name => ENV['MAIL_USERNAME'],
+    :password => Rails.application.credentials.mail_password,
     :domain => ENV['MAIL_DOMAIN'],
     :address => ENV['MAIL_ADDRESS'],
     :port => 587,

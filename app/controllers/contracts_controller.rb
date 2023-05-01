@@ -3,10 +3,16 @@ class ContractsController < ApplicationController
 
   def expiry_reminder
     @contract = Contract.find(params[:id])
-    @contract.send_expiry_reminder
     respond_to do |format|
-      format.html { redirect_to contract_url(@contract), notice: 'Expiry reminder sucessfully sent.' }
-      format.json { render :show, status: :ok, location: @contract }
+      # If contract already expired, redirect to contract show page
+      if @contract.expired?
+        format.html { redirect_to contract_url(@contract), alert: 'Contract has already expired.' }
+        format.json { render json: { error: 'Contract has already expired.' }, status: :unprocessable_entity }
+      else
+        @contract.send_expiry_reminder
+        format.html { redirect_to contract_url(@contract), notice: 'Expiry reminder sucessfully sent.' }
+        format.json { render :show, status: :ok, location: @contract }
+      end
     end
   end
 
@@ -108,7 +114,6 @@ class ContractsController < ApplicationController
           end
         end
       rescue StandardError => e
-        raise e
         # If error type is Oso::ForbiddenError, then the user is not authorized
         if e.class == Oso::ForbiddenError
           status = :unauthorized
@@ -159,7 +164,7 @@ class ContractsController < ApplicationController
 
           # Excuse this monster if statement, it's just checking if the user is associated with the entity, and for
           # some reason nested-if statements don't work here when you use format (ie. UnkownFormat error)
-          elsif User.find(@contract.point_of_contact_id).level == UserLevel::THREE && !User.find(contract_params[:point_of_contact_id].present? ? contract_params[:point_of_contact_id] : @contract.point_of_contact_id).entities.include?(Entity.find(contract_params[:entity_id].present? ? contract_params[:entity_id] : @contract.entity_id))
+          elsif contract_params[:point_of_contact_id].present? && User.find(contract_params[:point_of_contact_id]).level == UserLevel::THREE && !User.find(contract_params[:point_of_contact_id]).entities.include?(Entity.find(contract_params[:entity_id].present? ? contract_params[:entity_id] : @contract.entity_id))
               @contract.errors.add(:base, User.find(contract_params[:point_of_contact_id].present? ? contract_params[:point_of_contact_id] : @contract.point_of_contact_id).full_name + ' is not associated with ' + Entity.find(contract_params[:entity_id].present? ? contract_params[:entity_id] : @contract.entity_id).name)
               format.html { render :edit, status: :unprocessable_entity }
               format.json { render json: @contract.errors, status: :unprocessable_entity }
@@ -281,6 +286,7 @@ class ContractsController < ApplicationController
     # Check if the vendor is new
     if params[:contract][:vendor_id] == 'new'
       # Create a new vendor
+
       # Make vendor name Name Case
       params[:contract][:new_vendor_name] = params[:contract][:new_vendor_name].titlecase
       vendor = Vendor.new(name: params[:contract][:new_vendor_name])
@@ -308,7 +314,7 @@ class ContractsController < ApplicationController
 
       # Write the file to the filesystem
       bvcog_config = BvcogConfig.last
-      File.open(Rails.root.join(bvcog_config.contracts_path, official_file_name), 'wb') do |file|
+      File.open(File.join(bvcog_config.contracts_path, official_file_name), 'wb') do |file|
         file.write(doc.read)
       end
       # Get document type
@@ -317,7 +323,7 @@ class ContractsController < ApplicationController
       contract_document = ContractDocument.new(
         orig_file_name: doc.original_filename,
         file_name: official_file_name,
-        full_path: Rails.root.join(bvcog_config.contracts_path, official_file_name).to_s,
+        full_path: File.join(bvcog_config.contracts_path, official_file_name).to_s,
         document_type: document_type
       )
       # Add the contract_document to the contract

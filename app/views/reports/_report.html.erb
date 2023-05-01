@@ -111,7 +111,7 @@
                                     <th>End Date</th>
                                 </tr>  
                             </thead>
-                            <% query_report_contracts(@report).each do |contract| %>
+                            <% @report.query_filtered_report_contracts.each do |contract| %>
                                 <tr>
                                     <td>
                                         <%= link_to contract.title, contract_path(contract) %>

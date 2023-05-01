@@ -19,10 +19,8 @@ class UsersController < ApplicationController
 
   # GET /users/new
   def new
-    add_breadcrumb "Users", users_path
-    add_breadcrumb "Invite User", new_user_path
-
-    @user = User.new
+    # Redirect to index, this page is not used
+    redirect_to users_path, alert: "You do not have permission to access this page."
   end
 
   # GET /users/1/edit
