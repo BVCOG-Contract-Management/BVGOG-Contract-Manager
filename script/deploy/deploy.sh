@@ -5,6 +5,12 @@
 # Exit on error
 set -e
 
+# Fail if libpq-dev is not installed
+if ! dpkg -s libpq-dev >/dev/null 2>&1; then
+  echo "libpq-dev is not installed. Please install it with 'sudo apt-get install libpq-dev' and try again."
+  exit 1
+fi
+
 # Set environment variables
 
 # General settings
@@ -12,7 +18,12 @@ export HOST=54.173.238.151:3000
 export LANG=en_US.UTF-8
 
 # Database settings
-export DATABASE_URL=postgres://localhost:5432/bvcog
+export DB_USERNAME=postgres
+export DB_PASSWORD=postgres
+export DB_HOST=localhost
+export DB_PORT=5432
+export DB_NAME=bvcog
+export DATABASE_URL=postgres://$DB_USERNAME:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME
 
 # Rails environment
 export RAILS_ENV=production
@@ -31,9 +42,6 @@ export MAIL_USERNAME=apikey
 # Install dependencies
 bundle install
 
-# Install PSQL client
-apt-get install libpq-dev
-
 # Run database setup if no --skip-db-setup flag is passed
 if [ "$1" != "--skip-db-setup" ]; then
   bundle exec rake db:create db:migrate db:seed
@@ -42,7 +50,7 @@ fi
 # Precompile assets
 bundle exec rake assets:precompile
 
-# Start the server
-rvmsudo rails s -p 80
+# Start the server in the background
+bundle exec rails server --daemon
 
 
