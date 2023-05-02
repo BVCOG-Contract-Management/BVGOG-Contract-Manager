@@ -3,7 +3,7 @@
 
 <img src="./app/assets/images/bvcog-logo.png" alt="BVCOG Logo" width="200"/>
 
-# BVGOG-Contract-Manager
+# BVCOG-Contract-Manager
 Full-Stack source code for the BVCOG Contract Management Platform (CMS)
 
 ## Getting Started
