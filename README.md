@@ -1,3 +1,8 @@
+<!-- Github Actions Build Status -->
+![Build Status](https://github.com/github/docs/actions/workflows/ruby.yml/badge.svg)
+
+<img src="app/assets/bvcog-logo.png" alt="BVCOG Logo" width="200"/>
+
 # BVGOG-Contract-Manager
 Full-Stack source code for the BVCOG Contract Management Platform (CMS)
 
