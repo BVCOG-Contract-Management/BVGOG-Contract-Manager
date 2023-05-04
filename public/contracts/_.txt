@@ -1,0 +1,2 @@
+This file makes sure that the /contracts directory is checked in
+and deployed to Heroku.

@@ -39,121 +39,12 @@ class ReportsController < ApplicationController
   # POST /reports or /reports.json
   def create
     @report = Report.new(report_params)
-
-    # Here we will assign the "created_by" attribute to be the current logged in user
-    # First we need to fix up authentication
-    # For now default to the first user (id = 1)
-    @report.created_by = User.find(1).id
-
-    bvcog_config = BvcogConfig.last
-
-    # Here we will generate the file path and PDF file
-    # For now, we will just create the path
-    @report.file_name = "#{SecureRandom.uuid}.pdf"
-    @report.full_path = Rails.root.join(bvcog_config.reports_path, @report.file_name).to_s
-
-    contracts = []
-    # Collect contracts if needed
-    contracts = query_report_contracts(@report) if @report.report_type == ReportType::CONTRACTS
-
-    # Build the PDF
-    report_pdf = Prawn::Document.new(page_size: 'A4', page_layout: :landscape)
-    report_pdf.text @report.title, align: :center, size: 24, style: :bold
-    report_pdf.move_down 20
+    @report.created_by = current_user.id
     if @report.report_type == ReportType::CONTRACTS
-      # Build the contracts report
-      # List the filters that were chosen
-      report_pdf.text 'Filters', align: :center, size: 18, style: :bold
-      report_pdf.move_down 10
-      table_data = []
-      table_data << ['Entity', 'Program', 'Point of Contact', 'Expiring in Days']
-      poc = User.find(@report.point_of_contact_id) if @report.point_of_contact_id.present?
-      table_data << [
-        @report.entity_id.present? ? Entity.find(@report.entity_id).name : 'All',
-        @report.program_id.present? ? Program.find(@report.program_id).name : 'All',
-        @report.point_of_contact_id.present? ? "#{poc.first_name} #{poc.last_name}" : 'All',
-        @report.expiring_in_days.present? ? @report.expiring_in_days : 'All'
-      ]
-      # Add the table to the PDF
-      report_pdf.table table_data, header: true, width: report_pdf.bounds.width do
-        row(0).font_style = :bold
-        columns(0..3).align = :center
-        self.row_colors = %w[DDDDDD FFFFFF]
-      end
-      report_pdf.move_down 20
-      # List the contracts
-      report_pdf.text 'Contracts', align: :center, size: 18, style: :bold
-      report_pdf.move_down 10
-      table_data = []
-      table_data << ['Entity', 'Program', 'Contract Title', 'Contract Number', 'Vendor', 'Contract Type',
-                     'Contract Amount', 'Expiration Date']
-      contracts.each do |contract|
-        table_data << [
-          contract.entity.name,
-          contract.program.name,
-          contract.title,
-          contract.number,
-          contract.vendor.name,
-          contract.contract_type_humanize,
-          "$#{contract.amount_dollar} per #{contract.amount_duration_humanize}",
-          contract.ends_at.strftime('%m/%d/%Y')
-        ]
-      end
-      # Add the table to the PDF
-      report_pdf.table table_data, header: true, width: report_pdf.bounds.width do
-        row(0).font_style = :bold
-        columns(0..7).align = :center
-        self.row_colors = %w[DDDDDD FFFFFF]
-        self.header = true
-      end
+      @report.generate_standard_contracts_report
     elsif @report.report_type == ReportType::USERS
-      # Collect users by active and not active
-      active_users = User.where(is_active: true)
-      inactive_users = User.where(is_active: false)
-      # Build two tables
-      report_pdf.text 'Active users', align: :center, size: 18, style: :bold
-      report_pdf.move_down 10
-      table_data = []
-      table_data << ['First Name', 'Last Name', 'Program', 'Access Level']
-      active_users.each do |user|
-        table_data << [
-          user.first_name,
-          user.last_name,
-          # TODO: fix this to show the program name after users have been assigned to programs
-          'Dummy Program Name',
-          "Level #{user.level}"
-        ]
-      end
-      # Add the table to the PDF
-      report_pdf.table table_data, header: true, width: report_pdf.bounds.width do
-        row(0).font_style = :bold
-        columns(0..3).align = :center
-        self.row_colors = %w[DDDDDD FFFFFF]
-        self.header = true
-      end
-      report_pdf.move_down 20
-      report_pdf.text 'Inactive users', align: :center, size: 18, style: :bold
-      report_pdf.move_down 10
-      table_data = []
-      table_data << ['First Name', 'Last Name', 'Program', 'Access Level']
-      inactive_users.each do |user|
-        table_data << [
-          user.first_name,
-          user.last_name,
-          user.program.name,
-          user.access_level_humanize
-        ]
-      end
-      # Add the table to the PDF
-      report_pdf.table table_data, header: true, width: report_pdf.bounds.width do
-        row(0).font_style = :bold
-        columns(0..3).align = :center
-        self.row_colors = %w[DDDDDD FFFFFF]
-        self.header = true
-      end
+      @report.generate_standard_users_report
     end
-    # Save the PDF
-    report_pdf.render_file @report.full_path
 
     respond_to do |format|
       if @report.save
@@ -184,29 +75,33 @@ class ReportsController < ApplicationController
   # end
 
   def download
-    # Send the file to the user
-    send_file @report.full_path, type: 'application/pdf', x_sendfile: true
+
+    # If the report file does not exist, redirect to the report show page
+    if !File.exist?(@report.full_path)
+      redirect_to report_path(@report), alert: "The report file does not exist."
+    else
+      # Send the file to the user
+      send_file @report.full_path, type: "application/pdf", x_sendfile: true
+    end
+
   end
 
   private
 
-  # Use callbacks to share common setup or constraints between actions.
-  def set_report
-    @report = Report.find(params[:id])
-  end
 
-  # Only allow a list of trusted parameters through.
-  def report_params
-    allowed = %i[
-      title
-      file_path
-      full_path
-      report_type
-      point_of_contact_id
-      entity_id
-      program_id
-      expiring_in_days
-    ]
-    params.fetch(:report, {}).permit(allowed)
-  end
+    # Only allow a list of trusted parameters through.
+    def report_params
+      allowed = [
+        :title,
+        :file_path,
+        :full_path,
+        :report_type,
+        :point_of_contact_id,
+        :entity_id,
+        :program_id,
+        :expiring_in_days,
+        :show_expired_contracts,
+      ]
+      params.fetch(:report, {}).permit(allowed)
+    end
 end

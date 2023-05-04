@@ -1,0 +1,253 @@
+<% content_for :title do %>
+  Administration
+<% end %>
+
+<div id="admin-form">
+  <div class="card">
+
+    <%# Card header %>
+    <header class="card-header">
+      <p class="card-header-title">
+        BVCOG CMS Configuration
+      </p>
+    </header>
+
+
+    <%# Form %>
+    <%= form_with(model: @bvcog_config, url: admin_path, method: :put, data: { turbo: false }) do |form| %>
+    <%# Card content %>
+    <div class="card-content">
+          <div class="content">
+            <p>
+              <strong>
+                This page is for configuring the BVCOG CMS.  Please use caution when making changes.
+              </strong>
+            </p>
+          </div>
+
+          <%# Errors %>
+          <% if @bvcog_config.errors.any? %>
+              <article class="message is-danger">
+                <div class="message-header">
+                  <p><%= pluralize(@bvcog_config.errors.count, "error") %> prohibited this configuration from being saved:</p>
+                </div>
+                <div class="message-body">
+                  <ul>
+                    <% @bvcog_config.errors.full_messages.each do |message| %>
+                      <li><%= message %></li>
+                    <% end %>
+                  </ul>
+                </div>
+              </article>
+          <% end %>
+
+          <%# Form starts here %>
+              
+          <%# Contract Document Storage %>
+          <div class="field">
+            <%= form.label :contracts_path, class: "directory-input-label" do %>
+              <div class="icon-text">
+                <span class="icon has-text-info" id="directory-contracts-upload-modal-open-btn">
+                  <i class="fas fa-circle-info"></i>
+                </span>
+                <span>Contract Document Storage</span>
+              </div>
+            <% end %>
+              <span class="help">
+                Click the information icon above for more information.
+              </span>
+              <p class="control">
+                <%= form.text_field :contracts_path, class: "input" %>
+              </p>
+          </div>
+
+          <%# Reports Document Storage %>
+          <div class="field">
+            <%= form.label :reports_path, class: "directory-input-label" do %>
+              <div class="icon-text">
+                <span class="icon has-text-info" id="directory-reports-upload-modal-open-btn">
+                  <i class="fas fa-circle-info"></i>
+                </span>
+                <span>Reports Storage</span>
+              </div>
+            <% end %>
+              <span class="help">
+                Click the information icon above for more information.
+              </span>
+              <p class="control">
+                <%= form.text_field :reports_path, class: "input" %>
+              </p>
+          </div>
+
+          <div class="columns">
+            <div class="column is-6">
+              <div class="field">
+
+                <%# New Programs %>
+                <%= form.label :new_programs, "Add Programs" %>
+                  <p class="control add-resource-field" id="new_programs">
+                    <input type="text" class="input" id="new_program" placeholder="Program Name">
+                    <%# Plus Button %>
+                    <button class="button is-primary" id="add_program">
+                      <span class="icon">
+                        <i class="fas fa-plus"></i>
+                      </span>
+                    </button>
+                  </p>
+              </div>
+
+              <%#  Hidden field for new programs %>
+              <%= form.text_field :new_programs, id: "new_programs_field", class: "is-hidden" %>
+
+              <table class="table is-fullwidth">
+                <tbody id="new_programs_table">
+                </tbody>
+              </table>
+
+              <%# Delete Programs %>
+              <div class="field">
+                <%= form.label :delete_programs, "Delete Programs" %>
+                <table class="table is-hoverable is-fullwidth">
+                  <tbody>
+                    <% Program.all.each do |program| %>
+                    <tr>
+                      <td><%= program.name %></td>
+                      <td><%= form.check_box :delete_programs, { multiple: true }, program.id, nil %></td>
+                    </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="column is-6">
+              <div class="field">
+
+                <%# New Entities %>
+                <%= form.label :new_entities, "Add Entities" %>
+                  <p class="control add-resource-field" id="new_entities">
+                    <input type="text" class="input" id="new_entity" placeholder="Entity Name">
+                    <%# Plus Button %>
+                    <button class="button is-primary" id="add_entity">
+                      <span class="icon">
+                        <i class="fas fa-plus"></i>
+                      </span>
+                    </button>
+                  </p>
+              </div>
+
+              <%#  Hidden field for new entities %>
+              <%= form.text_field :new_entities, id: "new_entities_field", class: "is-hidden" %>
+
+              <table class="table is-fullwidth">
+                <tbody id="new_entities_table">
+                </tbody>
+              </table>
+
+              <%# Delete Entities %>
+              <div class="field">
+                <%= form.label :delete_entities, "Delete Entities" %>
+                <table class="table is-hoverable is-fullwidth">
+                  <tbody>
+                    <% Entity.all.each do |entity| %>
+                    <tr>
+                      <td><%= entity.name %></td>
+                      <td><%= form.check_box :delete_entities, { multiple: true }, entity.id, nil %></td>
+                    </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        <%# Automated Expiration Users %>
+              <div class="field">
+                <%= form.label :user_ids, "Automated Expiration Report Recipients" %>
+                <div class="columns">
+                    <% User.all.each_slice((User.count/4.0).ceil) do |user_group| %>
+                    <div class="column">
+                      <table class="table is-hoverable">
+                        <tbody>
+                          <% user_group.each do |user| %>
+                            <tr>
+                              <td><%= user.full_name %></td>
+                              <td><%= form.check_box :user_ids, { multiple: true }, user.id, nil  %></td>
+                            </tr>
+                          <% end %>
+                        </tbody>
+                      </table>
+                    </div>
+                    <% end %>
+                </div>
+              </div>
+    </div>
+
+    <%# Card Footer %>
+    <footer class="card-footer">
+      <div class="card-footer-item">
+        <%= form.submit "Save", class: "button is-primary" %>
+      </div>
+    </footer>
+
+    <% end %>
+      
+    
+  </div>
+
+
+<%# Directory Upload Explanation Modal %>
+<div class="modal" id="directory-contracts-upload-modal">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+        <div class="icon-text">
+          <span class="icon">
+            <i class="fas fa-folder-open"></i>
+          </span>
+          <p class="modal-card-title">Contract Documents Directory</p>
+        </div>
+    </header>
+    <section class="modal-card-body">
+      <div class="content">
+        This directory is where uploaded contract documents will be stored.
+        <hr>
+        Note that this directory must be accessible and writable by the web server.
+        <br>
+        Also, existing uploaded contract documents will not be moved to this directory.
+        Please be sure to contact an IT personell to move existing contract documents to this directory.
+      </div>
+    </section>
+    <footer class="modal-card-foot">
+      <button class="button modal-close-btn">Close</button>
+    </footer>
+  </div>
+</div>
+
+<%# Directory Upload Explanation Modal %>
+<div class="modal" id="directory-reports-upload-modal">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+        <div class="icon-text">
+          <span class="icon">
+            <i class="fas fa-folder-open"></i>
+          </span>
+          <p class="modal-card-title">Reports Directory</p>
+        </div>
+    </header>
+    <section class="modal-card-body">
+      <div class="content">
+        This directory is where generated reports will be stored.
+        <hr>
+        Note that this directory must be accessible and writable by the web server.
+        <br>
+        Also, existing reports will not be moved to this directory.
+        Please be sure to contact an IT personell to move existing reports to this directory.
+      </div>
+    </section>
+    <footer class="modal-card-foot">
+      <button class="button modal-close-btn">Close</button>
+    </footer>
+  </div>
+</div>
