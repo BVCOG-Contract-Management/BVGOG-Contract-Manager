@@ -17,13 +17,13 @@
         <% page[:subpaths].each do |item| %>
           <% if url_for(only_path: true) == item[:path] %>
             <%= link_to url_for(item[:path]), "data-turbo-method": item[:method].present? ? item[:method] : :get , class: "sidebar-item has-background-light menu-item has-text-black-bis" do %>
-              <%= raw("<i class=\"fa-solid fa-#{item[:icon]}\"></i>") %>
+              <%= raw("<i class=\"fa-regular fa-#{item[:icon]}\"></i>") %>
               <%= item[:name] %>
             <% end %>
 
           <% else %>
             <%= link_to url_for(item[:path]), "data-turbo-method": item[:method].present? ? item[:method] : :get , class: "sidebar-item  menu-item has-text-light" do %>
-                <i class="fa-solid fa-<%= item[:icon] %>"></i>
+                <i class="fa-regular fa-<%= item[:icon] %>"></i>
               <%= item[:name] %>
             <% end %>
           <% end %>

@@ -35,9 +35,5 @@ class Contract < ApplicationRecord
     ContractMailer.expiry_reminder(self).deliver_now
   end
 
-  def expired?
-    ends_at < Date.today
-  end
-
   public :send_expiry_reminder
 end

@@ -50,3 +50,7 @@ end
 When('I select {string} from the point of contact dropdown') do |point_of_contact|
   select point_of_contact, from: 'contract[point_of_contact_id]'
 end
+
+When('I follow \/contract_documents\/{int}"') do |int|
+  visit "/contract_documents/#{int}"
+end

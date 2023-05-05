@@ -7,6 +7,8 @@ Feature: Add a new contract
 Background:
   Given db is set up
   Given an example user exists
+  Given bvcog_config is set up
+  Given I am logged in as a level 1 user
 
 
 Scenario: Sucessfully create contracts report
@@ -18,6 +20,15 @@ Scenario: Sucessfully create contracts report
   And I select "Example User" from the "report[point_of_contact_id]" select box
   And I press "Create Report"
   Then I should see "Report was successfully created."
+
+Scenario: view reports auto-redirects to new report
+  Given I am on the reports page
+  Then I should be on the new report page
+
+Scenario: Edit reports auto-redirects to a new report
+  Given 2 example reports exist
+  When I try to edit report 1
+  Then my url should be "/reports/1"
 
 Scenario: Fail to create report
   Given I am on the new report page
@@ -35,6 +46,24 @@ Scenario: Sucessfully create users report
   And I fill in "report[title]" with "Example User Report"
   And I press "Create Report"
   Then I should see "Report was successfully created."
+
+@wip
+Scenario: Delete a report
+  Given 2 example reports exist
+  Given I send a DELETE request to "/reports/1"
+  Then I should see "You are being redirected."
+
+Scenario: Update a report
+  Given 2 example reports exist
+  Given I send a PUT request to "/reports/1"
+  Then I should see "You are being redirected."
+
+Scenario: Download a report
+  Given I am on the new report page
+  And I follow "Users Report"
+  And I fill in "report[title]" with "Example User Report"
+  And I press "Create Report"
+  And I follow "Export to PDF"
 
 
 
