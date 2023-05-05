@@ -86,7 +86,7 @@ Rails.application.configure do
     :domain => ENV['MAIL_DOMAIN'],
     :address => ENV['MAIL_ADDRESS'],
     :port => 587,
-    :authentication => :plain,
+    :authentication => :login,
     :enable_starttls_auto => true
   }
   ActionMailer::Base.delivery_method = :smtp
