@@ -66,7 +66,6 @@ RSpec.describe '/users', type: :request do
     end
   end
 
-
   describe 'GET /new' do
     it 'renders a successful response' do
       get new_user_url
@@ -76,7 +75,6 @@ RSpec.describe '/users', type: :request do
 
   describe 'GET /edit' do
     it 'renders a successful response' do
-
       user = User.create! valid_attributes
       get edit_user_url(user)
       expect(response).to be_successful

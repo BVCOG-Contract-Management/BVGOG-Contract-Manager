@@ -36,15 +36,11 @@
                             </tr>
                             <tr>
                                 <td><strong>Point of Contact:</strong></td>
-                                <td>
-                                <%= link_to @contract.point_of_contact.full_name, user_path(@contract.point_of_contact) %>
-                                </td>
+                                <td><%= @contract.point_of_contact.first_name %> <%= @contract.point_of_contact.last_name %></td>
                             </tr>
                             <tr>
                                 <td><strong>Vendor:</strong></td>
-                                <td>
-                                <%= link_to @contract.vendor.name, vendor_path(@contract.vendor) %>
-                                </td>
+                                <td><%= @contract.vendor.name %></td>
                             </tr>
                             <tr>
                                 <td><strong>Entity:</strong></td>
@@ -90,9 +86,15 @@
                         <%= link_to contract_path(@contract, params: { contract: { contract_status: contract_opposite_status(@contract) } }), data: { "turbo-method": :put }, class: "card-footer-item", id: "card-change-status" do %>
                             <span>
                                 <% if @contract.contract_status == ContractStatus::IN_PROGRESS %>
-                                    <span>Set to "Approved"</span>
+                                    <span class="icon">
+                                        <i class="fas fa-check"></i>
+                                    </span>
+                                    <span>Approve this contract</span>
                                 <% else %>
-                                    <span>Set to "In Review"</span>
+                                    <span class="icon">
+                                        <i class="fas fa-clock"></i>
+                                    </span>
+                                    <span>Set contract to pending review</span>
                                 <% end %>
                         <% end %>
                     <% end %>
@@ -135,7 +137,7 @@
                             <span class="icon">
                                 <i class="fas fa-file"></i>
                             </span>
-                            Contract Documents
+                            Contract Files
                         </p>
                     </header>
                     <div class="card-content is-paddingless">

@@ -19,7 +19,7 @@
           <%= form_with(url: users_path, method: "GET", data: { controller: "form-submission", turbo_frame: "users", turbo_action: "advance" }) do |form| %>
             <%= form.text_field :search, data: { action: "input->form-submission#search" }, class: "input", placeholder: "Search by first or last name", value: params[:search], autofocus: !params[:search].blank? , id: "search-input" %>
           <% end %>
-          <% if current_user.level == UserLevel::ONE %>
+          <% if current_user.level != UserLevel::THREE %>
             <%= link_to "Invite a user", new_user_path, class: "button is-primary" %>
           <% end %>
           </div>
@@ -31,19 +31,10 @@
     <table class="table table is-striped is-hoverable is-fullwidth">
       <thead>
         <tr>
-        <% columns = [["First Name", "first_name"], ["Last Name", "last_name"], ["Level", "level"], ["Program", "program"], ["Program Manager", "is_program_manager"]] %>
+        <% columns = [["First Name", "first_name"], ["Last Name", "last_name"], ["Level", "level"], ["Program", "program"]] %>
         <% columns.each do |col| %>
           <th>
             <%= link_to col[0], sort: col[1], order: (params[:order] == "asc" ? "desc" : "asc") %>
-            <% if params[:order] == "asc" and params[:sort] == col[1] %>
-              <span class="icon">
-                <i class="fas fa-sort-up"></i>
-              </span>
-            <% elsif params[:order] == "desc" and params[:sort] == col[1] %>
-              <span class="icon">
-                <i class="fas fa-sort-down"></i>
-              </span>
-            <% end %>
           </th>
         <% end %>
       </tr>
@@ -55,17 +46,9 @@
             <td><%= user.last_name %></td>
             <td><%= user.level_int %></td>
             <% if user.program.blank? %>
-              <td><%= "N/A" %></td>
-              <td><%= "N/A" %>
+              <td><%= "-" %></td>
             <% else %>
               <td><%= user.program.name %></td>
-              <td>
-                <% if user.is_program_manager %>
-                    <span class="tag is-success">Yes</span>
-                <% else %>
-                    <span class="tag is-danger">No</span>
-                <% end %>
-            </td>
             <% end %>
           </tr>
         <% end %>

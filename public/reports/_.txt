@@ -1,2 +1,0 @@
-This file makes sure that the /reports directory is checked in
-and deployed to Heroku.

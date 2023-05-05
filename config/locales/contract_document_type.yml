@@ -1,9 +1,0 @@
-en:
-  enumerations:
-    contract_document_type:
-      contract: 'Contract'
-      cost_analysis: 'Cost analysis'
-      debarment: 'Debarment'
-      procurement: 'Procurement'
-      insurance: 'Insurance'
-      other: 'Other'

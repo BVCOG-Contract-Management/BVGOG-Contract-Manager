@@ -1,6 +1,6 @@
 <div id="user-show">
     <div class="columns is-desktop">
-        <div class="column is-8">
+        <div class="column is-6">
             <div class="card">
                 <header class="card-header">
                     <p class="card-header-title">
@@ -46,16 +46,6 @@
                                     <% end %>
                                 </td>
                             </tr>
-                            <tr>
-                                <td><strong>Invitation Accepted:</strong></td>
-                                <td>
-                                    <% if @user.invitation_accepted_at.present? %>
-                                        <span class="tag is-success">Yes</span>
-                                    <% else %>
-                                        <span class="tag is-danger">No</span>
-                                    <% end %>
-                                </td>
-                            </tr>
                             <% if user.redirect_user_id.present? %>
                                 <tr>
                                     <td><strong>Redirected to:</strong></td>
@@ -65,7 +55,7 @@
                         </tbody>
                     </table>
                 </div>
-                <% if current_user.level == UserLevel::ONE %>
+                <% if current_user.level != UserLevel::THREE %>
                     <footer class="card-footer">
                         <%= link_to "Edit this user", edit_user_path(@user), class: "card-footer-item" %>
                         <div class= "card-footer-item" id="redirect-user-modal-open-btn">
@@ -73,14 +63,11 @@
                         </div>
                         <div class= "card-footer-item" id="disable-user-modal-open-btn">
                             <% if @user.is_active %>
-                                Deactivate this user
+                                Disable this user
                             <% else %>
-                                Activate this user
+                                Enable this user
                             <% end %>
                         </div>
-                        <% if !@user.invitation_accepted_at.present? %>
-                            <%= link_to "Resend invitation", reinvite_user_path(@user), method: :get, class: "card-footer-item" %>
-                        <% end %>
                     </footer>
                 <% end %>
             </div>
@@ -93,17 +80,17 @@
   <div class="modal-card">
     <header class="modal-card-head">
         <% if @user.is_active %>
-            <p class="modal-card-title">Deactivate <%= @user.full_name %></p>
+            <p class="modal-card-title">Disable <%= @user.full_name %></p>
         <% else %>
-            <p class="modal-card-title">Activate <%= @user.full_name %></p>
+            <p class="modal-card-title">Enable <%= @user.full_name %></p>
         <% end %>
     </header>
     <section class="modal-card-body">
       <% if @user.is_active %>
-            <p><strong>Are you sure you want to deactivate <%= @user.full_name %>?</strong></p>
+            <p><strong>Are you sure you want to disable <%= @user.full_name %>?</strong></p>
             <p>This will prevent them from logging in and using the system.</p>
         <% else %>
-            <p><strong>Are you sure you want to activate <%= @user.full_name %>?</strong></p>
+            <p><strong>Are you sure you want to enable <%= @user.full_name %>?</strong></p>
             <p>This will allow them to log in and use the system.</p>
             <p>Note that reactivated users that have been redirected will have their redirection removed.</p>
         <% end %>
@@ -111,9 +98,9 @@
     <footer class="modal-card-foot">
     <%= link_to user_path(@user, params: { user: { is_active: !@user.is_active } }), data: { "turbo-method": :put }, class: @user.is_active ? "button is-danger" : "button is-success" do %>
         <% if @user.is_active %>
-            Deactivate
+            Disable
         <% else %>
-            Activate
+            Enable
         <% end %>
     <% end %>
       <button class="button modal-close-btn">Cancel</button>

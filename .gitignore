@@ -12,7 +12,6 @@
 
 *.log
 *.sqlite3
-
 temp.*
 # Used by dotenv library to load environment variables.
 # .env
@@ -61,8 +60,5 @@ build-iPhoneSimulator/
 
 .DS_Store
 
-
-public/contracts/*
-public/reports/*
-/config/master.key
-
+public/contracts
+public/reports
