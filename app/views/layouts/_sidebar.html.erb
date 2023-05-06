@@ -1,12 +1,12 @@
 <% # This is the main application sidebar %>
 <% # It should have a tab highlighted depending on the active page %>
 
-<% # The sidebar is a Bulma panel %> 
+<% # The sidebar is a Bulma panel %>
 <% # https://bulma.io/documentation/components/panel/ %>
 
 <div>
   <div id="sidebar-header" class="sidebar-logo">
-    <h3 class="subtitle is-6">Contract Manager</h3>
+      <%= image_tag('bvcog-logo', style: 'height: 50px;') %>
   </div>
   <aside class="sidebar-main menu">
     <% page_list.each do |page| %>
@@ -15,16 +15,18 @@
       </p>
       <ul class="menu-list">
         <% page[:subpaths].each do |item| %>
-          <% if url_for(only_path: true) == item[:path] then %>
-            <a href="<% item[:path] %>" class="sidebar-item has-background-light menu-item has-text-black-bis">
+          <% if url_for(only_path: true) == item[:path] %>
+            <%= link_to url_for(item[:path]), "data-turbo-method": item[:method].present? ? item[:method] : :get , class: "sidebar-item has-background-light menu-item has-text-black-bis" do %>
+              <%= raw("<i class=\"fa-regular fa-#{item[:icon]}\"></i>") %>
+              <%= item[:name] %>
+            <% end %>
+
           <% else %>
-            <a href="<% item[:path] %>" class="sidebar-item menu-item has-text-link-light">
+            <%= link_to url_for(item[:path]), "data-turbo-method": item[:method].present? ? item[:method] : :get , class: "sidebar-item  menu-item has-text-light" do %>
+                <i class="fa-regular fa-<%= item[:icon] %>"></i>
+              <%= item[:name] %>
+            <% end %>
           <% end %>
-            <span class="icon">
-              <i class="fa-regular fa-<%= item[:icon] %>"></i>
-            </span>
-            <%= item[:name] %>
-          </a>
         <% end %>
       </ul>
     <% end %>

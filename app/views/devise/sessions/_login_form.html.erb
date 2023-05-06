@@ -1,0 +1,23 @@
+<%= form_for(resource, as: resource_name, url: session_path(resource_name), validate:true) do |f| %>
+  <div class="field">
+    <%= f.label :email, style: "display: block" %>
+    <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "input" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :password, style: "display: block" %>
+    <%= f.password_field :password, autocomplete: "current-password", class: "input"  %>
+  </div>
+
+  <% if devise_mapping.rememberable? %>
+    <div class="field">
+      <%= f.check_box :remember_me %>
+      <%= f.label :remember_me %>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit "Log In", class: "button is-success"%>
+    <%= render "devise/shared/links" %>
+  </div>
+<% end %>

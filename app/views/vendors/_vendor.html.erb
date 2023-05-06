@@ -1,0 +1,129 @@
+<div id="vendor-show">
+  <div class="columns is-desktop">
+    <div class="column is-6">
+      <div class="card">
+        <header class="card-header">
+          <p class="card-header-title">
+            Vendor Details
+          </p>
+        </header>
+        <div class="card-content is-paddingless">
+          <table class="table is-striped is-hoverable is-fullwidth">
+            <tbody>
+              <tr>
+                <td><strong>Name:</strong></td>
+                <td><%= @vendor.name %></td>
+              </tr>
+              <tr>
+                <td><strong>Total Reviews:</strong></td>
+                <td><%= @vendor.vendor_reviews.count %></td>
+              </tr>
+              <tr>
+                <td><strong>Last Reviewer:</strong></td>
+                <td><%= @vendor.vendor_reviews.empty? ? "N/A" : @vendor.vendor_reviews.last.user.full_name %></td>
+              </tr>
+              <tr>
+                <td><strong>Average Rating:</strong></td>
+                <td>
+                  <%= average_rating_stars(vendor) %>
+                  (<%= vendor.vendor_reviews.average(:rating).to_f.round(1) %>)
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <footer class="card-footer">
+          <%= link_to "Review this vendor", review_vendor_path(@vendor), class: "card-footer-item" %>
+        </footer>
+      </div>
+    </div>
+    <div class="column is-4">
+      <div class="card">
+        <header class="card-header">
+          <p class="card-header-title">
+            <span class="icon">
+              <i class="fas fa-commenting"></i>
+            </span>
+            Latest Review of <%= @vendor.name %>
+          </p>
+        </header>
+        <div class="card-content is-paddingless">
+          <table class="table is-striped is-hoverable is-fullwidth">
+            <tbody>
+              <tr>
+                <td><strong>Rating:</strong></td>
+                <td><%= @vendor.vendor_reviews.empty? ? "N/A" : stars_html(@vendor.vendor_reviews.last.rating) %></td>
+              </tr>
+              <tr>
+                <td><strong>Reviewer:</strong></td>
+                <td><%= @vendor.vendor_reviews.empty? ? "N/A" : @vendor.vendor_reviews.last.user.full_name %></td>
+              </tr>
+              <tr>
+                <td><strong>Review Date:</strong></td>
+                <td><%= @vendor.vendor_reviews.empty? ? "N/A" : @vendor.vendor_reviews.last.created_at.strftime("%B %d, %Y") %></td>
+              </tr>
+              <tr>
+                <td><strong>Description:</strong></td>
+                <td>
+                  <div style="max-height: 65px; overflow-y: scroll;">
+                    <%= @vendor.vendor_reviews.empty? ? "N/A" : @vendor.vendor_reviews.last.description %>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="columns is-desktop">
+   
+    <div class="column is-6">
+      <div class="card">
+        <header class="card-header">
+          <p class="card-header-title">
+            <span class="icon">
+              <i class="fas fa-comments"></i>
+            </span>
+            Reviews of <%= @vendor.name %>
+          </p>
+        </header>
+        <div class="card-content">
+            <% @vendor.vendor_reviews.sort_by(&:created_at).reverse.each do |review| %>
+              <p style="margin-bottom: 5px;">
+                <%= review.created_at.strftime("%B %d, %Y") %>
+              </p>
+              <%= stars_html(review.rating) %>
+              <p style="margin-top: 5px;">
+              <strong><%= review.user.full_name %></strong> says...
+              </p>
+              <p>
+                "<%= review.description %>"
+              </p>
+
+              <hr/>
+            <% end %>
+        </div>
+      </div>
+    </div>
+
+    <%# Bar Percenateg Graph Column %>
+    <div class="column is-4">
+      <div class="card">
+        <header class="card-header">
+          <p class="card-header-title">
+            <span class="icon">
+              <i class="fas fa-bar-chart"></i>
+            </span>
+            Review Metrics for <%= @vendor.name %>
+          </p>
+        </header>
+        <div class="card-content">
+            <%= bar_chart_reviews_html(@vendor) %>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

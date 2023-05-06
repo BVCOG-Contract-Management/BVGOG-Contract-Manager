@@ -17,15 +17,11 @@
 }
 
 #sidebar-header {
-  background-color: $aside-header-background-color;
+  background-color: $header-background-color;
   border-bottom: $aside-border;
-  padding: $aside-header-padding;
+  padding: $header-padding;
+  height: $header-height;
   border: none;
   display: flex;
   justify-content: center;
-  flex-direction: column;
-  text-align: center;
-  h3 {
-    color: $aside-header-text-color;
-  }
 }

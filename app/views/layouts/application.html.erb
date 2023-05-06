@@ -8,7 +8,7 @@
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
-    
+
     <% # Bulma CSS %>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
@@ -23,16 +23,42 @@
   </head>
 
   <body>
+
+
       <div class="columns">
-        <div id="sidebar-column" class="column is-2 is-paddingless">
-          <%= render partial: "layouts/sidebar", locals: { page_list: page_list } %>
-        </div>
-        <div class="column">
-          <div class="container">
-            <div>
-              Header Bar Goes Here
-            </div>
-            <div class="mt-3">
+        <% if user_signed_in? %>
+          <div id="sidebar-column" class="column is-2 is-paddingless">
+            <%= render partial: "layouts/sidebar", locals: { page_list: page_list } %>
+          </div>
+        <% end %>
+
+        <div class="column is-paddingless">
+        <%# If on sign in route %>
+        <% if !user_signed_in? %>
+          <%# Make background of column image app/assets/images/login-bg.jpg %>
+          <div id="auth-image-bg" style="background-image: url(<%= asset_path('login-bg.jpg') %>);"></div>
+        <% end %>
+        <% # Main content here %>
+          <div>
+            <%= render partial: "layouts/headerbar" %> 
+            <nav class="breadcrumb has-arrow-separator" aria-label="breadcrumbs">
+              <ul>
+                <%= render_breadcrumbs :tag => :li, :separator => "" %>
+              </ul>
+            </nav>
+            <div id="app-content-column" class="container">
+              <% flash.each do |type, msg| %>
+                <div class="flash-notice slid-out notification <%= flash_type_to_bulma_class(type) %>">
+                  <%= msg %>
+                  <span class="icon">
+                    <i class="fas fa-times"></i>
+                  </span>
+                </div>
+              <% end %>
+              <% if content_for?(:title) %>
+                <h3 class="title is-3"><%= yield(:title) %></h1>
+              <% end %>
+
               <%= yield %>
             </div>
           </div>

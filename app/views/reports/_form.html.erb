@@ -1,0 +1,89 @@
+<div id="report-form">
+    <div class="tabs is-small">
+        <ul>
+            <% ReportType.list.each do |form_type| %>
+                <li class="<%= form_type == report.report_type ? 'is-active' : '' %>">
+                    <%= link_to "#{form_type.titleize} Report", new_report_path(type: form_type) %>
+                </li>
+            <% end %>
+        </ul>
+    </div>
+  <div class="card">
+    <%= form_with(model: report) do |form| %>
+        <%= form.hidden_field :report_type %>
+        <header class="card-header">
+        <p class="card-header-title">
+            Report Arguments
+        </p>
+        </header>
+        <div class="card-content">
+            <% if report.errors.any? %>
+                <article class="message is-danger">
+                    <div class="message-header">
+                        <p><%= pluralize(report.errors.count, "error") %> prohibited this report from being saved:</p>
+                    </div>
+                    <div class="message-body">
+                        <ul>
+                        <% report.errors.full_messages.each do |message| %>
+                            <li><%= message %></li>
+                        <% end %>
+                        </ul>
+                    </div>
+                 </article>
+            <% end %>
+
+            <div class="field">
+                <%= form.label :report_title %>
+                <%= form.text_field :title, class: "input" %>
+            </div>
+            <div class="columns">
+                <%# Col 1 %>
+                <div class="column is-6">
+                    <% if report.report_type == ReportType::CONTRACTS %>
+
+                        <%# Expiration of contract %>
+                        <div class="field">
+                            <%= form.label :days_to_expiration %>
+                            <%= form.select :expiring_in_days, Report::EXPIRATION_OPTIONS, {:include_blank => true}, class: "input" %>
+                        </div>
+
+                        <%# Entity %>
+                        <div class="field">
+                            <%= form.label :entity_id %>
+                            <%= form.select :entity_id, entity_select_options, {:include_blank => true}, class: "input" %>
+                        </div>
+                    <% end %>
+                </div>
+
+                <%# Col 2 %>
+                <div class="column is-6">
+                    <% if report.report_type == ReportType::CONTRACTS %>
+
+                        <%# Expiration of contract %>
+                        <div class="field">
+                            <%= form.label :program_id %>
+                            <%= form.select :program_id, program_select_options, {:include_blank => true}, class: "input" %>
+                        </div>
+
+                        <%# Point of Contact %>
+                        <div class="field">
+                            <%= form.label :point_of_contact_id %>
+                            <%= form.select :point_of_contact_id, user_select_options, {:include_blank => true}, class: "input" %>
+                        </div>
+                    <% end %>
+                </div>
+            </div>
+        </div>
+
+        <footer class="card-footer">
+          <div class="card-footer-item">
+            <div class="field is-grouped">
+              <div class="control">
+                <%= form.submit class: "button is-link" %>
+              </div>
+            </div>
+          </div>
+        </footer>
+         <% end %>
+    </div>
+</div>

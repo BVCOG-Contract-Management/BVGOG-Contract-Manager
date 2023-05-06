@@ -1,0 +1,9 @@
+en:
+  enumerations:
+    contract_type:
+      contract: 'Contract'
+      grant: 'Grant'
+      property_lease: 'Property Lease'
+      ILA: 'ILA'
+      MOU_MOA: 'MOU/MUA'
+      letter_of_intent: 'Letter of Intent'
