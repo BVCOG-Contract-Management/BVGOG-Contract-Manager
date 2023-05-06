@@ -66,6 +66,17 @@
                                         <td>All</td>
                                     </tr>
                                 <% end %>
+                                <% if @report.show_expired_contracts.present? %>
+                                    <tr>
+                                        <td><strong>Show Expired Contracts:</strong></td>
+                                        <td><%= @report.show_expired_contracts ? "Yes" : "No" %></td>
+                                    </tr>
+                                <% else %>
+                                    <tr>
+                                        <td><strong>Show Expired Contracts:</strong></td>
+                                        <td>No</td>
+                                    </tr>
+                                <% end %>
                             <% end %>
                         </tbody>
                     </table>
@@ -100,7 +111,7 @@
                                     <th>End Date</th>
                                 </tr>  
                             </thead>
-                            <% query_report_contracts(@report).each do |contract| %>
+                            <% @report.query_filtered_report_contracts.each do |contract| %>
                                 <tr>
                                     <td>
                                         <%= link_to contract.title, contract_path(contract) %>

@@ -3,10 +3,16 @@ class ContractsController < ApplicationController
 
   def expiry_reminder
     @contract = Contract.find(params[:id])
-    @contract.send_expiry_reminder
     respond_to do |format|
-      format.html { redirect_to contract_url(@contract), notice: 'Expiry reminder sucessfully sent.' }
-      format.json { render :show, status: :ok, location: @contract }
+      # If contract already expired, redirect to contract show page
+      if @contract.expired?
+        format.html { redirect_to contract_url(@contract), alert: 'Contract has already expired.' }
+        format.json { render json: { error: 'Contract has already expired.' }, status: :unprocessable_entity }
+      else
+        @contract.send_expiry_reminder
+        format.html { redirect_to contract_url(@contract), notice: 'Expiry reminder sucessfully sent.' }
+        format.json { render :show, status: :ok, location: @contract }
+      end
     end
   end
 
@@ -15,9 +21,10 @@ class ContractsController < ApplicationController
     add_breadcrumb 'Contracts', contracts_path
     # Sort contracts
     @contracts = sort_contracts.page params[:page]
-    print reports_path
     # Filter contracts based on allowed entities if user is level 3
-    @contracts = @contracts.where(entity_id: current_user.entities.pluck(:id)) if current_user.level == UserLevel::THREE
+    if current_user.level == UserLevel::THREE
+      @contracts = @contracts.where(entity_id: current_user.entities.pluck(:id))
+    end
     # Search contracts
     @contracts = search_contracts(@contracts) if params[:search].present?
     puts params[:search].inspect
@@ -25,12 +32,22 @@ class ContractsController < ApplicationController
 
   # GET /contracts/1 or /contracts/1.json
   def show
+    begin
+      OSO.authorize(current_user, 'read', @contract)
+    rescue Oso::Error => e
+      redirect_to root_path, alert: "You do not have permission to access this page."
+      return
+    end
     add_breadcrumb 'Contracts', contracts_path
     add_breadcrumb @contract.title, contract_path(@contract)
   end
 
   # GET /contracts/new
   def new
+    if current_user.level == UserLevel::THREE
+      redirect_to root_path, alert: "You do not have permission to access this page."
+      return
+    end
     add_breadcrumb 'Contracts', contracts_path
     add_breadcrumb 'New Contract', new_contract_path
     @contract = Contract.new
@@ -38,6 +55,10 @@ class ContractsController < ApplicationController
 
   # GET /contracts/1/edit
   def edit
+    if current_user.level == UserLevel::THREE
+      redirect_to root_path, alert: "You do not have permission to access this page."
+      return
+    end
     add_breadcrumb 'Contracts', contracts_path
     add_breadcrumb @contract.title, contract_path(@contract)
     add_breadcrumb 'Edit', edit_contract_path(@contract)
@@ -49,29 +70,42 @@ class ContractsController < ApplicationController
     add_breadcrumb 'New Contract', new_contract_path
 
     contract_documents_upload = params[:contract][:contract_documents]
+    contract_documents_attributes = params[:contract][:contract_documents_attributes]
     # Delete the contract_documents from the params
     # so that it doesn't get saved as a contract attribute
     params[:contract].delete(:contract_documents)
+    params[:contract].delete(:contract_documents_attributes)
+    params[:contract].delete(:contract_document_type_hidden)
 
-    @contract = Contract.new(contract_params.merge(contract_status: ContractStatus::IN_PROGRESS))
+    contract_params_clean = contract_params
+    contract_params_clean.delete(:new_vendor_name)
+
+    @contract = Contract.new(contract_params_clean.merge(contract_status: ContractStatus::IN_PROGRESS))
 
     respond_to do |format|
       ActiveRecord::Base.transaction do
         begin
           OSO.authorize(current_user, 'write', @contract)
           handle_if_new_vendor
-          if @contract.point_of_contact_id.present? && User.find(@contract.point_of_contact_id).redirect_user_id.present?
-            @contract.errors.add(:base,
-                                 User.find(@contract.point_of_contact_id).full_name + ' is not active, use ' + User.find(User.find(@contract.point_of_contact_id).redirect_user_id).full_name + ' instead')
+          #  Check specific for PoC since we use it down the line to check entity association
+          if !contract_params[:point_of_contact_id].present? 
+            @contract.errors.add(:base, 'Point of contact is required')
             format.html { render :new, status: :unprocessable_entity }
             format.json { render json: @contract.errors, status: :unprocessable_entity }
-          elsif !User.find(@contract.point_of_contact_id).entities.include?(@contract.entity)
-            @contract.errors.add(:base,
-                                 User.find(@contract.point_of_contact_id).full_name + ' is not associated with ' + @contract.entity.name)
+          elsif @contract.point_of_contact_id.present? && !User.find(@contract.point_of_contact_id).is_active
+            if User.find(@contract.point_of_contact_id).redirect_user_id.present?
+              @contract.errors.add(:base, User.find(@contract.point_of_contact_id).full_name + ' is not active, use ' + User.find(User.find(@contract.point_of_contact_id).redirect_user_id).full_name + ' instead')
+            else
+              @contract.errors.add(:base, User.find(@contract.point_of_contact_id).full_name + ' is not active')
+            end
+            format.html { render :new, status: :unprocessable_entity }
+            format.json { render json: @contract.errors, status: :unprocessable_entity }
+          elsif User.find(@contract.point_of_contact_id).level == UserLevel::THREE && !User.find(@contract.point_of_contact_id).entities.include?(@contract.entity)
+            @contract.errors.add(:base, User.find(@contract.point_of_contact_id).full_name + ' is not associated with ' + @contract.entity.name)
             format.html { render :new, status: :unprocessable_entity }
             format.json { render json: @contract.errors, status: :unprocessable_entity }
           elsif @contract.save
-            handle_contract_documents(contract_documents_upload) if contract_documents_upload.present?
+            handle_contract_documents(contract_documents_upload, contract_documents_attributes) if contract_documents_upload.present?
             format.html { redirect_to contract_url(@contract), notice: 'Contract was successfully created.' }
             format.json { render :show, status: :created, location: @contract }
           else
@@ -81,7 +115,7 @@ class ContractsController < ApplicationController
         end
       rescue StandardError => e
         # If error type is Oso::ForbiddenError, then the user is not authorized
-        if e.instance_of?(Oso::ForbiddenError)
+        if e.class == Oso::ForbiddenError
           status = :unauthorized
           @contract.errors.add(:base, 'You are not authorized to create a contract')
           message = 'You are not authorized to create a contract'
@@ -96,48 +130,60 @@ class ContractsController < ApplicationController
 
   # PATCH/PUT /contracts/1 or /contracts/1.json
   def update
-    add_breadcrumb 'Contracts', contracts_path
+    add_breadcrumb "Contracts", contracts_path
     add_breadcrumb @contract.title, contract_path(@contract)
     add_breadcrumb 'Edit', edit_contract_path(@contract)
 
     handle_if_new_vendor
+    # Remove the new vendor from the params
+    params[:contract].delete(:new_vendor_name)
     contract_documents_upload = params[:contract][:contract_documents]
+    contract_documents_attributes = params[:contract][:contract_documents_attributes]
     # Delete the contract_documents from the params
     # so that it doesn't get saved as a contract attribute
     params[:contract].delete(:contract_documents)
+    params[:contract].delete(:contract_documents_attributes)
+    params[:contract].delete(:contract_document_type_hidden)
 
     respond_to do |format|
-      ActiveRecord::Base.transaction do
-        OSO.authorize(current_user, 'edit', @contract)
-        if contract_params[:point_of_contact_id].present? && User.find(contract_params[:point_of_contact_id]).redirect_user_id.present?
-          @contract.errors.add(:base,
-                               User.find(contract_params[:point_of_contact_id]).full_name + ' is not active, use ' + User.find(User.find(contract_params[:point_of_contact_id]).redirect_user_id).full_name + ' instead')
-          format.html { render :edit, status: :unprocessable_entity }
-          format.json { render json: @contract.errors, status: :unprocessable_entity }
+      begin 
+        ActiveRecord::Base.transaction do
+          OSO.authorize(current_user, 'edit', @contract)
+          if !@contract[:point_of_contact_id].present? && !contract_params[:point_of_contact_id].present?
+            @contract.errors.add(:base, 'Point of contact is required')
+            format.html { render :edit, status: :unprocessable_entity }
+            format.json { render json: @contract.errors, status: :unprocessable_entity }
+          elsif contract_params[:point_of_contact_id].present? && !User.find(contract_params[:point_of_contact_id]).is_active
+            if User.find(contract_params[:point_of_contact_id]).redirect_user_id.present?
+              @contract.errors.add(:base, User.find(contract_params[:point_of_contact_id]).full_name + ' is not active, use ' + User.find(User.find(contract_params[:point_of_contact_id]).redirect_user_id).full_name + ' instead')
+            else
+              @contract.errors.add(:base, User.find(contract_params[:point_of_contact_id]).full_name + ' is not active')
+            end
+            format.html { render :edit, status: :unprocessable_entity }
+            format.json { render json: @contract.errors, status: :unprocessable_entity }
 
-        # Excuse this monster if statement, it's just checking if the user is associated with the entity, and for
-        # some reason nested-if statements don't work here when you use format (ie. UnkownFormat error)
-        elsif !User.find(contract_params[:point_of_contact_id].present? ? contract_params[:point_of_contact_id] : @contract.point_of_contact_id).entities.include?(Entity.find(contract_params[:entity_id].present? ? contract_params[:entity_id] : @contract.entity_id))
-          @contract.errors.add(:base,
-                               User.find(contract_params[:point_of_contact_id].present? ? contract_params[:point_of_contact_id] : @contract.point_of_contact_id).full_name + ' is not associated with ' + Entity.find(contract_params[:entity_id].present? ? contract_params[:entity_id] : @contract.entity_id).name)
-          format.html { render :edit, status: :unprocessable_entity }
-          format.json { render json: @contract.errors, status: :unprocessable_entity }
-        elsif @contract.update(contract_params)
-          handle_contract_documents(contract_documents_upload) if contract_documents_upload.present?
-          puts 'Contract updated successfully'
-          format.html { redirect_to contract_url(@contract), notice: 'Contract was successfully updated.' }
-          format.json { render :show, status: :ok, location: @contract }
-        else
-          format.html { render :edit, status: :unprocessable_entity }
-          format.json { render json: @contract.errors, status: :unprocessable_entity }
+          # Excuse this monster if statement, it's just checking if the user is associated with the entity, and for
+          # some reason nested-if statements don't work here when you use format (ie. UnkownFormat error)
+          elsif contract_params[:point_of_contact_id].present? && User.find(contract_params[:point_of_contact_id]).level == UserLevel::THREE && !User.find(contract_params[:point_of_contact_id]).entities.include?(Entity.find(contract_params[:entity_id].present? ? contract_params[:entity_id] : @contract.entity_id))
+              @contract.errors.add(:base, User.find(contract_params[:point_of_contact_id].present? ? contract_params[:point_of_contact_id] : @contract.point_of_contact_id).full_name + ' is not associated with ' + Entity.find(contract_params[:entity_id].present? ? contract_params[:entity_id] : @contract.entity_id).name)
+              format.html { render :edit, status: :unprocessable_entity }
+              format.json { render json: @contract.errors, status: :unprocessable_entity }
+          elsif @contract.update(contract_params)
+            handle_contract_documents(contract_documents_upload, contract_documents_attributes) if contract_documents_upload.present?
+            puts 'Contract updated successfully'
+            format.html { redirect_to contract_url(@contract), notice: 'Contract was successfully updated.' }
+            format.json { render :show, status: :ok, location: @contract }
+          else
+            format.html { render :edit, status: :unprocessable_entity }
+            format.json { render json: @contract.errors, status: :unprocessable_entity }
+          end
         end
       end
-
     rescue StandardError => e
       @contract.reload
       print e
       # If error type is Oso::ForbiddenError, then the user is not authorized
-      if e.instance_of?(Oso::ForbiddenError)
+      if e.class == Oso::ForbiddenError
         status = :unauthorized
         @contract.errors.add(:base, 'You are not authorized to update this contract')
         message = 'You are not authorized to update this contract'
@@ -151,14 +197,14 @@ class ContractsController < ApplicationController
   end
 
   # DELETE /contracts/1 or /contracts/1.json
-  # def destroy
-  #  @contract.destroy
-  #
-  #  respond_to do |format|
-  #    format.html { redirect_to contracts_url, notice: 'Contract was successfully destroyed.' }
-  #    format.json { head :no_content }
-  #  end
-  # end
+  def destroy
+    @contract.destroy
+
+    respond_to do |format|
+      format.html { redirect_to contracts_url, notice: 'Contract was successfully destroyed.' }
+      format.json { head :no_content }
+    end
+  end
 
   def get_file
     contract_document = ContractDocument.find(params[:id])
@@ -197,7 +243,10 @@ class ContractsController < ApplicationController
       contract_type
       requires_rebid
       number
+      new_vendor_name
       contract_documents
+      contract_documents_attributes
+      contract_document_type_hidden
     ]
     params.require(:contract).permit(allowed)
   end
@@ -237,6 +286,7 @@ class ContractsController < ApplicationController
     # Check if the vendor is new
     if params[:contract][:vendor_id] == 'new'
       # Create a new vendor
+
       # Make vendor name Name Case
       params[:contract][:new_vendor_name] = params[:contract][:new_vendor_name].titlecase
       vendor = Vendor.new(name: params[:contract][:new_vendor_name])
@@ -252,7 +302,7 @@ class ContractsController < ApplicationController
 
   # TODO: This is a temporary solution
   # File upload is a seperate issue that will be handled with a dropzone
-  def handle_contract_documents(contract_documents_upload)
+  def handle_contract_documents(contract_documents_upload, contract_documents_attributes)
     for doc in contract_documents_upload
       next unless doc.present?
 
@@ -264,14 +314,17 @@ class ContractsController < ApplicationController
 
       # Write the file to the filesystem
       bvcog_config = BvcogConfig.last
-      File.open(Rails.root.join(bvcog_config.contracts_path, official_file_name), 'wb') do |file|
+      File.open(File.join(bvcog_config.contracts_path, official_file_name), 'wb') do |file|
         file.write(doc.read)
       end
+      # Get document type
+      document_type = contract_documents_attributes[doc.original_filename][:document_type] || ContractDocumentType::OTHER
       # Create a new contract_document
       contract_document = ContractDocument.new(
         orig_file_name: doc.original_filename,
         file_name: official_file_name,
-        full_path: Rails.root.join(bvcog_config.contracts_path, official_file_name).to_s
+        full_path: File.join(bvcog_config.contracts_path, official_file_name).to_s,
+        document_type: document_type
       )
       # Add the contract_document to the contract
       @contract.contract_documents << contract_document
