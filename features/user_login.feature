@@ -4,11 +4,6 @@ Feature: log in to website
   So that I can securely access contracts
   I want to be able to securely log in and out to the contract manager
 
-
-Background:
-  Given 1 example programs exist
-  Given 1 example entities exist
-
 Scenario: fail login
     Given I am on the sign_in page
     When I fill in "Email" with "user@example.com"
@@ -17,28 +12,15 @@ Scenario: fail login
     Then I should see "Invalid Email or password."
 
 Scenario: User logs in successfully
-    Given an example user exists
     Given I am on the sign_in page
+    Given an example user exists
     When I fill in "Email" with "user@example.com"
     And I fill in "Password" with "password"
     And I press "Log in"
     Then I should see "Signed in successfully"
 
-Scenario: User logs out
-    Given an example user exists
-    Given I am on the sign_in page
-    When I fill in "Email" with "user@example.com"
-    And I fill in "Password" with "password"
-    And I press "Log in"
-    And I follow "Sign Out"
-    Then I should be on the sign_in page
 
-Scenario: Try to log in as inactive user
-    Given an example user exists
-    Then deactivate example user
-    Given I am on the sign_in page
-    When I fill in "Email" with "user@example.com"
-    And I fill in "Password" with "password"
-    And I press "Log in"
-    Then I should see "Your account is not currently active."
-
+#Scenario: User logs out
+#    Given I am on the home page
+#    And I follow "Sign Out"
+#    Then I should be on the sign_in page

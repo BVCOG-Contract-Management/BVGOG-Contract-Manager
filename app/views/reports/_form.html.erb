@@ -52,6 +52,12 @@
                             <%= form.label :entity_id %>
                             <%= form.select :entity_id, entity_select_options, {:include_blank => true}, class: "input" %>
                         </div>
+
+                        <%# Show Expired Contracts %>
+                        <div class="field">
+                            <%= form.label :show_expired_contracts %>
+                            <%= form.check_box :show_expired_contracts, class: "checkbox" %>
+                        </div>
                     <% end %>
                 </div>
 

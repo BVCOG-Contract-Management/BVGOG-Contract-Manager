@@ -4,6 +4,6 @@ en:
       contract: 'Contract'
       grant: 'Grant'
       property_lease: 'Property Lease'
-      ILA: 'ILA'
-      MOU_MOA: 'MOU/MUA'
+      ila: 'ILA'
+      mou_moa: 'MOU/MUA'
       letter_of_intent: 'Letter of Intent'

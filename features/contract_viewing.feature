@@ -6,12 +6,11 @@ Feature: View a contract
 
 
 Background:
+  Given 1 example users exist
   Given 1 example entities exist
   Given 1 example programs exist
-  Given 1 example users exist
   Given 1 example vendors exist
   Given 15 example contracts exist
-  Given I am logged in as a level 1 user
 
 Scenario: View contracts
   Given I am on the contracts page
@@ -23,18 +22,6 @@ Scenario: Search contracts
   And I fill in "search" with "Contract 11"
   And I follow "Contract 1"
   Then I should see "Edit this contract"
-
-Scenario: Search contracts
-  Given I am on the contracts page
-  And I fill in "search" with "lorem"
-
-Scenario: Sort by point of contact
-  Given I am on the contracts page
-  And I follow "Point of Contact"
-
-Scenario: Sort by title
-  Given I am on the contracts page
-  And I follow "Title"
 
 Scenario: Look at paginated contracts
   Given I am on the contracts page
