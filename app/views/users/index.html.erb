@@ -31,19 +31,10 @@
     <table class="table table is-striped is-hoverable is-fullwidth">
       <thead>
         <tr>
-        <% columns = [["First Name", "first_name"], ["Last Name", "last_name"], ["Level", "level"], ["Program", "program"], ["Program Manager", "is_program_manager"]] %>
+        <% columns = [["First Name", "first_name"], ["Last Name", "last_name"], ["Level", "level"], ["Program", "program"]] %>
         <% columns.each do |col| %>
           <th>
             <%= link_to col[0], sort: col[1], order: (params[:order] == "asc" ? "desc" : "asc") %>
-            <% if params[:order] == "asc" and params[:sort] == col[1] %>
-              <span class="icon">
-                <i class="fas fa-sort-up"></i>
-              </span>
-            <% elsif params[:order] == "desc" and params[:sort] == col[1] %>
-              <span class="icon">
-                <i class="fas fa-sort-down"></i>
-              </span>
-            <% end %>
           </th>
         <% end %>
       </tr>
@@ -55,17 +46,9 @@
             <td><%= user.last_name %></td>
             <td><%= user.level_int %></td>
             <% if user.program.blank? %>
-              <td><%= "N/A" %></td>
-              <td><%= "N/A" %>
+              <td><%= "-" %></td>
             <% else %>
               <td><%= user.program.name %></td>
-              <td>
-                <% if user.is_program_manager %>
-                    <span class="tag is-success">Yes</span>
-                <% else %>
-                    <span class="tag is-danger">No</span>
-                <% end %>
-            </td>
             <% end %>
           </tr>
         <% end %>

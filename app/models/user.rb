@@ -9,9 +9,6 @@ class User < ApplicationRecord
   validates :email, presence: true, length: { maximum: 255 }
   validates :encrypted_password, presence: true
   validates :level, presence: true, inclusion: { in: UserLevel.list, allow_blank: false }
-  validates :is_program_manager, inclusion: { in: [true, false], allow_blank: false }
-  validates :is_active, inclusion: { in: [true, false], allow_blank: false }
-  validates :program_id, presence: true
 
   # Add associations here
   has_and_belongs_to_many :entities
@@ -20,8 +17,10 @@ class User < ApplicationRecord
   has_many :contracts, class_name: "Contract", foreign_key: "point_of_contact_id"
   has_many :vendor_reviews, class_name: "VendorReview", foreign_key: "user_id"
 
+  has_and_belongs_to_many :entities
+
   # TODO: Should the program be optional?
-  belongs_to :program, class_name: "Program", foreign_key: "program_id"
+  belongs_to :program, class_name: "Program", foreign_key: "program_id", optional: true
 
   attr_accessor :old_name
 

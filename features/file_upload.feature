@@ -10,13 +10,97 @@ Background:
   Given 1 example vendors exist
   Given 1 example users exist
   Given 1 example contracts exist
+  Given bvcog_config is set up
+  Given I am logged in as a level 1 user
 
-Scenario: Upload a file
+Scenario: Upload a txt file
   Given I am on the contracts page
   When I follow "Contract 1"
   And I follow "Edit this contract"
   And I upload "temp.txt" to the contract documents field
   And I press "commit"
+  Then I should see ".txt"
+  And I should see "Contract Details"
+
+Scenario: Download a txt file
+  Given I am on the contracts page
+  When I follow "Contract 1"
+  And I follow "Edit this contract"
+  And I upload "temp.txt" to the contract documents field
+  And I press "commit"
+  And I follow /contract_documents/1"
+
+Scenario: Upload a pdf file
+  Given I am on the contracts page
+  When I follow "Contract 1"
+  And I follow "Edit this contract"
+  And I upload "temp.pdf" to the contract documents field
+  And I press "commit"
+  Then I should see ".pdf"
+  And I should see "Contract Details"
+
+Scenario: Upload a doc file
+  Given I am on the contracts page
+  When I follow "Contract 1"
+  And I follow "Edit this contract"
+  And I upload "temp.doc" to the contract documents field
+  And I press "commit"
+  Then I should see ".doc"
+  And I should see "Contract Details"
+
+Scenario: Upload a xlsx file
+  Given I am on the contracts page
+  When I follow "Contract 1"
+  And I follow "Edit this contract"
+  And I upload "temp.xlsx" to the contract documents field
+  And I press "commit"
+
+Scenario: Upload a pptx file
+  Given I am on the contracts page
+  When I follow "Contract 1"
+  And I follow "Edit this contract"
+  And I upload "temp.pptx" to the contract documents field
+  And I press "commit"
+
+Scenario: Upload a jpg file
+  Given I am on the contracts page
+  When I follow "Contract 1"
+  And I follow "Edit this contract"
+  And I upload "temp.jpg" to the contract documents field
+  And I press "commit"
 
 
+Scenario: Upload a zip file
+  Given I am on the contracts page
+  When I follow "Contract 1"
+  And I follow "Edit this contract"
+  And I upload "temp.zip" to the contract documents field
+  And I press "commit"
 
+Scenario: Upload a mp3 file
+  Given I am on the contracts page
+  When I follow "Contract 1"
+  And I follow "Edit this contract"
+  And I upload "temp.mp3" to the contract documents field
+  And I press "commit"
+
+Scenario: Upload a mp4 file
+  Given I am on the contracts page
+  When I follow "Contract 1"
+  And I follow "Edit this contract"
+  And I upload "temp.mp4" to the contract documents field
+  And I press "commit"
+
+Scenario: Upload a html file
+  Given I am on the contracts page
+  When I follow "Contract 1"
+  And I follow "Edit this contract"
+  And I upload "temp.html" to the contract documents field
+  And I press "commit"
+
+Scenario: Upload a other file
+  Given I am on the contracts page
+  When I follow "Contract 1"
+  And I follow "Edit this contract"
+  And I upload "temp.other" to the contract documents field
+  And I press "commit"

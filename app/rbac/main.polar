@@ -28,11 +28,11 @@ has_permission(user: User, "edit", contract: Contract) if
 
 # Can a user read see other users?
 has_permission(user: User, "read", user_resource: User) if
-    user_resource matches User and (
+    user_resource matches User and
     user.level == "three" or
     user.level == "two" or
     user.level == "one" or
-    user.level == "zero");
+    user.level == "zero";
 
 # Can a user invite a user
 has_permission(user: User, "write", user_resource: User) if

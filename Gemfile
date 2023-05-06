@@ -47,7 +47,6 @@ gem "bootsnap", require: false
 
 group :production do
   gem "pg", "~> 1.4"
-  gem "matrix"
 end
 
 group :development, :test do
@@ -55,6 +54,10 @@ group :development, :test do
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
   # Use sqlite3 as the database for Active Record
   gem "sqlite3", "~> 1.4"
+
+  gem "factory_bot_rails", "~> 6.2.0"
+
+  gem "faker", "~> 2.19.0"
 
   gem "byebug"
 end
@@ -114,13 +117,3 @@ gem 'prawn'
 gem 'prawn-table', '~> 0.2.0'
 
 gem 'oso-oso', '~> 0.27.0'
-
-gem 'erb-formatter'
-
-
-# These need to move into development or not be used in production
-gem "factory_bot_rails", "~> 6.2.0"
-
-gem "faker", "~> 2.19.0"
-
-gem 'whenever', require: false
