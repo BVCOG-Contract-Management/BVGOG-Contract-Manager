@@ -82,6 +82,7 @@ document.addEventListener('turbo:load', () => {
     const uploadedContractDocumentsInput =
         document.querySelector('#contract-documents-file-input');
     if (uploadedContractDocumentsInput) {
+        let files = new DataTransfer();
         // Get the hidden document type select field 
         const documentTypeSelect = document.querySelector('#contract_document_type_hidden');
         const uploadedContractDocumentsTable =
@@ -91,8 +92,19 @@ document.addEventListener('turbo:load', () => {
             uploadedContractDocumentsTable.querySelector('tbody');
         // for each file that is uploaded, add a new row to the table
         uploadedContractDocumentsInput.addEventListener('change', (event) => {
+            // Clear all rows with class 'new-file'
+            const newFileRows = uploadedContractDocumentsTableBody.querySelectorAll('.new-file');
+            newFileRows.forEach((row) => {
+                row.remove();
+            });
+            // Maintain existing files when input is changed
             for (let i = 0; i < event.target.files.length; i++) {
-                const file = event.target.files[i];
+                files.items.add(event.target.files[i]);
+            }
+            // Set the files of the input to the existing files
+            uploadedContractDocumentsInput.files = files.files;
+            for (let i = 0; i < files.items.length; i++) {
+                const file = files.items[i].getAsFile();
 
                 // Create new document type select field based on the hidden one using a new ID
                 const documentTypeSelectNew = documentTypeSelect.cloneNode(true);
@@ -104,6 +116,8 @@ document.addEventListener('turbo:load', () => {
 
                 // Create a new row for the file
                 const fileRow = document.createElement('tr');
+                // add class 'new-file' to the row
+                fileRow.classList.add('new-file');
                 fileRow.innerHTML = `
                     <td>
                         ${fileIcon(file.type)} 
