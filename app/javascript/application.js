@@ -82,6 +82,8 @@ document.addEventListener('turbo:load', () => {
     const uploadedContractDocumentsInput =
         document.querySelector('#contract-documents-file-input');
     if (uploadedContractDocumentsInput) {
+        // We maintain all the files uploaded, since
+        // the input is cleared when the value is changed
         let files = new DataTransfer();
         // Get the hidden document type select field 
         const documentTypeSelect = document.querySelector('#contract_document_type_hidden');
@@ -90,7 +92,7 @@ document.addEventListener('turbo:load', () => {
         // Get tbody element of the table
         const uploadedContractDocumentsTableBody =
             uploadedContractDocumentsTable.querySelector('tbody');
-        // for each file that is uploaded, add a new row to the table
+        // For each file that is uploaded, add a new row to the table
         uploadedContractDocumentsInput.addEventListener('change', (event) => {
             // Clear all rows with class 'new-file'
             const newFileRows = uploadedContractDocumentsTableBody.querySelectorAll('.new-file');
@@ -98,14 +100,15 @@ document.addEventListener('turbo:load', () => {
                 row.remove();
             });
             // Maintain existing files when input is changed
+            // by adding the new files to the existing ones
             for (let i = 0; i < event.target.files.length; i++) {
                 files.items.add(event.target.files[i]);
             }
             // Set the files of the input to the existing files
+            // plus the new files
             uploadedContractDocumentsInput.files = files.files;
             for (let i = 0; i < files.items.length; i++) {
                 const file = files.items[i].getAsFile();
-
                 // Create new document type select field based on the hidden one using a new ID
                 const documentTypeSelectNew = documentTypeSelect.cloneNode(true);
                 documentTypeSelectNew.id = `contract_document_type_${uuid_mock(8)}`;
@@ -117,6 +120,7 @@ document.addEventListener('turbo:load', () => {
                 // Create a new row for the file
                 const fileRow = document.createElement('tr');
                 // add class 'new-file' to the row
+                // so we can remove it when the the file is removed
                 fileRow.classList.add('new-file');
                 fileRow.innerHTML = `
                     <td>
@@ -136,14 +140,20 @@ document.addEventListener('turbo:load', () => {
                     </td>
                 `;
                 uploadedContractDocumentsTableBody.appendChild(fileRow);
-                // Add an event listener to the button
+                // Create a new event listener for the remove button
+                // so we can remove the file from the input and the table
                 const button = fileRow.querySelector(`button[type=button]`);
                 button.addEventListener('click', (event) => {
-                    // Remove the file from the input
+                    // Remove the file from the global list of files
                     const filtered = Array.from(files.files)
                         .filter((f) => f.name !== file.name);
                     const fileList = new DataTransfer();
                     filtered.forEach((f) => fileList.items.add(f));
+                    // Change the input's files and the global files
+                    // so that if the user submits the form, the files
+                    // in the input are correct.
+                    // If the user adds more files, the global files
+                    // will be updated with the new files
                     uploadedContractDocumentsInput.files = fileList.files;
                     files = fileList;
                     // Remove the row from the table

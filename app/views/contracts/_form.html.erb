@@ -120,7 +120,7 @@
               </div>
               <%# Intial Term %>
               <div class="columns">
-                <div class="column is-6">
+                <div class="column is-4">
                   <%# Term Amount %>
                   <div class="field">
                     <%= form.label :initial_term_amount %>
@@ -132,11 +132,18 @@
                     </p>
                   </div>
                 </div>
-                <div class="column is-6">
+                <div class="column is-4">
                   <%# Term Duration %>
                   <div class="field">
                     <%= form.label :initial_term_duration %>
                     <%= form.select :initial_term_duration, TimePeriod.to_a, {:include_blank => true}, class: "input " %>
+                  </div>
+                </div>
+                <div class="column is-4">
+                  <%# Term Extension %>
+                  <div class="field">
+                    <%= form.label :renewal_count, "Remaining renewals" %>
+                    <%= form.number_field :renewal_count, class: "input" %>
                   </div>
                 </div>
               </div>

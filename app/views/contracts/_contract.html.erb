@@ -31,6 +31,10 @@
                                 <td><%= @contract.initial_term_amount %> <%= @contract.initial_term_duration_humanize %><%= @contract.initial_term_amount > 1 ? "s" : "" %></td>
                             </tr>
                             <tr>
+                                <td><strong>Remaining renewals:</strong></td>
+                                <td><%= @contract.renewal_count %></td>
+                            </tr>
+                            <tr>
                                 <td><strong>End Trigger:</strong></td>
                                 <td><%= @contract.end_trigger_humanize %></td>
                             </tr>
