@@ -140,11 +140,12 @@ document.addEventListener('turbo:load', () => {
                 const button = fileRow.querySelector(`button[type=button]`);
                 button.addEventListener('click', (event) => {
                     // Remove the file from the input
-                    const filtered = Array.from(uploadedContractDocumentsInput.files)
+                    const filtered = Array.from(files.files)
                         .filter((f) => f.name !== file.name);
                     const fileList = new DataTransfer();
                     filtered.forEach((f) => fileList.items.add(f));
                     uploadedContractDocumentsInput.files = fileList.files;
+                    files = fileList;
                     // Remove the row from the table
                     fileRow.remove();
                 });
