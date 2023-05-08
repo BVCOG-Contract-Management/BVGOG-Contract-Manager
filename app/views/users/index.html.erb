@@ -20,7 +20,7 @@
             <%= form.text_field :search, data: { action: "input->form-submission#search" }, class: "input", placeholder: "Search by first or last name", value: params[:search], autofocus: !params[:search].blank? , id: "search-input" %>
           <% end %>
           <% if current_user.level == UserLevel::ONE %>
-            <%= link_to "Invite a user", new_user_path, class: "button is-primary" %>
+            <%= link_to "Invite a user", new_user_invitation_path, class: "button is-primary" %>
           <% end %>
           </div>
       </div>

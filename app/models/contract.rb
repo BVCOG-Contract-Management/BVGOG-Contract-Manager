@@ -16,6 +16,7 @@ class Contract < ApplicationRecord
   validates :amount_duration, inclusion: { in: TimePeriod.list }
   validates :initial_term_duration, inclusion: { in: TimePeriod.list }
   validates :end_trigger, inclusion: { in: EndTrigger.list }
+  validates :renewal_count, numericality: { greater_than_or_equal_to: 0 }
 
   belongs_to :entity, class_name: 'Entity', foreign_key: 'entity_id'
   belongs_to :program, class_name: 'Program', foreign_key: 'program_id'

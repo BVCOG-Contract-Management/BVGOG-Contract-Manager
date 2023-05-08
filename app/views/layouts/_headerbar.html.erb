@@ -1,5 +1,11 @@
 <nav class="navbar" role="navigation" aria-label="main navigation" id="header-bar">
 
+  <% if !user_signed_in? %>
+    <div class="navbar-start" style="margin-left: 1rem;">
+      <h1 class="navbar-item has-text-light title is-6">BVCOG Contract Management System</h1>
+    </div>
+  <% end %>
+
     <div class="navbar-end">
       <div class="navbar-item">
         <div class="buttons">

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_30_003137) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_07_223210) do
   create_table "bvcog_configs", force: :cascade do |t|
     t.text "contracts_path", null: false
     t.text "reports_path", null: false
@@ -57,6 +57,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_30_003137) do
     t.text "end_trigger"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "renewal_count", default: 1
     t.index ["entity_id"], name: "index_contracts_on_entity_id"
     t.index ["point_of_contact_id"], name: "index_contracts_on_point_of_contact_id"
     t.index ["program_id"], name: "index_contracts_on_program_id"

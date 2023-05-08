@@ -5,8 +5,8 @@
         Contract Information
       </p>
     </header>
+    <%= form_with(model: @contract, data: { turbo: false }) do |form| %>
     <div class="card-content">
-      <%= form_with(model: @contract, data: { turbo: false }) do |form| %>
           <% if @contract.errors.any? %>
             <article class="message is-danger">
               <div class="message-header">
@@ -120,7 +120,7 @@
               </div>
               <%# Intial Term %>
               <div class="columns">
-                <div class="column is-6">
+                <div class="column is-4">
                   <%# Term Amount %>
                   <div class="field">
                     <%= form.label :initial_term_amount %>
@@ -132,11 +132,18 @@
                     </p>
                   </div>
                 </div>
-                <div class="column is-6">
+                <div class="column is-4">
                   <%# Term Duration %>
                   <div class="field">
                     <%= form.label :initial_term_duration %>
                     <%= form.select :initial_term_duration, TimePeriod.to_a, {:include_blank => true}, class: "input " %>
+                  </div>
+                </div>
+                <div class="column is-4">
+                  <%# Term Extension %>
+                  <div class="field">
+                    <%= form.label :renewal_count, "Remaining renewals" %>
+                    <%= form.number_field :renewal_count, class: "input" %>
                   </div>
                 </div>
               </div>
@@ -194,6 +201,7 @@
               </table>
             </div>
           </div>
+    </div>
 
         <footer class="card-footer">
           <div class="card-footer-item">

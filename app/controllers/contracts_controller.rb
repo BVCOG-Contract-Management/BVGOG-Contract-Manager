@@ -247,6 +247,7 @@ class ContractsController < ApplicationController
       contract_documents
       contract_documents_attributes
       contract_document_type_hidden
+      renewal_count
     ]
     params.require(:contract).permit(allowed)
   end

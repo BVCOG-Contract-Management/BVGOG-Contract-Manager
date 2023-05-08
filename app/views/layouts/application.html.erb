@@ -37,6 +37,11 @@
         <% end %>
 
         <div class="column is-paddingless">
+        <%# If on sign in route %>
+        <% if !user_signed_in? %>
+          <%# Make background of column image app/assets/images/login-bg.jpg %>
+          <div id="auth-image-bg" style="background-image: url(<%= asset_path('login-bg.jpg') %>);"></div>
+        <% end %>
         <% # Main content here %>
           <div>
             <%= render partial: "layouts/headerbar" %> 

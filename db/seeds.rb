@@ -196,6 +196,8 @@ else
     last_name: "Dev",
     level: UserLevel::ONE,
     program: Program.first,
+    # Invitation already accepted
+    invitation_accepted_at: Time.now,
   )
   
   BvcogConfig.create(

@@ -18,17 +18,17 @@
 @import "sidebar";
 @import "headerbar";
 
- body {
-    font-family: 'Nunito Sans', sans-serif !important;
+body {
+   font-family: 'Nunito Sans', sans-serif !important;
    background-color: $body-background-color;
- }
+}
 
- #app-content-column {
+#app-content-column {
    padding: $app-content-column-padding;
- }
+}
 
- // Bread crumbs
- .breadcrumb {
+// Bread crumbs
+.breadcrumb {
    font-size: 1.1rem !important;
    background-color: $breadcrumb-background-color;
    border: 1px solid #e3e6f0;
@@ -40,19 +40,20 @@
          padding: 0;
       }
    }
+
    ::before {
       margin: 0 0.5rem;
    }
- }
+}
 
- .flash-notice{
+.flash-notice {
    @include slide-out(0.2s);
 
    // Make the flash notice look like a toast
    // By having it in the upper right hand corner and 
    // being displayed "above" the rest of the content with 
    // a higher z-index
-   
+
    position: fixed !important;
    top: 0 !important;
    right: 0;
@@ -67,10 +68,27 @@
       top: 0;
       right: 0;
       margin: 1px;
-      
+
       :hover {
          cursor: pointer;
          opacity: 0.5;
       }
    }
- }
+}
+
+//  style="background-image: url('/assets/login-bg.jpg'); background-height: 200vh !important; background-size: cover;"
+#auth-image-bg {
+   position: absolute;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   background-size: cover;
+   display: block;
+   background-position: center;
+
+   // Blur the background image
+   filter: blur(10px);
+   /* Adjust the blur strength as needed */
+   -webkit-filter: blur(10px);
+}
