@@ -140,18 +140,5 @@ RSpec.describe "/contracts", type: :request do
     end
   end
 
-  describe "DELETE /destroy" do
-    it "destroys the requested contract" do
-      contract = Contract.create! valid_attributes
-      expect {
-        delete contract_url(contract)
-      }.to change(Contract, :count).by(-1)
-    end
 
-    it "redirects to the contracts list" do
-      contract = Contract.create! valid_attributes
-      delete contract_url(contract)
-      expect(response).to redirect_to(contracts_url)
-    end
-  end
 end

@@ -12,6 +12,70 @@ module WithinHelpers
 end
 World(WithinHelpers)
 
+When("I check the show expired contracts checkbox") do
+  check('report_show_expired_contracts')
+end
+
+
+Then('my url should be {string}') do |url|
+  current_url = page.driver.browser.current_url
+  current_path = URI.parse(current_url).path
+  expect(current_path).to eq(url)
+end
+
+Given('I am logged in') do
+  step 'I am on the sign_in page'
+  step 'an example user exists'
+  step 'I fill in "Email" with "user@example.com"'
+  step 'I fill in "Password" with "password"'
+  step 'I press "Log in"'
+end
+
+Given('I have visited the user registration page') do
+  visit '/users/sign_up'
+end
+Given('I have visited the user invite page') do
+  visit '/users/invitation/new'
+end
+
+When('I try to edit report {int}') do |num|
+  visit "/reports/#{num}/edit"
+end
+
+When('I try to edit contract {int}') do |num|
+  visit "/contracts/#{num}/edit"
+end
+
+When('I try to edit vendor {int}') do |num|
+  visit "/vendors/#{num}/edit"
+end
+
+When('I try to edit user {int}') do |num|
+  visit "/users/#{num}/edit"
+end
+
+When('I select the Entity {int} checkbox') do |num|
+  find("#user_entity_ids_#{num}").set(true)
+end
+
+When('I check Entity 1') do
+  check('user[entity_ids][]', option: '1')
+end
+
+Given('bvcog_config is set up') do
+  # BVCOG Config
+  # Create the directories if they don't exist
+  Dir.mkdir(Rails.root.join('public/contracts')) unless Dir.exist?(Rails.root.join('public/contracts'))
+  Dir.mkdir(Rails.root.join('public/reports')) unless Dir.exist?(Rails.root.join('public/reports'))
+
+  # Create the config
+  BvcogConfig.create(
+    id: 1,
+    contracts_path: Rails.root.join('public/contracts'),
+    reports_path: Rails.root.join('public/reports')
+  )
+end
+
 When(/^I upload "([^"]*)" to the contract documents field$/) do |filename|
   # Find the input element by name attribute
   # input_element = find('input[id="contract-documents-file-input"]', visible: false)

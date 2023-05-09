@@ -18,7 +18,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_07_223210) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "bvcog_configs_users", id: false, force: :cascade do |t|
+  create_table "bvcog_configs_users", force: :cascade do |t|
     t.integer "bvcog_config_id"
     t.integer "user_id"
     t.index ["bvcog_config_id"], name: "index_bvcog_configs_users_on_bvcog_config_id"

@@ -88,7 +88,7 @@ class ContractsController < ApplicationController
           OSO.authorize(current_user, 'write', @contract)
           handle_if_new_vendor
           #  Check specific for PoC since we use it down the line to check entity association
-          if !contract_params[:point_of_contact_id].present? 
+          if !contract_params[:point_of_contact_id].present?
             @contract.errors.add(:base, 'Point of contact is required')
             format.html { render :new, status: :unprocessable_entity }
             format.json { render json: @contract.errors, status: :unprocessable_entity }
@@ -146,7 +146,7 @@ class ContractsController < ApplicationController
     params[:contract].delete(:contract_document_type_hidden)
 
     respond_to do |format|
-      begin 
+      begin
         ActiveRecord::Base.transaction do
           OSO.authorize(current_user, 'edit', @contract)
           if !@contract[:point_of_contact_id].present? && !contract_params[:point_of_contact_id].present?
@@ -197,14 +197,14 @@ class ContractsController < ApplicationController
   end
 
   # DELETE /contracts/1 or /contracts/1.json
-  def destroy
-    @contract.destroy
-
-    respond_to do |format|
-      format.html { redirect_to contracts_url, notice: 'Contract was successfully destroyed.' }
-      format.json { head :no_content }
-    end
-  end
+  #def destroy
+  #  @contract.destroy
+  #
+  #  respond_to do |format|
+  #    format.html { redirect_to contracts_url, notice: 'Contract was successfully destroyed.' }
+  #    format.json { head :no_content }
+  #  end
+  #end
 
   def get_file
     contract_document = ContractDocument.find(params[:id])
