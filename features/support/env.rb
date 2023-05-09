@@ -5,9 +5,10 @@
 # files.
 
 require 'simplecov'
+SimpleCov.start 'rails'
 require 'cucumber/rails'
 
-SimpleCov.start 'rails'
+
 SimpleCov.coverage_dir 'coverage/cucumber'
 # features/support/env.rb
 

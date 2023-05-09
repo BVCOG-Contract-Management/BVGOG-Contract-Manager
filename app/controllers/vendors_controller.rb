@@ -77,14 +77,14 @@ class VendorsController < ApplicationController
   end
 
   # DELETE /vendors/1 or /vendors/1.json
-  def destroy
-    @vendor.destroy
-
-    respond_to do |format|
-      format.html { redirect_to vendors_url, notice: "Vendor was successfully destroyed." }
-      format.json { head :no_content }
-    end
-  end
+  #def destroy
+  #  @vendor.destroy
+  #
+  #  respond_to do |format|
+  #    format.html { redirect_to vendors_url, notice: "Vendor was successfully destroyed." }
+  #    format.json { head :no_content }
+  #  end
+  #end
 
   private
     # Use callbacks to share common setup or constraints between actions.

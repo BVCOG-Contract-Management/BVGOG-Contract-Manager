@@ -34,19 +34,19 @@ class UsersController < ApplicationController
   end
 
   # POST /users or /users.json
-  def create
-    @user = User.new(user_params)
-
-    respond_to do |format|
-      if @user.save
-        format.html { redirect_to user_url(@user), notice: "User was successfully created." }
-        format.json { render :show, status: :created, location: @user }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
-      end
-    end
-  end
+  #def create
+  #  @user = User.new(user_params)
+  #
+  #  respond_to do |format|
+  #    if @user.save
+  #      format.html { redirect_to user_url(@user), notice: "User was successfully created." }
+  #      format.json { render :show, status: :created, location: @user }
+  #    else
+  #      format.html { render :new, status: :unprocessable_entity }
+  #      format.json { render json: @user.errors, status: :unprocessable_entity }
+  #    end
+  #  end
+  #end
 
   # PATCH/PUT /users/1 or /users/1.json
   def update
@@ -99,17 +99,17 @@ class UsersController < ApplicationController
         elsif @user.id == user_params[:redirect_user_id].to_i
           format.html { redirect_to user_url(@user), alert: "User cannot be redirected to themselves." }
           format.json { render json: { error: "User cannot be redirected to themselves." }, status: :unprocessable_entity }
-        
+
         # Cannot redirect an already redirected user
         elsif @user.redirect_user_id.present?
           format.html { redirect_to user_url(@user), alert: "User is already redirected." }
           format.json { render json: { error: "User is already redirected." }, status: :unprocessable_entity }
-        
+
         # Cannot redirect to a user that is already redirected
         elsif User.find(user_params[:redirect_user_id]).redirect_user_id.present?
           format.html { redirect_to user_url(@user), alert: "User being redirected to is already redirected." }
           format.json { render json: { error: "User being redirected to is already redirected." }, status: :unprocessable_entity }
-        
+
         # Cannot redirect yourself
         elsif @user.id == current_user.id
           format.html { redirect_to user_url(@user), alert: "You cannot redirect yourself." }
@@ -135,18 +135,18 @@ class UsersController < ApplicationController
   end
 
   # DELETE /users/1 or /users/1.json
-  def destroy
-    @user.destroy
-
-    respond_to do |format|
-      format.html { redirect_to users_url, notice: "User was successfully destroyed." }
-      format.json { head :no_content }
-    end
-  end
+  #def destroy
+  #  @user.destroy
+  #
+  #  respond_to do |format|
+  #    format.html { redirect_to users_url, notice: "User was successfully destroyed." }
+  #    format.json { head :no_content }
+  #  end
+  #end
 
   def reinvite
     @user = User.find(params[:id])
-    if !@user.is_active 
+    if !@user.is_active
       redirect_to user_url(@user), alert: "User is not active and cannot be re-invited."
     else
       @user.invite!
