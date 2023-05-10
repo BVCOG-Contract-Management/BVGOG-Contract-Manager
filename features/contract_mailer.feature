@@ -11,6 +11,7 @@ Background:
   Given 15 example contracts exist
   Given I am logged in as a level 1 user
 
+
 Scenario: Send reminder email
   Given I am on the contracts page
   When I follow "Contract 1"

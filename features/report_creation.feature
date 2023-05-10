@@ -21,6 +21,17 @@ Scenario: Sucessfully create contracts report
   And I press "Create Report"
   Then I should see "Report was successfully created."
 
+Scenario: Sucessfully create contracts expiration report
+  Given I am on the new report page
+  When I fill in the "report[title]" field with "TestReport"
+  And I select "30" from the "report[expiring_in_days]" select box
+  And I select "Entity 1" from the "report[entity_id]" select box
+  And I select "Program 1" from the "report[program_id]" select box
+  And I select "Example User" from the "report[point_of_contact_id]" select box
+  And I check the show expired contracts checkbox
+  And I press "Create Report"
+  Then I should see "Report was successfully created."
+
 Scenario: view reports auto-redirects to new report
   Given I am on the reports page
   Then I should be on the new report page
@@ -47,11 +58,6 @@ Scenario: Sucessfully create users report
   And I press "Create Report"
   Then I should see "Report was successfully created."
 
-@wip
-Scenario: Delete a report
-  Given 2 example reports exist
-  Given I send a DELETE request to "/reports/1"
-  Then I should see "You are being redirected."
 
 Scenario: Update a report
   Given 2 example reports exist

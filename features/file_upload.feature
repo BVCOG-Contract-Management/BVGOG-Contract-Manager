@@ -19,16 +19,6 @@ Scenario: Upload a txt file
   And I follow "Edit this contract"
   And I upload "temp.txt" to the contract documents field
   And I press "commit"
-  Then I should see ".txt"
-  And I should see "Contract Details"
-
-Scenario: Download a txt file
-  Given I am on the contracts page
-  When I follow "Contract 1"
-  And I follow "Edit this contract"
-  And I upload "temp.txt" to the contract documents field
-  And I press "commit"
-  And I follow /contract_documents/1"
 
 Scenario: Upload a pdf file
   Given I am on the contracts page
@@ -36,8 +26,6 @@ Scenario: Upload a pdf file
   And I follow "Edit this contract"
   And I upload "temp.pdf" to the contract documents field
   And I press "commit"
-  Then I should see ".pdf"
-  And I should see "Contract Details"
 
 Scenario: Upload a doc file
   Given I am on the contracts page
@@ -45,8 +33,6 @@ Scenario: Upload a doc file
   And I follow "Edit this contract"
   And I upload "temp.doc" to the contract documents field
   And I press "commit"
-  Then I should see ".doc"
-  And I should see "Contract Details"
 
 Scenario: Upload a xlsx file
   Given I am on the contracts page

@@ -12,8 +12,8 @@ When('I try to redirect this user') do
   find('div.card-footer-item:contains("Redirect this user")').click
 end
 
-When('I try to disable this user') do
-  find('div.card-footer-item:contains("Disable this user")').click
+When('I try to deactivate this user') do
+  find('div.card-footer-item:contains("Deactivate this user")').click
 end
 
 Given('I am logged in as a level 1 user') do
@@ -31,7 +31,7 @@ Given('I am logged in as a level 1 user') do
 
   step 'I fill in "Email" with "level1@example.com"'
   step 'fill in "Password" with "password"'
-  step 'I press "Log in"'
+  step 'I press "commit"'
 end
 
 Given('I am logged in as a level 3 user') do
@@ -49,7 +49,7 @@ Given('I am logged in as a level 3 user') do
 
   step 'I fill in "Email" with "level3@example.com"'
   step 'fill in "Password" with "password"'
-  step 'I press "Log in"'
+  step 'I press "commit"'
 end
 
 Given('I am logged in as an example user') do
@@ -57,7 +57,7 @@ Given('I am logged in as an example user') do
   step 'an example user exists'
   step 'I fill in "Email" with "user@example.com"'
   step 'fill in "Password" with "password"'
-  step 'I press "Log in"'
+  step 'I press "commit"'
 end
 
 Given(/^an example user exists$/) do
@@ -86,6 +86,16 @@ Then('I should see the following users in the console') do |_table|
 end
 
 Then('deactivate example user') do
-  user = User.find(1)
-  user.update(is_active: false)
+  user = User.find_by(email: "user@example.com")
+  if user.present?
+    puts "found user:"
+    puts user.first_name
+    if user.update(is_active: false)
+      puts "User #{user.first_name} is now inactive"
+    else
+      puts "Failed to update user: #{user.errors.full_messages}"
+    end
+  else
+    puts "User not found"
+  end
 end

@@ -5,6 +5,19 @@ import 'controllers'
 
 import { fileIcon } from './helpers/file-helper'
 
+const uuid_mock = (char_count) => {
+    let chars = '0123456789abcdef'.split('');
+    let uuid = [], rnd = Math.random, r;
+    char_count = char_count || 32;
+    return function () {
+        for (let i = 0; i < char_count; i++) {
+            r = 0 | rnd() * 16;
+            uuid[i] = chars[(i == 19) ? (r & 0x3) | 0x8 : r & 0xf];
+        }
+        return uuid.join('');
+    }().replace(/(.{8})(.{4})(.{4})(.{4})(.{12})/, '$1-$2-$3-$4-$5');
+};
+
 // Helpers
 function clearNotice() {
     const notice = document.querySelector('.flash-notice');
@@ -69,23 +82,54 @@ document.addEventListener('turbo:load', () => {
     const uploadedContractDocumentsInput =
         document.querySelector('#contract-documents-file-input');
     if (uploadedContractDocumentsInput) {
+        // We maintain all the files uploaded, since
+        // the input is cleared when the value is changed
+        let files = new DataTransfer();
+        // Get the hidden document type select field 
+        const documentTypeSelect = document.querySelector('#contract_document_type_hidden');
         const uploadedContractDocumentsTable =
             document.querySelector('#uploaded-contract-documents-table');
         // Get tbody element of the table
         const uploadedContractDocumentsTableBody =
             uploadedContractDocumentsTable.querySelector('tbody');
-        // for each file that is uploaded, add a new row to the table
+        // For each file that is uploaded, add a new row to the table
         uploadedContractDocumentsInput.addEventListener('change', (event) => {
+            // Clear all rows with class 'new-file'
+            const newFileRows = uploadedContractDocumentsTableBody.querySelectorAll('.new-file');
+            newFileRows.forEach((row) => {
+                row.remove();
+            });
+            // Maintain existing files when input is changed
+            // by adding the new files to the existing ones
             for (let i = 0; i < event.target.files.length; i++) {
-                const file = event.target.files[i];
+                files.items.add(event.target.files[i]);
+            }
+            // Set the files of the input to the existing files
+            // plus the new files
+            uploadedContractDocumentsInput.files = files.files;
+            for (let i = 0; i < files.items.length; i++) {
+                const file = files.items[i].getAsFile();
+                // Create new document type select field based on the hidden one using a new ID
+                const documentTypeSelectNew = documentTypeSelect.cloneNode(true);
+                documentTypeSelectNew.id = `contract_document_type_${uuid_mock(8)}`;
+                // Remove is-hidden class from the new select field
+                documentTypeSelectNew.classList.remove('is-hidden');
+                // Change the name of the new select field to match the file name
+                documentTypeSelectNew.name = `contract[contract_documents_attributes][${file.name}][document_type]`;
+
+                // Create a new row for the file
                 const fileRow = document.createElement('tr');
-                // Shorten the file name if it is too long
+                // add class 'new-file' to the row
+                // so we can remove it when the the file is removed
+                fileRow.classList.add('new-file');
                 fileRow.innerHTML = `
                     <td>
                         ${fileIcon(file.type)} 
                         <strong>${file.name.length > 30 ? file.name.substring(0, 30) + '...' :
                         file.name}</strong>
                     </td>
+                    <td>
+                        ${documentTypeSelectNew.outerHTML}
                     <td>
                         <button type="button" class="button is-danger is-small" data-file-name="${file.name} class="${file.name}">
                             <span class="icon is-small">
@@ -96,15 +140,22 @@ document.addEventListener('turbo:load', () => {
                     </td>
                 `;
                 uploadedContractDocumentsTableBody.appendChild(fileRow);
-                // Add an event listener to the button
+                // Create a new event listener for the remove button
+                // so we can remove the file from the input and the table
                 const button = fileRow.querySelector(`button[type=button]`);
                 button.addEventListener('click', (event) => {
-                    // Remove the file from the input
-                    const filtered = Array.from(uploadedContractDocumentsInput.files)
+                    // Remove the file from the global list of files
+                    const filtered = Array.from(files.files)
                         .filter((f) => f.name !== file.name);
                     const fileList = new DataTransfer();
                     filtered.forEach((f) => fileList.items.add(f));
+                    // Change the input's files and the global files
+                    // so that if the user submits the form, the files
+                    // in the input are correct.
+                    // If the user adds more files, the global files
+                    // will be updated with the new files
                     uploadedContractDocumentsInput.files = fileList.files;
+                    files = fileList;
                     // Remove the row from the table
                     fileRow.remove();
                 });
@@ -117,7 +168,6 @@ document.addEventListener('turbo:load', () => {
     if (vendorReviewStars) {
         const input = document.querySelector('#vendor_review_rating');
         vendorReviewStars.forEach((star) => {
-            console.log(star.parentElement);
             star.addEventListener('click', (event) => {
                 // Get the value of the star (the id of the star converted to an
                 // integer)
@@ -163,68 +213,86 @@ document.addEventListener('turbo:load', () => {
         modals.forEach((modal) => {
             // Get the modal close button
             const modalCloseButtons = modal.querySelectorAll('.modal-close-btn');
+
+            const modalId = modal.id;
+            // Get the buttons that opens the modal
+            const modalOpenButton = document.querySelector(`#${modalId}-open-btn`);
+
+            // Make the button behave like an <a> tag
+            // We do this to avoid making an actual <a> tag which causses redirection when we try to
+            // open the modal
+            // Make cursor a pointer
+            modalOpenButton.style.cursor = 'pointer';
+            // Make the button look like a link (Blue text and no underline, remove blue text on hover)
+            modalOpenButton.classList.add('has-text-link', 'has-text-decoration-none');
+            // Add event listener to the button
+            modalOpenButton.addEventListener('mouseover', (event) => {
+                modalOpenButton.classList.remove('has-text-link');
+            });
+            modalOpenButton.addEventListener('mouseout', (event) => {
+                modalOpenButton.classList.add('has-text-link');
+            });
+
+            // Add event listener to the modal open button
+            modalOpenButton.addEventListener('click', (event) => {
+                modal.classList.add('is-active');
+            });
+            
             // Get the modal background
             const modalBackground = modal.querySelector('.modal-background');
             // Add event listener to the modal close button
-            console.log(modalCloseButtons);
             modalCloseButtons.forEach((button) => {
                 button.addEventListener('click', (event) => {
-                    console.log('close button clicked');
                     modal.classList.remove('is-active');
                 });
             });
             // Add event listener to the modal background
             modalBackground.addEventListener('click', (event) => {
-                console.log('background clicked');
                 modal.classList.remove('is-active');
             });
         });
     }
 
-    // Specific buttons to open modals
-    // Disable user model
-    const disableUserModalButton = document.querySelector('#disable-user-modal-open-btn');
-    if (disableUserModalButton) {
-        // Make the button behave like an <a> tag
-        // We do this to avoid making an actual <a> tag which causses redirection when we try to
-        // open the modal
-        // Make cursor a pointer
-        disableUserModalButton.style.cursor = 'pointer';
-        // Make the button look like a link (Blue text and no underline, remove blue text on hover)
-        disableUserModalButton.classList.add('has-text-link', 'has-text-decoration-none');
-        // Add event listener to the button
-        disableUserModalButton.addEventListener('hover', (event) => {
-            disableUserModalButton.classList.remove('has-text-link');
-        });
+    // Add program or entity on admin page
+    const addResourceFields = document.querySelectorAll('.add-resource-field');
+    if (addResourceFields) {
+        addResourceFields.forEach((addResourceField) => {
+            const id = addResourceField.id;
+            const textInput = addResourceField.querySelector(`input`);
+            const button = addResourceField.querySelector(`button`);
+            const table = document.querySelector(`#${id}_table`);
+            const hiddenInput = document.querySelector(`#${id}_field`);
 
-
-        // ID of the modal is id of the button with -open-btn removed
-        const disableUserModal = document.querySelector('#disable-user-modal');
-        disableUserModalButton.addEventListener('click', (event) => {
-            disableUserModal.classList.add('is-active');
-        });
-    }
-
-    // Redirect user modal
-    const redirectUserModalButton = document.querySelector('#redirect-user-modal-open-btn');
-    if (redirectUserModalButton) {
-        // Make the button behave like an <a> tag
-        // We do this to avoid making an actual <a> tag which causses redirection when we try to
-        // open the modal
-        // Make cursor a pointer
-        redirectUserModalButton.style.cursor = 'pointer';
-        // Make the button look like a link (Blue text and no underline, remove blue text on hover)
-        redirectUserModalButton.classList.add('has-text-link', 'has-text-decoration-none');
-        // Add event listener to the button
-        redirectUserModalButton.addEventListener('hover', (event) => {
-            redirectUserModalButton.classList.remove('has-text-link');
-        });
-
-        // ID of the modal is id of the button with -open-btn removed
-        const redirectUserModal = document.querySelector('#redirect-user-modal');
-        redirectUserModalButton.addEventListener('click', (event) => {
-            console.log('redirect user modal button clicked');
-            redirectUserModal.classList.add('is-active');
+            console.log(id, textInput, button, table, hiddenInput)
+            
+            button.addEventListener('click', (event) => {
+                event.preventDefault();
+                const value = textInput.value;
+                if (value) {
+                    hiddenInput.value += `${value},`;
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${value}</td>
+                        <td>
+                            <button type="button" class="button is-danger is-small">
+                                <span class="icon is-small">
+                                    <i class="fas fa-times"></i>
+                                </span>
+                                <span>Remove</span>
+                            </button>
+                        </td>
+                    `;
+                    table.appendChild(row);
+                    textInput.value = '';
+                    const removeButton = row.querySelector('button');
+                    removeButton.addEventListener('click', (event) => {
+                        event.preventDefault();
+                        const value = row.querySelector('td').textContent;
+                        hiddenInput.value = hiddenInput.value.replace(`${value},`, '');
+                        row.remove();
+                    });
+                }
+            });
         });
     }
 });

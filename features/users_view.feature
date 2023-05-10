@@ -15,7 +15,7 @@ Scenario: View a user
   Then I should see "Example"
 
 Scenario: Get back to view users page from new user page
-  Given I am on the new user page
+  Given I am on the new user invitation page
   And I follow "Back to users"
   Then I should be on the users page
 

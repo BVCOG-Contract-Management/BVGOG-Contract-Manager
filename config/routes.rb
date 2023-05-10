@@ -1,13 +1,18 @@
 Rails.application.routes.draw do
+
   devise_for :users, controllers: { invitations: 'invitations' }
-
+  
   authenticated :user do
-    root to: 'pages#home'
+    root :to => "pages#home"
   end
-
+  
   unauthenticated do
     root to: redirect('/users/sign_in'), as: :unauthenticated_root
   end
+
+  # GET /admin
+  get "/admin", to: "pages#admin", as: "admin"
+  put "/admin", to: "pages#update_admin", as: "update_admin"
 
   resources :vendors do
     member do
@@ -20,6 +25,7 @@ Rails.application.routes.draw do
     # PUT /users/1/redirect
     member do
       put 'redirect', to: 'users#redirect', as: 'redirect'
+      get 'reinvite', to: 'users#reinvite', as: 'reinvite'
     end
   end
   resources :reports
@@ -30,11 +36,11 @@ Rails.application.routes.draw do
   # Contract Documents
   # GET
 
-  get '/contract_documents/:id', to: 'contract_documents#download', as: 'download_contract_document'
+  get "/contract_documents/:id", to: "contract_documents#download", as: "download_contract_document"
 
   # Download Report
   # GET
-  get '/reports/:id/download', to: 'reports#download', as: 'download_report'
+  get "/reports/:id/download", to: "reports#download", as: "download_report"
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
