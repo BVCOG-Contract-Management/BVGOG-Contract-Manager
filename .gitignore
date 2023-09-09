@@ -64,4 +64,5 @@ build-iPhoneSimulator/
 
 public/contracts/*
 public/reports/*
-/config/master.key
+*.key
+
