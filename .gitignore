@@ -1,7 +1,11 @@
 *.gem
 *.rbc
 *.gpg
-/.config
+makefile
+output.txt
+
+/public/assets/
+/.config/
 /coverage/
 /InstalledFiles
 /pkg/
