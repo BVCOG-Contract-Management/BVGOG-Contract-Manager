@@ -1,6 +1,9 @@
 *.gem
 *.rbc
 *.gpg
+makefile
+output.txt
+
 /public/assets/
 /.config/
 /coverage/

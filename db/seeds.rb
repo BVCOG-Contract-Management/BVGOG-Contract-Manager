@@ -55,6 +55,19 @@ unless Rails.env.production?
     entities: Entity.all.sample(rand(0..Entity.count)),
     level: UserLevel::THREE,
     )
+
+    # Create a level 2 user
+    FactoryBot.create(
+      :user,
+      email: "gatekeeper@example.com",
+      password: "password",
+      first_name: "Gatekeeper",
+      last_name: "User",
+      program: Program.all.sample,
+      entities: Entity.all.sample(rand(0..Entity.count)),
+      level: UserLevel::TWO,
+    )
+
     # Create a level 1 user
     FactoryBot.create(
       :user,
