@@ -44,7 +44,7 @@ class ContractsController < ApplicationController
 
   # GET /contracts/new
   def new
-    if current_user.level == UserLevel::THREE
+    if current_user.level == UserLevel::TWO
       redirect_to root_path, alert: "You do not have permission to access this page."
       return
     end
@@ -55,7 +55,7 @@ class ContractsController < ApplicationController
 
   # GET /contracts/1/edit
   def edit
-    if current_user.level == UserLevel::THREE
+    if current_user.level == UserLevel::TWO
       redirect_to root_path, alert: "You do not have permission to access this page."
       return
     end
