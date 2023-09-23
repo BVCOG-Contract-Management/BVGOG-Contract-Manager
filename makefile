@@ -8,5 +8,9 @@ database:
 	rails db:migrate
 	rails db:seed
 
+heroku_db:
+	heroku run rails db:migrate
+	heroku run rails db:seed
+
 deploy:
 	./script/deploy/deploy.sh

@@ -72,9 +72,3 @@ Scenario: Try to get to admin page as a level 3 user
   Given I am on the users page
   And I follow "Administration"
   Then I should see "You do not have permission to access this page"
-
-
-
-
-
-
