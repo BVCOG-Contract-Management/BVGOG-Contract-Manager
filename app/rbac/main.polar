@@ -8,19 +8,19 @@ allow(actor, action, resource) if
 # Can a user read a contract?
 has_permission(user: User, "read", contract: Contract) if
     contract matches Contract and
-    (user.level != "three" or
+    (user.level != "two" or
     user.has_entity?(contract.entity_id) or
     contract.point_of_contact_id = user.id);
 
 # Can a user create a contract?
 has_permission(user: User, "write", contract: Contract) if
     contract matches Contract and
-    user.level != "three";
+    user.level != "two";
 
 # Can a user edit a contract
 has_permission(user: User, "edit", contract: Contract) if
     contract matches Contract and
-    user.level != "three"; 
+    user.level != "two"; 
 
 # --------------------------------------------- #
 
