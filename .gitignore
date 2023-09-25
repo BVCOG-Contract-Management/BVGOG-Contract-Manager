@@ -5,6 +5,7 @@ output.txt
 
 /public/assets/
 /.config/
+/.vscode/
 /coverage/
 /InstalledFiles
 /pkg/
