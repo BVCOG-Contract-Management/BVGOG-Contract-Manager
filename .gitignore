@@ -2,9 +2,11 @@
 *.rbc
 *.gpg
 output.txt
+CMS Requirements Fall 2023.pdf
 
 /public/assets/
 /.config/
+/.vscode/
 /coverage/
 /InstalledFiles
 /pkg/
