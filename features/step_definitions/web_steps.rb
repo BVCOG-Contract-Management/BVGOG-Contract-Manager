@@ -20,3 +20,11 @@ Then(/^I should be on (.+)$/) do |page_name|
 	current_path = URI.parse(current_url).path
 	expect(current_path).to eq(expected_path)
 end
+
+Then(/^I should see "([^"]*)"$/) do |text|
+	if page.respond_to? :should
+		page.should have_content(text)
+	else
+		assert page.has_content?(text)
+	end
+end
