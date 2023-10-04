@@ -30,7 +30,7 @@ Given('I am logged in as a level 1 user') do
 	)
 
 	step 'I fill in "Email" with "level1@example.com"'
-	step 'fill in "Password" with "password"'
+	step 'I fill in "Password" with "password"'
 	step 'I press "commit"'
 end
 
@@ -98,8 +98,4 @@ Then('deactivate example user') do
 	else
 		puts "User not found"
 	end
-end
-
-Given('I am logged in as a level {int} user') do |int|
-	puts int
 end
