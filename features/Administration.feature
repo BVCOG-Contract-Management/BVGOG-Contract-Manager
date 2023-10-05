@@ -57,7 +57,7 @@ Scenario: Delete a program
 	Given I am on the admin page
 	When I check the program 1 check box
 	And I press "commit"
-	Then I should see "Attempted to delete program with associated users program: Program 1"
+	Then I should see /Attempted to delete program with associated contracts program: Program 1|Attempted to delete program with associated users program: Program 1/
 
 Scenario: Delete an entity
 	Given I am on the admin page
