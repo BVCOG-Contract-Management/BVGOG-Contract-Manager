@@ -34,6 +34,24 @@ Given('I am logged in as a level 1 user') do
 	step 'I press "commit"'
 end
 
+Given('I am logged in as a level 2 user') do
+	step 'I am on the sign_in page'
+	FactoryBot.create(
+		:user,
+		email: 'level2@example.com',
+		password: 'password',
+		first_name: 'Level',
+		last_name: 'Two',
+		level: UserLevel::TWO,
+		program: Program.all.sample,
+		entities: [Entity.first]
+	)
+
+	step 'I fill in "Email" with "level2@example.com"'
+	step 'I fill in "Password" with "password"'
+	step 'I press "commit"'
+end
+
 Given('I am logged in as a level 3 user') do
 	step 'I am on the sign_in page'
 	FactoryBot.create(
@@ -47,8 +65,8 @@ Given('I am logged in as a level 3 user') do
 		entities: [Entity.first]
 	)
 
-	step 'I fill in "Email" with "level3@example.com"'
-	step 'fill in "Password" with "password"'
+	step 'I fill in "Email" with "level1@example.com"'
+	step 'I fill in "Password" with "password"'
 	step 'I press "commit"'
 end
 
@@ -74,8 +92,8 @@ Given(/^an example user exists$/) do
 end
 
 Then(/^I should see the example user in the database$/) do
-  user = User.find_by(email: 'user@example.com')
-  expect(user).not_to be_nil
+	user = User.find_by(email: 'user@example.com')
+	expect(user).not_to be_nil
 end
 
 Then('I should see the following users in the console') do |_table|
