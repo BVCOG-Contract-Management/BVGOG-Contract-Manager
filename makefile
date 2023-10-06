@@ -17,6 +17,8 @@ deploy:
 	./script/deploy/deploy.sh
 
 cucumber:
+	bundle install
+	rails db:drop RAILS_ENV=test
 	cucumber
 
 rspec:

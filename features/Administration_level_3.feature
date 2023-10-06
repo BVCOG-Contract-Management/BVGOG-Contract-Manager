@@ -6,16 +6,13 @@ Feature: View and Invite Users
 
 Background:
 	Given db is set up
-	Given an example user exists
 	Given bvcog_config is set up
 	Given I am logged in as a level 3 user
 
-@wip
 Scenario: Get to admin page as level 3
 	Given I am on the admin page
 	Then I should see "You do not have permission to access this page."
 
-@wip
 Scenario: Update admin as level 3
 	Given I am on the admin page
 	And I send a PUT request to "/admin"
