@@ -2,6 +2,14 @@ Given(/^I am on (.+)$/) do |page_name|
 	visit path_to(page_name)
 end
 
+Given('I have visited the user registration page') do
+	visit '/users/sign_up'
+end
+
+Given('I have visited the user invite page') do
+	visit '/users/invitation/new'
+end
+
 When(/^I fill in "([^"]*)" with "([^"]*)"$/) do |field, value|
 	fill_in(field, with: value)
 end
@@ -47,6 +55,9 @@ When("I check the show expired contracts checkbox") do
 	check('report_show_expired_contracts')
 end
 
+When('I select the Entity {int} checkbox') do |num|
+	find("#user_entity_ids_#{num}").set(true)
+end
 
 Then('my url should be {string}') do |url|
 	current_url = page.driver.browser.current_url
