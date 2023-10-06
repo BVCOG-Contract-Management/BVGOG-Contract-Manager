@@ -18,6 +18,22 @@ When('I select {string} from the {string} select box') do |option, select_name|
 	select option, from: select_name
 end
 
+When('I try to edit report {int}') do |num|
+	visit "/reports/#{num}/edit"
+end
+
+When('I try to edit contract {int}') do |num|
+	visit "/contracts/#{num}/edit"
+end
+
+When('I try to edit vendor {int}') do |num|
+	visit "/vendors/#{num}/edit"
+end
+
+When('I try to edit user {int}') do |num|
+	visit "/users/#{num}/edit"
+end
+
 Then(/^I should be on (.+)$/) do |page_name|
 	expected_path = path_to(page_name)
 	current_url = page.driver.browser.current_url
