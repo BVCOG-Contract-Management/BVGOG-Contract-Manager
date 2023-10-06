@@ -16,6 +16,8 @@ module NavigationHelpers
 		when /^the admin page/ then '/admin'
 		when /^the contracts page/ then '/contracts'
 		when /^the new contract page/ then '/contracts/new'
+		when /^the vendor page/ then '/vendors'
+		when /^the new vendor page/ then '/vendors/new'
 
 
 		else
