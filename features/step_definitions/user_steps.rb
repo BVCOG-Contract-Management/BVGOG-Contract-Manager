@@ -65,7 +65,7 @@ Given('I am logged in as a level 3 user') do
 		entities: [Entity.first]
 	)
 
-	step 'I fill in "Email" with "level1@example.com"'
+	step 'I fill in "Email" with "level3@example.com"'
 	step 'I fill in "Password" with "password"'
 	step 'I press "commit"'
 end
@@ -74,7 +74,7 @@ Given('I am logged in as an example user') do
 	step 'I am on the sign_in page'
 	step 'an example user exists'
 	step 'I fill in "Email" with "user@example.com"'
-	step 'fill in "Password" with "password"'
+	step 'I fill in "Password" with "password"'
 	step 'I press "commit"'
 end
 
