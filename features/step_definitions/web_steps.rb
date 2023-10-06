@@ -43,6 +43,17 @@ When('I try to edit user {int}') do |num|
 	visit "/users/#{num}/edit"
 end
 
+When("I check the show expired contracts checkbox") do
+	check('report_show_expired_contracts')
+end
+
+
+Then('my url should be {string}') do |url|
+	current_url = page.driver.browser.current_url
+	current_path = URI.parse(current_url).path
+	expect(current_path).to eq(url)
+end
+
 Then(/^I should be on (.+)$/) do |page_name|
 	expected_path = path_to(page_name)
 	current_url = page.driver.browser.current_url
