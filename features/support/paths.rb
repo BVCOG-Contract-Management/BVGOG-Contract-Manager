@@ -18,6 +18,8 @@ module NavigationHelpers
 		when /^the new contract page/ then '/contracts/new'
 		when /^the vendor page/ then '/vendors'
 		when /^the new vendor page/ then '/vendors/new'
+		when /^the report page/ then '/reports/'
+		when /^the new report page/ then '/reports/new'
 
 
 		else
