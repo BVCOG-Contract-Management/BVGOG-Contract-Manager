@@ -14,6 +14,15 @@ When(/^I follow "([^"]*)"$/) do |link|
 	click_link(link)
 end
 
+When(/^I upload "([^"]*)" to the contract documents field$/) do |filename|
+	# Find the input element by name attribute
+	File.new(filename, 'w')
+	# Attach the file to the input element
+	page.attach_file(Rails.root.join(filename)) do
+		page.find('#contract-documents-file-input').click
+	end
+end
+
 When('I select {string} from the {string} select box') do |option, select_name|
 	select option, from: select_name
 end
