@@ -16,11 +16,11 @@ module NavigationHelpers
 		when /^the admin page/ then '/admin'
 		when /^the contracts page/ then '/contracts'
 		when /^the new contract page/ then '/contracts/new'
-		when /^the vendor page/ then '/vendors'
+		when /^the vendors page/ then '/vendors'
 		when /^the new vendor page/ then '/vendors/new'
 		when /^the reports page/ then '/reports/'
 		when /^the new report page/ then '/reports/new'
-
+		when /^the new user invitation page/ then '/users/invitation/new'
 
 		else
 			raise "Can't find mapping from \"#{page_name}\" to a path.\nNow, go and add a mapping in #{__FILE__}"

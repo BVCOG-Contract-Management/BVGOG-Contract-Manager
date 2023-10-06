@@ -59,6 +59,10 @@ When('I select the Entity {int} checkbox') do |num|
 	find("#user_entity_ids_#{num}").set(true)
 end
 
+When('I check Entity {int}') do |num|
+	check('user[entity_ids][]', option: "#{num}")
+end
+
 Then('my url should be {string}') do |url|
 	current_url = page.driver.browser.current_url
 	current_path = URI.parse(current_url).path
