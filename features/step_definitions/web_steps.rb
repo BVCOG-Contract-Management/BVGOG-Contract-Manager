@@ -14,6 +14,10 @@ When(/^I follow "([^"]*)"$/) do |link|
 	click_link(link)
 end
 
+When('I select {string} from the {string} select box') do |option, select_name|
+	select option, from: select_name
+end
+
 Then(/^I should be on (.+)$/) do |page_name|
 	expected_path = path_to(page_name)
 	current_url = page.driver.browser.current_url
