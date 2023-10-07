@@ -1,4 +1,5 @@
 run:
+	bundle install
 	rails s
 
 database:
@@ -14,3 +15,11 @@ heroku_db:
 
 deploy:
 	./script/deploy/deploy.sh
+
+cucumber:
+	bundle install
+	rails db:drop RAILS_ENV=test
+	cucumber
+
+rspec:
+	rspec

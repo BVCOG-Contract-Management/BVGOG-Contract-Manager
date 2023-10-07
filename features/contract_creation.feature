@@ -34,5 +34,3 @@ Scenario: Sucessfully create a contract
 	And I select "Example User" from the point of contact dropdown
 	And I press "Create Contract"
 	Then I should see "Contract was successfully created."
-
-
