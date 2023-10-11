@@ -7,215 +7,212 @@
     </header>
     <%= form_with(model: @contract, data: { turbo: false }) do |form| %>
     <div class="card-content">
-          <% if @contract.errors.any? %>
-            <article class="message is-danger">
-              <div class="message-header">
-                <p><%= pluralize(contract.errors.count, "error") %> prohibited this contract from being saved:</p>
-              </div>
-              <div class="message-body">
-                <ul>
-                  <% contract.errors.full_messages.each do |message| %>
-                    <li><%= message %></li>
-                  <% end %>
-                </ul>
-              </div>
-            </article>
-          <% end %>
+      <% if @contract.errors.any? %>
+        <article class="message is-danger">
+          <div class="message-header">
+            <p><%= pluralize(contract.errors.count, "error") %> prohibited this contract from being saved:</p>
+          </div>
+          <div class="message-body">
+            <ul>
+              <% contract.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        </article>
+      <% end %>
 
-          <%# Form starts here %>
+      <%# Form starts here %>
+      <div class="columns">
+        <div class="column is-6">
+          <%# Title %>
+          <div class="field">
+            <%= form.label :title %>
+            <%= form.text_field :title, class: "input" %>
+          </div>
+          <%# Number %>
+          <div class="field">
+            <%= form.label :number %>
+            <%= form.text_field :number, class: "input" %>
+          </div>
+          <%# Vendor %>
+          <div class="field">
+            <%= form.label :vendor_id %>
+            <%= form.select :vendor_id, vendor_select_options, {:include_blank => !@contract.vendor_id.present?}, class: "input", id: "vendor_id" %>
+          </div>
+
+          <%# Description %>
+          <div class="field">
+            <%= form.label :description %>
+            <%= form.text_area :description, class: "textarea" %>
+          </div>
+
+          <%# Contract Type %>
+          <div class="field">
+            <%= form.label :contract_type %>
+            <%= form.select :contract_type, ContractType.to_a, {:include_blank => true}, class: "input" %>
+          </div>
+
+          <%# Point of Contact %>
+          <%# TODO: default to logged in user %>
+          <div class="field">
+            <%= form.label :point_of_contact_id %>
+            <%= form.select :point_of_contact_id, user_select_options, {:include_blank => true}, class: "input" %>
+          </div>
+
+          <%# Program %>
+          <div class="field">
+            <%= form.label :program_id %>
+            <%= form.select :program_id, program_select_options, {:include_blank => !@contract.program_id.present?}, class: "input" %>
+          </div>
+
+          <%# Entity %>
+          <div class="field">
+            <%= form.label :entity_id %>
+            <%= form.select :entity_id, entity_select_options, {:include_blank => !@contract.entity_id.present?}, class: "input" %>
+          </div>
+
+          <%# Search Key Words %>
+          <div class="field">
+            <%= form.label :search_key_words %>
+            <%= form.text_field :key_words, placeholder: "Separate key words with a comma", class: "input" %>
+          </div>
+        </div>
+
+        <div class="column is-6">
+          <%# Start Date and End Date %>
           <div class="columns">
             <div class="column is-6">
-              <%# Title %>
               <div class="field">
-                <%= form.label :title %>
-                <%= form.text_field :title, class: "input" %>
-              </div>
-              <%# Contract Number %>
-              <div class="field">
-                <%= form.label :number %>
-                <%= form.text_field :number, class: "input" %>
-              </div>
-              <%# Point of Contact %>
-              <%# TODO: default to logged in user %>
-              <div class="field">
-                <%= form.label :point_of_contact_id %>
-                <%= form.select :point_of_contact_id, user_select_options, {:include_blank => true}, class: "input" %>
-              </div>
-              <%# Contract Type %>
-              <div class="field">
-                <%= form.label :contract_type %>
-                <%= form.select :contract_type, ContractType.to_a, {:include_blank => true}, class: "input" %>
-              </div>
-              <div class="columns">
-                <div class="column is-6">
-                  <%# Start Date %>
-                  <div class="field">
-                    <%= form.label :start_date %>
-                    <%= form.date_field :starts_at, class: "input" %>
-                  </div>
-                </div>
-                <div class="column is-6">
-                  <%# End Date %>
-                  <div class="field">
-                    <%= form.label :end_date %>
-                    <%= form.date_field :ends_at, class: "input" %>
-                  </div>
-                </div>
-              </div>
-              <%# Money Amount %>
-              <div class="columns">
-                <div class="column is-6">
-                  <%# Dollar Amount %>
-                  <div class="field">
-                    <%= form.label :amount_dollar, "Dollar amount" %>
-                    <p class="control has-icons-left">
-                      <%= form.number_field :amount_dollar, class: "input", id: "contract-form-dollar-amount" %>
-                      <span class="icon is-small is-left">
-                        <i class="fas fa-dollar"></i>
-                      </span>
-                    </p>
-                  </div>
-                </div>
-                <div class="column is-6">
-                  <%# Amount Period %>
-                  <div class="field">
-                    <%= form.label :amount_duration %>
-                    <%= form.select :amount_duration, TimePeriod.to_a, {:include_blank => true}, class: "input" %>
-                  </div>
-                </div>
-              </div>
-              <%# Description %>
-              <div class="field">
-                <%= form.label :description %>
-                <%= form.text_area :description, class: "textarea" %>
+                <%= form.label :start_date %>
+                <%= form.date_field :starts_at, class: "input" %>
               </div>
             </div>
             <div class="column is-6">
-              <%# Vendor %>
-                <div class="field">
-                  <%= form.label :vendor_id %>
-                  <%= form.select :vendor_id, vendor_select_options, {:include_blank => !@contract.vendor_id.present?}, class: "input", id: "vendor_id" %>
-                </div>
-
-                <!-- A text input field for entering a new vendor name, initially hidden -->
-                <div id="new_vendor_field" class="field is-hidden">
-                  <%= form.label :new_vendor_name %>
-                  <%= form.text_field :new_vendor_name, class: "input" %>
-                </div>
-
-              <%# Program %>
               <div class="field">
-                <%= form.label :program_id %>
-                <%= form.select :program_id, program_select_options, {:include_blank => !@contract.program_id.present?}, class: "input" %>
+                <%= form.label :end_date %>
+                <%= form.date_field :ends_at, class: "input" %>
               </div>
-              <%# Entity %>
-              <div class="field">
-                <%= form.label :entity_id %>
-                <%= form.select :entity_id, entity_select_options, {:include_blank => !@contract.entity_id.present?}, class: "input" %>
-              </div>
-              <%# End Trigger %>
-              <div class="field">
-                <%= form.label :end_trigger %>
-                <%= form.select :end_trigger, EndTrigger.to_a, {:include_blank => true}, class: "input" %>
-              </div>
-              <%# Intial Term %>
-              <div class="columns">
-                <div class="column is-4">
-                  <%# Term Amount %>
-                  <div class="field">
-                    <%= form.label :initial_term_amount %>
-                    <p class="control has-icons-left">
-                      <%= form.number_field :initial_term_amount, class: "input" %>
-                      <span class="icon is-small is-left">
-                        <i class="fas fa-clock"></i>
-                      </span>
-                    </p>
-                  </div>
-                </div>
-                <div class="column is-4">
-                  <%# Term Duration %>
-                  <div class="field">
-                    <%= form.label :initial_term_duration %>
-                    <%= form.select :initial_term_duration, TimePeriod.to_a, {:include_blank => true}, class: "input " %>
-                  </div>
-                </div>
-                <div class="column is-4">
-                  <%# Term Extension %>
-                  <div class="field">
-                    <%= form.label :renewal_count, "Remaining renewals" %>
-                    <%= form.number_field :renewal_count, class: "input" %>
-                  </div>
-                </div>
-              </div>
-              <%# Keywords %>
-              <div class="field">
-                <%= form.label :search_key_words %>
-                <%= form.text_field :key_words, placeholder: "Seperate key words with comma", class: "input" %>
-              </div>
-              <%# Requires Rebid %>
-              <div class="field">
-                <%= form.label :requires_rebid %>
-                <%= form.check_box :requires_rebid, class: "checkbox" %>
-              </div>
-              <%# Files %>
-              <div class="field">
-                <%= form.label :contract_documents %>
-                <div class="file">
-                  <label class="file-label">
-                    <%= form.file_field :contract_documents, multiple: true, class: "file-input", id: "contract-documents-file-input" %>
-                    <span class="file-cta">
-                      <span class="file-icon">
-                        <i class="fas fa-upload"></i>
-                      </span>
-                      <span class="file-label">
-                        Choose files...
-                      </span>
-                    </span>
-                  </label>
-                </div>
-              </div>
-
-
-              <%# Use a hidden select tag that JS can copy over for each uploaded file %>
-              <%= form.select :contract_document_type_hidden, ContractDocumentType.to_a, {:selected => ContractDocumentType::OTHER}, class: "input is-small is-hidden", id: "contract_document_type_hidden" %>
-
-              <%# Display the uploaded contract documents %>
-              <table id="uploaded-contract-documents-table" class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
-                <tbody>
-                  <%# Javascript adds to this table as files are uploaded %>
-                  <%# Ruby is annoying and doesn't do this nicely... %>
-
-                  <%# Files that are already uploaded are not removable %>
-                    <% @contract.contract_documents.each do |contract_document| %>
-                      <tr class="is-disabled" id="contract-document-<%= contract_document.id %>">
-                        <td>
-                        <%= file_type_icon(contract_document.file_name) %>
-                        <strong><%= contract_document.orig_file_name.present? ? contract_document.orig_file_name.truncate(30) : contract_document.file_name.truncate(30) %></strong>
-                        </td>
-                        <td>
-                          <%= contract_document.document_type.present? ? contract_document.document_type.humanize : "Other" %>
-                        </td>
-                      </tr>
-                    <% end %>
-                </tbody>
-              </table>
             </div>
           </div>
+
+          <%# Dollar Amount and Amount Duration %>
+          <div class="columns">
+            <div class="column is-6">
+              <div class="field">
+                <%= form.label :amount_dollar, "Dollar amount" %>
+                <p class="control has-icons-left">
+                  <%= form.number_field :amount_dollar, class: "input", id: "contract-form-dollar-amount" %>
+                  <span class="icon is-small is-left">
+                    <i class="fas fa-dollar"></i>
+                  </span>
+                </p>
+              </div>
+            </div>
+            <div class="column is-6">
+              <div class="field">
+                <%= form.label :amount_duration %>
+                <%= form.select :amount_duration, TimePeriod.to_a, {:include_blank => true}, class: "input" %>
+              </div>
+            </div>
+          </div>
+
+          <%# End Trigger %>
+          <div class="field">
+            <%= form.label :end_trigger %>
+            <%= form.select :end_trigger, EndTrigger.to_a, {:include_blank => true}, class: "input" %>
+          </div>
+
+          <%# Initial Term Amount, Initial Term Duration, and Remaining Renewals %>
+          <div class="columns">
+            <div class="column is-4">
+              <div class="field">
+                <%= form.label :initial_term_amount %>
+                <p class="control has-icons-left">
+                  <%= form.number_field :initial_term_amount, class: "input" %>
+                  <span class="icon is-small is-left">
+                    <i class="fas fa-clock"></i>
+                  </span>
+                </p>
+              </div>
+            </div>
+            <div class="column is-4">
+              <div class="field">
+                <%= form.label :initial_term_duration %>
+                <%= form.select :initial_term_duration, TimePeriod.to_a, {:include_blank => true}, class: "input " %>
+              </div>
+            </div>
+            <div class="column is-4">
+              <div class="field">
+                <%= form.label :renewal_count, "Remaining renewals" %>
+                <%= form.number_field :renewal_count, class: "input" %>
+              </div>
+            </div>
+          </div>
+
+          <%# Requires Rebid %>
+          <div class="field">
+            <%= form.label :requires_rebid %>
+            <%= form.check_box :requires_rebid, class: "checkbox" %>
+          </div>
+
+          <%# Contract Documents %>
+          <div class="field">
+            <%= form.label :contract_documents %>
+            <div class="file">
+              <label class="file-label">
+                <%= form.file_field :contract_documents, multiple: true, class: "file-input", id: "contract-documents-file-input" %>
+                <span class="file-cta">
+                  <span class="file-icon">
+                    <i class="fas fa-upload"></i>
+                  </span>
+                  <span class="file-label">
+                    Choose files...
+                  </span>
+                </span>
+              </label>
+            </div>
+          </div>
+
+          <%# Use a hidden select tag that JS can copy over for each uploaded file %>
+          <%= form.select :contract_document_type_hidden, ContractDocumentType.to_a, {:selected => ContractDocumentType::OTHER}, class: "input is-small is-hidden", id: "contract_document_type_hidden" %>
+
+          <%# Display the uploaded contract documents %>
+          <table id="uploaded-contract-documents-table" class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+            <tbody>
+              <%# JavaScript adds to this table as files are uploaded %>
+              <%# Ruby is annoying and doesn't do this nicely... %>
+
+              <%# Files that are already uploaded are not removable %>
+              <% @contract.contract_documents.each do |contract_document| %>
+                <tr class="is-disabled" id="contract-document-<%= contract_document.id %>">
+                  <td>
+                    <%= file_type_icon(contract_document.file_name) %>
+                    <strong><%= contract_document.orig_file_name.present? ? contract_document.orig_file_name.truncate(30) : contract_document.file_name.truncate(30) %></strong>
+                  </td>
+                  <td>
+                    <%= contract_document.document_type.present? ? contract_document.document_type.humanize : "Other" %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
 
-        <footer class="card-footer">
-          <div class="card-footer-item">
-            <div class="field is-grouped">
-              <div class="control">
-                <%= form.submit class: "button is-link" %>
-              </div>
-              <div class="control">
-                <%= link_to "Back to contracts", contracts_path, class: "button is-danger is-outlined" %>
-              </div>
-            </div>
+    <footer class="card-footer">
+      <div class="card-footer-item">
+        <div class="field is-grouped">
+          <div class="control">
+            <%= form.submit class: "button is-link" %>
           </div>
-        </footer>
-      <% end %>
+          <div class="control">
+            <%= link_to "Back to contracts", contracts_path, class: "button is-danger is-outlined" %>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <% end %>
   </div>
 </div>
-
