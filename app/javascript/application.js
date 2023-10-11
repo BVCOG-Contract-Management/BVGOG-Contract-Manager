@@ -66,6 +66,12 @@ document.addEventListener('turbo:load', () => {
         });
     }
 
+    $(document).ready(function() {
+        $('#vendor_id').autocomplete({
+          source: ['foo', 'foobar', 'food', "neha", "shreya"]
+        });
+      });
+
     // Set cursor blink in search table
     const searchInput = document.querySelector('#search-input');
     if (searchInput) {
