@@ -41,6 +41,12 @@
             <%= form.select :vendor_id, vendor_select_options, {:include_blank => !@contract.vendor_id.present?}, class: "input", id: "vendor_id" %>
           </div>
 
+          <!-- A text input field for entering a new vendor name, initially hidden -->
+                <div id="new_vendor_field" class="field is-hidden">
+                  <%= form.label :new_vendor_name %>
+                  <%= form.text_field :new_vendor_name, class: "input" %>
+                </div>
+                
           <%# Description %>
           <div class="field">
             <%= form.label :description %>
