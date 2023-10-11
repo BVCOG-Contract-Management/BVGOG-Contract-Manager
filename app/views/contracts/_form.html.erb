@@ -42,6 +42,9 @@
            <input type="text" id="vendor_id" class="input" placeholder="Type to select or enter a vendor">
           </div>
 
+          <script type="text/javascript">
+            var vendorOptions = <%= vendor_select_options_json.html_safe %>;
+          </script>
           <!-- A text input field for entering a new vendor name, initially hidden -->
                 <div id="new_vendor_field" class="field is-hidden">
                   <%= form.label :new_vendor_name %>

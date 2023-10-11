@@ -68,7 +68,10 @@ document.addEventListener('turbo:load', () => {
 
     $(document).ready(function() {
         $('#vendor_id').autocomplete({
-          source: ['foo', 'foobar', 'food', "neha", "shreya"]
+          source: vendorOptions,
+          minLength: 1, 
+          max: 5, 
+          maxHeight: 200,
         });
       });
 
