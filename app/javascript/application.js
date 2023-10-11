@@ -67,11 +67,24 @@ document.addEventListener('turbo:load', () => {
     }
 
     $(document).ready(function() {
-        $('#vendor_id').autocomplete({
+        $(vendorSelect).autocomplete({
           source: vendorOptions,
-          minLength: 1, 
+          minLength: 1,
           max: 5, 
           maxHeight: 200,
+          focus: function(event, ui) {
+            // Prevent the input field from displaying vendor.id when an option is highlighted
+            event.preventDefault();
+            // Set the input field value to the highlighted vendor name (handling keyboard activity here)
+            $(vendorSelect).val(ui.item.label);
+          },
+          select: function(event, ui) {
+            // Set the value of the input field to the selected vendor name (not the vendor id)
+            $(vendorSelect).val(ui.item.label);
+            return false; // Prevent the default behavior of filling the input with the value
+          }
+        
+         
         });
       });
 
