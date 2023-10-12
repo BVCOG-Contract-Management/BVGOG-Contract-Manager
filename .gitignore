@@ -1,11 +1,13 @@
 *.gem
 *.rbc
 *.gpg
-makefile
 output.txt
+CMS Requirements Fall 2023.pdf
+logo.png
 
 /public/assets/
 /.config/
+/.vscode/
 /coverage/
 /InstalledFiles
 /pkg/
