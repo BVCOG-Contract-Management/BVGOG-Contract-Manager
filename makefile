@@ -18,8 +18,8 @@ deploy:
 
 cucumber:
 	bundle install
-	rails db:drop RAILS_ENV=test
-	cucumber
+	rails cucumber
 
 rspec:
-	rspec
+	bundle install
+	bunlde exec rspec
