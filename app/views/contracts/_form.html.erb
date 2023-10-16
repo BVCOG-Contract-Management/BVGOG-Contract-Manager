@@ -39,7 +39,9 @@
           <div class="field">
             <%= form.label :vendor_id %>
 
-           <input type="text" id="vendor_id" class="input" placeholder="Type to select or enter a vendor">
+            <input type="text" name="vendor_id", id="vendor_id" class="input" placeholder="Type to select or enter a vendor">
+            <%= form.text_field :vendor_id, class: "input" %>
+            
           </div>
 
           <script type="text/javascript">

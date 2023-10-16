@@ -23,7 +23,7 @@ Then('I should see {string} element') do |element_name|
   expect(page).to have_selector(:xpath, "//strong[contains(., '#{element_name}')]")
 end
 
-When('I fill in the {string} field with {string}') do |field, filler|
+When('I fill in the {string} date field with {string}') do |field, filler|
   fill_in field, with: filler
 end
 
@@ -35,8 +35,12 @@ When('I fill in the contract end date field with {string}') do |date|
   fill_in 'contract_ends_at', with: date
 end
 
-When('I select {string} from the vendor dropdown') do |vendor_name|
-  select vendor_name, from: 'contract[vendor_id]'
+# When('I select {string} from the vendor dropdown') do |vendor_name|
+#   select vendor_name, from: 'contract[vendor_id]'
+# end
+
+When('I fill in the {string} field with {string}') do |field_name, vendor_name|
+  fill_in field_name, with: vendor_name
 end
 
 When('I select {string} from the program dropdown') do |program_name|
