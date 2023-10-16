@@ -1,7 +1,9 @@
-require "rails_helper"
-require "auth_helper"
+# frozen_string_literal: true
 
-RSpec.describe "contracts/edit", type: :view do
+require 'rails_helper'
+require 'auth_helper'
+
+RSpec.describe 'contracts/edit', type: :view do
   include Devise::Test::IntegrationHelpers
   include Devise::Test::ControllerHelpers
   include FactoryBot::Syntax::Methods
@@ -11,10 +13,10 @@ RSpec.describe "contracts/edit", type: :view do
     @contract = assign(:contract, create(:contract))
   end
 
-  it "renders the edit contract form" do
+  it 'renders the edit contract form' do
     render
 
-    assert_select "form[action=?][method=?]", contract_path(@contract), "post" do
+    assert_select 'form[action=?][method=?]', contract_path(@contract), 'post' do
     end
   end
 end

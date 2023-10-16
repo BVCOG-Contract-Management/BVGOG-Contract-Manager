@@ -1,7 +1,8 @@
+# frozen_string_literal: true
 
 class ReportsController < ApplicationController
   include ReportsHelper
-  before_action :set_report, only: %i[ show edit update destroy download ]
+  before_action :set_report, only: %i[show edit update destroy download]
 
   # GET /reports or /reports.json
   def index
@@ -10,14 +11,14 @@ class ReportsController < ApplicationController
 
   # GET /reports/1 or /reports/1.json
   def show
-    add_breadcrumb "Reports"
+    add_breadcrumb 'Reports'
     add_breadcrumb @report.title, report_path(@report)
   end
 
   # GET /reports/new
   def new
-    add_breadcrumb "Reports"
-    add_breadcrumb "New Report", new_report_path
+    add_breadcrumb 'Reports'
+    add_breadcrumb 'New Report', new_report_path
     # Get the query param "type" (either "contract" or "user")
     # and create the correct report model subclass
     type = params[:type]
@@ -50,7 +51,7 @@ class ReportsController < ApplicationController
 
     respond_to do |format|
       if @report.save
-        format.html { redirect_to report_url(@report), notice: "Report was successfully created." }
+        format.html { redirect_to report_url(@report), notice: 'Report was successfully created.' }
         format.json { render :show, status: :created, location: @report }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -71,7 +72,7 @@ class ReportsController < ApplicationController
     @report.destroy
 
     respond_to do |format|
-      format.html { redirect_to reports_url, notice: "Report was successfully destroyed." }
+      format.html { redirect_to reports_url, notice: 'Report was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -79,32 +80,33 @@ class ReportsController < ApplicationController
   def download
     # If the report file does not exist, redirect to the report show page
     if !File.exist?(@report.full_path)
-      redirect_to report_path(@report), alert: "The report file does not exist."
+      redirect_to report_path(@report), alert: 'The report file does not exist.'
     else
       # Send the file to the user
-      send_file @report.full_path, type: "application/pdf", x_sendfile: true
+      send_file @report.full_path, type: 'application/pdf', x_sendfile: true
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_report
-      @report = Report.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def report_params
-      allowed = [
-        :title,
-        :file_path,
-        :full_path,
-        :report_type,
-        :point_of_contact_id,
-        :entity_id,
-        :program_id,
-        :expiring_in_days,
-        :show_expired_contracts,
-      ]
-      params.fetch(:report, {}).permit(allowed)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_report
+    @report = Report.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def report_params
+    allowed = %i[
+      title
+      file_path
+      full_path
+      report_type
+      point_of_contact_id
+      entity_id
+      program_id
+      expiring_in_days
+      show_expired_contracts
+    ]
+    params.fetch(:report, {}).permit(allowed)
+  end
 end

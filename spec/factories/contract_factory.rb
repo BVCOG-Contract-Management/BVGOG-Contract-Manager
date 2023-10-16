@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Contract Factory
 
 FactoryBot.define do

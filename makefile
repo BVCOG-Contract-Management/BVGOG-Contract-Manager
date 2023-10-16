@@ -22,4 +22,4 @@ cucumber:
 
 rspec:
 	bundle install
-	bunlde exec rspec
+	bundle exec rspec spec

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ContractDocument < ApplicationRecord
   validates :contract_id, presence: true
   validates :file_name, presence: true
@@ -5,5 +7,5 @@ class ContractDocument < ApplicationRecord
 
   has_enumeration_for :document_type, with: ContractDocumentType, create_helpers: true
 
-  belongs_to :contract, class_name: "Contract", foreign_key: "contract_id"
+  belongs_to :contract, class_name: 'Contract', foreign_key: 'contract_id'
 end

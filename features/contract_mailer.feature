@@ -17,5 +17,4 @@ Background:
 Scenario: Send reminder email
 	Given I am on the contracts page
 	When I follow "Contract 1"
-	When I follow "Send expiry reminder"
-	Then I should not see "Expiry reminder sucessfully sent."
+	Then I should not see "Send expiry reminder"

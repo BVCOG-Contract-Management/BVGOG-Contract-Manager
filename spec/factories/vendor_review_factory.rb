@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Vendor Review Factory
 
 FactoryBot.define do

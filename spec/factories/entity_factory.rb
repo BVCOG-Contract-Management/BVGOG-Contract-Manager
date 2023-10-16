@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Entity Factory
 
 FactoryBot.define do

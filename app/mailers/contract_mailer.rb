@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Sends reminder emails for contract expiry
 class ContractMailer < ApplicationMailer
   def expiry_reminder(contract)
@@ -10,16 +12,17 @@ class ContractMailer < ApplicationMailer
     mail(to: emails,
          subject: "REMINDER: Contract expiring in #{days_remaining} days ")
   end
-  
+
   def expiration_report(report)
     @report = report
     attachments[report.file_name] = File.read(report.full_path)
     BvcogConfig.last.users.each do |user|
       mail(
         to: user.email,
-        subject: "Contract Expiration Report - #{Date.today.strftime("%m/%d/%Y")}") do |format|
-          format.html { render 'expiration_report', locals: { name: user.full_name } }
-        end
+        subject: "Contract Expiration Report - #{Date.today.strftime('%m/%d/%Y')}"
+      ) do |format|
+        format.html { render 'expiration_report', locals: { name: user.full_name } }
+      end
     end
   end
 end

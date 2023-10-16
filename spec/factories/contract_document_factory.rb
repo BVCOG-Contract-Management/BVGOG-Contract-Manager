@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Contract Document Factory
 
 FactoryBot.define do
@@ -6,6 +8,6 @@ FactoryBot.define do
 
     id { Faker::Number.positive }
     file_name { Faker::File.file_name }
-    full_path { Faker::File.dir + "/" + Faker::File.file_name }
+    full_path { "#{Faker::File.dir}/#{Faker::File.file_name}" }
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Use this file to easily define all of your cron jobs.
 #
 # It's helpful, but not entirely necessary to understand cron before proceeding.
@@ -19,7 +21,7 @@
 
 # Learn more: http://github.com/javan/whenever
 
-set :output, "log/cron_log.log"
+set :output, 'log/cron_log.log'
 env :PATH, ENV['PATH']
 env :HOST, ENV['HOST']
 env :DATABASE_URL, ENV['DATABASE_URL']
@@ -33,9 +35,8 @@ env :MAIL_DEFAULT_FROM, ENV['MAIL_DEFAULT_FROM']
 env :MAIL_DOMAIN, ENV['MAIL_DOMAIN']
 env :MAIL_USERNAME, ENV['MAIL_USERNAME']
 
-
-EVERY_DAY_AT_5_AM = "0 5 * * *"
-FIRST_OF_EACH_MONTH = "0 0 1 * *"
+EVERY_DAY_AT_5_AM = '0 5 * * *'
+FIRST_OF_EACH_MONTH = '0 0 1 * *'
 
 # Send expiry reminders for contracts every day
 # every EVERY_DAY_AT_5_AM do
@@ -44,12 +45,12 @@ FIRST_OF_EACH_MONTH = "0 0 1 * *"
 
 # Send expiration reports once a month
 every FIRST_OF_EACH_MONTH do
-    rake "contracts:send_expiration_reports"
+  rake 'contracts:send_expiration_reports'
 end
 
 # Export contracts once a month
 every FIRST_OF_EACH_MONTH do
-    rake "contracts:export_all_contract_data"
+  rake 'contracts:export_all_contract_data'
 end
 
 # Test task every minute

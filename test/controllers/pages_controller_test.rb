@@ -1,7 +1,9 @@
-require "test_helper"
+# frozen_string_literal: true
+
+require 'test_helper'
 
 class PagesControllerTest < ActionDispatch::IntegrationTest
-  test "should get home" do
+  test 'should get home' do
     get root_path
     assert_response :success
   end

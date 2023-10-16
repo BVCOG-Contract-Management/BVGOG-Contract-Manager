@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 require 'auth_helper'
 
-RSpec.describe "vendors/show", type: :view do
+RSpec.describe 'vendors/show', type: :view do
   include Devise::Test::IntegrationHelpers
   include Devise::Test::ControllerHelpers
   include FactoryBot::Syntax::Methods
@@ -11,7 +13,7 @@ RSpec.describe "vendors/show", type: :view do
     @vendor = FactoryBot.create(:vendor)
   end
 
-  it "renders attributes in <p>" do
+  it 'renders attributes in <p>' do
     render
   end
 end

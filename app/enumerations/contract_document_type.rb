@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ContractDocumentType < EnumerateIt::Base
   associate_values(
     :other,

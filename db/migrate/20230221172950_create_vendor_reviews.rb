@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateVendorReviews < ActiveRecord::Migration[7.0]
   def change
     create_table :vendor_reviews do |t|
@@ -7,7 +9,7 @@ class CreateVendorReviews < ActiveRecord::Migration[7.0]
       t.references :vendor, null: false, foreign_key: true
 
       # (user, vendor) pair must be unique
-      t.index [:user_id, :vendor_id], unique: true
+      t.index %i[user_id vendor_id], unique: true
 
       t.timestamps
     end

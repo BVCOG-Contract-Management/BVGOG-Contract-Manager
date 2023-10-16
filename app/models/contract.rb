@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 class Contract < ApplicationRecord
   validates :title, presence: true, length: { maximum: 255 }
