@@ -16,129 +16,129 @@ require 'auth_helper'
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
 RSpec.describe '/contracts', type: :request do
-  include Devise::Test::IntegrationHelpers
-  include FactoryBot::Syntax::Methods
+    include Devise::Test::IntegrationHelpers
+    include FactoryBot::Syntax::Methods
 
-  before do
-    login_user
-  end
-
-  # This should return the minimal set of attributes required to create a valid
-  # Contract. As you add validations to Contract, be sure to
-  # adjust the attributes here as well.
-  let(:valid_attributes) do
-    entity = create(:entity)
-    program = create(:program)
-    point_of_contact = create(:user, entities: [entity], level: UserLevel::TWO)
-    vendor = create(:vendor)
-    return build(
-      :contract,
-      entity:,
-      program:,
-      point_of_contact:,
-      vendor:
-    ).attributes
-  end
-
-  let(:invalid_attributes) do
-    return build(
-      :contract,
-      vendor_id: nil,
-      entity_id: nil,
-      program_id: nil,
-      point_of_contact_id: nil,
-      starts_at: nil,
-      title: nil,
-      contract_type: nil
-    ).attributes
-  end
-
-  describe 'GET /index' do
-    it 'renders a successful response' do
-      Contract.create! valid_attributes
-      get contracts_url
-      expect(response).to be_successful
-    end
-  end
-
-  describe 'GET /show' do
-    it 'renders a successful response' do
-      contract = Contract.create! valid_attributes
-      get contract_url(contract)
-      expect(response).to be_successful
-    end
-  end
-
-  describe 'GET /new' do
-    it 'renders a successful response' do
-      get new_contract_url
-      expect(response).to be_successful
-    end
-  end
-
-  describe 'GET /edit' do
-    it 'renders a successful response' do
-      contract = Contract.create! valid_attributes
-      get edit_contract_url(contract)
-      expect(response).to be_successful
-    end
-  end
-
-  describe 'POST /create' do
-    context 'with valid parameters' do
-      it 'creates a new Contract' do
-        expect do
-          post contracts_url, params: { contract: valid_attributes }
-        end.to change(Contract, :count).by(1)
-      end
-
-      pending 'redirects to the created contract' do
-        it contracts_url, params: { contract: valid_attributes }
-        expect(response).to redirect_to(contract_url(Contract.last))
-      end
+    before do
+        login_user
     end
 
-    context 'with invalid parameters' do
-      it 'does not create a new Contract' do
-        expect do
-          post contracts_url, params: { contract: invalid_attributes }
-        end.to change(Contract, :count).by(0)
-      end
-
-      pending "renders a successful response (i.e. to display the 'new' template)" do
-        post contracts_url, params: { contract: invalid_attributes }
-        expect(response).to be_successful
-      end
-    end
-  end
-
-  describe 'PATCH /update' do
-    context 'with valid parameters' do
-      let(:new_attributes) do
-        skip('Add a hash of attributes valid for your model')
-      end
-
-      it 'updates the requested contract' do
-        contract = Contract.create! valid_attributes
-        patch contract_url(contract), params: { contract: new_attributes }
-        contract.reload
-        skip('Add assertions for updated state')
-      end
-
-      it 'redirects to the contract' do
-        contract = Contract.create! valid_attributes
-        patch contract_url(contract), params: { contract: new_attributes }
-        contract.reload
-        expect(response).to redirect_to(contract_url(contract))
-      end
+    # This should return the minimal set of attributes required to create a valid
+    # Contract. As you add validations to Contract, be sure to
+    # adjust the attributes here as well.
+    let(:valid_attributes) do
+        entity = create(:entity)
+        program = create(:program)
+        point_of_contact = create(:user, entities: [entity], level: UserLevel::TWO)
+        vendor = create(:vendor)
+        return build(
+            :contract,
+            entity:,
+            program:,
+            point_of_contact:,
+            vendor:
+        ).attributes
     end
 
-    context 'with invalid parameters' do
-      pending "renders a successful response (i.e. to display the 'edit' template)" do
-        contract = Contract.create! valid_attributes
-        patch contract_url(contract), params: { contract: invalid_attributes }
-        expect(response).to be_successful
-      end
+    let(:invalid_attributes) do
+        return build(
+            :contract,
+            vendor_id: nil,
+            entity_id: nil,
+            program_id: nil,
+            point_of_contact_id: nil,
+            starts_at: nil,
+            title: nil,
+            contract_type: nil
+        ).attributes
     end
-  end
+
+    describe 'GET /index' do
+        it 'renders a successful response' do
+            Contract.create! valid_attributes
+            get contracts_url
+            expect(response).to be_successful
+        end
+    end
+
+    describe 'GET /show' do
+        it 'renders a successful response' do
+            contract = Contract.create! valid_attributes
+            get contract_url(contract)
+            expect(response).to be_successful
+        end
+    end
+
+    describe 'GET /new' do
+        it 'renders a successful response' do
+            get new_contract_url
+            expect(response).to be_successful
+        end
+    end
+
+    describe 'GET /edit' do
+        it 'renders a successful response' do
+            contract = Contract.create! valid_attributes
+            get edit_contract_url(contract)
+            expect(response).to be_successful
+        end
+    end
+
+    describe 'POST /create' do
+        context 'with valid parameters' do
+            it 'creates a new Contract' do
+                expect do
+                    post contracts_url, params: { contract: valid_attributes }
+                end.to change(Contract, :count).by(1)
+            end
+
+            pending 'redirects to the created contract' do
+                it contracts_url, params: { contract: valid_attributes }
+                expect(response).to redirect_to(contract_url(Contract.last))
+            end
+        end
+
+        context 'with invalid parameters' do
+            it 'does not create a new Contract' do
+                expect do
+                    post contracts_url, params: { contract: invalid_attributes }
+                end.to change(Contract, :count).by(0)
+            end
+
+            pending "renders a successful response (i.e. to display the 'new' template)" do
+                post contracts_url, params: { contract: invalid_attributes }
+                expect(response).to be_successful
+            end
+        end
+    end
+
+    describe 'PATCH /update' do
+        context 'with valid parameters' do
+            let(:new_attributes) do
+                skip('Add a hash of attributes valid for your model')
+            end
+
+            it 'updates the requested contract' do
+                contract = Contract.create! valid_attributes
+                patch contract_url(contract), params: { contract: new_attributes }
+                contract.reload
+                skip('Add assertions for updated state')
+            end
+
+            it 'redirects to the contract' do
+                contract = Contract.create! valid_attributes
+                patch contract_url(contract), params: { contract: new_attributes }
+                contract.reload
+                expect(response).to redirect_to(contract_url(contract))
+            end
+        end
+
+        context 'with invalid parameters' do
+            pending "renders a successful response (i.e. to display the 'edit' template)" do
+                contract = Contract.create! valid_attributes
+                patch contract_url(contract), params: { contract: invalid_attributes }
+                expect(response).to be_successful
+            end
+        end
+    end
 end

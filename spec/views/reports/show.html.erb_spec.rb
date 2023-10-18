@@ -3,11 +3,11 @@
 require 'rails_helper'
 
 RSpec.describe 'reports/show', type: :view do
-  before do
-    @report = assign(:report, Report.create!)
-  end
+    before do
+        @report = assign(:report, Report.create!)
+    end
 
-  pending 'renders attributes in <p>' do
-    render
-  end
+    pending 'renders attributes in <p>' do
+        render
+    end
 end

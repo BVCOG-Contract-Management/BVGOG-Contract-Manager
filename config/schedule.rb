@@ -45,12 +45,12 @@ FIRST_OF_EACH_MONTH = '0 0 1 * *'
 
 # Send expiration reports once a month
 every FIRST_OF_EACH_MONTH do
-  rake 'contracts:send_expiration_reports'
+    rake 'contracts:send_expiration_reports'
 end
 
 # Export contracts once a month
 every FIRST_OF_EACH_MONTH do
-  rake 'contracts:export_all_contract_data'
+    rake 'contracts:export_all_contract_data'
 end
 
 # Test task every minute

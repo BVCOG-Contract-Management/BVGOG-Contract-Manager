@@ -2,16 +2,8 @@ run: bundle
 	rails s
 
 clean:
-	rm -f temp.doc
-	rm -f temp.html
-	rm -f temp.mp3
-	rm -f temp.mp4
-	rm -f temp.other
-	rm -f temp.pdf
-	rm -f temp.pptx
-	rm -f temp.txt
-	rm -f temp.xlsx
-	rm -f temp.zip
+	rm -f temp.*
+	rm -f *.log
 
 bundle:
 	bundle install
@@ -31,10 +23,10 @@ deploy:
 	./script/deploy/deploy.sh
 
 cucumber: clean bundle
-	rails cucumber
+	bundle exec cucumber --profile default
 
 rspec: clean bundle
 	bundle exec rspec spec
 
 rubocop: clean bundle
-	rubocop --config .rubocop.yml --autocorrect-all
+	bundle exec rubocop --config .rubocop.yml --autocorrect-all

@@ -2,9 +2,9 @@
 
 OSO = Oso.new
 ActiveSupport::Reloader.to_prepare do
-  OSO.register_class(User, fields: { id: :integer })
-  OSO.register_class(Contract, fields: { id: :integer })
-  OSO.load_files(['app/rbac/main.polar'])
+    OSO.register_class(User, fields: { id: :integer })
+    OSO.register_class(Contract, fields: { id: :integer })
+    OSO.load_files(['app/rbac/main.polar'])
 rescue StandardError => e
-  Rails.logger.debug e.class
+    Rails.logger.debug e.class
 end
