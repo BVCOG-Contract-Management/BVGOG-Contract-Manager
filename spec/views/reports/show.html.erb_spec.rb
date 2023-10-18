@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'reports/show', type: :view do
-  before(:each) do
+  before do
     @report = assign(:report, Report.create!)
   end
 

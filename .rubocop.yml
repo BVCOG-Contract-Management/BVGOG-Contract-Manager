@@ -1,8 +1,25 @@
+# inherit_from: .rubocop_todo.yml
+
+require:
+    - rubocop-capybara
+    - rubocop-rspec
+    - rubocop-rails
+
 AllCops:
+    Suggestextensions: false
     Exclude:
         - "node_modules/**/*"
         - "tmp/**/*"
         - "vendor/**/*"
         - ".git/**/*"
+    Layout/ArgumentAlignment:
+        EnforcedStyle: with_first_argument
+    Layout/ArrayAlignment:
+        Enabled: true
+        EnforcedStyle: with_first_element
+    Layout/IndentationStyle:
+        Enabled: true
+        IndentationWidth: 4
+        EnforcedStyle: tabs
     Layout/IndentationWidth:
         Width: 4

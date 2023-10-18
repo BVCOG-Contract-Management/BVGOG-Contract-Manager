@@ -8,7 +8,7 @@ RSpec.describe 'users/show', type: :view do
   include Devise::Test::ControllerHelpers
   include FactoryBot::Syntax::Methods
 
-  before(:each) do
+  before do
     login_user
     @user = FactoryBot.create(:user)
   end

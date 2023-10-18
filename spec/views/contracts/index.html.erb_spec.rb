@@ -8,7 +8,7 @@ RSpec.describe 'contracts/index', type: :view do
   include Devise::Test::ControllerHelpers
   include FactoryBot::Syntax::Methods
 
-  before(:each) do
+  before do
     login_user
     contracts = []
     # This test was failing because contracts were being created elsewhere, and the unique_id check was failing. Please advise.

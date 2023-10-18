@@ -27,7 +27,7 @@ class Report < ApplicationRecord
     if report.expiring_in_days.present?
       contracts = contracts.where('ends_at <= ?', report.expiring_in_days.days.from_now)
     end
-    if report.show_expired_contracts.present? && !report.show_expired_contracts.present?
+    if report.show_expired_contracts.present? && report.show_expired_contracts.blank?
       contracts = contracts.where('ends_at >= ?', Date.today)
     end
     if User.find(report.created_by).level == UserLevel::THREE
@@ -126,7 +126,7 @@ class Report < ApplicationRecord
       report.entity_id.present? ? Entity.find(report.entity_id).name : 'All',
       report.program_id.present? ? Program.find(report.program_id).name : 'All',
       report.point_of_contact_id.present? ? "#{poc.first_name} #{poc.last_name}" : 'All',
-      report.expiring_in_days.present? ? report.expiring_in_days : 'All',
+      (report.expiring_in_days.presence || 'All'),
       if report.show_expired_contracts.present?
         report.show_expired_contracts ? 'Yes' : 'No'
       else

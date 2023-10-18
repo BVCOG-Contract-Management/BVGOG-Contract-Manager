@@ -88,7 +88,9 @@ end
 
 gem 'rubocop', '~> 1.45'
 
+gem 'rubocop-capybara'
 gem 'rubocop-rails', '~> 2.17'
+gem 'rubocop-rspec'
 
 gem 'rspec' # , "~> 3.12"
 

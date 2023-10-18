@@ -60,7 +60,7 @@ module VendorsHelper
       ratings_percentages[rating] = (count.to_f / total_reviews * 100).round
     end
 
-    print ratings_percentages
+    Rails.logger.debug ratings_percentages
 
     # Create html for bar chart
     bar_chart_html = ''

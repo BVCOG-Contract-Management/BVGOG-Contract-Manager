@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'users/edit', type: :view do
   include FactoryBot::Syntax::Methods
-  before(:each) do
+  before do
     @user = FactoryBot.create(:user)
   end
 

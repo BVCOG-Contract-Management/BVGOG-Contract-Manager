@@ -19,7 +19,7 @@ RSpec.describe '/contracts', type: :request do
   include Devise::Test::IntegrationHelpers
   include FactoryBot::Syntax::Methods
 
-  before(:each) do
+  before do
     login_user
   end
 

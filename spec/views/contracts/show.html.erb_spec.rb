@@ -8,7 +8,7 @@ RSpec.describe 'contracts/show', type: :view do
   include Devise::Test::ControllerHelpers
   include FactoryBot::Syntax::Methods
 
-  before(:each) do
+  before do
     login_user
     @contract = assign(:contract, create(:contract))
   end

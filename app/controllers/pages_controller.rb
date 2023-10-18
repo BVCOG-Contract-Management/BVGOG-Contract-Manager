@@ -14,11 +14,11 @@ class PagesController < ApplicationController
 
   def admin
     if current_user.level != UserLevel::ONE
-      puts 'We not an Admin\n'
+      Rails.logger.debug 'We not an Admin\n'
       redirect_to root_path, alert: 'You do not have permission to access this page.'
       return
     end
-    puts 'We an Admin\n'
+    Rails.logger.debug 'We an Admin\n'
     add_breadcrumb 'Administration', admin_path
     @bvcog_config = BvcogConfig.last
     # Map the :users field to IDs of users

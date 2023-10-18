@@ -8,7 +8,7 @@ RSpec.describe 'vendors/index', type: :view do
   include Devise::Test::ControllerHelpers
   include FactoryBot::Syntax::Methods
 
-  before(:each) do
+  before do
     login_user
     vendors = []
     (1..15).each do |_i|

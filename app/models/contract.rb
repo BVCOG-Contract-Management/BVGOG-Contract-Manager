@@ -19,10 +19,10 @@ class Contract < ApplicationRecord
   validates :end_trigger, inclusion: { in: EndTrigger.list }
   validates :renewal_count, numericality: { greater_than_or_equal_to: 0 }
 
-  belongs_to :entity, class_name: 'Entity', foreign_key: 'entity_id'
-  belongs_to :program, class_name: 'Program', foreign_key: 'program_id'
-  belongs_to :point_of_contact, class_name: 'User', foreign_key: 'point_of_contact_id'
-  belongs_to :vendor, class_name: 'Vendor', foreign_key: 'vendor_id'
+  belongs_to :entity, class_name: 'Entity'
+  belongs_to :program, class_name: 'Program'
+  belongs_to :point_of_contact, class_name: 'User'
+  belongs_to :vendor, class_name: 'Vendor'
   has_many :contract_documents, class_name: 'ContractDocument'
 
   # Enums

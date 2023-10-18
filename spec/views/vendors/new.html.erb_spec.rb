@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'vendors/new', type: :view do
-  before(:each) do
+  before do
     assign(:vendor, Vendor.new)
   end
 

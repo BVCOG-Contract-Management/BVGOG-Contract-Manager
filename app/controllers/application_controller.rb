@@ -15,9 +15,7 @@ class ApplicationController < ActionController::Base
     # If route is not the sign in page, check if user is signed in
     unless ['/users/sign_in', '/users/sign_out', '/users/password/new', '/users/password', '/users/password/edit',
             '/users/confirmation', '/users/invitation/accept', '/users/invitation', '/users/invitation/new'].include? request.path
-      unless current_user.present?
-        redirect_to new_user_session_path, alert: 'You must be signed in to access this page.'
-      end
+      redirect_to new_user_session_path, alert: 'You must be signed in to access this page.' if current_user.blank?
       authenticate_user!
       unless current_user.is_active
         sign_out current_user

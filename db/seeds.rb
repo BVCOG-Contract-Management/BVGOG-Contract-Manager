@@ -69,7 +69,7 @@ if Rails.env.production?
     level: UserLevel::ONE,
     program: Program.first,
     # Invitation already accepted
-    invitation_accepted_at: Time.now
+    invitation_accepted_at: Time.zone.now
   )
 
   # Create admin user
@@ -82,7 +82,7 @@ if Rails.env.production?
     level: UserLevel::TWO,
     program: Program.first,
     # Invitation already accepted
-    invitation_accepted_at: Time.now
+    invitation_accepted_at: Time.zone.now
   )
 
   # Create admin user
@@ -95,7 +95,7 @@ if Rails.env.production?
     level: UserLevel::THREE,
     program: Program.first,
     # Invitation already accepted
-    invitation_accepted_at: Time.now
+    invitation_accepted_at: Time.zone.now
   )
 
   BvcogConfig.create(
@@ -201,7 +201,7 @@ else
       program: Program.all.sample,
       vendor: Vendor.all.sample,
       entity: Entity.all.sample,
-      ends_at: Date.today + 1.days * i
+      ends_at: Date.today + 1.day * i
     )
   end
 

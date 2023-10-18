@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# :nocov:
 # Sends reminder emails for contract expiry
 class ContractMailer < ApplicationMailer
   def expiry_reminder(contract)
@@ -26,3 +27,4 @@ class ContractMailer < ApplicationMailer
     end
   end
 end
+# :nocov:

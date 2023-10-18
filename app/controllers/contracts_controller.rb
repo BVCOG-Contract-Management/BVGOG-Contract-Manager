@@ -27,7 +27,7 @@ class ContractsController < ApplicationController
     @contracts = @contracts.where(entity_id: current_user.entities.pluck(:id)) if current_user.level == UserLevel::THREE
     # Search contracts
     @contracts = search_contracts(@contracts) if params[:search].present?
-    puts params[:search].inspect
+    Rails.logger.debug params[:search].inspect
   end
 
   # GET /contracts/1 or /contracts/1.json
@@ -88,7 +88,7 @@ class ContractsController < ApplicationController
           OSO.authorize(current_user, 'write', @contract)
           handle_if_new_vendor
           #  Check specific for PoC since we use it down the line to check entity association
-          if !contract_params[:point_of_contact_id].present?
+          if contract_params[:point_of_contact_id].blank?
             @contract.errors.add(:base, 'Point of contact is required')
             format.html { render :new, status: :unprocessable_entity }
             format.json { render json: @contract.errors, status: :unprocessable_entity }
@@ -153,7 +153,7 @@ class ContractsController < ApplicationController
     respond_to do |format|
       ActiveRecord::Base.transaction do
         OSO.authorize(current_user, 'edit', @contract)
-        if !@contract[:point_of_contact_id].present? && !contract_params[:point_of_contact_id].present?
+        if @contract[:point_of_contact_id].blank? && contract_params[:point_of_contact_id].blank?
           @contract.errors.add(:base, 'Point of contact is required')
           format.html { render :edit, status: :unprocessable_entity }
           format.json { render json: @contract.errors, status: :unprocessable_entity }
@@ -170,9 +170,9 @@ class ContractsController < ApplicationController
 
         # Excuse this monster if statement, it's just checking if the user is associated with the entity, and for
         # some reason nested-if statements don't work here when you use format (ie. UnkownFormat error)
-        elsif contract_params[:point_of_contact_id].present? && User.find(contract_params[:point_of_contact_id]).level == UserLevel::THREE && !User.find(contract_params[:point_of_contact_id]).entities.include?(Entity.find(contract_params[:entity_id].present? ? contract_params[:entity_id] : @contract.entity_id))
+        elsif contract_params[:point_of_contact_id].present? && User.find(contract_params[:point_of_contact_id]).level == UserLevel::THREE && !User.find(contract_params[:point_of_contact_id]).entities.include?(Entity.find((contract_params[:entity_id].presence || @contract.entity_id)))
           @contract.errors.add(:base,
-                               "#{User.find(contract_params[:point_of_contact_id].present? ? contract_params[:point_of_contact_id] : @contract.point_of_contact_id).full_name} is not associated with #{Entity.find(contract_params[:entity_id].present? ? contract_params[:entity_id] : @contract.entity_id).name}")
+                               "#{User.find((contract_params[:point_of_contact_id].presence || @contract.point_of_contact_id)).full_name} is not associated with #{Entity.find((contract_params[:entity_id].presence || @contract.entity_id)).name}")
           format.html { render :edit, status: :unprocessable_entity }
           format.json { render json: @contract.errors, status: :unprocessable_entity }
         elsif @contract.update(contract_params)
@@ -180,7 +180,7 @@ class ContractsController < ApplicationController
             handle_contract_documents(contract_documents_upload,
                                       contract_documents_attributes)
           end
-          puts 'Contract updated successfully'
+          Rails.logger.debug 'Contract updated successfully'
           format.html { redirect_to contract_url(@contract), notice: 'Contract was successfully updated.' }
           format.json { render :show, status: :ok, location: @contract }
         else
@@ -191,7 +191,7 @@ class ContractsController < ApplicationController
 
     rescue StandardError => e
       @contract.reload
-      print e
+      Rails.logger.debug e
       # If error type is Oso::ForbiddenError, then the user is not authorized
       if e.instance_of?(Oso::ForbiddenError)
         status = :unauthorized
@@ -315,7 +315,7 @@ class ContractsController < ApplicationController
   # File upload is a seperate issue that will be handled with a dropzone
   def handle_contract_documents(contract_documents_upload, contract_documents_attributes)
     contract_documents_upload.each do |doc|
-      next unless doc.present?
+      next if doc.blank?
 
       # Create a file name for the official file
       official_file_name = contract_document_filename(@contract, File.extname(doc.original_filename))
