@@ -38,9 +38,7 @@
           <%# Vendor %>
           <div class="field">
             <%= form.label :vendor_id %>
-
-            <input type="text" name="vendor_id", id="vendor_id" class="input" placeholder="Type to select or enter a vendor">
-            <%= form.text_field :vendor_id, class: "input" %>
+            <%= form.text_field :vendor_id, id: 'vendor_id', name: 'vendor_id', include_blank: !@contract.vendor_id.present?, class: 'input' %>
             
           </div>
 
