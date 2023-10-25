@@ -1,0 +1,20 @@
+<div class="modal fade" id="rejectModal" tabindex="-1" role="dialog" aria-labelledby="rejectModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title" id="rejectModalLabel">Reject Contract</h4>
+        </div>
+        <div class="modal-body">
+            <%= form_with model: @contract, url: reject_contract_path(@contract), method: :patch, remote: true do |f| %>
+            <div class="form-group">
+                <%= f.label :rejection_reason, 'Rejection Reason' %>
+                <%= f.text_area :rejection_reason, class: 'form-control', required: true %>
+            </div>
+            <div class="form-group">
+                <%= f.submit 'Reject Contract', class: 'btn btn-danger' %>
+            </div>
+            <% end %>
+        </div>
+        </div>
+    </div>
+</div>
