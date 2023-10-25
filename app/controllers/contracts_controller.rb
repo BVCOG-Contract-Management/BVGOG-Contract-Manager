@@ -234,8 +234,7 @@ class ContractsController < ApplicationController
     # /contracts/:id/reject
     def reject
         @contract = Contract.find(params[:id])
-        render layout: false
-        redirect_to contracts_path
+        render 'reject'
     end
 
     private
