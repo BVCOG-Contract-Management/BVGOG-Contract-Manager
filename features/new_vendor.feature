@@ -38,7 +38,7 @@ Scenario: Edit a vendor
 Scenario: Back to vendors
 	Given I am on the new vendor page
 	And I follow "Back to vendors"
-	Then I should see "View Vendors"
+	Then I should see "Vendor Rating"
 
 Scenario: Get Name
 	When I get the name of Vendor 1

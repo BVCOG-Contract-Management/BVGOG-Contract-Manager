@@ -29,7 +29,7 @@ module ApplicationHelper
     ] }
     # All users can view vendors
     pages << { title: "Vendors", subpaths: [
-      { name: "View Vendors", path: vendors_path, icon: "address-book" },
+      { name: "Vendor Rating", path: vendors_path, icon: "address-book" },
     ] }
     # Level 2 and 3 users can only view users
     if current_user.level == UserLevel::TWO || current_user.level == UserLevel::THREE
