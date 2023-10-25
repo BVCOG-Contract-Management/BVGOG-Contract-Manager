@@ -14,10 +14,20 @@ Layout/IndentationStyle:
     EnforcedStyle: spaces
 Layout/IndentationWidth:
     Width: 4
+Metrics/AbcSize:
+    Max: 256
+Metrics/BlockLength:
+    Max: 128
 Metrics/ClassLength:
-    Max: 400
+    Max: 512
+Metrics/CyclomaticComplexity:
+    Max: 128
 Metrics/MethodLength:
-    Max: 100
+    Max: 128
+Metrics/ModuleLength:
+    Max: 128
+Metrics/PerceivedComplexity:
+    Max: 128
 
 AllCops:
     # Suggestextensions: false

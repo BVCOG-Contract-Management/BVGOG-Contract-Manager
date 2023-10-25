@@ -112,6 +112,6 @@ namespace :contracts do
         )
         contract.save
         # Send an expiry reminder to test email
-        contract.send_expiry_reminder
+        # contract.send_expiry_reminder
     end
 end

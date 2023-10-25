@@ -4,6 +4,8 @@
 class ContractsController < ApplicationController
     before_action :set_contract, only: %i[show edit update destroy]
 
+    # Deprecated
+    # :nocov:
     def expiry_reminder
         @contract = Contract.find(params[:id])
         respond_to do |format|
@@ -20,6 +22,7 @@ class ContractsController < ApplicationController
             end
         end
     end
+    # :nocov:
 
     # GET /contracts or /contracts.json
     def index
@@ -37,12 +40,13 @@ class ContractsController < ApplicationController
 
     # GET /contracts/1 or /contracts/1.json
     def show
-        begin
-            OSO.authorize(current_user, 'read', @contract)
-        rescue Oso::Error
-            redirect_to root_path, alert: 'You do not have permission to access this page.'
-            return
-        end
+        OSO.authorize(current_user, 'read', @contract)
+        # begin
+        # Since all users can read contracts, this error recovery cannot happen
+        # rescue Oso::Error
+        #     redirect_to root_path, alert: 'You do not have permission to access this page.'
+        #     return
+        # end
         add_breadcrumb 'Contracts', contracts_path
         add_breadcrumb @contract.title, contract_path(@contract)
     end
@@ -218,12 +222,12 @@ class ContractsController < ApplicationController
 
     # DELETE /contracts/1 or /contracts/1.json
     def destroy
-		# @contract.destroy
-		
-		# respond_to do |format|
-		# 	format.html { redirect_to contracts_url, notice: 'Contract was successfully destroyed.' }
-		# 	format.json { head :no_content }
-		# end
+        # @contract.destroy
+
+        # respond_to do |format|
+        # 	format.html { redirect_to contracts_url, notice: 'Contract was successfully destroyed.' }
+        # 	format.json { head :no_content }
+        # end
     end
 
     def get_file

@@ -33,6 +33,7 @@ Rails.application.routes.draw do
     resources :contracts
 
     get '/contracts/:id/expiry_reminder', to: 'contracts#expiry_reminder', as: 'expiry_reminder_contract'
+    get '/contracts/:id/reject', to: 'contracts#reject', as: 'reject_contract'
 
     # Contract Documents
     # GET

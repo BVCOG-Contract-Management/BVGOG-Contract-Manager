@@ -78,6 +78,20 @@ Given('I am logged in as an example user') do
     step 'I press "commit"'
 end
 
+Given(/^an example inactive user exists/) do
+    FactoryBot.create(
+        :user,
+        email: 'inactive@example.com',
+        password: 'password',
+        first_name: 'Inactive',
+        last_name: 'User',
+        level: UserLevel::ONE,
+        program: Program.all.sample,
+        entities: [Entity.first],
+        is_active: false
+    )
+end
+
 Given(/^an example user exists$/) do
     FactoryBot.create(
         :user,
