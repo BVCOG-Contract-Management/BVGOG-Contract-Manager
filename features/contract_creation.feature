@@ -14,7 +14,6 @@ Scenario: Fail to create a contract
 	And I press "Create Contract"
 	Then I should see "Point of contact is required"
 
-@error
 Scenario: Sucessfully create a contract
 	Given I am on the new contract page
 	When I fill in "Title" with "TestContract"
