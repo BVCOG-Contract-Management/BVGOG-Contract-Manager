@@ -35,12 +35,20 @@ When('I fill in the contract end date field with {string}') do |date|
   fill_in 'contract_ends_at', with: date
 end
 
-# When('I select {string} from the vendor dropdown') do |vendor_name|
-#   select vendor_name, from: 'contract[vendor_id]'
+When('I select {string} from the vendor dropdown') do |vendor_name|
+  select vendor_name, from: 'contract[vendor_id]'
+end
+
+# When('I fill in the "vendor_id" hidden field with "new"') do
+#   find('#vendor_id', visible: false).set('new')
 # end
 
-When('I fill in the {string} field with {string}') do |field_name, vendor_name|
-  fill_in field_name, with: vendor_name
+When('I fill in the {string} field with {string}') do |field_name, start_date|
+  fill_in field_name, with: start_date
+end
+
+When('I fill in the vendor field with vendor value {string}') do |vendor_name|
+  find('#vendor_id', visible: false).set(vendor_name)
 end
 
 When('I select {string} from the program dropdown') do |program_name|
