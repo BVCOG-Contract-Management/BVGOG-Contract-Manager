@@ -76,7 +76,7 @@ class ContractsController < ApplicationController
 		params[:contract].delete(:contract_documents)
 		params[:contract].delete(:contract_documents_attributes)
 		params[:contract].delete(:contract_document_type_hidden)
-        
+
 		contract_params_clean = contract_params
 		contract_params_clean.delete(:new_vendor_name)
 
@@ -86,7 +86,7 @@ class ContractsController < ApplicationController
 			ActiveRecord::Base.transaction do
 				begin
 					OSO.authorize(current_user, 'write', @contract)
-					# puts("Vendor id = #{params[:contract][:vendor_id]}")
+					
 					handle_if_new_vendor
 					#  Check specific for PoC since we use it down the line to check entity association
 					if !contract_params[:point_of_contact_id].present?
