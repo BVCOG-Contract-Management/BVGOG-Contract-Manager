@@ -76,7 +76,7 @@ class ContractsController < ApplicationController
 		params[:contract].delete(:contract_documents)
 		params[:contract].delete(:contract_documents_attributes)
 		params[:contract].delete(:contract_document_type_hidden)
-
+        
 		contract_params_clean = contract_params
 		contract_params_clean.delete(:new_vendor_name)
 

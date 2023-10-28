@@ -38,8 +38,10 @@
           <%# Vendor %>
           <div class="field">
             <%= form.label :vendor_id %>
-            <%= form.text_field :vendor_id, id: 'vendor_id', name: 'vendor_id', include_blank: !@contract.vendor_id.present?, class: 'input' %>
-            
+            <!-- the field below is visible, but not used for the form submission -->
+            <input type="text" id="vendor_visible_id" name="vendor_visible_id" class="input">
+             <!-- this field below is hidden and used for form submission -->
+            <%= form.hidden_field :vendor_id, class:"input", id:"vendor_id"%>
           </div>
 
           <script type="text/javascript">

@@ -49,25 +49,27 @@ document.addEventListener('turbo:load', () => {
     clearNotice();
     // New vendor option selected in contracts
     // Get references to the vendor select field and the new vendor input field
+    const vendorVisibleField = document.querySelector('#vendor_visible_id')
     const vendorSelect = document.querySelector('#vendor_id');
     const newVendorField = document.querySelector('#new_vendor_field');
 
     // Add an event listener to the vendor select field
-    if (vendorSelect) {
-        vendorSelect.addEventListener('change', (event) => {
+    if (vendorVisibleField) {
+        vendorVisibleField.addEventListener('input', (event) => {
+             
             // If the value of the vendor select field is 'new_vendor'
             if (event.target.value === 'new') {
                 // Show the new vendor input field
-                newVendorField.classList.remove('is-hidden');
+                // newVendorField.classList.remove('is-hidden');
             } else {
                 // Hide the new vendor input field
                 newVendorField.classList.add('is-hidden');
             }
         });
-    }
+    } 
 
     $(document).ready(function() {
-        $(vendorSelect).autocomplete({
+        $(vendorVisibleField).autocomplete({
           source: vendorOptions,
           minLength: 1,
           max: 5, 
@@ -76,11 +78,30 @@ document.addEventListener('turbo:load', () => {
             // Prevent the input field from displaying vendor.id when an option is highlighted
             event.preventDefault();
             // Set the input field value to the highlighted vendor name (handling keyboard activity here)
-            $(vendorSelect).val(ui.item.label);
+            $(vendorVisibleField).val(ui.item.label);
+
+            if($(vendorVisibleField).val() === 'New Vendor') {
+                //show the 'new' text field only if the 'New Vendor' is selected, not on hovering (focus)
+                // newVendorField.classList.remove('is-hidden');
+            } else {
+                // Hide the new vendor input field
+                newVendorField.classList.add('is-hidden');
+            }
           },
           select: function(event, ui) {
+            event.preventDefault();
             // Set the value of the input field to the selected vendor name (not the vendor id)
-            $(vendorSelect).val(ui.item.label);
+            $(vendorVisibleField).val(ui.item.label);
+            $(vendorSelect).val(ui.item.value);
+            
+            
+            if($(vendorSelect).val() === 'new') {
+                // Show the new vendor input field
+                newVendorField.classList.remove('is-hidden');
+            } else {
+                // Hide the new vendor input field
+                newVendorField.classList.add('is-hidden');
+            }
             return false; // Prevent the default behavior of filling the input with the value
           }
         
