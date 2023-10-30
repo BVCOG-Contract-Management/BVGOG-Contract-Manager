@@ -92,6 +92,21 @@ Given(/^an example inactive user exists/) do
     )
 end
 
+Given(/^an example inactive user with a redirect user exists/) do
+    FactoryBot.create(
+        :user,
+        email: 'inactive@example.com',
+        password: 'password',
+        first_name: 'Inactive',
+        last_name: 'User',
+        level: UserLevel::ONE,
+        program: Program.all.sample,
+        entities: [Entity.first],
+        is_active: false,
+        redirect_user: User.find_by(email: 'user@example.com')
+    )
+end
+
 Given(/^an example user exists$/) do
     FactoryBot.create(
         :user,
