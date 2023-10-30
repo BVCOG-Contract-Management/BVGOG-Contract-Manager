@@ -87,6 +87,52 @@ class ContractsController < ApplicationController
 
         @contract = Contract.new(contract_params_clean.merge(contract_status: ContractStatus::IN_PROGRESS))
 
+		respond_to do |format|
+			ActiveRecord::Base.transaction do
+				begin
+					OSO.authorize(current_user, 'write', @contract)
+					
+					handle_if_new_vendor
+					#  Check specific for PoC since we use it down the line to check entity association
+					if !contract_params[:point_of_contact_id].present?
+						@contract.errors.add(:base, 'Point of contact is required')
+						format.html { render :new, status: :unprocessable_entity }
+						format.json { render json: @contract.errors, status: :unprocessable_entity }
+					elsif @contract.point_of_contact_id.present? && !User.find(@contract.point_of_contact_id).is_active
+						if User.find(@contract.point_of_contact_id).redirect_user_id.present?
+							@contract.errors.add(:base, User.find(@contract.point_of_contact_id).full_name + ' is not active, use ' + User.find(User.find(@contract.point_of_contact_id).redirect_user_id).full_name + ' instead')
+						else
+							@contract.errors.add(:base, User.find(@contract.point_of_contact_id).full_name + ' is not active')
+						end
+						format.html { render :new, status: :unprocessable_entity }
+						format.json { render json: @contract.errors, status: :unprocessable_entity }
+					elsif User.find(@contract.point_of_contact_id).level == UserLevel::THREE && !User.find(@contract.point_of_contact_id).entities.include?(@contract.entity)
+						@contract.errors.add(:base, User.find(@contract.point_of_contact_id).full_name + ' is not associated with ' + @contract.entity.name)
+						format.html { render :new, status: :unprocessable_entity }
+						format.json { render json: @contract.errors, status: :unprocessable_entity }
+					elsif @contract.save
+						handle_contract_documents(contract_documents_upload, contract_documents_attributes) if contract_documents_upload.present?
+						format.html { redirect_to contract_url(@contract), notice: 'Contract was successfully created.' }
+						format.json { render :show, status: :created, location: @contract }
+					else
+						format.html { render :new, status: :unprocessable_entity }
+						format.json { render json: @contract.errors, status: :unprocessable_entity }
+					end
+				end
+			rescue StandardError => e
+				# If error type is Oso::ForbiddenError, then the user is not authorized
+				if e.class == Oso::ForbiddenError
+					status = :unauthorized
+					@contract.errors.add(:base, 'You are not authorized to create a contract')
+					message = 'You are not authorized to create a contract'
+				else
+					status = :unprocessable_entity
+					message = e.message
+				end
+				format.html { redirect_to contracts_path, alert: message }
+			end
+		end
+	end
         respond_to do |format|
             ActiveRecord::Base.transaction do
                 begin
