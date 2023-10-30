@@ -30,11 +30,7 @@ Rails.application.routes.draw do
         end
     end
     resources :reports
-    resources :contracts do
-        member do
-            patch :reject_contract
-        end
-    end
+    resources :contracts
 
     get '/contracts/:id/expiry_reminder', to: 'contracts#expiry_reminder', as: 'expiry_reminder_contract'
     get '/contracts/:id/reject', to: 'contracts#reject', as: 'reject_contract'

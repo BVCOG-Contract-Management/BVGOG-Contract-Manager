@@ -1,33 +1,33 @@
-// @import "main";
+@import "main";
 
-// #users {
-//     @include table-card($table-card-header-background-color, $table-card-header-border, $table-border);
-//     #users-table-header-inputs {
-//         display: flex;
-//         flex-direction: column;
-//         justify-content: center;
-//         padding-right: 0;
+#users {
+    @include table-card($table-card-header-background-color, $table-card-header-border, $table-border);
+    #users-table-header-inputs {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding-right: 0;
 
-//         div {
-//             display: flex;
-//             justify-content: right;
+        div {
+            display: flex;
+            justify-content: right;
 
-//             form {
-//                 margin-right: 20px;
-//                 width: 70%;
-//             }
-//         }
-//     }
-// }
+            form {
+                margin-right: 20px;
+                width: 70%;
+            }
+        }
+    }
+}
 
-// #user-show {
-//     @include table-card($table-card-header-background-color, $table-card-header-border, $table-border);
-//     .download-file-button {
-//         display: flex;
-//         justify-content: flex-end;
-//     }
-// }
+#user-show {
+    @include table-card($table-card-header-background-color, $table-card-header-border, $table-border);
+    .download-file-button {
+        display: flex;
+        justify-content: flex-end;
+    }
+}
 
-// #user-form {
-//     @include table-card($table-card-header-background-color, $table-card-header-border, $table-border);
-// }
+#user-form {
+    @include table-card($table-card-header-background-color, $table-card-header-border, $table-border);
+}

@@ -249,7 +249,7 @@ class ContractsController < ApplicationController
     def contract_params
         allowed = %i[
             title
-            description
+            description~
             key_words
             starts_at
             ends_at

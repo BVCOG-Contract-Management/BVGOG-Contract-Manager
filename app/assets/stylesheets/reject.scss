@@ -2,12 +2,12 @@
 
 /* Style the custom modal overlay */
 #rejectModal.modal {
-	background: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay */
+	display: contents;
+	width: -webkit-fill-available;
 }
 
 /* Style the custom modal dialog */
 #rejectModal .modal-dialog {
-	max-width: 600px; /* Adjust the maximum width as needed */
 	margin: 50px auto; /* Center the modal vertically and horizontally */
 }
 
