@@ -231,7 +231,7 @@ class ContractsController < ApplicationController
 
     def reject
         @contract = Contract.find(params[:id])
-        render 'reject'
+        # render 'reject' # this line is implicit
     end
 
     private

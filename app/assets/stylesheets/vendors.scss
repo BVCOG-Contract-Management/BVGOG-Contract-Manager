@@ -1,0 +1,70 @@
+// @import "main";
+// #vendors {
+//     @include table-card($table-card-header-background-color, $table-card-header-border, $table-border);
+//     #vendors-table-header-inputs {
+//         display: flex;
+//         flex-direction: column;
+//         justify-content: center;
+//         padding-right: 0;
+
+//         div {
+//             display: flex;
+//             justify-content: right;
+
+//             form {
+//                 margin-right: 20px;
+//                 width: 70%;
+//             }
+//         }
+//     }
+// }
+
+// #vendor-show {
+//     @include table-card($table-card-header-background-color, $table-card-header-border, $table-border);
+//     .download-file-button {
+//         display: flex;
+//         justify-content: flex-end;
+//     }
+// }
+
+// #vendor-form {
+//     @include table-card($table-card-header-background-color, $table-card-header-border, $table-border);
+// }
+
+// .vendor-review-star {
+//     @include transition(all, 0.3s, ease);
+//     font-size: 1.5rem;
+// }
+
+// .vendor-review-star:hover {
+//     cursor: pointer;
+// }
+
+// .review-percentage-bar {
+//     width: 100%; /* Set the width of the rectangle */
+//     height: 20px; /* Set the height of the rectangle */
+//     background-color: #f7f5f5; /* Set the background color of the rectangle */
+//     border-radius: 4px;
+//     border: $table-card-header-border;
+// }
+
+// .review-percentage-fill {
+//     height: 100%;
+//     // is-text-warning color
+//     background-color: rgb(254,224,149);
+//     border-radius: 4px;
+// }
+
+// .review-percentage-star-count {
+//     text-align: end;
+// }
+
+// .review-percentage-percent {
+//     text-align: start;
+// }
+
+// .review-percentage-container {
+//     .column {
+//         padding: 5px 0.75rem !important;
+//     }
+// }

@@ -3,24 +3,18 @@
 /* Style the custom modal overlay */
 #rejectModal.modal {
 	background: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay */
-	z-index: 9999; /* Set a high z-index value to place it on top of other elements */
-	position: fixed; /* Use fixed position to ensure the overlay covers the entire viewport */
 }
 
 /* Style the custom modal dialog */
 #rejectModal .modal-dialog {
 	max-width: 600px; /* Adjust the maximum width as needed */
 	margin: 50px auto; /* Center the modal vertically and horizontally */
-	z-index: 10000; /* Ensure the dialog appears above other elements */
-	position: relative; /* Set position to relative for z-index to work */
 }
 
 /* Style the custom modal content */
 #rejectModal .modal-content {
 	border: none; /* Remove the border */
 	border-radius: 5px; /* Rounded corners */
-	z-index: 10001; /* Place it above other elements */
-	position: relative; /* Set position to relative for z-index to work */
 }
 
 /* Style the custom modal header */
@@ -28,38 +22,28 @@
 	background-color: #dc3545; /* Red header background color */
 	color: #fff; /* White text color */
 	border: none; /* Remove the header border */
-	z-index: 10002; /* Place it above other elements */
-	position: relative; /* Set position to relative for z-index to work */
 }
 
 /* Style the custom modal title */
 #rejectModal .modal-title {
 	font-size: 24px; /* Adjust the title font size as needed */
 	font-weight: bold; /* Make the title bold */
-	z-index: 10003; /* Place it above other elements */
-	position: relative; /* Set position to relative for z-index to work */
 }
 
 /* Style the custom modal body (form) */
 #rejectModal .modal-body {
 	padding: 20px; /* Add some padding inside the modal body */
-	z-index: 10004; /* Place it above other elements */
-	position: relative; /* Set position to relative for z-index to work */
 }
 
 /* Style the form label in the custom modal */
 #rejectModal label {
 	font-weight: bold; /* Make labels bold */
-	z-index: 10005; /* Place it above other elements */
-	position: relative; /* Set position to relative for z-index to work */
 }
 
 /* Style the rejection reason text area in the custom modal */
 #rejectModal .form-control {
 	width: 100%; /* Make the text area 100% width */
 	height: 100px; /* Adjust the height as needed */
-	z-index: 10006; /* Place it above other elements */
-	position: relative; /* Set position to relative for z-index to work */
 }
 
 /* Style the "Reject Contract" button in the custom modal */
@@ -67,14 +51,10 @@
 	background-color: #dc3545; /* Red button background color */
 	border: none; /* Remove the button border */
 	color: #fff; /* White text color */
-	z-index: 10007; /* Place it above other elements */
-	position: relative; /* Set position to relative for z-index to work */
 }
 
 /* Adjust button styles on hover and focus in the custom modal if needed */
 #rejectModal .btn-danger:hover,
 #rejectModal .btn-danger:focus {
 	background-color: #c82333; /* Darker red on hover/focus */
-	z-index: 10008; /* Place it above other elements */
-	position: relative; /* Set position to relative for z-index to work */
 }

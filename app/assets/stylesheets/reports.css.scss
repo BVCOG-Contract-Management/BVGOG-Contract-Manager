@@ -1,9 +1,0 @@
-@import "main";
-
-#report-form {
-    @include table-card($table-card-header-background-color, $table-card-header-border, $table-border);
-
-    tr.is-disabled {
-        opacity: 0.5;
-    }
-}
