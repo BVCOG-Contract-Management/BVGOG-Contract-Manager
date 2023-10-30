@@ -229,6 +229,11 @@ class ContractsController < ApplicationController
         send_file contract_document.file.path, type: contract_document.file_content_type, disposition: :inline
     end
 
+    def reject
+        @contract = Contract.find(params[:id])
+        render 'reject'
+    end
+
     private
 
     # Use callbacks to share common setup or constraints between actions.
