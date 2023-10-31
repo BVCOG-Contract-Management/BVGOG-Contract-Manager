@@ -23,7 +23,7 @@ deploy:
 	./script/deploy/deploy.sh
 
 cucumber: clean bundle
-	bundle exec cucumber --profile default
+	bundle exec cucumber --profile default --out ./out.log
 
 rspec: clean bundle
 	bundle exec rspec spec
