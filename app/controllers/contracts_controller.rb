@@ -186,7 +186,6 @@ class ContractsController < ApplicationController
                         handle_contract_documents(contract_documents_upload,
                                                   contract_documents_attributes)
                     end
-                    puts 'Contract updated successfully'
                     format.html do
                         redirect_to contract_url(@contract), notice: 'Contract was successfully updated.'
                     end
@@ -199,7 +198,6 @@ class ContractsController < ApplicationController
 
         rescue StandardError => e
             @contract.reload
-            print e
             # If error type is Oso::ForbiddenError, then the user is not authorized
             if e.instance_of?(Oso::ForbiddenError)
                 status = :unauthorized
