@@ -86,6 +86,7 @@ class ContractsController < ApplicationController
 			ActiveRecord::Base.transaction do
 				begin
 					OSO.authorize(current_user, 'write', @contract)
+					
 					handle_if_new_vendor
 					#  Check specific for PoC since we use it down the line to check entity association
 					if !contract_params[:point_of_contact_id].present?
