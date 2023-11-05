@@ -26,7 +26,7 @@ Scenario: Sucessfully create a contract
 	And I fill in "Initial term amount" with "100"
 	And I fill in the "contract_starts_at" field with "2023-03-30"
 	And I fill in the "contract_ends_at" field with "2025-03-30"
-	And I select "New Vendor" from the vendor dropdown
+	And I fill in the vendor field with vendor value "new"
 	And I fill in the "contract_new_vendor_name" field with "Test Vendor"
 	And I select "Program 1" from the program dropdown
 	And I select "Entity 1" from the entity dropdown

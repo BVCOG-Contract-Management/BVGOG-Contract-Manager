@@ -9,7 +9,7 @@ Background:
 	Given I am logged in as a level 1 user
 	Given bvcog_config is set up
 
-Scenario: View vendors
+Scenario: Vendor Rating
 	Given I am on the vendors page
 	Then I should see "Vendor 1"
 
