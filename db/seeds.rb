@@ -91,6 +91,7 @@ unless Rails.env.production?
 
 	# Create multiple contracts
 	for i in 1..50
+		d = Date.today + 1.days * i
 		FactoryBot.create(
 			:contract,
 			id: i,
@@ -99,12 +100,22 @@ unless Rails.env.production?
 			program: Program.all.sample,
 			point_of_contact: User.all.sample,
 			vendor: Vendor.all.sample,
+			ends_at: d,
+			ends_at_final: d + 1.days * i,
+			max_renewal_count: i,
+			renewal_duration: i,
+			renewal_duration_units: TimePeriod::DAY,
+			extension_count: i,
+			max_extension_count: i,
+			extension_duration: i,
+			extension_duration_units: TimePeriod::MONTH
 		)
 	end
 
 	contact_person = User.find_by(email: 'user@example.com')
 	#Create some documents with nearby expiries to test expiring docs mailer
 	for i in 1..100
+		d = Date.today + 1.days * i
 		FactoryBot.create(
 			:contract, 
 			id: 50+i,
@@ -113,7 +124,15 @@ unless Rails.env.production?
 			program: Program.all.sample,
 			vendor: Vendor.all.sample,
 			entity: Entity.all.sample,
-			ends_at: Date.today + 1.days * i
+			ends_at: d,
+			ends_at_final: d + 1.days * i,
+			max_renewal_count: i,
+			renewal_duration: i,
+			renewal_duration_units: TimePeriod::DAY,
+			extension_count: i,
+			max_extension_count: i,
+			extension_duration: i,
+			extension_duration_units: TimePeriod::MONTH
 		)
 	end
 
