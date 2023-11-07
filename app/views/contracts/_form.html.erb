@@ -51,6 +51,9 @@
 								<span>Number</span>
 							</div>
 						<% end %>
+						<span class="help">
+							Click the information icon above for more information.
+						</span>
 						<%= form.text_field :number, class: "input" %>
 					</div>
 
@@ -64,6 +67,9 @@
 								<span>Vendor</span>
 							</div>
 						<% end %>
+						<span class="help">
+							Click the information icon above for more information.
+						</span>
 
 						<!-- the field below is visible, but not used for the form submission -->
 						<input type="text" id="vendor_visible_id" name="vendor_visible_id" class="input">
@@ -84,18 +90,31 @@
 					<div class="field">
 						<%= form.label :description do %>
 							<div class="icon-text">
-								<span class="icon has-text-info" id="contract-discription-modal-open-btn">
+								<span class="icon has-text-info" id="contract-description-modal-open-btn">
 									<i class="fas fa-circle-info"></i>
 								</span>
 								<span>Description</span>
 							</div>
 						<% end %>
+						<span class="help">
+							Click the information icon above for more information.
+						</span>
 						<%= form.text_area :description, class: "textarea" %>
 					</div>
 
 					<%# Contract Type %>
 					<div class="field">
-						<%= form.label :contract_type %>
+						<%= form.label :contract_type do %>
+							<div class="icon-text">
+								<span class="icon has-text-info" id="contract-type-modal-open-btn">
+									<i class="fas fa-circle-info"></i>
+								</span>
+								<span>Contract Type</span>
+							</div>
+						<% end %>
+						<span class="help">
+							Click the information icon above for more information.
+						</span>
 						<%= form.select :contract_type, ContractType.to_a, {:include_blank => true}, class: "input" %>
 					</div>
 
@@ -109,12 +128,25 @@
 								<span>Point of Contact</span>
 							</div>
 						<% end %>
+						<span class="help">
+							Click the information icon above for more information.
+						</span>
 						<%= form.select :point_of_contact_id, user_select_options, {:include_blank => true}, class: "input" %>
 					</div>
 
 					<%# Program %>
 					<div class="field">
-						<%= form.label :program_id %>
+						<%= form.label :program_id do %>
+							<div class="icon-text">
+								<span class="icon has-text-info" id="contract-program-modal-open-btn">
+									<i class="fas fa-circle-info"></i>
+								</span>
+								<span>Program</span>
+							</div>
+						<% end %>
+						<span class="help">
+							Click the information icon above for more information.
+						</span>
 						<%= form.select :program_id, program_select_options, {:include_blank => !@contract.program_id.present?}, class: "input" %>
 					</div>
 
@@ -128,6 +160,9 @@
 								<span>Entity</span>
 							</div>
 						<% end %>
+						<span class="help">
+							Click the information icon above for more information.
+						</span>
 						<%= form.select :entity_id, entity_select_options, {:include_blank => !@contract.entity_id.present?}, class: "input" %>
 					</div>
 
@@ -141,6 +176,9 @@
 								<span>Key Words</span>
 							</div>
 						<% end %>
+						<span class="help">
+							Click the information icon above for more information.
+						</span>
 						<%= form.text_field :key_words, placeholder: "Separate key words with a comma", class: "input" %>
 					</div>
 				</div>
@@ -193,7 +231,17 @@
 					<div class="columns">
 						<div class="column is-4">
 							<div class="field">
-								<%= form.label :initial_term_amount %>
+								<%= form.label :initial_term_amount do %>
+									<div class="icon-text">
+										<span class="icon has-text-info" id="contract-initial-term-modal-open-btn">
+											<i class="fas fa-circle-info"></i>
+										</span>
+										<span>Initial Term</span>
+									</div>
+								<% end %>
+								<span class="help">
+									Click the information icon above for more information.
+								</span>
 								<p class="control has-icons-left">
 									<%= form.number_field :initial_term_amount, class: "input" %>
 									<span class="icon is-small is-left">
@@ -314,8 +362,6 @@
 		<section class="modal-card-body">
 		<div class="content">
 			This is the contract's identification number
-			<hr>
-			Should be unique
 		</div>
 		</section>
 		<footer class="modal-card-foot">
@@ -343,6 +389,44 @@
 	</div>
 </div>
 
+<div class="modal" id="contract-description-modal">
+	<div class="modal-background"></div>
+	<div class="modal-card">
+		<header class="modal-card-head">
+			<div class="icon-text">
+			<p class="modal-card-title">Description</p>
+			</div>
+		</header>
+		<section class="modal-card-body">
+		<div class="content">
+			Short summary of the contract
+		</div>
+		</section>
+		<footer class="modal-card-foot">
+		<button class="button modal-close-btn">Close</button>
+		</footer>
+	</div>
+</div>
+
+<div class="modal" id="contract-type-modal">
+	<div class="modal-background"></div>
+	<div class="modal-card">
+		<header class="modal-card-head">
+			<div class="icon-text">
+			<p class="modal-card-title">Contract Type</p>
+			</div>
+		</header>
+		<section class="modal-card-body">
+		<div class="content">
+			Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+		</div>
+		</section>
+		<footer class="modal-card-foot">
+		<button class="button modal-close-btn">Close</button>
+		</footer>
+	</div>
+</div>
+
 <div class="modal" id="contract-poc-modal">
 	<div class="modal-background"></div>
 	<div class="modal-card">
@@ -354,6 +438,25 @@
 		<section class="modal-card-body">
 		<div class="content">
 			The Program Manager for the contract
+		</div>
+		</section>
+		<footer class="modal-card-foot">
+		<button class="button modal-close-btn">Close</button>
+		</footer>
+	</div>
+</div>
+
+<div class="modal" id="contract-program-modal">
+	<div class="modal-background"></div>
+	<div class="modal-card">
+		<header class="modal-card-head">
+			<div class="icon-text">
+			<p class="modal-card-title">Contract Type</p>
+			</div>
+		</header>
+		<section class="modal-card-body">
+		<div class="content">
+			Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 		</div>
 		</section>
 		<footer class="modal-card-foot">
@@ -400,17 +503,17 @@
 	</div>
 </div>
 
-<div class="modal" id="contract-discription-modal">
+<div class="modal" id="contract-limited-term-modal">
 	<div class="modal-background"></div>
 	<div class="modal-card">
 		<header class="modal-card-head">
 			<div class="icon-text">
-			<p class="modal-card-title">Discription</p>
+			<p class="modal-card-title">Limited Term</p>
 			</div>
 		</header>
 		<section class="modal-card-body">
 		<div class="content">
-			Short summary of the contract
+			Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 		</div>
 		</section>
 		<footer class="modal-card-foot">
