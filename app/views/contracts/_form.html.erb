@@ -7,35 +7,35 @@
 }
 </style>
 <div id="contract-form">
-	<div class="card">
-		<header class="card-header">
-			<p class="card-header-title">
-				Contract Information
-			</p>
-		</header>
-		<%= form_with(model: @contract, data: { turbo: false }) do |form| %>
-		<div class="card-content">
-			<% if @contract.errors.any? %>
-				<article class="message is-danger">
-					<div class="message-header">
-						<p><%= pluralize(contract.errors.count, "error") %> prohibited this contract from being saved:</p>
-					</div>
-					<div class="message-body">
-						<ul>
-							<% contract.errors.full_messages.each do |message| %>
-								<li><%= message %></li>
-							<% end %>
-						</ul>
-					</div>
-				</article>
-			<% end %>
+  <div class="card">
+    <header class="card-header">
+      <p class="card-header-title">
+        Contract Information
+      </p>
+    </header>
+    <%= form_with(model: @contract, data: { turbo: false }) do |form| %>
+    <div class="card-content">
+      <% if @contract.errors.any? %>
+        <article class="message is-danger">
+          <div class="message-header">
+            <p><%= pluralize(contract.errors.count, "error") %> prohibited this contract from being saved:</p>
+          </div>
+          <div class="message-body">
+            <ul>
+              <% contract.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        </article>
+      <% end %>
 
-			<%# Form starts here %>
-			<div class="columns">
-				<div class="column is-6">
-					<%# Title %>
-					<div class="field">
-						<%= form.label :title do %>
+      <%# Form starts here %>
+      <div class="columns">
+        <div class="column is-6">
+          <%# Title %>
+          <div class="field">
+            <%= form.label :title do %>
 							<div class="icon-text">
 								<span class="icon has-text-info" id="contract-title-modal-open-btn">
 									<i class="fas fa-circle-info"></i>
@@ -46,12 +46,12 @@
 						<span class="help">
 							Click the information icon above for more information.
 						</span>
-						<%= form.text_field :title, class: "input" %>
-					</div>
+            <%= form.text_field :title, class: "input" %>
+          </div>
 
-					<%# Number %>
-					<div class="field">
-						<%= form.label :number do %>
+          <%# Number %>
+          <div class="field">
+            <%= form.label :number do %>
 							<div class="icon-text">
 								<span class="icon has-text-info" id="contract-id-modal-open-btn">
 									<i class="fas fa-circle-info"></i>
@@ -62,12 +62,12 @@
 						<span class="help">
 							Click the information icon above for more information.
 						</span>
-						<%= form.text_field :number, class: "input" %>
-					</div>
+            <%= form.text_field :number, class: "input" %>
+          </div>
 
-					<%# Vendor %>
-					<div class="field">
-						<%= form.label :vendor_id do %>
+          <%# Vendor %>
+          <div class="field">
+            <%= form.label :vendor_id do %>
 							<div class="icon-text">
 								<span class="icon has-text-info" id="contract-vendor-modal-open-btn">
 									<i class="fas fa-circle-info"></i>
@@ -79,14 +79,25 @@
 							Click the information icon above for more information.
 						</span>
 
-						<!-- the field below is visible, but not used for the form submission -->
-						<input type="text" id="vendor_visible_id" name="vendor_visible_id" class="input">
-						<!-- this field below is hidden and used for form submission -->
-						<%= form.hidden_field :vendor_id, class:"input", id:"vendor_id"%>
-					</div>
+            <!-- the field below is visible, but not used for the form submission -->
+            <input type="text" id="vendor_visible_id" name="vendor_visible_id" class="input">
+             <!-- this field below is hidden and used for form submission -->
+            <%= form.hidden_field :vendor_id, class:"input", id:"vendor_id"%>
+          </div>
 
-					<script type="text/javascript">
+          <script type="text/javascript">
             var vendorOptions = <%= vendor_select_options_json.html_safe %>;
+
+            function showhideTotalValueField() {
+              var selectField = document.getElementById("contractvalueselection"); 
+              var textField = document.getElementById("total_value_field");
+
+               if (selectField.value === "Total Value") {
+                  textField.style.display = "block";
+                } else {
+                  textField.style.display = "none";
+                }
+            }
             function updateForm() {
               // Get the user input from the text input
               const userInput = document.getElementById('contract_end_trigger').value;
@@ -126,15 +137,15 @@
               console.log(userInput)
             }
           </script>
-					<!-- A text input field for entering a new vendor name, initially hidden -->
-					<div id="new_vendor_field" class="field is-hidden">
-						<%= form.label :new_vendor_name %>
-						<%= form.text_field :new_vendor_name, class: "input" %>
-					</div>
+          <!-- A text input field for entering a new vendor name, initially hidden -->
+                <div id="new_vendor_field" class="field is-hidden">
+                  <%= form.label :new_vendor_name %>
+                  <%= form.text_field :new_vendor_name, class: "input" %>
+                </div>
 
-					<%# Description %>
-					<div class="field">
-						<%= form.label :description do %>
+          <%# Description %>
+          <div class="field">
+            <%= form.label :description do %>
 							<div class="icon-text">
 								<span class="icon has-text-info" id="contract-description-modal-open-btn">
 									<i class="fas fa-circle-info"></i>
@@ -145,12 +156,12 @@
 						<span class="help">
 							Click the information icon above for more information.
 						</span>
-						<%= form.text_area :description, class: "textarea" %>
-					</div>
+            <%= form.text_area :description, class: "textarea" %>
+          </div>
 
-					<%# Contract Type %>
-					<div class="field">
-						<%= form.label :contract_type do %>
+          <%# Contract Type %>
+          <div class="field">
+            <%= form.label :contract_type do %>
 							<div class="icon-text">
 								<span class="icon has-text-info" id="contract-type-modal-open-btn">
 									<i class="fas fa-circle-info"></i>
@@ -161,12 +172,12 @@
 						<span class="help">
 							Click the information icon above for more information.
 						</span>
-						<%= form.select :contract_type, ContractType.to_a, {:include_blank => true}, class: "input" %>
-					</div>
+            <%= form.select :contract_type, ContractType.to_a, {:include_blank => true}, class: "input" %>
+          </div>
 
-					<%# Point of Contact %>
-					<div class="field">
-						<%= form.label :point_of_contact_id do %>
+          <%# Point of Contact %>
+                    <div class="field">
+            <%= form.label :point_of_contact_id do %>
 							<div class="icon-text">
 								<span class="icon has-text-info" id="contract-poc-modal-open-btn">
 									<i class="fas fa-circle-info"></i>
@@ -177,12 +188,12 @@
 						<span class="help">
 							Click the information icon above for more information.
 						</span>
-						<%= form.select :point_of_contact_id, user_select_options, {:include_blank => true}, class: "input" %>
-					</div>
+            <%= form.select :point_of_contact_id, user_select_options, {:include_blank => true}, class: "input" %>
+          </div>
 
-					<%# Program %>
-					<div class="field">
-						<%= form.label :program_id do %>
+          <%# Program %>
+          <div class="field">
+            <%= form.label :program_id do %>
 							<div class="icon-text">
 								<span class="icon has-text-info" id="contract-program-modal-open-btn">
 									<i class="fas fa-circle-info"></i>
@@ -193,12 +204,12 @@
 						<span class="help">
 							Click the information icon above for more information.
 						</span>
-						<%= form.select :program_id, program_select_options, {:include_blank => !@contract.program_id.present?}, class: "input" %>
-					</div>
+            <%= form.select :program_id, program_select_options, {:include_blank => !@contract.program_id.present?}, class: "input" %>
+          </div>
 
-					<%# Entity %>
-					<div class="field">
-						<%= form.label :entity_id do %>
+          <%# Entity %>
+          <div class="field">
+            <%= form.label :entity_id do %>
 							<div class="icon-text">
 								<span class="icon has-text-info" id="contract-entity-modal-open-btn">
 									<i class="fas fa-circle-info"></i>
@@ -209,12 +220,12 @@
 						<span class="help">
 							Click the information icon above for more information.
 						</span>
-						<%= form.select :entity_id, entity_select_options, {:include_blank => !@contract.entity_id.present?}, class: "input" %>
-					</div>
+            <%= form.select :entity_id, entity_select_options, {:include_blank => !@contract.entity_id.present?}, class: "input" %>
+          </div>
 
-					<%# Search Key Words %>
-					<div class="field">
-						<%= form.label :search_key_words do %>
+          <%# Search Key Words %>
+          <div class="field">
+            <%= form.label :search_key_words do %>
 							<div class="icon-text">
 								<span class="icon has-text-info" id="contract-key-words-modal-open-btn">
 									<i class="fas fa-circle-info"></i>
@@ -225,9 +236,9 @@
 						<span class="help">
 							Click the information icon above for more information.
 						</span>
-						<%= form.text_field :key_words, placeholder: "Separate key words with a comma", class: "input" %>
-					</div>
-				</div>
+            <%= form.text_field :key_words, placeholder: "Separate key words with a comma", class: "input" %>
+          </div>
+        </div>
 
         <div class="column is-6">
           <%# End Trigger %>
@@ -296,12 +307,12 @@
 				<span class="help">
 					Click the information icon above for more information.
 				</span>
-				<p class="control has-icons-left">
-					<%= form.number_field :initial_term_amount, class: "input" %>
-					<span class="icon is-small is-left">
-						<i class="fas fa-clock"></i>
-					</span>
-				</p>
+                <p class="control has-icons-left">
+                  <%= form.number_field :initial_term_amount, class: "input" %>
+                  <span class="icon is-small is-left">
+                    <i class="fas fa-clock"></i>
+                  </span>
+                </p>
               </div>
             </div>
             <div class="column is-6">
@@ -369,13 +380,15 @@
           </div>
 
           <div class="field">
-          <%= label_tag :value_type, 'Value Type' %>
-          <%= form.select :value_type, ["Not Applicable", "Total Value", "Calculated Value"], { id: "contractvaluefield", class: "input" } %>
+          <%= form.label :value_type, 'Value Type' %>
+         <%= form.select :value_type, ["Not Applicable", "Total Value", "Calculated Value"], 
+           {}, { id: "contractvalueselection", class: "input", onchange: "showhideTotalValueField()" }  %>
+
         </div>
 
-        <div class="field" id="total_value_field" style="display: none;">
-          <%= label_tag :total_value, 'Total Value' %>
-          <%= text_field_tag :total_value %>
+        <div class="field" id="total_value_field" style="display: none;" >
+          <%= form.label :totalamount, 'Total Value' %>
+          <%= form.text_field :totalamount, id: "total_amount", class: "input"  %>
         </div>
 
           <%# Requires Rebid %>

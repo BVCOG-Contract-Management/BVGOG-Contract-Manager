@@ -80,6 +80,8 @@ class ContractsController < ApplicationController
 		contract_params_clean = contract_params
 		contract_params_clean.delete(:new_vendor_name)
 
+		# puts "PARAMS SENT == #{contract_params.totalamount}"
+
 		@contract = Contract.new(contract_params_clean.merge(contract_status: ContractStatus::IN_PROGRESS))
 
 		respond_to do |format|
@@ -145,6 +147,8 @@ class ContractsController < ApplicationController
 		params[:contract].delete(:contract_documents)
 		params[:contract].delete(:contract_documents_attributes)
 		params[:contract].delete(:contract_document_type_hidden)
+
+		
 
 		respond_to do |format|
 			begin
@@ -238,6 +242,7 @@ class ContractsController < ApplicationController
 			point_of_contact_id
 			vendor_id
 			amount_dollar
+			totalamount
 			amount_duration
 			initial_term_amount
 			initial_term_duration

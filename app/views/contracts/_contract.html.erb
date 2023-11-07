@@ -110,6 +110,12 @@
                                 <td><strong>Amount:</strong></td>
                                 <td><%= number_to_currency(@contract.amount_dollar) %> per <%= @contract.amount_duration %></td>
                             </tr>
+
+                             <tr>
+                                <td><strong>Total Amount:</strong></td>
+                                <td><%= number_to_currency(@contract.totalamount) %></td>
+                            </tr>
+
                             <tr>
                                 <td><strong>Status:</strong></td>
                                 <td><%= contract_status_icon(@contract) %></td>
