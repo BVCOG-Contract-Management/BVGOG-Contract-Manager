@@ -38,15 +38,21 @@
           <%# Vendor %>
           <div class="field">
             <%= form.label :vendor_id %>
-            <%= form.select :vendor_id, vendor_select_options, {:include_blank => !@contract.vendor_id.present?}, class: "input", id: "vendor_id" %>
+            <!-- the field below is visible, but not used for the form submission -->
+            <input type="text" id="vendor_visible_id" name="vendor_visible_id" class="input">
+             <!-- this field below is hidden and used for form submission -->
+            <%= form.hidden_field :vendor_id, class:"input", id:"vendor_id"%>
           </div>
 
+          <script type="text/javascript">
+            var vendorOptions = <%= vendor_select_options_json.html_safe %>;
+          </script>
           <!-- A text input field for entering a new vendor name, initially hidden -->
                 <div id="new_vendor_field" class="field is-hidden">
                   <%= form.label :new_vendor_name %>
                   <%= form.text_field :new_vendor_name, class: "input" %>
                 </div>
-                
+
           <%# Description %>
           <div class="field">
             <%= form.label :description %>
@@ -122,7 +128,7 @@
               </div>
             </div>
           </div>
-          
+
           <div class="field">
             <%= label_tag :value_type, 'Value Type' %>
             <%= select_tag :value_type, options_for_select(["Not Applicable", "Total Value", "Calculated Value"]) %>

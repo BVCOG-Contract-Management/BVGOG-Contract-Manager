@@ -116,6 +116,13 @@ def vendor_select_options
   options.push(["New Vendor", "new"])
 end
 
+def vendor_select_options_json
+  options = Vendor.all.map { |vendor| { label: vendor.name, value: vendor.id } }
+  options.push({ label: "New Vendor", value: "new" })
+  
+  options.to_json
+end
+
 def program_select_options
   options = Program.all.map { |program| [program.name, program.id] }
 end
