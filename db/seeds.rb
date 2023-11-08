@@ -17,7 +17,6 @@ require 'factory_bot_rails'
 # ------------ DEV/TEST SEEDS ------------
 
 if Rails.env.production?
-
     PROGRAM_NAMES = [
         '9-1-1',
         'AAA',
@@ -68,35 +67,55 @@ if Rails.env.production?
         last_name: 'Admin',
         level: UserLevel::ONE,
         program: Program.first,
-        # Invitation already accepted
         invitation_accepted_at: Time.zone.now
     )
 
-    # Create admin user
-    FactoryBot.create(
-        :user,
-        email: 'gatekeeper@bvcogdev.com',
-        password: 'password',
-        first_name: 'BVCOG',
-        last_name: 'Gatekeeper',
-        level: UserLevel::TWO,
-        program: Program.first,
-        # Invitation already accepted
-        invitation_accepted_at: Time.zone.now
-    )
+    # Create multiple contracts
+    for i in 1..50
+        d = Date.today + 1.day * i
+        FactoryBot.create(
+            :contract,
+            id: i,
+            title: "Contract #{i}",
+            entity: Entity.all.sample,
+            program: Program.all.sample,
+            point_of_contact: User.all.sample,
+            vendor: Vendor.all.sample,
+            ends_at: d,
+            ends_at_final: d + 1.day * i,
+            max_renewal_count: i,
+            renewal_duration: i,
+            renewal_duration_units: TimePeriod::DAY,
+            extension_count: i,
+            max_extension_count: i,
+            extension_duration: i,
+            extension_duration_units: TimePeriod::MONTH
+        )
+    end
 
-    # Create admin user
-    FactoryBot.create(
-        :user,
-        email: 'user@bvcogdev.com',
-        password: 'password',
-        first_name: 'BVCOG',
-        last_name: 'User',
-        level: UserLevel::THREE,
-        program: Program.first,
-        # Invitation already accepted
-        invitation_accepted_at: Time.zone.now
-    )
+    contact_person = User.find_by(email: 'user@example.com')
+    # Create some documents with nearby expiries to test expiring docs mailer
+    for i in 1..100
+        d = Date.today + 1.day * i
+        FactoryBot.create(
+            :contract,
+            id: 50 + i,
+            point_of_contact: contact_person,
+            title: "Expiry Contract #{i}",
+            program: Program.all.sample,
+            vendor: Vendor.all.sample,
+            entity: Entity.all.sample,
+            ends_at: d,
+            ends_at_final: d + 1.day * i,
+            max_renewal_count: i,
+            renewal_duration: i,
+            renewal_duration_units: TimePeriod::DAY,
+            extension_count: i,
+            max_extension_count: i,
+            extension_duration: i,
+            extension_duration_units: TimePeriod::MONTH
+        )
+    end
 
     BvcogConfig.create(
         contracts_path: Rails.root.join('public/contracts'),

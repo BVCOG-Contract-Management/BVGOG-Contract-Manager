@@ -276,6 +276,44 @@ class ContractsController < ApplicationController
         params.require(:contract).permit(allowed)
     end
 
+    # Only allow a list of trusted parameters through.
+    def contract_params
+        allowed = %i[
+            title
+            description
+            key_words
+            starts_at
+            ends_at
+            ends_at_final
+            contract_status
+            entity_id
+            program_id
+            point_of_contact_id
+            vendor_id
+            amount_dollar
+            amount_duration
+            initial_term_amount
+            initial_term_duration
+            end_trigger
+            contract_type
+            requires_rebid
+            number
+            new_vendor_name
+            contract_documents
+            contract_documents_attributes
+            contract_document_type_hidden
+            renewal_count
+            max_renewal_count
+            renewal_duration
+            renewal_duration_units
+            extension_count
+            max_extension_count
+            extension_duration
+            extension_duration_units
+        ]
+        params.require(:contract).permit(allowed)
+    end
+
     def sort_contracts
         # Sorts by the query string parameter "sort"
         # Since some columns are combinations or associations, we need to handle them separately
