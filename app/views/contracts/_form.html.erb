@@ -266,6 +266,16 @@
             </div>
           </div>
 
+          <div class="field">
+          <%= label_tag :value_type, 'Value Type' %>
+          <%= form.select :value_type, ["Not Applicable", "Total Value", "Calculated Value"], { id: "contractvaluefield", class: "input" } %>
+        </div>
+
+        <div class="field" id="total_value_field" style="display: none;">
+          <%= label_tag :total_value, 'Total Value' %>
+          <%= text_field_tag :total_value %>
+        </div>
+
           <%# Requires Rebid %>
           <div class="field">
             <%= form.label :requires_rebid %>
