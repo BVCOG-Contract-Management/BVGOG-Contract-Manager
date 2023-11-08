@@ -231,6 +231,7 @@ class ContractsController < ApplicationController
 			key_words
 			starts_at
 			ends_at
+            ends_at_final
 			contract_status
 			entity_id
 			program_id
@@ -249,6 +250,13 @@ class ContractsController < ApplicationController
 			contract_documents_attributes
 			contract_document_type_hidden
 			renewal_count
+            max_renewal_count
+            renewal_duration
+            renewal_duration_units
+            extension_count
+            max_extension_count
+            extension_duration
+            extension_duration_units
 		]
 		params.require(:contract).permit(allowed)
 	end
