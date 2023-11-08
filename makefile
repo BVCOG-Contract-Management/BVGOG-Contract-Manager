@@ -1,6 +1,12 @@
-run:
-	bundle install
+run: bundle
 	rails s
+
+clean:
+	rm -f temp.*
+	rm -f *.log
+
+bundle:
+	bundle install
 
 database:
 	rm -f ./db/development.sqlite3
@@ -16,10 +22,11 @@ heroku_db:
 deploy:
 	./script/deploy/deploy.sh
 
-cucumber:
-	bundle install
-	rails cucumber
+cucumber: clean bundle
+	bundle exec cucumber --profile default --out ./out.log
 
-rspec:
-	bundle install
-	bunlde exec rspec
+rspec: clean bundle
+	bundle exec rspec spec
+
+rubocop: clean bundle
+	bundle exec rubocop --config .rubocop.yml --autocorrect-all
