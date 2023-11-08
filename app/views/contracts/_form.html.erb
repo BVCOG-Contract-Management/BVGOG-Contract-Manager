@@ -7,52 +7,85 @@
 }
 </style>
 <div id="contract-form">
-  <div class="card">
-    <header class="card-header">
-      <p class="card-header-title">
-        Contract Information
-      </p>
-    </header>
-    <%= form_with(model: @contract, data: { turbo: false }) do |form| %>
-    <div class="card-content">
-      <% if @contract.errors.any? %>
-        <article class="message is-danger">
-          <div class="message-header">
-            <p><%= pluralize(contract.errors.count, "error") %> prohibited this contract from being saved:</p>
-          </div>
-          <div class="message-body">
-            <ul>
-              <% contract.errors.full_messages.each do |message| %>
-                <li><%= message %></li>
-              <% end %>
-            </ul>
-          </div>
-        </article>
-      <% end %>
+	<div class="card">
+		<header class="card-header">
+			<p class="card-header-title">
+				Contract Information
+			</p>
+		</header>
+		<%= form_with(model: @contract, data: { turbo: false }) do |form| %>
+		<div class="card-content">
+			<% if @contract.errors.any? %>
+				<article class="message is-danger">
+					<div class="message-header">
+						<p><%= pluralize(contract.errors.count, "error") %> prohibited this contract from being saved:</p>
+					</div>
+					<div class="message-body">
+						<ul>
+							<% contract.errors.full_messages.each do |message| %>
+								<li><%= message %></li>
+							<% end %>
+						</ul>
+					</div>
+				</article>
+			<% end %>
 
-      <%# Form starts here %>
-      <div class="columns">
-        <div class="column is-6">
-          <%# Title %>
-          <div class="field">
-            <%= form.label :title %>
-            <%= form.text_field :title, class: "input" %>
-          </div>
-          <%# Number %>
-          <div class="field">
-            <%= form.label :number %>
-            <%= form.text_field :number, class: "input" %>
-          </div>
-          <%# Vendor %>
-          <div class="field">
-            <%= form.label :vendor_id %>
-            <!-- the field below is visible, but not used for the form submission -->
-            <input type="text" id="vendor_visible_id" name="vendor_visible_id" class="input">
-             <!-- this field below is hidden and used for form submission -->
-            <%= form.hidden_field :vendor_id, class:"input", id:"vendor_id"%>
-          </div>
+			<%# Form starts here %>
+			<div class="columns">
+				<div class="column is-6">
+					<%# Title %>
+					<div class="field">
+						<%= form.label :title do %>
+							<div class="icon-text">
+								<span class="icon has-text-info" id="contract-title-modal-open-btn">
+									<i class="fas fa-circle-info"></i>
+								</span>
+								<span>Title</span>
+							</div>
+						<% end %>
+						<span class="help">
+							Click the information icon above for more information.
+						</span>
+						<%= form.text_field :title, class: "input" %>
+					</div>
 
-          <script type="text/javascript">
+					<%# Number %>
+					<div class="field">
+						<%= form.label :number do %>
+							<div class="icon-text">
+								<span class="icon has-text-info" id="contract-id-modal-open-btn">
+									<i class="fas fa-circle-info"></i>
+								</span>
+								<span>Number</span>
+							</div>
+						<% end %>
+						<span class="help">
+							Click the information icon above for more information.
+						</span>
+						<%= form.text_field :number, class: "input" %>
+					</div>
+
+					<%# Vendor %>
+					<div class="field">
+						<%= form.label :vendor_id do %>
+							<div class="icon-text">
+								<span class="icon has-text-info" id="contract-vendor-modal-open-btn">
+									<i class="fas fa-circle-info"></i>
+								</span>
+								<span>Vendor</span>
+							</div>
+						<% end %>
+						<span class="help">
+							Click the information icon above for more information.
+						</span>
+
+						<!-- the field below is visible, but not used for the form submission -->
+						<input type="text" id="vendor_visible_id" name="vendor_visible_id" class="input">
+						<!-- this field below is hidden and used for form submission -->
+						<%= form.hidden_field :vendor_id, class:"input", id:"vendor_id"%>
+					</div>
+
+					<script type="text/javascript">
             var vendorOptions = <%= vendor_select_options_json.html_safe %>;
             function updateForm() {
               // Get the user input from the text input
@@ -93,49 +126,108 @@
               console.log(userInput)
             }
           </script>
-          <!-- A text input field for entering a new vendor name, initially hidden -->
-                <div id="new_vendor_field" class="field is-hidden">
-                  <%= form.label :new_vendor_name %>
-                  <%= form.text_field :new_vendor_name, class: "input" %>
-                </div>
+					<!-- A text input field for entering a new vendor name, initially hidden -->
+					<div id="new_vendor_field" class="field is-hidden">
+						<%= form.label :new_vendor_name %>
+						<%= form.text_field :new_vendor_name, class: "input" %>
+					</div>
 
-          <%# Description %>
-          <div class="field">
-            <%= form.label :description %>
-            <%= form.text_area :description, class: "textarea" %>
-          </div>
+					<%# Description %>
+					<div class="field">
+						<%= form.label :description do %>
+							<div class="icon-text">
+								<span class="icon has-text-info" id="contract-description-modal-open-btn">
+									<i class="fas fa-circle-info"></i>
+								</span>
+								<span>Description</span>
+							</div>
+						<% end %>
+						<span class="help">
+							Click the information icon above for more information.
+						</span>
+						<%= form.text_area :description, class: "textarea" %>
+					</div>
 
-          <%# Contract Type %>
-          <div class="field">
-            <%= form.label :contract_type %>
-            <%= form.select :contract_type, ContractType.to_a, {:include_blank => true}, class: "input" %>
-          </div>
+					<%# Contract Type %>
+					<div class="field">
+						<%= form.label :contract_type do %>
+							<div class="icon-text">
+								<span class="icon has-text-info" id="contract-type-modal-open-btn">
+									<i class="fas fa-circle-info"></i>
+								</span>
+								<span>Contract Type</span>
+							</div>
+						<% end %>
+						<span class="help">
+							Click the information icon above for more information.
+						</span>
+						<%= form.select :contract_type, ContractType.to_a, {:include_blank => true}, class: "input" %>
+					</div>
 
-          <%# Point of Contact %>
-          <%# TODO: default to logged in user %>
-          <div class="field">
-            <%= form.label :point_of_contact_id %>
-            <%= form.select :point_of_contact_id, user_select_options, {:include_blank => true}, class: "input" %>
-          </div>
+					<%# Point of Contact %>
+					<div class="field">
+						<%= form.label :point_of_contact_id do %>
+							<div class="icon-text">
+								<span class="icon has-text-info" id="contract-poc-modal-open-btn">
+									<i class="fas fa-circle-info"></i>
+								</span>
+								<span>Point of Contact</span>
+							</div>
+						<% end %>
+						<span class="help">
+							Click the information icon above for more information.
+						</span>
+						<%= form.select :point_of_contact_id, user_select_options, {:include_blank => true}, class: "input" %>
+					</div>
 
-          <%# Program %>
-          <div class="field">
-            <%= form.label :program_id %>
-            <%= form.select :program_id, program_select_options, {:include_blank => !@contract.program_id.present?}, class: "input" %>
-          </div>
+					<%# Program %>
+					<div class="field">
+						<%= form.label :program_id do %>
+							<div class="icon-text">
+								<span class="icon has-text-info" id="contract-program-modal-open-btn">
+									<i class="fas fa-circle-info"></i>
+								</span>
+								<span>Program</span>
+							</div>
+						<% end %>
+						<span class="help">
+							Click the information icon above for more information.
+						</span>
+						<%= form.select :program_id, program_select_options, {:include_blank => !@contract.program_id.present?}, class: "input" %>
+					</div>
 
-          <%# Entity %>
-          <div class="field">
-            <%= form.label :entity_id %>
-            <%= form.select :entity_id, entity_select_options, {:include_blank => !@contract.entity_id.present?}, class: "input" %>
-          </div>
+					<%# Entity %>
+					<div class="field">
+						<%= form.label :entity_id do %>
+							<div class="icon-text">
+								<span class="icon has-text-info" id="contract-entity-modal-open-btn">
+									<i class="fas fa-circle-info"></i>
+								</span>
+								<span>Entity</span>
+							</div>
+						<% end %>
+						<span class="help">
+							Click the information icon above for more information.
+						</span>
+						<%= form.select :entity_id, entity_select_options, {:include_blank => !@contract.entity_id.present?}, class: "input" %>
+					</div>
 
-          <%# Search Key Words %>
-          <div class="field">
-            <%= form.label :search_key_words %>
-            <%= form.text_field :key_words, placeholder: "Separate key words with a comma", class: "input" %>
-          </div>
-        </div>
+					<%# Search Key Words %>
+					<div class="field">
+						<%= form.label :search_key_words do %>
+							<div class="icon-text">
+								<span class="icon has-text-info" id="contract-key-words-modal-open-btn">
+									<i class="fas fa-circle-info"></i>
+								</span>
+								<span>Key Words</span>
+							</div>
+						<% end %>
+						<span class="help">
+							Click the information icon above for more information.
+						</span>
+						<%= form.text_field :key_words, placeholder: "Separate key words with a comma", class: "input" %>
+					</div>
+				</div>
 
         <div class="column is-6">
           <%# End Trigger %>
@@ -193,13 +285,23 @@
           <div class="columns">
             <div class="column is-6">
               <div class="field">
-                <%= form.label :initial_term_amount %>
-                <p class="control has-icons-left">
-                  <%= form.number_field :initial_term_amount, class: "input" %>
-                  <span class="icon is-small is-left">
-                    <i class="fas fa-clock"></i>
-                  </span>
-                </p>
+                <%= form.label :initial_term_amount do %>
+					<div class="icon-text">
+						<span class="icon has-text-info" id="contract-initial-term-modal-open-btn">
+							<i class="fas fa-circle-info"></i>
+						</span>
+						<span>Initial Term</span>
+					</div>
+				<% end %>
+				<span class="help">
+					Click the information icon above for more information.
+				</span>
+				<p class="control has-icons-left">
+					<%= form.number_field :initial_term_amount, class: "input" %>
+					<span class="icon is-small is-left">
+						<i class="fas fa-clock"></i>
+					</span>
+				</p>
               </div>
             </div>
             <div class="column is-6">
@@ -333,4 +435,194 @@
     <% end %>
   </div>
   <script type="text/javascript">updateForm()</script>
+
+<%# Hints User Story. See https://www.pivotaltracker.com/story/show/186056105 %>
+<div class="modal" id="contract-title-modal">
+	<div class="modal-background"></div>
+	<div class="modal-card">
+		<header class="modal-card-head">
+			<div class="icon-text">
+			<p class="modal-card-title">Contract Title</p>
+			</div>
+		</header>
+		<section class="modal-card-body">
+		<div class="content">
+			The name of the contract
+		</div>
+		</section>
+		<footer class="modal-card-foot">
+		<button class="button modal-close-btn">Close</button>
+		</footer>
+	</div>
+</div>
+
+<div class="modal" id="contract-id-modal">
+	<div class="modal-background"></div>
+	<div class="modal-card">
+		<header class="modal-card-head">
+			<div class="icon-text">
+			<p class="modal-card-title">Number</p>
+			</div>
+		</header>
+		<section class="modal-card-body">
+		<div class="content">
+			This is the contract's identification number
+		</div>
+		</section>
+		<footer class="modal-card-foot">
+		<button class="button modal-close-btn">Close</button>
+		</footer>
+	</div>
+</div>
+
+<div class="modal" id="contract-vendor-modal">
+	<div class="modal-background"></div>
+	<div class="modal-card">
+		<header class="modal-card-head">
+			<div class="icon-text">
+			<p class="modal-card-title">Vendor</p>
+			</div>
+		</header>
+		<section class="modal-card-body">
+		<div class="content">
+			The entity we are entering an agreement with
+		</div>
+		</section>
+		<footer class="modal-card-foot">
+		<button class="button modal-close-btn">Close</button>
+		</footer>
+	</div>
+</div>
+
+<div class="modal" id="contract-description-modal">
+	<div class="modal-background"></div>
+	<div class="modal-card">
+		<header class="modal-card-head">
+			<div class="icon-text">
+			<p class="modal-card-title">Description</p>
+			</div>
+		</header>
+		<section class="modal-card-body">
+		<div class="content">
+			Short summary of the contract
+		</div>
+		</section>
+		<footer class="modal-card-foot">
+		<button class="button modal-close-btn">Close</button>
+		</footer>
+	</div>
+</div>
+
+<div class="modal" id="contract-type-modal">
+	<div class="modal-background"></div>
+	<div class="modal-card">
+		<header class="modal-card-head">
+			<div class="icon-text">
+			<p class="modal-card-title">Contract Type</p>
+			</div>
+		</header>
+		<section class="modal-card-body">
+		<div class="content">
+			Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+		</div>
+		</section>
+		<footer class="modal-card-foot">
+		<button class="button modal-close-btn">Close</button>
+		</footer>
+	</div>
+</div>
+
+<div class="modal" id="contract-poc-modal">
+	<div class="modal-background"></div>
+	<div class="modal-card">
+		<header class="modal-card-head">
+			<div class="icon-text">
+			<p class="modal-card-title">Point of Contact</p>
+			</div>
+		</header>
+		<section class="modal-card-body">
+		<div class="content">
+			The Program Manager for the contract
+		</div>
+		</section>
+		<footer class="modal-card-foot">
+		<button class="button modal-close-btn">Close</button>
+		</footer>
+	</div>
+</div>
+
+<div class="modal" id="contract-program-modal">
+	<div class="modal-background"></div>
+	<div class="modal-card">
+		<header class="modal-card-head">
+			<div class="icon-text">
+			<p class="modal-card-title">Contract Type</p>
+			</div>
+		</header>
+		<section class="modal-card-body">
+		<div class="content">
+			Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+		</div>
+		</section>
+		<footer class="modal-card-foot">
+		<button class="button modal-close-btn">Close</button>
+		</footer>
+	</div>
+</div>
+
+<div class="modal" id="contract-entity-modal">
+	<div class="modal-background"></div>
+	<div class="modal-card">
+		<header class="modal-card-head">
+			<div class="icon-text">
+			<p class="modal-card-title">Entity</p>
+			</div>
+		</header>
+		<section class="modal-card-body">
+		<div class="content">
+			The organization the contract belongs to i.e. BVCOG or BVCAP
+		</div>
+		</section>
+		<footer class="modal-card-foot">
+		<button class="button modal-close-btn">Close</button>
+		</footer>
+	</div>
+</div>
+
+<div class="modal" id="contract-key-words-modal">
+	<div class="modal-background"></div>
+	<div class="modal-card">
+		<header class="modal-card-head">
+			<div class="icon-text">
+			<p class="modal-card-title">Key Words</p>
+			</div>
+		</header>
+		<section class="modal-card-body">
+		<div class="content">
+			Words that can be used to search for the contract
+		</div>
+		</section>
+		<footer class="modal-card-foot">
+		<button class="button modal-close-btn">Close</button>
+		</footer>
+	</div>
+</div>
+
+<div class="modal" id="contract-initial-term-modal">
+	<div class="modal-background"></div>
+	<div class="modal-card">
+		<header class="modal-card-head">
+			<div class="icon-text">
+			<p class="modal-card-title">Initial Term</p>
+			</div>
+		</header>
+		<section class="modal-card-body">
+		<div class="content">
+			The beginning length of the contract.
+		</div>
+		</section>
+		<footer class="modal-card-foot">
+		<button class="button modal-close-btn">Close</button>
+		</footer>
+	</div>
 </div>
