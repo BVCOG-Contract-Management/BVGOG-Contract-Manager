@@ -229,45 +229,6 @@
 					</div>
 				</div>
 
-				<div class="column is-6">
-					<%# Start Date and End Date %>
-					<div class="columns">
-						<div class="column is-6">
-							<div class="field">
-								<%= form.label :start_date %>
-								<%= form.date_field :starts_at, class: "input" %>
-							</div>
-						</div>
-						<div class="column is-6">
-							<div class="field">
-								<%= form.label :end_date %>
-								<%= form.date_field :ends_at, class: "input" %>
-							</div>
-						</div>
-					</div>
-
-					<%# Dollar Amount and Amount Duration %>
-					<div class="columns">
-						<div class="column is-6">
-							<div class="field">
-								<%= form.label :amount_dollar, "Dollar amount" %>
-								<p class="control has-icons-left">
-									<%= form.number_field :amount_dollar, class: "input", id: "contract-form-dollar-amount" %>
-									<span class="icon is-small is-left">
-										<i class="fas fa-dollar"></i>
-									</span>
-								</p>
-							</div>
-						</div>
-						<div class="column is-6">
-							<div class="field">
-								<%= form.label :amount_duration %>
-								<%= form.select :amount_duration, TimePeriod.to_a, {:include_blank => true}, class: "input" %>
-							</div>
-						</div>
-					</div>
-				</div>
-
         <div class="column is-6">
           <%# End Trigger %>
           <div class="field">
@@ -325,16 +286,22 @@
             <div class="column is-6">
               <div class="field">
                 <%= form.label :initial_term_amount do %>
-									<div class="icon-text">
-										<span class="icon has-text-info" id="contract-initial-term-modal-open-btn">
-											<i class="fas fa-circle-info"></i>
-										</span>
-										<span>Initial Term</span>
-									</div>
-								<% end %>
-								<span class="help">
-									Click the information icon above for more information.
-								</span>
+					<div class="icon-text">
+						<span class="icon has-text-info" id="contract-initial-term-modal-open-btn">
+							<i class="fas fa-circle-info"></i>
+						</span>
+						<span>Initial Term</span>
+					</div>
+				<% end %>
+				<span class="help">
+					Click the information icon above for more information.
+				</span>
+				<p class="control has-icons-left">
+					<%= form.number_field :initial_term_amount, class: "input" %>
+					<span class="icon is-small is-left">
+						<i class="fas fa-clock"></i>
+					</span>
+				</p>
               </div>
             </div>
             <div class="column is-6">
@@ -468,7 +435,6 @@
     <% end %>
   </div>
   <script type="text/javascript">updateForm()</script>
-</div>
 
 <%# Hints User Story. See https://www.pivotaltracker.com/story/show/186056105 %>
 <div class="modal" id="contract-title-modal">
