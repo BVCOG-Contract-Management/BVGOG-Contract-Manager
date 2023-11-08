@@ -28,12 +28,35 @@
                             </tr>
                             <tr>
                                 <td><strong>Initial Term:</strong></td>
-                                <td><%= @contract.initial_term_amount %> <%= @contract.initial_term_duration_humanize %><%= @contract.initial_term_amount > 1 ? "s" : "" %></td>
+                                <td><%= @contract.initial_term_amount %> <%= @contract.initial_term_duration %><%= @contract.initial_term_amount > 1 ? "s" : "" %></td>
                             </tr>
-                            <tr>
-                                <td><strong>Remaining renewals:</strong></td>
-                                <td><%= @contract.renewal_count %></td>
-                            </tr>
+
+                            <% if @contract.renewal_count && contract.end_trigger == "limited_term"%>
+                                <tr>
+                                    <td><strong>Remaining renewals:</strong></td>
+                                    <td><%= @contract.renewal_count %></td>
+                                </tr>
+                            <% end %>
+                            <% if @contract.renewal_count && contract.end_trigger == "limited_term"%>
+                                <tr>
+                                    <td><strong>Renewal Period:</strong></td>
+                                    <td><%= @contract.renewal_duration %> <%= @contract.renewal_duration_units %><%= @contract.renewal_duration > 1 ? "s" : "" %></td></td>
+                                </tr>
+                            <% end %>
+
+                            <% if @contract.extension_count && contract.end_trigger == "limited_term"%>
+                                <tr>
+                                    <td><strong>Remaining extensions:</strong></td>
+                                    <td><%= @contract.extension_count %></td>
+                                </tr>
+                            <% end %>
+                            <% if @contract.renewal_count && contract.end_trigger == "limited_term"%>
+                                <tr>
+                                    <td><strong>Renewal Period:</strong></td>
+                                    <td><%= @contract.extension_duration %> <%= @contract.extension_duration_units %><%= @contract.extension_duration > 1 ? "s" : "" %></td></td>
+                                </tr>
+                            <% end %>
+
                             <tr>
                                 <td><strong>End Trigger:</strong></td>
                                 <td><%= @contract.end_trigger_humanize %></td>
@@ -61,10 +84,18 @@
                                 <td><strong>Start Date:</strong></td>
                                 <td><%= @contract.starts_at.strftime("%B %d, %Y") %></td>
                             </tr>
-                            <tr>
-                                <td><strong>End Date:</strong></td>
-                                <td><%= @contract.ends_at.strftime("%B %d, %Y") %></td>
-                            </tr>
+                            <% if @contract.ends_at && contract.end_trigger == "limited_term"%>
+                                <tr>
+                                    <td><strong>End Date:</strong></td>
+                                    <td><%= @contract.ends_at.strftime("%B %d, %Y") %></td>
+                                </tr>
+                            <% end %>
+                            <% if @contract.ends_at_final && contract.end_trigger == "limited_term"%>
+                                <tr>
+                                    <td><strong>Final End Date:</strong></td>
+                                    <td><%= @contract.ends_at_final.strftime("%B %d, %Y") %></td>
+                                </tr>
+                            <% end %>
                             <tr>
                                 <td><strong>Requires Rebid:</strong></td>
                                 <td>

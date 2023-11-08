@@ -212,16 +212,6 @@ class ContractsController < ApplicationController
         end
     end
 
-    # DELETE /contracts/1 or /contracts/1.json
-    # def destroy
-    #  @contract.destroy
-    #
-    #  respond_to do |format|
-    #    format.html { redirect_to contracts_url, notice: 'Contract was successfully destroyed.' }
-    #    format.json { head :no_content }
-    #  end
-    # end
-
     def get_file
         contract_document = ContractDocument.find(params[:id])
         send_file contract_document.file.path, type: contract_document.file_content_type, disposition: :inline
@@ -232,7 +222,43 @@ class ContractsController < ApplicationController
         # render 'reject' # this line is implicit
     end
 
-    private
+	# Only allow a list of trusted parameters through.
+	def contract_params
+		allowed = %i[
+			title
+			description
+			key_words
+			starts_at
+			ends_at
+            ends_at_final
+			contract_status
+			entity_id
+			program_id
+			point_of_contact_id
+			vendor_id
+			amount_dollar
+			amount_duration
+			initial_term_amount
+			initial_term_duration
+			end_trigger
+			contract_type
+			requires_rebid
+			number
+			new_vendor_name
+			contract_documents
+			contract_documents_attributes
+			contract_document_type_hidden
+			renewal_count
+            max_renewal_count
+            renewal_duration
+            renewal_duration_units
+            extension_count
+            max_extension_count
+            extension_duration
+            extension_duration_units
+		]
+		params.require(:contract).permit(allowed)
+	end
 
     # Use callbacks to share common setup or constraints between actions.
     def set_contract
@@ -241,36 +267,6 @@ class ContractsController < ApplicationController
 
     def set_users
         @users = User.all
-    end
-
-    # Only allow a list of trusted parameters through.
-    def contract_params
-        allowed = %i[
-            title
-            description~
-            key_words
-            starts_at
-            ends_at
-            contract_status
-            entity_id
-            program_id
-            point_of_contact_id
-            vendor_id
-            amount_dollar
-            amount_duration
-            initial_term_amount
-            initial_term_duration
-            end_trigger
-            contract_type
-            requires_rebid
-            number
-            new_vendor_name
-            contract_documents
-            contract_documents_attributes
-            contract_document_type_hidden
-            renewal_count
-        ]
-        params.require(:contract).permit(allowed)
     end
 
     def sort_contracts
