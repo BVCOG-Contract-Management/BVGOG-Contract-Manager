@@ -10,7 +10,9 @@ class Contract < ApplicationRecord
     validates :vendor_id, presence: true
     validates :starts_at, presence: true
     validates :ends_at, comparison: { greater_than_or_equal_to: :starts_at }, if: -> { end_trigger == 'limited_term' }
-    validates :ends_at_final, comparison: { greater_than_or_equal_to: :ends_at }, if: { end_trigger == 'limited_term' } 
+    validates :ends_at_final, comparison: { greater_than_or_equal_to: :ends_at }, if: lambda {
+                                                                                          end_trigger == 'limited_term'
+                                                                                      }
     validates :amount_dollar, numericality: { greater_than_or_equal_to: 0 }
     validates :initial_term_amount, numericality: { greater_than_or_equal_to: 0 }
     validates :contract_type, presence: true, inclusion: { in: ContractType.list }

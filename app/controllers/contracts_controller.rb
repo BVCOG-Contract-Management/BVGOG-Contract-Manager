@@ -254,36 +254,6 @@ class ContractsController < ApplicationController
             key_words
             starts_at
             ends_at
-            contract_status
-            entity_id
-            program_id
-            point_of_contact_id
-            vendor_id
-            amount_dollar
-            amount_duration
-            initial_term_amount
-            initial_term_duration
-            end_trigger
-            contract_type
-            requires_rebid
-            number
-            new_vendor_name
-            contract_documents
-            contract_documents_attributes
-            contract_document_type_hidden
-            renewal_count
-        ]
-        params.require(:contract).permit(allowed)
-    end
-
-    # Only allow a list of trusted parameters through.
-    def contract_params
-        allowed = %i[
-            title
-            description
-            key_words
-            starts_at
-            ends_at
             ends_at_final
             contract_status
             entity_id

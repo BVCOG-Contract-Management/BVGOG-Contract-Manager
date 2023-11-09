@@ -69,7 +69,8 @@ Given('{int} example contracts exist') do |num_contracts|
             entity: Entity.all.sample,
             program: Program.all.sample,
             point_of_contact: User.all.sample,
-            vendor: Vendor.all.sample
+            vendor: Vendor.all.sample,
+            ends_at_final: Time.current + 100.years
         )
     end
 end

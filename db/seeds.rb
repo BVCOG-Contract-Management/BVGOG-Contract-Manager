@@ -14,8 +14,7 @@ require 'factory_bot_rails'
 # orig_stdout = $stdout.clone
 # $stdout.reopen(File.new('/dev/null', 'w'))
 
-# ------------ DEV/TEST SEEDS ------------
-
+# ------------ PROD SEEDS ------------ #
 if Rails.env.production?
     PROGRAM_NAMES = [
         '9-1-1',
@@ -71,8 +70,8 @@ if Rails.env.production?
     )
 
     # Create multiple contracts
-    for i in 1..50
-        d = Date.today + 1.day * i
+    (1..50).each do |i|
+        d = Time.zone.today + 1.day * i
         FactoryBot.create(
             :contract,
             id: i,
@@ -95,8 +94,8 @@ if Rails.env.production?
 
     contact_person = User.find_by(email: 'user@example.com')
     # Create some documents with nearby expiries to test expiring docs mailer
-    for i in 1..100
-        d = Date.today + 1.day * i
+    (1..100).each do |i|
+        d = Time.zone.today + 1.day * i
         FactoryBot.create(
             :contract,
             id: 50 + i,
@@ -123,17 +122,16 @@ if Rails.env.production?
     )
 
 else
-    # Create programs
+    # ------------ DEV/TEST SEEDS ------------ #
     (1..5).each do |i|
+        # Create programs
         FactoryBot.create(
             :program,
             id: i,
             name: "Program #{i}"
         )
-    end
 
-    # Create entities
-    (1..5).each do |i|
+        # Create entities
         FactoryBot.create(
             :entity,
             id: i,
@@ -151,6 +149,7 @@ else
             entities: Entity.all.sample(rand(1..3))
         )
     end
+
     # Create a level 3 user
     FactoryBot.create(
         :user,
@@ -187,17 +186,15 @@ else
         level: UserLevel::ONE
     )
 
-    # Create vendors
     (1..50).each do |i|
+        # Create vendors
         FactoryBot.create(
             :vendor,
             id: i,
             name: "Vendor #{i}"
         )
-    end
 
-    # Create multiple contracts
-    (1..50).each do |i|
+        # Create Contracts
         FactoryBot.create(
             :contract,
             id: i,
@@ -205,7 +202,8 @@ else
             entity: Entity.all.sample,
             program: Program.all.sample,
             point_of_contact: User.all.sample,
-            vendor: Vendor.all.sample
+            vendor: Vendor.all.sample,
+            ends_at_final: Time.zone.today + 100.years
         )
     end
 
@@ -220,7 +218,8 @@ else
             program: Program.all.sample,
             vendor: Vendor.all.sample,
             entity: Entity.all.sample,
-            ends_at: Date.today + 1.day * i
+            ends_at: Time.zone.today + 1.day * i,
+            ends_at_final: Time.zone.today + 2.days * i
         )
     end
 
@@ -259,7 +258,4 @@ else
         contracts_path: Rails.root.join('public/contracts'),
         reports_path: Rails.root.join('public/reports')
     )
-
-    # ------------ PROD SEEDS ------------
-
 end
