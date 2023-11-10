@@ -62,6 +62,7 @@ end
 Given('{int} example contracts exist') do |num_contracts|
     # Create multiple contracts
     (1..num_contracts).each do |i|
+        d = Time.zone.today + 1.day * i
         FactoryBot.create(
             :contract,
             id: i,
@@ -70,11 +71,15 @@ Given('{int} example contracts exist') do |num_contracts|
             program: Program.all.sample,
             point_of_contact: User.all.sample,
             vendor: Vendor.all.sample,
-            starts_at: Time.zone.now,
-            ends_at: Time.zone.now + + 1.day + 10 * i.day,
-            ends_at_final: Time.zone.now + 2.days + 20 * i.day,
-            renewal_duration: 1.day,
-            renewal_duration_units: TimePeriod::DAY
+            ends_at: d,
+            ends_at_final: d + 1.day * i,
+            max_renewal_count: i,
+            renewal_duration: i,
+            renewal_duration_units: TimePeriod::DAY,
+            extension_count: i,
+            max_extension_count: i,
+            extension_duration: i,
+            extension_duration_units: TimePeriod::MONTH
         )
     end
 end
