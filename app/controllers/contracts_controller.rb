@@ -30,11 +30,11 @@ class ContractsController < ApplicationController
         # Sort contracts
         @contracts = sort_contracts.page params[:page]
         # Filter contracts based on allowed entities if user is level 3
-        if current_user.level == UserLevel::THREE
+        if current_user.level != UserLevel::ONE
             @contracts = @contracts.where(entity_id: current_user.entities.pluck(:id))
         end
-        # Search contracts
         @contracts = search_contracts(@contracts) if params[:search].present?
+        # Search contracts
         Rails.logger.debug params[:search].inspect
     end
 
