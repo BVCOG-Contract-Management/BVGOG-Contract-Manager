@@ -1,0 +1,38 @@
+require:
+    - rubocop-capybara
+    - rubocop-rspec
+    - rubocop-rails
+
+Layout/ArgumentAlignment:
+    EnforcedStyle: with_first_argument
+Layout/ArrayAlignment:
+    Enabled: true
+    EnforcedStyle: with_first_element
+Layout/IndentationStyle:
+    Enabled: true
+    IndentationWidth: 4
+    EnforcedStyle: spaces
+Layout/IndentationWidth:
+    Width: 4
+Metrics/AbcSize:
+    Max: 256
+Metrics/BlockLength:
+    Max: 128
+Metrics/ClassLength:
+    Max: 512
+Metrics/CyclomaticComplexity:
+    Max: 128
+Metrics/MethodLength:
+    Max: 128
+Metrics/ModuleLength:
+    Max: 128
+Metrics/PerceivedComplexity:
+    Max: 128
+
+AllCops:
+    # Suggestextensions: false
+    Exclude:
+        - "node_modules/**/*"
+        - "tmp/**/*"
+        - "vendor/**/*"
+        - ".git/**/*"

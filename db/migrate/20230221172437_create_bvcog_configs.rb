@@ -1,10 +1,12 @@
-class CreateBvcogConfigs < ActiveRecord::Migration[7.0]
-  def change
-    create_table :bvcog_configs do |t|
-      t.text :contracts_path, null: false
-      t.text :reports_path, null: false
+# frozen_string_literal: true
 
-      t.timestamps
+class CreateBvcogConfigs < ActiveRecord::Migration[7.0]
+    def change
+        create_table :bvcog_configs do |t|
+            t.text :contracts_path, null: false
+            t.text :reports_path, null: false
+
+            t.timestamps
+        end
     end
-  end
 end

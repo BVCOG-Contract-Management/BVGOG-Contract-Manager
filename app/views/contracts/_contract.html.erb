@@ -125,8 +125,7 @@
                 </div>
 
                 <footer class="card-footer">
-                  <% if current_user.present? && current_user.level != UserLevel::THREE %>
-                    
+                    <% if current_user.present? && current_user.level != UserLevel::THREE %>
                         <%= link_to "Edit this contract", edit_contract_path(@contract), class: "card-footer-item" %>
                         <%= link_to contract_path(@contract, params: { contract: { contract_status: contract_opposite_status(@contract) } }), data: { "turbo-method": :put }, class: "card-footer-item", id: "card-change-status" do %>
                             <span>
@@ -137,6 +136,9 @@
                                 <% end %>
                         <% end %>
                     <% end %>
+                    <% if current_user.present? && current_user.level == UserLevel::TWO %>
+                        <%= link_to "Reject Contract", reject_contract_path(@contract), class: "card-footer-item"%>
+                    <%end %>
                     <%# <%= link_to "Send expiry reminder", expiry_reminder_contract_path(@contract), class: "card-footer-item" %>
                 </footer>
 
