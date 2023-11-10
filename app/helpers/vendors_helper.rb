@@ -1,23 +1,23 @@
+# frozen_string_literal: true
+
 module VendorsHelper
     def average_rating_stars(vendor)
         vendor_reviews = vendor.vendor_reviews
-        if vendor_reviews.empty?
-            average_rating = 0
-        else
-            average_rating = vendor_reviews.average(:rating)
-        end
+        average_rating = if vendor_reviews.empty?
+                             0
+                         else
+                             vendor_reviews.average(:rating)
+                         end
         # Round to nearest 0.5
         average_rating = (average_rating * 2).round / 2.0
         stars_html(average_rating)
-      end
+    end
 
     def stars_html(rating)
-        stars = ""
+        stars = ''
         # Add full stars while possible, then add half star if needed
         rating.floor.times { stars += "<span class=\"icon\"><i class='fas fa-star has-text-warning'></i></span>" }
-        if rating % 1 != 0
-          stars += "<span class=\"icon\"><i class='fas fa-star-half-alt has-text-warning'></i></span>"
-        end
+        stars += "<span class=\"icon\"><i class='fas fa-star-half-alt has-text-warning'></i></span>" if rating % 1 != 0
         # Add empty stars until 5 stars
         (5 - rating.ceil).times { stars += "<span class=\"icon\"><i class='far fa-star'></i></span>" }
         stars.html_safe
@@ -25,7 +25,7 @@ module VendorsHelper
 
     def bar_chart_reviews_html(vendor)
         # Creates an amazon-like bar chart of reviews
-        # ex. 
+        # ex.
         # 5 star |******** | 70%
         # 4 star |*****    | 20%
         # 3 star |**       | 10%
@@ -41,12 +41,13 @@ module VendorsHelper
         reviews_by_rating = {}
         vendor_reviews.each do |review|
             review_rating = review.rating.to_i
-            reviews_by_rating[review_rating] = reviews_by_rating[review_rating] ? reviews_by_rating[review_rating] + 1 : 1
+            reviews_by_rating[review_rating] =
+                reviews_by_rating[review_rating] ? reviews_by_rating[review_rating] + 1 : 1
         end
         # Create a hash of ratings with the number of reviews for each rating
         ratings = {}
         (1..5).each do |rating|
-          ratings[rating] = reviews_by_rating[rating] || 0
+            ratings[rating] = reviews_by_rating[rating] || 0
         end
 
         # Create a hash of ratings with the percentage of reviews for each rating
@@ -59,12 +60,12 @@ module VendorsHelper
             ratings_percentages[rating] = (count.to_f / total_reviews * 100).round
         end
 
-        print ratings_percentages
-        
+        Rails.logger.debug ratings_percentages
+
         # Create html for bar chart
-        bar_chart_html = ""
+        bar_chart_html = ''
         (1..5).reverse_each do |rating|
-            bar_chart_html += """
+            bar_chart_html += ''"
             <div class=\"columns is-1 is-variable review-percentage-container\">
                 <div class=\"column is-3 review-percentage-star-count\">
                     <span><strong>#{rating} star</strong></span>
@@ -78,7 +79,7 @@ module VendorsHelper
                     <span>#{ratings_percentages[rating]}%</span>
                 </div>
             </div>
-            """
+            "''
         end
         bar_chart_html.html_safe
     end

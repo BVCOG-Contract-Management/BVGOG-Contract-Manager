@@ -1,17 +1,19 @@
-require "rails_helper"
-require "auth_helper"
+# frozen_string_literal: true
 
-RSpec.describe "contracts/show", type: :view do
-  include Devise::Test::IntegrationHelpers
-  include Devise::Test::ControllerHelpers
-  include FactoryBot::Syntax::Methods
+require 'rails_helper'
+require 'auth_helper'
 
-  before(:each) do
-    login_user
-    @contract = assign(:contract, create(:contract))
-  end
+RSpec.describe 'contracts/show', type: :view do
+    include Devise::Test::IntegrationHelpers
+    include Devise::Test::ControllerHelpers
+    include FactoryBot::Syntax::Methods
 
-  it "renders attributes in <p>" do
-    render
-  end
+    before do
+        login_user
+        @contract = assign(:contract, create(:contract))
+    end
+
+    it 'renders attributes in <p>' do
+        render
+    end
 end
