@@ -70,7 +70,11 @@ Given('{int} example contracts exist') do |num_contracts|
             program: Program.all.sample,
             point_of_contact: User.all.sample,
             vendor: Vendor.all.sample,
-            ends_at_final: Time.current + 100.years
+            starts_at: Time.zone.now,
+            ends_at: Time.zone.now + + 1.day + 10 * i.day,
+            ends_at_final: Time.zone.now + 2.days + 20 * i.day,
+            renewal_duration: 1.day,
+            renewal_duration_units: TimePeriod::DAY
         )
     end
 end

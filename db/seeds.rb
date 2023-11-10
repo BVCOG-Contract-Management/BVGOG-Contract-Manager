@@ -69,6 +69,30 @@ if Rails.env.production?
         invitation_accepted_at: Time.zone.now
     )
 
+    # Create gatekeeper user
+    FactoryBot.create(
+        :user,
+        email: 'gatekeeper@bvcogdev.com',
+        password: 'password',
+        first_name: 'BVCOG',
+        last_name: 'Gatekeeper',
+        level: UserLevel::TWO,
+        program: Program.first,
+        invitation_accepted_at: Time.zone.now
+    )
+
+    # Create user
+    FactoryBot.create(
+        :user,
+        email: 'user@bvcogdev.com',
+        password: 'password',
+        first_name: 'BVCOG',
+        last_name: 'User',
+        level: UserLevel::THREE,
+        program: Program.first,
+        invitation_accepted_at: Time.zone.now
+    )
+
     # Create multiple contracts
     (1..50).each do |i|
         d = Time.zone.today + 1.day * i
@@ -120,7 +144,6 @@ if Rails.env.production?
         contracts_path: Rails.root.join('public/contracts'),
         reports_path: Rails.root.join('public/reports')
     )
-
 else
     # ------------ DEV/TEST SEEDS ------------ #
     (1..5).each do |i|
@@ -150,31 +173,7 @@ else
         )
     end
 
-    # Create a level 3 user
-    FactoryBot.create(
-        :user,
-        email: 'user@example.com',
-        password: 'password',
-        first_name: 'Example',
-        last_name: 'User',
-        program: Program.all.sample,
-        entities: Entity.all.sample(rand(0..Entity.count)),
-        level: UserLevel::THREE
-    )
-
-    # Create a level 2 user
-    FactoryBot.create(
-        :user,
-        email: 'gatekeeper@example.com',
-        password: 'password',
-        first_name: 'Gatekeeper',
-        last_name: 'User',
-        program: Program.all.sample,
-        entities: Entity.all.sample(rand(0..Entity.count)),
-        level: UserLevel::TWO
-    )
-
-    # Create a level 1 user
+    # Create Admin
     FactoryBot.create(
         :user,
         email: 'admin@example.com',
@@ -186,6 +185,30 @@ else
         level: UserLevel::ONE
     )
 
+    # Create Gatekeeper
+    FactoryBot.create(
+        :user,
+        email: 'gatekeeper@example.com',
+        password: 'password',
+        first_name: 'Gatekeeper',
+        last_name: 'User',
+        program: Program.all.sample,
+        entities: Entity.all.sample(rand(0..Entity.count)),
+        level: UserLevel::TWO
+    )
+
+    # Create User
+    FactoryBot.create(
+        :user,
+        email: 'user@example.com',
+        password: 'password',
+        first_name: 'Example',
+        last_name: 'User',
+        program: Program.all.sample,
+        entities: Entity.all.sample(rand(0..Entity.count)),
+        level: UserLevel::THREE
+    )
+
     (1..50).each do |i|
         # Create vendors
         FactoryBot.create(
@@ -195,6 +218,7 @@ else
         )
 
         # Create Contracts
+        d = Time.zone.today + 1.day * i
         FactoryBot.create(
             :contract,
             id: i,
@@ -203,7 +227,15 @@ else
             program: Program.all.sample,
             point_of_contact: User.all.sample,
             vendor: Vendor.all.sample,
-            ends_at_final: Time.zone.today + 100.years
+            ends_at: d,
+            ends_at_final: d + 1.day * i,
+            max_renewal_count: i,
+            renewal_duration: i.days,
+            renewal_duration_units: TimePeriod::DAY,
+            extension_count: i,
+            max_extension_count: i,
+            extension_duration: i.months,
+            extension_duration_units: TimePeriod::MONTH
         )
     end
 
