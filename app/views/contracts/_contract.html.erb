@@ -120,13 +120,12 @@
 
                 <footer class="card-footer">
                     <% if current_user.present? && current_user.level != UserLevel::THREE %>
-                        <%= link_to contract_path(@contract, params: { contract: { contract_status: contract_opposite_status(@contract) } }), data: { "turbo-method": :put }, class: "card-footer-item", id: "card-change-status" do %>
-                            <span>
-                                <% if @contract.contract_status == ContractStatus::IN_PROGRESS %>
-                                    <span>Set to "Approved"</span>
-                                <% else %>
-                                    <span>Set to "In Review"</span>
-                                <% end %>
+                        <%= link_to review_contract_path(@contract), class: "card-footer-item" do %>
+                            <% if @contract.contract_status == ContractStatus::IN_PROGRESS %>
+                                <span>Set to "Approved"</span>
+                            <% else %>
+                                <span>Set to "In Review"</span>
+                            <% end %>
                         <% end %>
                     <% end %>
                     <% if current_user.present? && current_user.level == UserLevel::TWO %>

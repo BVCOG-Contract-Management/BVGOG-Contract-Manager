@@ -25,6 +25,12 @@ has_permission(user: User, "edit", contract: Contract) if
     contract matches Contract and
     (not is_two(user.level));
 
+# Can a user review a contract
+has_permission(user: User, "review", contract: Contract) if
+    contract matches Contract and
+    is_two(user.level) and
+    user.has_entity?(contract.entity_id);
+
 # --------------------------------------------- #
 
 # ----------- User Permissions ----------- #
@@ -52,7 +58,7 @@ has_permission(user: User, "edit", user_resource: User) if
 actor User {}
 
 resource Contract {
-    permissions = ["read", "write", "edit"];
+    permissions = ["read", "write", "edit", "review"];
 }
 
 resource User {

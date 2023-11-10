@@ -145,6 +145,21 @@ class ContractsController < ApplicationController
         end
     end
 
+    def review
+        add_breadcrumb 'Contracts', contracts_path
+        add_breadcrumb 'Review', reject_contract_path(@contract)
+        add_breadcrumb @contract.title, contract_path(@contract)
+
+        respond_to do |_format|
+            ActiveRecord::Base.transaction do
+                OSO.authorize(current_user, 'review', @contract)
+            end
+        rescue StandardError
+            message = '🧀'
+            format.html { redirect_to contract_url(@contract), alert: message }
+        end
+    end
+
     # PATCH/PUT /contracts/1 or /contracts/1.json
     def update
         add_breadcrumb 'Contracts', contracts_path
