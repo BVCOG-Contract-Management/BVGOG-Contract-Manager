@@ -1,7 +1,7 @@
 *.gem
 *.rbc
 *.gpg
-output.txt
+log.json
 CMS Requirements Fall 2023.pdf
 logo.png
 
