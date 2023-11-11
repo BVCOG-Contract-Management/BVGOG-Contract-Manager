@@ -33,12 +33,13 @@ Rails.application.routes.draw do
     resources :contracts do
         post 'reject_contract', on: :member
         post 'reject_reason', on: :member
+        post 'review_contract', on: :member
     end
 
     get '/contracts/:id/expiry_reminder', to: 'contracts#expiry_reminder', as: 'expiry_reminder_contract'
 
     get '/contracts/:id/reject', to: 'contracts#reject', as: 'reject_contract'
-    get '/contract/:id/review', to: 'contract#review', as: 'review_contract'
+    get '/contracts/:id/review', to: 'contracts#review', as: 'review_contract'
 
     # Contract Documents
     # GET

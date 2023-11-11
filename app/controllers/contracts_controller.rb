@@ -98,23 +98,23 @@ class ContractsController < ApplicationController
 
                     handle_if_new_vendor
                     #  Check specific for PoC since we use it down the line to check entity association
-                    if !contract_params[:point_of_contact_id].present?
+                    if contract_params[:point_of_contact_id].blank?
                         @contract.errors.add(:base, 'Point of contact is required')
                         format.html { render :new, status: :unprocessable_entity }
                         format.json { render json: @contract.errors, status: :unprocessable_entity }
                     elsif @contract.point_of_contact_id.present? && !User.find(@contract.point_of_contact_id).is_active
                         if User.find(@contract.point_of_contact_id).redirect_user_id.present?
                             @contract.errors.add(:base,
-                                                 User.find(@contract.point_of_contact_id).full_name + ' is not active, use ' + User.find(User.find(@contract.point_of_contact_id).redirect_user_id).full_name + ' instead')
+                                                 "#{User.find(@contract.point_of_contact_id).full_name} is not active, use #{User.find(User.find(@contract.point_of_contact_id).redirect_user_id).full_name} instead")
                         else
                             @contract.errors.add(:base,
-                                                 User.find(@contract.point_of_contact_id).full_name + ' is not active')
+                                                 "#{User.find(@contract.point_of_contact_id).full_name} is not active")
                         end
                         format.html { render :new, status: :unprocessable_entity }
                         format.json { render json: @contract.errors, status: :unprocessable_entity }
                     elsif User.find(@contract.point_of_contact_id).level == UserLevel::THREE && !User.find(@contract.point_of_contact_id).entities.include?(@contract.entity)
                         @contract.errors.add(:base,
-                                             User.find(@contract.point_of_contact_id).full_name + ' is not associated with ' + @contract.entity.name)
+                                             "#{User.find(@contract.point_of_contact_id).full_name} is not associated with #{@contract.entity.name}")
                         format.html { render :new, status: :unprocessable_entity }
                         format.json { render json: @contract.errors, status: :unprocessable_entity }
                     elsif @contract.save
@@ -147,13 +147,23 @@ class ContractsController < ApplicationController
     end
 
     def review
+        @contract = Contract.find(params[:id])
         add_breadcrumb 'Contracts', contracts_path
-        add_breadcrumb 'Review', reject_contract_path(@contract)
         add_breadcrumb @contract.title, contract_path(@contract)
+        add_breadcrumb 'Review', review_contract_path(@contract)
 
-        respond_to do |_format|
+        respond_to do |format|
             ActiveRecord::Base.transaction do
                 OSO.authorize(current_user, 'review', @contract)
+                status = case contract.contract_status
+                         when ContractStatus::IN_PROGRESS
+                             ContractStatus::APPROVED
+                         when ContractStatus::APPROVED
+                             ContractStatus::IN_PROGRESS
+                         else
+                             ContractStatus::IN_PROGRESS
+                         end
+                format.html { render :review, contract_status: status }
             end
         rescue StandardError
             message = '🧀'
@@ -181,17 +191,17 @@ class ContractsController < ApplicationController
         respond_to do |format|
             ActiveRecord::Base.transaction do
                 OSO.authorize(current_user, 'edit', @contract)
-                if !@contract[:point_of_contact_id].present? && !contract_params[:point_of_contact_id].present?
+                if @contract[:point_of_contact_id].blank? && contract_params[:point_of_contact_id].blank?
                     @contract.errors.add(:base, 'Point of contact is required')
                     format.html { render :edit, status: :unprocessable_entity }
                     format.json { render json: @contract.errors, status: :unprocessable_entity }
                 elsif contract_params[:point_of_contact_id].present? && !User.find(contract_params[:point_of_contact_id]).is_active
                     if User.find(contract_params[:point_of_contact_id]).redirect_user_id.present?
                         @contract.errors.add(:base,
-                                             User.find(contract_params[:point_of_contact_id]).full_name + ' is not active, use ' + User.find(User.find(contract_params[:point_of_contact_id]).redirect_user_id).full_name + ' instead')
+                                             "#{User.find(contract_params[:point_of_contact_id]).full_name} is not active, use #{User.find(User.find(contract_params[:point_of_contact_id]).redirect_user_id).full_name} instead")
                     else
                         @contract.errors.add(:base,
-                                             User.find(contract_params[:point_of_contact_id]).full_name + ' is not active')
+                                             "#{User.find(contract_params[:point_of_contact_id]).full_name} is not active")
                     end
                     format.html { render :edit, status: :unprocessable_entity }
                     format.json { render json: @contract.errors, status: :unprocessable_entity }
@@ -200,7 +210,7 @@ class ContractsController < ApplicationController
                 # some reason nested-if statements don't work here when you use format (ie. UnkownFormat error)
                 elsif contract_params[:point_of_contact_id].present? && User.find(contract_params[:point_of_contact_id]).level == UserLevel::THREE && !User.find(contract_params[:point_of_contact_id]).entities.include?(Entity.find((contract_params[:entity_id].presence || @contract.entity_id)))
                     @contract.errors.add(:base,
-                                         User.find((contract_params[:point_of_contact_id].presence || @contract.point_of_contact_id)).full_name + ' is not associated with ' + Entity.find((contract_params[:entity_id].presence || @contract.entity_id)).name)
+                                         "#{User.find((contract_params[:point_of_contact_id].presence || @contract.point_of_contact_id)).full_name} is not associated with #{Entity.find((contract_params[:entity_id].presence || @contract.entity_id)).name}")
                     format.html { render :edit, status: :unprocessable_entity }
                     format.json { render json: @contract.errors, status: :unprocessable_entity }
                 elsif @contract.update(contract_params)
@@ -355,8 +365,8 @@ class ContractsController < ApplicationController
     # TODO: This is a temporary solution
     # File upload is a seperate issue that will be handled with a dropzone
     def handle_contract_documents(contract_documents_upload, contract_documents_attributes)
-        for doc in contract_documents_upload
-            next unless doc.present?
+        contract_documents_upload.each do |doc|
+            next if doc.blank?
 
             # Create a file name for the official file
             official_file_name = contract_document_filename(@contract, File.extname(doc.original_filename))

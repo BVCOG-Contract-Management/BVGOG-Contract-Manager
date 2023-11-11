@@ -40,7 +40,7 @@
                             <% if @contract.renewal_count && contract.end_trigger == "limited_term"%>
                                 <tr>
                                     <td><strong>Renewal Period:</strong></td>
-                                    <td><%= @contract.renewal_duration %> <%= @contract.renewal_duration_units %><%= @contract.renewal_duration > 1 ? "s" : "" %></td></td>
+                                    <td><%= @contract.renewal_duration %> <%= @contract.renewal_duration_units %><%= @contract.renewal_duration > 1 ? "s" : "" %></td>
                                 </tr>
                             <% end %>
 
