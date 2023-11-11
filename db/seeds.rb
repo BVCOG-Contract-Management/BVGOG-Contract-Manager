@@ -14,10 +14,8 @@ require 'factory_bot_rails'
 # orig_stdout = $stdout.clone
 # $stdout.reopen(File.new('/dev/null', 'w'))
 
-# ------------ DEV/TEST SEEDS ------------
-
+# ------------ PROD SEEDS ------------ #
 if Rails.env.production?
-
     PROGRAM_NAMES = [
         '9-1-1',
         'AAA',
@@ -68,11 +66,10 @@ if Rails.env.production?
         last_name: 'Admin',
         level: UserLevel::ONE,
         program: Program.first,
-        # Invitation already accepted
         invitation_accepted_at: Time.zone.now
     )
 
-    # Create admin user
+    # Create gatekeeper user
     FactoryBot.create(
         :user,
         email: 'gatekeeper@bvcogdev.com',
@@ -81,11 +78,10 @@ if Rails.env.production?
         last_name: 'Gatekeeper',
         level: UserLevel::TWO,
         program: Program.first,
-        # Invitation already accepted
         invitation_accepted_at: Time.zone.now
     )
 
-    # Create admin user
+    # Create user
     FactoryBot.create(
         :user,
         email: 'user@bvcogdev.com',
@@ -94,27 +90,71 @@ if Rails.env.production?
         last_name: 'User',
         level: UserLevel::THREE,
         program: Program.first,
-        # Invitation already accepted
         invitation_accepted_at: Time.zone.now
     )
+
+    # Create multiple contracts
+    (1..50).each do |i|
+        d = Time.zone.today + 1.day * i
+        FactoryBot.create(
+            :contract,
+            id: i,
+            title: "Contract #{i}",
+            entity: Entity.all.sample,
+            program: Program.all.sample,
+            point_of_contact: User.all.sample,
+            vendor: Vendor.all.sample,
+            ends_at: d,
+            ends_at_final: d + 1.day * i,
+            max_renewal_count: i,
+            renewal_duration: i,
+            renewal_duration_units: TimePeriod::DAY,
+            extension_count: i,
+            max_extension_count: i,
+            extension_duration: i,
+            extension_duration_units: TimePeriod::MONTH
+        )
+    end
+
+    contact_person = User.find_by(email: 'user@example.com')
+    # Create some documents with nearby expiries to test expiring docs mailer
+    (1..100).each do |i|
+        d = Time.zone.today + 1.day * i
+        FactoryBot.create(
+            :contract,
+            id: 50 + i,
+            point_of_contact: contact_person,
+            title: "Expiry Contract #{i}",
+            program: Program.all.sample,
+            vendor: Vendor.all.sample,
+            entity: Entity.all.sample,
+            ends_at: d,
+            ends_at_final: d + 1.day * i,
+            max_renewal_count: i,
+            renewal_duration: i,
+            renewal_duration_units: TimePeriod::DAY,
+            extension_count: i,
+            max_extension_count: i,
+            extension_duration: i,
+            extension_duration_units: TimePeriod::MONTH
+        )
+    end
 
     BvcogConfig.create(
         contracts_path: Rails.root.join('public/contracts'),
         reports_path: Rails.root.join('public/reports')
     )
-
 else
-    # Create programs
+    # ------------ DEV/TEST SEEDS ------------ #
     (1..5).each do |i|
+        # Create programs
         FactoryBot.create(
             :program,
             id: i,
             name: "Program #{i}"
         )
-    end
 
-    # Create entities
-    (1..5).each do |i|
+        # Create entities
         FactoryBot.create(
             :entity,
             id: i,
@@ -132,31 +172,8 @@ else
             entities: Entity.all.sample(rand(1..3))
         )
     end
-    # Create a level 3 user
-    FactoryBot.create(
-        :user,
-        email: 'user@example.com',
-        password: 'password',
-        first_name: 'Example',
-        last_name: 'User',
-        program: Program.all.sample,
-        entities: Entity.all.sample(rand(0..Entity.count)),
-        level: UserLevel::THREE
-    )
 
-    # Create a level 2 user
-    FactoryBot.create(
-        :user,
-        email: 'gatekeeper@example.com',
-        password: 'password',
-        first_name: 'Gatekeeper',
-        last_name: 'User',
-        program: Program.all.sample,
-        entities: Entity.all.sample(rand(0..Entity.count)),
-        level: UserLevel::TWO
-    )
-
-    # Create a level 1 user
+    # Create Admin
     FactoryBot.create(
         :user,
         email: 'admin@example.com',
@@ -168,17 +185,40 @@ else
         level: UserLevel::ONE
     )
 
-    # Create vendors
+    # Create Gatekeeper
+    FactoryBot.create(
+        :user,
+        email: 'gatekeeper@example.com',
+        password: 'password',
+        first_name: 'Gatekeeper',
+        last_name: 'User',
+        program: Program.all.sample,
+        entities: Entity.all.sample(rand(0..Entity.count)),
+        level: UserLevel::TWO
+    )
+
+    # Create User
+    FactoryBot.create(
+        :user,
+        email: 'user@example.com',
+        password: 'password',
+        first_name: 'Example',
+        last_name: 'User',
+        program: Program.all.sample,
+        entities: Entity.all.sample(rand(0..Entity.count)),
+        level: UserLevel::THREE
+    )
+
     (1..50).each do |i|
+        # Create vendors
         FactoryBot.create(
             :vendor,
             id: i,
             name: "Vendor #{i}"
         )
-    end
 
-    # Create multiple contracts
-    (1..50).each do |i|
+        # Create Contracts
+        d = Time.zone.today + 1.day * i
         FactoryBot.create(
             :contract,
             id: i,
@@ -186,7 +226,16 @@ else
             entity: Entity.all.sample,
             program: Program.all.sample,
             point_of_contact: User.all.sample,
-            vendor: Vendor.all.sample
+            vendor: Vendor.all.sample,
+            ends_at: d,
+            ends_at_final: d + 1.day * i,
+            max_renewal_count: i,
+            renewal_duration: i.days,
+            renewal_duration_units: TimePeriod::DAY,
+            extension_count: i,
+            max_extension_count: i,
+            extension_duration: i.months,
+            extension_duration_units: TimePeriod::MONTH
         )
     end
 
@@ -201,7 +250,8 @@ else
             program: Program.all.sample,
             vendor: Vendor.all.sample,
             entity: Entity.all.sample,
-            ends_at: Date.today + 1.day * i
+            ends_at: Time.zone.today + 1.day * i,
+            ends_at_final: Time.zone.today + 2.days * i
         )
     end
 
@@ -240,7 +290,4 @@ else
         contracts_path: Rails.root.join('public/contracts'),
         reports_path: Rails.root.join('public/reports')
     )
-
-    # ------------ PROD SEEDS ------------
-
 end

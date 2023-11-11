@@ -4,6 +4,7 @@ run: bundle
 clean:
 	rm -f temp.*
 	rm -f *.log
+	rm -f ./log.json
 
 bundle:
 	bundle install
@@ -23,7 +24,7 @@ deploy:
 	./script/deploy/deploy.sh
 
 cucumber: clean bundle
-	bundle exec cucumber --profile default
+	bundle exec cucumber --publish-quiet --profile default --format json --out ./log.json
 
 rspec: clean bundle
 	bundle exec rspec spec
