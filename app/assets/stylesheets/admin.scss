@@ -1,6 +1,5 @@
 @import "main";
 
-
 #admin-form{
     @include table-card($table-card-header-background-color, $table-card-header-border, $table-border);
 
@@ -11,7 +10,7 @@
 
 .directory-input-label{
     display: flex;
-    
+
     .icon {
         @include transition(all, 0.3s, ease);
         cursor: pointer;
