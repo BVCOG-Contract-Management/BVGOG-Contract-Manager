@@ -232,7 +232,9 @@ class ContractsController < ApplicationController
 
     def reject
         @contract = Contract.find(params[:id])
-        # render 'reject' # this line is implicit
+        add_breadcrumb 'Contracts', contracts_path
+        add_breadcrumb @contract.title, contract_path(@contract)
+        add_breadcrumb 'Reject', reject_contract_path(@contract)
     end
 
     private
