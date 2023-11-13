@@ -65,6 +65,10 @@ When('I select {string} from the point of contact dropdown') do |point_of_contac
     select point_of_contact, from: 'contract[point_of_contact_id]'
 end
 
+When('I select {string} from the end trigger dropdown') do |end_trigger|
+    select end_trigger, from: 'contract[end_trigger]'
+end
+
 When('I follow \/contract_documents\/{int}"') do |int|
     visit "/contract_documents/#{int}"
 end

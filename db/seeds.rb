@@ -67,11 +67,10 @@ if Rails.env.production?
         last_name: 'Admin',
         level: UserLevel::ONE,
         program: Program.first,
-        # Invitation already accepted
         invitation_accepted_at: Time.zone.now
     )
 
-    # Create admin user
+    # Create gatekeeper user
     FactoryBot.create(
         :user,
         email: 'gatekeeper@bvcogdev.com',
@@ -80,11 +79,10 @@ if Rails.env.production?
         last_name: 'Gatekeeper',
         level: UserLevel::TWO,
         program: Program.first,
-        # Invitation already accepted
         invitation_accepted_at: Time.zone.now
     )
 
-    # Create admin user
+    # Create user
     FactoryBot.create(
         :user,
         email: 'user@bvcogdev.com',
@@ -93,173 +91,204 @@ if Rails.env.production?
         last_name: 'User',
         level: UserLevel::THREE,
         program: Program.first,
-        # Invitation already accepted
         invitation_accepted_at: Time.zone.now
     )
+
+    # Create multiple contracts
+    (1..50).each do |i|
+        d = Time.zone.today + 1.day * i
+        FactoryBot.create(
+            :contract,
+            id: i,
+            title: "Contract #{i}",
+            entity: Entity.all.sample,
+            program: Program.all.sample,
+            point_of_contact: User.all.sample,
+            vendor: Vendor.all.sample,
+            ends_at: d,
+            ends_at_final: d + 1.day * i,
+            max_renewal_count: i,
+            renewal_duration: i,
+            renewal_duration_units: TimePeriod::DAY,
+            extension_count: i,
+            max_extension_count: i,
+            extension_duration: i,
+            extension_duration_units: TimePeriod::MONTH
+        )
+    end
+
+    contact_person = User.find_by(email: 'user@example.com')
+    # Create some documents with nearby expiries to test expiring docs mailer
+    (1..100).each do |i|
+        d = Time.zone.today + 1.day * i
+        FactoryBot.create(
+            :contract,
+            id: 50 + i,
+            point_of_contact: contact_person,
+            title: "Expiry Contract #{i}",
+            program: Program.all.sample,
+            vendor: Vendor.all.sample,
+            entity: Entity.all.sample,
+            ends_at: d,
+            ends_at_final: d + 1.day * i,
+            max_renewal_count: i,
+            renewal_duration: i,
+            renewal_duration_units: TimePeriod::DAY,
+            extension_count: i,
+            max_extension_count: i,
+            extension_duration: i,
+            extension_duration_units: TimePeriod::MONTH
+        )
+    end
 
     BvcogConfig.create(
         contracts_path: Rails.root.join('public/contracts'),
         reports_path: Rails.root.join('public/reports')
     )
 else
-    # ------------ DEV/TEST SEEDS ------------
-	# Create programs
-	for i in 1..5
-		FactoryBot.create(
-			:program,
-			id: i,
-			name: "Program #{i}",
-		)
-	end
+    # ------------ DEV/TEST SEEDS ------------ #
+    (1..5).each do |i|
+        # Create programs
+        FactoryBot.create(
+            :program,
+            id: i,
+            name: "Program #{i}"
+        )
 
-	# Create entities
-	for i in 1..5
-		FactoryBot.create(
-			:entity,
-			id: i,
-			name: "Entity #{i}",
-		)
-	end
+        # Create entities
+        FactoryBot.create(
+            :entity,
+            id: i,
+            name: "Entity #{i}"
+        )
+    end
 
-	# Create users
-	for i in 1..50
-		FactoryBot.create(
-			:user,
-			id: i,
-			level: UserLevel.enumeration.except(:zero).keys.sample,
-			program: Program.all.sample,
-			entities: Entity.all.sample(rand(1..3)),
-		)
-	end
+    # Create users
+    (1..50).each do |i|
+        FactoryBot.create(
+            :user,
+            id: i,
+            level: UserLevel.enumeration.except(:zero).keys.sample,
+            program: Program.all.sample,
+            entities: Entity.all.sample(rand(1..3))
+        )
+    end
 
-	# Create a level 3 user
-	FactoryBot.create(
-		:user, 
-		email: "user@example.com", 
-		password: "password", 
-		first_name: "Example", 
-		last_name: "User", 
-		program: Program.all.sample,
-		entities: Entity.all.sample(rand(0..Entity.count)),
-		level: UserLevel::THREE,
-	)
+    # Create Admin
+    FactoryBot.create(
+        :user,
+        email: 'admin@example.com',
+        password: 'password',
+        first_name: 'Admin',
+        last_name: 'User',
+        program: Program.all.sample,
+        entities: Entity.all.sample(rand(0..Entity.count)),
+        level: UserLevel::ONE
+    )
 
-	# Create a level 2 user
-	FactoryBot.create(
-		:user,
-		email: "gatekeeper@example.com",
-		password: "password",
-		first_name: "Gatekeeper",
-		last_name: "User",
-		program: Program.all.sample,
-		entities: Entity.all.sample(rand(0..Entity.count)),
-		level: UserLevel::TWO,
-	)
+    # Create Gatekeeper
+    FactoryBot.create(
+        :user,
+        email: 'gatekeeper@example.com',
+        password: 'password',
+        first_name: 'Gatekeeper',
+        last_name: 'User',
+        program: Program.all.sample,
+        entities: Entity.all.sample(rand(0..Entity.count)),
+        level: UserLevel::TWO
+    )
 
-	# Create a level 1 user
-	FactoryBot.create(
-		:user,
-		email: "admin@example.com",
-		password: "password",
-		first_name: "Admin",
-		last_name: "User",
-		program: Program.all.sample,
-		entities: Entity.all.sample(rand(0..Entity.count)),
-		level: UserLevel::ONE,
-	)
+    # Create User
+    FactoryBot.create(
+        :user,
+        email: 'user@example.com',
+        password: 'password',
+        first_name: 'Example',
+        last_name: 'User',
+        program: Program.all.sample,
+        entities: Entity.all.sample(rand(0..Entity.count)),
+        level: UserLevel::THREE
+    )
 
-	# Create vendors
-	for i in 1..50
-		FactoryBot.create(
-			:vendor,
-			id: i,
-			name: "Vendor #{i}",
-		)
-	end
+    (1..50).each do |i|
+        # Create vendors
+        FactoryBot.create(
+            :vendor,
+            id: i,
+            name: "Vendor #{i}"
+        )
 
-	# Create multiple contracts
-	for i in 1..50
-		d = Date.today + 1.days * i
-		FactoryBot.create(
-			:contract,
-			id: i,
-			title: "Contract #{i}",
-			entity: Entity.all.sample,
-			program: Program.all.sample,
-			point_of_contact: User.all.sample,
-			vendor: Vendor.all.sample,
-			ends_at: d,
-			ends_at_final: d + 1.days * i,
-			max_renewal_count: i,
-			renewal_duration: i,
-			renewal_duration_units: TimePeriod::DAY,
-			extension_count: i,
-			max_extension_count: i,
-			extension_duration: i,
-			extension_duration_units: TimePeriod::MONTH
-		)
-	end
+        # Create Contracts
+        d = Time.zone.today + 1.day * i
+        FactoryBot.create(
+            :contract,
+            id: i,
+            title: "Contract #{i}",
+            entity: Entity.all.sample,
+            program: Program.all.sample,
+            point_of_contact: User.all.sample,
+            vendor: Vendor.all.sample,
+            ends_at: d,
+            ends_at_final: d + 1.day * i,
+            max_renewal_count: i,
+            renewal_duration: i.days,
+            renewal_duration_units: TimePeriod::DAY,
+            extension_count: i,
+            max_extension_count: i,
+            extension_duration: i.months,
+            extension_duration_units: TimePeriod::MONTH
+        )
+    end
 
-	contact_person = User.find_by(email: 'user@example.com')
-	#Create some documents with nearby expiries to test expiring docs mailer
-	for i in 1..100
-		d = Date.today + 1.days * i
-		FactoryBot.create(
-			:contract, 
-			id: 50+i,
-			point_of_contact: contact_person, 
-			title: "Expiry Contract #{i}",
-			program: Program.all.sample,
-			vendor: Vendor.all.sample,
-			entity: Entity.all.sample,
-			ends_at: d,
-			ends_at_final: d + 1.days * i,
-			max_renewal_count: i,
-			renewal_duration: i,
-			renewal_duration_units: TimePeriod::DAY,
-			extension_count: i,
-			max_extension_count: i,
-			extension_duration: i,
-			extension_duration_units: TimePeriod::MONTH
-		)
-	end
+    contact_person = User.find_by(email: 'user@example.com')
+    # Create some documents with nearby expiries to test expiring docs mailer
+    (1..100).each do |i|
+        FactoryBot.create(
+            :contract,
+            id: 50 + i,
+            point_of_contact: contact_person,
+            title: "Expiry Contract #{i}",
+            program: Program.all.sample,
+            vendor: Vendor.all.sample,
+            entity: Entity.all.sample,
+            ends_at: Time.zone.today + 1.day * i,
+            ends_at_final: Time.zone.today + 2.days * i
+        )
+    end
 
-	# Create contract documents
-	for i in 1..500
-		FactoryBot.create(
-			:contract_document,
-			id: i,
-			contract: Contract.all.sample,
-		)
-	end
+    # Create contract documents
+    (1..500).each do |i|
+        FactoryBot.create(
+            :contract_document,
+            id: i,
+            contract: Contract.all.sample
+        )
+    end
 
-	# Create vendor reviews manually since they have a (user, vendor) unique index
-	used_user_vendor_combos = []
-	for i in 1..100
-		user = User.all.sample
-		vendor = Vendor.all.sample
-		if used_user_vendor_combos.include?([user.id, vendor.id])
-			redo
-		end
-		FactoryBot.create(
-			:vendor_review,
-			id: i,
-			user: user,
-			vendor: vendor,
-		)
-		used_user_vendor_combos << [user.id, vendor.id]
-	end
+    # Create vendor reviews manually since they have a (user, vendor) unique index
+    used_user_vendor_combos = []
+    (1..100).each do |i|
+        user = User.all.sample
+        vendor = Vendor.all.sample
+        redo if used_user_vendor_combos.include?([user.id, vendor.id])
+        FactoryBot.create(
+            :vendor_review,
+            id: i,
+            user:,
+            vendor:
+        )
+        used_user_vendor_combos << [user.id, vendor.id]
+    end
 
-	# BVCOG Config
-	# Create the directories if they don't exist
-	Dir.mkdir(Rails.root.join("public/contracts")) unless Dir.exist?(Rails.root.join("public/contracts"))
-	Dir.mkdir(Rails.root.join("public/reports")) unless Dir.exist?(Rails.root.join("public/reports"))
+    # BVCOG Config
+    # Create the directories if they don't exist
+    Dir.mkdir(Rails.root.join('public/contracts')) unless Dir.exist?(Rails.root.join('public/contracts'))
+    Dir.mkdir(Rails.root.join('public/reports')) unless Dir.exist?(Rails.root.join('public/reports'))
 
-	# Create the config
-	BvcogConfig.create(
-		id: 1,
-		contracts_path: Rails.root.join("public/contracts"),
-		reports_path: Rails.root.join("public/reports"),
-	)
-
+    # Create the config
+    BvcogConfig.create(
+        id: 1,
+        contracts_path: Rails.root.join('public/contracts'),
+        reports_path: Rails.root.join('public/reports')
+    )
 end

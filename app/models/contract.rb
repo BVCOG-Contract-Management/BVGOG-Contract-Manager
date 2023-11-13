@@ -54,6 +54,6 @@ class Contract < ApplicationRecord
     #TODO Verify this behavior.
     ends_at < Date.today or final_ends_at < Date.today
   end
-  
+
     public :send_expiry_reminder
 end
