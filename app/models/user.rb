@@ -31,30 +31,22 @@ class User < ApplicationRecord
         @old_name
     end
 
-    def has_entity?(entity_id)
+    def entity?(entity_id)
         entities.where(id: entity_id).exists?
     end
 
     # Virtual attribute to calculate integer level on the fly
+    LEVELS = {
+        'one' => { int: 1, name: 'Admin' },
+        'two' => { int: 2, name: 'Gatekeeper' },
+        'three' => { int: 3, name: 'User' }
+    }.freeze
+
     def level_int
-        case level
-        when 'one'
-            1
-        when 'two'
-            2
-        when 'three'
-            3
-        end
+        LEVELS[level][:int] if LEVELS.key?(level)
     end
 
     def level_name
-        case level
-        when 'one'
-            'Admin'
-        when 'two'
-            'Gatekeeper'
-        when 'three'
-            'User'
-        end
+        LEVELS[level][:name] if LEVELS.key?(level)
     end
 end

@@ -135,8 +135,8 @@ class ContractsController < ApplicationController
                 # If error type is Oso::ForbiddenError, then the user is not authorized
                 if e.instance_of?(Oso::ForbiddenError)
                     status = :unauthorized
-                    @contract.errors.add(:base, 'You are not authorized to create a contract')
                     message = 'You are not authorized to create a contract'
+                    @contract.errors.add(:base, message)
                 else
                     status = :unprocessable_entity
                     message = e.message
@@ -155,7 +155,7 @@ class ContractsController < ApplicationController
         respond_to do |format|
             ActiveRecord::Base.transaction do
                 OSO.authorize(current_user, 'review', @contract)
-                status = case contract.contract_status
+                status = case @contract.contract_status
                          when ContractStatus::IN_PROGRESS
                              ContractStatus::APPROVED
                          when ContractStatus::APPROVED
@@ -163,11 +163,14 @@ class ContractsController < ApplicationController
                          else
                              ContractStatus::IN_PROGRESS
                          end
-                format.html { render :review, contract_status: status }
+                @contract.update(contract_status: status)
+                format.html { redirect_to contract_url(@contract), notice: 'Contract reviewed successfully.' }
+                format.json { render :show, status: :ok, location: @contract }
             end
         rescue StandardError
-            message = '🧀'
+            message = 'You do not have permission to review this contract.'
             format.html { redirect_to contract_url(@contract), alert: message }
+            format.json { render json: { error: message }, status: :unauthorized }
         end
     end
 
