@@ -89,6 +89,7 @@ class ContractsController < ApplicationController
             ActiveRecord::Base.transaction do
                 begin
                     OSO.authorize(current_user, 'write', @contract)
+                    handle_if_new_vendor
 
                     #  Check specific for PoC since we use it down the line to check entity association
                     if !contract_params[:point_of_contact_id].present?
@@ -258,6 +259,16 @@ class ContractsController < ApplicationController
             @decision = @contract.decisions.build(reason: nil, decision:ContractStatus::IN_PROGRESS, user: current_user)
             @decision.save
             redirect_to contract_url(@contract.id), notice: 'Contract was returned to In Progress.'
+        end
+    end
+
+    def log_submission
+        ActiveRecord::Base.transaction do
+            @contract = Contract.find(params[:contract_id])
+            @contract.update(contract_status: ContractStatus::IN_REVIEW)
+            @decision = @contract.decisions.build(reason: nil, decision:ContractStatus::IN_REVIEW, user: current_user)
+            @decision.save
+            redirect_to contract_url(@contract.id), notice: 'Contract was Submitted.'
         end
     end
 

@@ -4,8 +4,9 @@
 class ContractStatus < EnumerateIt::Base
     associate_values(
         :created,
-        :approved,
         :in_progress,
+        :in_review,
+        :approved,
         :rejected
     )
 end

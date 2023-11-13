@@ -5,6 +5,12 @@ module ContractsHelper
         case contract.contract_status
         when ContractStatus::IN_PROGRESS
             "
+            <span class=\"tag is-warning\" style=\"background-color: #cccccc\">
+                In Progress
+            </span>
+            ".html_safe
+        when ContractStatus::IN_REVIEW
+            "
             <span class=\"tag is-warning\">
                 In Review
             </span>
