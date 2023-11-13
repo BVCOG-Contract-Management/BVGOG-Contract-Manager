@@ -3,6 +3,7 @@
 # A enum of valid contract satuses
 class ContractStatus < EnumerateIt::Base
     associate_values(
+        :created,
         :approved,
         :in_progress,
         :rejected

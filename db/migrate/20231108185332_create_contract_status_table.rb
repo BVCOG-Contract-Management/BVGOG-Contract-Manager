@@ -1,9 +1,10 @@
 class CreateContractStatusTable < ActiveRecord::Migration[7.0]
   def change
-    create_table :contract_status_tables do |t|
-      t.text :contract_id, null: false
-      t.string :description, null: false
-      t.text :decision, null: false, default: ContractStatus::in_progress
+    create_table :contract_decisions do |t|
+      t.references :contract, null: false, foreign_key: { to_table: :contracts }
+      t.references :user, null: false, foreign_key: { to_table: :users }
+      t.string :reason
+      t.text :decision, null: false, default: ContractStatus::IN_PROGRESS
 
       t.timestamps
     end

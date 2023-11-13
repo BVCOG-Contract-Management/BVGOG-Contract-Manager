@@ -24,17 +24,6 @@ module ContractsHelper
         end
     end
 
-    def contract_opposite_status(contract)
-        case contract.contract_status
-        when ContractStatus::IN_PROGRESS
-            ContractStatus::APPROVED
-        when ContractStatus::APPROVED
-            ContractStatus::IN_PROGRESS
-        else
-            ContractStatus::IN_PROGRESS
-        end
-    end
-
     def file_type_icon(file_name)
         file_type = file_name.split('.').last
         case file_type

@@ -29,7 +29,6 @@ class ContractsController < ApplicationController
         end
         # Search contracts
         @contracts = search_contracts(@contracts) if params[:search].present?
-        puts params[:search].inspect
     end
 
     # GET /contracts/1 or /contracts/1.json
@@ -42,6 +41,8 @@ class ContractsController < ApplicationController
         end
         add_breadcrumb 'Contracts', contracts_path
         add_breadcrumb @contract.title, contract_path(@contract)
+
+        @decisions = @contract.decisions.order(created_at: :asc)
     end
 
     # GET /contracts/new
@@ -81,7 +82,7 @@ class ContractsController < ApplicationController
 
         contract_params_clean = contract_params
         contract_params_clean.delete(:new_vendor_name)
-
+        
         @contract = Contract.new(contract_params_clean.merge(contract_status: ContractStatus::IN_PROGRESS))
 
         respond_to do |format|
@@ -89,7 +90,6 @@ class ContractsController < ApplicationController
                 begin
                     OSO.authorize(current_user, 'write', @contract)
 
-                    handle_if_new_vendor
                     #  Check specific for PoC since we use it down the line to check entity association
                     if !contract_params[:point_of_contact_id].present?
                         @contract.errors.add(:base, 'Point of contact is required')
@@ -111,6 +111,10 @@ class ContractsController < ApplicationController
                         format.html { render :new, status: :unprocessable_entity }
                         format.json { render json: @contract.errors, status: :unprocessable_entity }
                     elsif @contract.save
+                        @decision = @contract.decisions.build(decision:ContractStatus::CREATED, user: current_user)
+                        @decision.save
+                        @decision = @contract.decisions.build(decision:ContractStatus::IN_PROGRESS, user: current_user)
+                        @decision.save
                         if contract_documents_upload.present?
                             handle_contract_documents(contract_documents_upload,
                                                       contract_documents_attributes)
@@ -221,6 +225,42 @@ class ContractsController < ApplicationController
         @contract = Contract.find(params[:id])
         # render 'reject' # this line is implicit
     end
+
+    def log_rejection
+        ActiveRecord::Base.transaction do
+            @contract = Contract.find(params[:contract_id])
+            reason = params[:contract][:rejection_reason]
+            
+            @contract.update(contract_status: ContractStatus::REJECTED)
+            @decision = @contract.decisions.build(reason: reason, decision:ContractStatus::REJECTED, user: current_user)
+            if @decision.save
+                redirect_to contract_url(@contract.id), notice: 'Contract was Rejected.'
+            else
+                redirect_to contract_url(@contract.id), alert: 'Contract Rejection failed.'
+            end
+        end
+    end
+
+    def log_approval
+        ActiveRecord::Base.transaction do
+            @contract = Contract.find(params[:contract_id])
+            @contract.update(contract_status: ContractStatus::APPROVED)
+            @decision = @contract.decisions.build(reason: nil, decision:ContractStatus::APPROVED, user: current_user)
+            @decision.save
+            redirect_to contract_url(@contract.id), notice: 'Contract was Approved.'
+        end
+    end
+
+    def log_return
+        ActiveRecord::Base.transaction do
+            @contract = Contract.find(params[:contract_id])
+            @contract.update(contract_status: ContractStatus::IN_PROGRESS)
+            @decision = @contract.decisions.build(reason: nil, decision:ContractStatus::IN_PROGRESS, user: current_user)
+            @decision.save
+            redirect_to contract_url(@contract.id), notice: 'Contract was returned to In Progress.'
+        end
+    end
+
 
 	# Only allow a list of trusted parameters through.
 	def contract_params

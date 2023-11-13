@@ -36,6 +36,7 @@ class Contract < ApplicationRecord
   belongs_to :point_of_contact, class_name: 'User'
   belongs_to :vendor, class_name: 'Vendor'
   has_many :contract_documents, class_name: 'ContractDocument'
+  has_many :decisions, class_name: 'ContractDecision'
 
   # Enums
   has_enumeration_for :contract_type, with: ContractType, create_helpers: true
