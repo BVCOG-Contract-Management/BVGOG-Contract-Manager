@@ -381,8 +381,13 @@
 
           <div class="field">
           <%= form.label :value_type, 'Value Type' %>
-         <%= form.select :value_type, ["Not Applicable", "Total Value", "Calculated Value"], 
-           {}, { id: "contractvalueselection", class: "input", onchange: "showhideTotalValueField()" }  %>
+         <%# <%= form.select :value_type, ["Not Applicable", "Total Value", "Calculated Value"], 
+           {}, { id: "contractvalueselection", class: "input", onchange: "showhideTotalValueField()" }  %> 
+
+           <%= form.select :value_type,
+                ["Not Applicable", "Total Value", "Calculated Value"],
+                { include_blank: true },
+                { id: "contractvalueselection", class: "input", onchange: "showhideTotalValueField()" } %>
 
         </div>
 
