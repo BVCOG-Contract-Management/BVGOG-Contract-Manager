@@ -1,11 +1,9 @@
 # frozen_string_literal: true
 
-# Controller for the contracts page
+# Contract Controller
 class ContractsController < ApplicationController
-    before_action :set_contract, only: %i[show edit update destroy]
+    before_action :set_contract, only: %i[show edit update]
 
-    # Deprecated
-    # :nocov:
     def expiry_reminder
         @contract = Contract.find(params[:id])
         respond_to do |format|
@@ -22,7 +20,6 @@ class ContractsController < ApplicationController
             end
         end
     end
-    # :nocov:
 
     # GET /contracts or /contracts.json
     def index
@@ -40,13 +37,12 @@ class ContractsController < ApplicationController
 
     # GET /contracts/1 or /contracts/1.json
     def show
-        OSO.authorize(current_user, 'read', @contract)
-        # begin
-        # Since all users can read contracts, this error recovery cannot happen
-        # rescue Oso::Error
-        #     redirect_to root_path, alert: 'You do not have permission to access this page.'
-        #     return
-        # end
+        begin
+            OSO.authorize(current_user, 'read', @contract)
+        rescue Oso::Error => e
+            redirect_to root_path, alert: 'You do not have permission to access this page.'
+            return
+        end
         add_breadcrumb 'Contracts', contracts_path
         add_breadcrumb @contract.title, contract_path(@contract)
     end
@@ -95,6 +91,7 @@ class ContractsController < ApplicationController
             ActiveRecord::Base.transaction do
                 begin
                     OSO.authorize(current_user, 'write', @contract)
+
                     handle_if_new_vendor
                     #  Check specific for PoC since we use it down the line to check entity association
                     if contract_params[:point_of_contact_id].blank?
@@ -192,7 +189,6 @@ class ContractsController < ApplicationController
                         handle_contract_documents(contract_documents_upload,
                                                   contract_documents_attributes)
                     end
-                    Rails.logger.debug 'Contract updated successfully'
                     format.html do
                         redirect_to contract_url(@contract), notice: 'Contract was successfully updated.'
                     end
@@ -205,7 +201,6 @@ class ContractsController < ApplicationController
 
         rescue StandardError => e
             @contract.reload
-            Rails.logger.debug e
             # If error type is Oso::ForbiddenError, then the user is not authorized
             if e.instance_of?(Oso::ForbiddenError)
                 status = :unauthorized
@@ -221,18 +216,25 @@ class ContractsController < ApplicationController
     end
 
     # DELETE /contracts/1 or /contracts/1.json
-    def destroy
-        # @contract.destroy
-
-        # respond_to do |format|
-        # 	format.html { redirect_to contracts_url, notice: 'Contract was successfully destroyed.' }
-        # 	format.json { head :no_content }
-        # end
-    end
+    # def destroy
+    #  @contract.destroy
+    #
+    #  respond_to do |format|
+    #    format.html { redirect_to contracts_url, notice: 'Contract was successfully destroyed.' }
+    #    format.json { head :no_content }
+    #  end
+    # end
 
     def get_file
         contract_document = ContractDocument.find(params[:id])
         send_file contract_document.file.path, type: contract_document.file_content_type, disposition: :inline
+    end
+
+    def reject
+        @contract = Contract.find(params[:id])
+        add_breadcrumb 'Contracts', contracts_path
+        add_breadcrumb @contract.title, contract_path(@contract)
+        add_breadcrumb 'Reject', reject_contract_path(@contract)
     end
 
     private
@@ -250,7 +252,7 @@ class ContractsController < ApplicationController
     def contract_params
         allowed = %i[
             title
-            description
+            description~
             key_words
             starts_at
             ends_at
