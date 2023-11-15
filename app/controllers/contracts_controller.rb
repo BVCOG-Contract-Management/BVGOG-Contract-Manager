@@ -27,7 +27,7 @@ class ContractsController < ApplicationController
         # Sort contracts
         @contracts = sort_contracts.page params[:page]
         # Filter contracts based on allowed entities if user is level 3
-        if current_user.level == UserLevel::THREE
+        if current_user.level != UserLevel::ONE
             @contracts = @contracts.where(entity_id: current_user.entities.pluck(:id))
         end
         # Search contracts
@@ -156,22 +156,19 @@ class ContractsController < ApplicationController
         respond_to do |format|
             ActiveRecord::Base.transaction do
                 OSO.authorize(current_user, 'review', @contract)
-                status = case @contract.contract_status
-                         when ContractStatus::IN_PROGRESS
-                             ContractStatus::APPROVED
-                         when ContractStatus::APPROVED
-                             ContractStatus::IN_PROGRESS
-                         else
-                             ContractStatus::IN_PROGRESS
-                         end
-                @contract.update(contract_status: status)
-                format.html { redirect_to contract_url(@contract), notice: 'Contract reviewed successfully.' }
-                format.json { render :show, status: :ok, location: @contract }
+                case params[:action]
+                when 'submit'
+                    handle_submit_action(format)
+                when 'approve'
+                    handle_approve_action(format)
+                when 'return'
+                    handle_return_action(format)
+                else
+                    format.html { redirect_to contract_url(@contract), alert: 'Invalid action.' }
+                end
             end
         rescue StandardError
-            message = 'You do not have permission to review this contract.'
-            format.html { redirect_to contract_url(@contract), alert: message }
-            format.json { render json: { error: message }, status: :unauthorized }
+            handle_error(format)
         end
     end
 
@@ -429,5 +426,45 @@ class ContractsController < ApplicationController
             # Add the contract_document to the contract
             @contract.contract_documents << contract_document
         end
+    end
+
+    private
+
+    def handle_submit_action(format)
+        # Your logic for handling the submission action
+        # Example:
+        @contract.update(contract_status: ContractStatus::APPROVED)
+        format.html { redirect_to contract_url(@contract), notice: 'Contract submitted successfully.' }
+        format.json { render :show, status: :ok, location: @contract }
+    end
+
+    def handle_approve_action(format)
+        # Your logic for handling the approval action
+        # Example:
+        status = case @contract.contract_status
+                 when ContractStatus::IN_PROGRESS
+                     ContractStatus::APPROVED
+                 when ContractStatus::APPROVED
+                     ContractStatus::IN_PROGRESS
+                 else
+                     ContractStatus::IN_PROGRESS
+                 end
+        @contract.update(contract_status: status)
+        format.html { redirect_to contract_url(@contract), notice: 'Contract approved successfully.' }
+        format.json { render :show, status: :ok, location: @contract }
+    end
+
+    def handle_return_action(format)
+        # Your logic for handling the return action
+        # Example:
+        @contract.update(contract_status: ContractStatus::IN_PROGRESS)
+        format.html { redirect_to contract_url(@contract), notice: 'Contract set to "In Progress".' }
+        format.json { render :show, status: :ok, location: @contract }
+    end
+
+    def handle_error(format)
+        message = 'You do not have permission to perform this action on the contract.'
+        format.html { redirect_to contract_url(@contract), alert: message }
+        format.json { render json: { error: message }, status: :unauthorized }
     end
 end

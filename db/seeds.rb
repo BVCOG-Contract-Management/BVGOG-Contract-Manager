@@ -183,7 +183,8 @@ else
         last_name: 'User',
         program: Program.all.sample,
         entities: Entity.all.sample(rand(0..Entity.count)),
-        level: UserLevel::ONE
+        level: UserLevel::ONE,
+        invitation_accepted_at: Time.zone.now
     )
 
     # Create Gatekeeper
@@ -195,7 +196,8 @@ else
         last_name: 'User',
         program: Program.all.sample,
         entities: Entity.all.sample(rand(0..Entity.count)),
-        level: UserLevel::TWO
+        level: UserLevel::TWO,
+        invitation_accepted_at: Time.zone.now
     )
 
     # Create User
@@ -207,7 +209,8 @@ else
         last_name: 'User',
         program: Program.all.sample,
         entities: Entity.all.sample(rand(0..Entity.count)),
-        level: UserLevel::THREE
+        level: UserLevel::THREE,
+        invitation_accepted_at: Time.zone.now
     )
 
     (1..50).each do |i|
