@@ -51,8 +51,8 @@ body {
    @include slide-out(0.2s);
 
    // Make the flash notice look like a toast
-   // By having it in the upper right hand corner and 
-   // being displayed "above" the rest of the content with 
+   // By having it in the upper right hand corner and
+   // being displayed "above" the rest of the content with
    // a higher z-index
 
    position: fixed !important;

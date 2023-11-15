@@ -1,10 +1,9 @@
 @import "main";
 
-#home-about-you {
+#report-form {
     @include table-card($table-card-header-background-color, $table-card-header-border, $table-border);
-}
 
-#home-page-contracts-table-container{
-    max-height: 60vh;
-    overflow-y: scroll;
+    tr.is-disabled {
+        opacity: 0.5;
+    }
 }

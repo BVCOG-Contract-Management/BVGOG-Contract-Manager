@@ -118,22 +118,35 @@
                     </table>
                 </div>
 
-                <footer class="card-footer">
+                <footer class="card-footer distrbute">
+                    <% if @contract.contract_status == ContractStatus::IN_PROGRESS %>
+                        <div>
+                            <%= link_to "Edit this contract", edit_contract_path(@contract), class: "card-footer-item common-button" %>
+                        </div>
+                        <div>
+                            <%= form_with model: @contract, url: [@contract, :log_submission], method: :post, remote: true do |f| %>
+                                <%= f.submit 'Submit', class: "card-footer-item common-button" %>
+                            <% end %>
+                        </div>
+                    <% end %>
                     <% if current_user.present? && current_user.level != UserLevel::THREE %>
-                        <%= link_to "Edit this contract", edit_contract_path(@contract), class: "card-footer-item" %>
-                        <%= link_to contract_path(@contract, params: { contract: { contract_status: contract_opposite_status(@contract) } }), data: { "turbo-method": :put }, class: "card-footer-item", id: "card-change-status" do %>
-                            <span>
-                                <% if @contract.contract_status == ContractStatus::IN_PROGRESS %>
-                                    <span>Set to "Approved"</span>
-                                <% else %>
-                                    <span>Set to "In Review"</span>
+                        <% if @contract.contract_status == ContractStatus::IN_REVIEW %>
+                            <div>
+                                <%= form_with model: @contract, url: [@contract, :log_approval], method: :post, remote: true do |f| %>
+                                    <%= f.submit 'Set to "Approved"', class: "card-footer-item common-button" %>
                                 <% end %>
+                            </div>
+                            <div>
+                               <%= link_to "Set to \"Rejected\"", reject_contract_path(@contract), class: "card-footer-item common-button" %>
+                            </div>
+                        <% elsif @contract.contract_status == ContractStatus::APPROVED || @contract.contract_status == ContractStatus::REJECTED %>
+                            <div>
+                                <%= form_with model: @contract, url: [@contract, :log_return], method: :post, remote: true do |f| %>
+                                    <%= f.submit 'Set to "In Progress"', class: "card-footer-item common-button" %>
+                                <% end %>
+                            </div>
                         <% end %>
                     <% end %>
-                    <% if current_user.present? && current_user.level == UserLevel::TWO %>
-                        <%= link_to "Reject Contract", reject_contract_path(@contract), class: "card-footer-item"%>
-                    <%end %>
-                    <%# <%= link_to "Send expiry reminder", expiry_reminder_contract_path(@contract), class: "card-footer-item" %>
                 </footer>
 
             </div>
@@ -178,6 +191,41 @@
                     <div class="card-content is-paddingless">
                         <%= render partial: "contracts/contract_documents", locals: { contract: @contract, action: "download" } %>
                     </div>
+                </div>
+            </div>
+            <div class="column is-12 is-paddingless">
+                <div class="card">
+                    <header class="card-header">
+                        <p class="card-header-title">Contract Decision History</p>
+                    </header>
+                    <table class="table is-striped is-hoverable is-fullwidth">
+                        <tbody>
+                            <% @decisions.each do |decision| %>
+                            <tr>
+                                <td>
+                                    <strong>Event:</strong> 
+                                    <% if decision.decision == ContractStatus::CREATED %>
+                                        Created
+                                    <% elsif decision.decision == ContractStatus::IN_PROGRESS %>
+                                        Moved to "In Progress"
+                                    <% elsif decision.decision == ContractStatus::IN_REVIEW %>
+                                        Moved to "In Review"
+                                    <% elsif decision.decision == ContractStatus::REJECTED %>
+                                        Rejected
+                                    <% elsif decision.decision == ContractStatus::APPROVED %>
+                                        Approved
+                                    <% end %> 
+                                    <br>
+                                    <strong>User:</strong> <%= link_to decision.user.full_name, user_path(decision.user) %><br>
+                                    <strong>Date:</strong> <%= decision.created_at %><br>
+                                    <% if decision.reason != nil %>
+                                        <strong>Reason:</strong> <%= decision.reason %><br>
+                                    <% end %>
+                                </td>
+                            </tr>
+                            <% end %>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

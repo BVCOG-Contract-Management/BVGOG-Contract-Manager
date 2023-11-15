@@ -1,8 +1,9 @@
 @import "main";
 
-#users {
+#contracts {
     @include table-card($table-card-header-background-color, $table-card-header-border, $table-border);
-    #users-table-header-inputs {
+
+    #contracts-table-header-inputs {
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -20,14 +21,44 @@
     }
 }
 
-#user-show {
+#contract-show {
     @include table-card($table-card-header-background-color, $table-card-header-border, $table-border);
+
     .download-file-button {
         display: flex;
         justify-content: flex-end;
     }
+
+    .distrbute {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .common-button {
+        display: inline-block;
+        padding: 10px;
+        font-size: 16px;
+        text-decoration: none;
+        color: #0066b2;
+        cursor: pointer;
+        font-family: Arial, Helvetica, sans-serif;
+        border: none;
+        cursor: pointer;
+        width: 150px;
+        text-align: center;
+        line-height: 30px;
+        background: none;
+    }
+
+    .common-button:hover {
+      background-color: #e0e0e0;
+    }
 }
 
-#user-form {
+#contract-form {
     @include table-card($table-card-header-background-color, $table-card-header-border, $table-border);
+
+    tr.is-disabled {
+        opacity: 0.5;
+    }
 }

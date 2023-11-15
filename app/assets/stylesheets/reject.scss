@@ -1,0 +1,60 @@
+/* app/assets/stylesheets/custom_modal_styles.scss */
+
+/* Style the custom modal overlay */
+#rejectModal.modal {
+	display: contents;
+	width: -webkit-fill-available;
+}
+
+/* Style the custom modal dialog */
+#rejectModal .modal-dialog {
+	margin: 50px auto; /* Center the modal vertically and horizontally */
+}
+
+/* Style the custom modal content */
+#rejectModal .modal-content {
+	border: none; /* Remove the border */
+	border-radius: 5px; /* Rounded corners */
+}
+
+/* Style the custom modal header */
+#rejectModal .modal-header {
+	background-color: #dc3545; /* Red header background color */
+	color: #fff; /* White text color */
+	border: none; /* Remove the header border */
+}
+
+/* Style the custom modal title */
+#rejectModal .modal-title {
+	font-size: 24px; /* Adjust the title font size as needed */
+	font-weight: bold; /* Make the title bold */
+}
+
+/* Style the custom modal body (form) */
+#rejectModal .modal-body {
+	padding: 20px; /* Add some padding inside the modal body */
+}
+
+/* Style the form label in the custom modal */
+#rejectModal label {
+	font-weight: bold; /* Make labels bold */
+}
+
+/* Style the rejection reason text area in the custom modal */
+#rejectModal .form-control {
+	width: 100%; /* Make the text area 100% width */
+	height: 100px; /* Adjust the height as needed */
+}
+
+/* Style the "Reject Contract" button in the custom modal */
+#rejectModal .btn-danger {
+	background-color: #dc3545; /* Red button background color */
+	border: none; /* Remove the button border */
+	color: #fff; /* White text color */
+}
+
+/* Adjust button styles on hover and focus in the custom modal if needed */
+#rejectModal .btn-danger:hover,
+#rejectModal .btn-danger:focus {
+	background-color: #c82333; /* Darker red on hover/focus */
+}
