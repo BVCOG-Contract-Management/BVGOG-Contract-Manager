@@ -1,10 +1,15 @@
 # frozen_string_literal: true
 
-# Helper for contracts
 module ContractsHelper
     def contract_status_icon(contract)
         case contract.contract_status
         when ContractStatus::IN_PROGRESS
+            "
+            <span class=\"tag is-warning\" style=\"background-color: #cccccc\">
+                In Progress
+            </span>
+            ".html_safe
+        when ContractStatus::IN_REVIEW
             "
             <span class=\"tag is-warning\">
                 In Review
@@ -22,17 +27,6 @@ module ContractsHelper
                 Rejected
             </span>
             ".html_safe
-        end
-    end
-
-    def contract_opposite_status(contract)
-        case contract.contract_status
-        when ContractStatus::IN_PROGRESS
-            ContractStatus::APPROVED
-        when ContractStatus::APPROVED
-            ContractStatus::IN_PROGRESS
-        else
-            ContractStatus::IN_PROGRESS
         end
     end
 

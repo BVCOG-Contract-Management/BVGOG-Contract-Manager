@@ -5,7 +5,7 @@
                 <h4 class="modal-title" id="rejectModalLabel">Reject Contract</h4>
             </div>
             <div class="modal-body">
-                <%= form_with model: @contract, url: reject_reason_contract_path(@contract), method: :post, remote: true do |f| %>
+                <%= form_with model: @contract, url: [@contract, :log_rejection], method: :post, remote: true do |f| %>
                 <div class="form-group">
                     <%= f.label :rejection_reason, 'Rejection Reason' %>
                     <%= f.text_area :rejection_reason, class: 'form-control', required: true %>

@@ -31,19 +31,20 @@ Rails.application.routes.draw do
     end
     resources :reports
     resources :contracts do
-        post 'reject_contract', on: :member
-        post 'reject_reason', on: :member
+        post 'reject', to: 'contracts#log_rejection', as: 'log_rejection'
+        post 'approvet', to: 'contracts#log_approval', as: 'log_approval'
+        post 'return', to: 'contracts#log_return', as: 'log_return'
+        post 'submit', to: 'contracts#log_submission', as: 'log_submission'
         post 'review_contract', on: :member
     end
 
     get '/contracts/:id/expiry_reminder', to: 'contracts#expiry_reminder', as: 'expiry_reminder_contract'
 
+    # Contract Rejections
     get '/contracts/:id/reject', to: 'contracts#reject', as: 'reject_contract'
-    get '/contracts/:id/review', to: 'contracts#review', as: 'review_contract'
 
     # Contract Documents
     # GET
-
     get '/contract_documents/:id', to: 'contract_documents#download', as: 'download_contract_document'
 
     # Download Report

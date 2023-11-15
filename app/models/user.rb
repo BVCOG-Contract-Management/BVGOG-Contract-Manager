@@ -20,6 +20,7 @@ class User < ApplicationRecord
     has_one :redirect_user, class_name: 'User', foreign_key: 'redirect_user_id'
     has_many :contracts, class_name: 'Contract', foreign_key: 'point_of_contact_id'
     has_many :vendor_reviews, class_name: 'VendorReview'
+    has_many :contract_decisions, class_name: 'ContractDecision'
 
     # TODO: Should the program be optional?
     belongs_to :program, class_name: 'Program'
@@ -31,22 +32,30 @@ class User < ApplicationRecord
         @old_name
     end
 
-    def entity?(entity_id)
+    def has_entity?(entity_id)
         entities.where(id: entity_id).exists?
     end
 
     # Virtual attribute to calculate integer level on the fly
-    LEVELS = {
-        'one' => { int: 1, name: 'Admin' },
-        'two' => { int: 2, name: 'Gatekeeper' },
-        'three' => { int: 3, name: 'User' }
-    }.freeze
-
     def level_int
-        LEVELS[level][:int] if LEVELS.key?(level)
+        case level
+        when 'one'
+            1
+        when 'two'
+            2
+        when 'three'
+            3
+        end
     end
 
     def level_name
-        LEVELS[level][:name] if LEVELS.key?(level)
+        case level
+        when 'one'
+            'Admin'
+        when 'two'
+            'Gatekeeper'
+        when 'three'
+            'User'
+        end
     end
 end

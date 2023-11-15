@@ -28,6 +28,31 @@
         display: flex;
         justify-content: flex-end;
     }
+
+    .distrbute {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .common-button {
+        display: inline-block;
+        padding: 10px;
+        font-size: 16px;
+        text-decoration: none;
+        color: #0066b2;
+        cursor: pointer;
+        font-family: Arial, Helvetica, sans-serif;
+        border: none;
+        cursor: pointer;
+        width: 150px;
+        text-align: center;
+        line-height: 30px;
+        background: none;
+    }
+
+    .common-button:hover {
+      background-color: #e0e0e0;
+    }
 }
 
 #contract-form {
