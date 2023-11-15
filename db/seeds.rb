@@ -117,7 +117,7 @@ if Rails.env.production?
         )
     end
 
-    contact_person = User.find_by(email: 'user@example.com')
+    #contact_person = User.find_by(email: 'user@example.com')
     # Create some documents with nearby expiries to test expiring docs mailer
     (1..100).each do |i|
         d = Time.zone.today + 1.day * i
@@ -253,6 +253,13 @@ else
             entity: Entity.all.sample,
             ends_at: Time.zone.today + 1.day * i,
             ends_at_final: Time.zone.today + 2.days * i
+            max_renewal_count: i,
+            renewal_duration: i.days,
+            renewal_duration_units: TimePeriod::DAY,
+            extension_count: i,
+            max_extension_count: i,
+            extension_duration: i.months,
+            extension_duration_units: TimePeriod::MONTH
         )
     end
 
