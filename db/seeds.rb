@@ -252,7 +252,7 @@ else
             vendor: Vendor.all.sample,
             entity: Entity.all.sample,
             ends_at: Time.zone.today + 1.day * i,
-            ends_at_final: Time.zone.today + 2.days * i
+            ends_at_final: Time.zone.today + 2.days * i,
             max_renewal_count: i,
             renewal_duration: i.days,
             renewal_duration_units: TimePeriod::DAY,
