@@ -259,7 +259,6 @@ class ContractsController < ApplicationController
                     format.json { render json: @contract.errors, status: :unprocessable_entity }
                 end
             end
-
         rescue StandardError => e
             @contract.reload
             # If error type is Oso::ForbiddenError, then the user is not authorized
