@@ -2,7 +2,6 @@
 
 Rails.application.routes.draw do
     devise_for :users, controllers: { invitations: 'invitations' }
-
     authenticated :user do
         root to: 'pages#home'
     end
