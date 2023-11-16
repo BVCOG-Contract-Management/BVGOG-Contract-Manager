@@ -28,7 +28,6 @@ jobs:
               run: |
                   git diff --exit-code
             - name: Push Rufo changes
-              if: steps.git-check.outputs.modified == 'true'
               run: |
                   git config --global user.name 'Github Actions'
                   git config --global user.email 'github-actions@users.noreply.github.com'
@@ -65,6 +64,9 @@ jobs:
                   RAILS_ENV: test
                   DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
               run: |
-                  bundle exec rails db:prepare
+                  rm -f ./db/development.sqlite3
+                  rm -f ./db/test.sqlite3
+                  bundle exec rails db:create
                   bundle exec rails db:migrate
+                  bundle exec rails db:seed
                   bundle exec cucumber --publish-quiet --profile default

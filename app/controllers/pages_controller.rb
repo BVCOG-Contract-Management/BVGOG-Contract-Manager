@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Controller for pages
 class PagesController < ApplicationController
     def home
         add_breadcrumb 'Home', root_path

@@ -1,8 +1,15 @@
 # frozen_string_literal: true
 
+# Helper for contracts
 module ContractsHelper
     def contract_status_icon(contract)
         case contract.contract_status
+        when ContractStatus::CREATED
+            "
+            <span class=\"tag is-warning\" style=\"background-color: #170cab\">
+                Created
+            </span>
+            ".html_safe
         when ContractStatus::IN_PROGRESS
             "
             <span class=\"tag is-warning\" style=\"background-color: #cccccc\">

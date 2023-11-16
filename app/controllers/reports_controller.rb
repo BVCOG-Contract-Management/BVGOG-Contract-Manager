@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Controller for reports
 class ReportsController < ApplicationController
     include ReportsHelper
     before_action :set_report, only: %i[show edit update destroy download]
