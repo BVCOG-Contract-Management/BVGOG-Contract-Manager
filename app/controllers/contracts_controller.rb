@@ -143,6 +143,35 @@ class ContractsController < ApplicationController
             end
         end
     end
+  
+    def review
+        @contract = Contract.find(params[:id])
+        add_breadcrumb 'Contracts', contracts_path
+        add_breadcrumb @contract.title, contract_path(@contract)
+        add_breadcrumb 'Review', review_contract_path(@contract)
+
+        respond_to do |format|
+            ActiveRecord::Base.transaction do
+                OSO.authorize(current_user, 'review', @contract)
+                status = case @contract.contract_status
+                         when ContractStatus::IN_PROGRESS
+                             ContractStatus::APPROVED
+                         when ContractStatus::APPROVED
+                             ContractStatus::IN_PROGRESS
+                         else
+                             ContractStatus::IN_PROGRESS
+                         end
+                @contract.update(contract_status: status)
+                format.html { redirect_to contract_url(@contract), notice: 'Contract reviewed successfully.' }
+                format.json { render :show, status: :ok, location: @contract }
+            end
+        rescue StandardError
+            message = 'You do not have permission to review this contract.'
+            format.html { redirect_to contract_url(@contract), alert: message }
+            format.json { render json: { error: message }, status: :unauthorized }
+        end
+    end
+
 
     # PATCH/PUT /contracts/1 or /contracts/1.json
     def update

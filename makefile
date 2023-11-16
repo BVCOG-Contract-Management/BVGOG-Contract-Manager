@@ -14,7 +14,7 @@ database:
 	rm -f ./db/test.sqlite3
 	rails db:create
 	rails db:migrate
-	rails db:seed --trace
+	rails db:seed
 
 heroku_db:
 	heroku run rails db:migrate

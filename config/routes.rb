@@ -35,6 +35,7 @@ Rails.application.routes.draw do
         post 'approvet', to: 'contracts#log_approval', as: 'log_approval'
         post 'return', to: 'contracts#log_return', as: 'log_return'
         post 'submit', to: 'contracts#log_submission', as: 'log_submission'
+        post 'review_contract', on: :member
     end
 
     get '/contracts/:id/expiry_reminder', to: 'contracts#expiry_reminder', as: 'expiry_reminder_contract'

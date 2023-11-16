@@ -1,4 +1,3 @@
-
 <div id="contract-show">
     <div class="columns is-desktop">
         <div class="column is-6">
@@ -118,36 +117,40 @@
                     </table>
                 </div>
 
+  
+
                 <footer class="card-footer distrbute">
-                    <% if @contract.contract_status == ContractStatus::IN_PROGRESS %>
-                        <div>
-                            <%= link_to "Edit this contract", edit_contract_path(@contract), class: "card-footer-item common-button" %>
-                        </div>
-                        <div>
-                            <%= form_with model: @contract, url: [@contract, :log_submission], method: :post, remote: true do |f| %>
-                                <%= f.submit 'Submit', class: "card-footer-item common-button" %>
-                            <% end %>
-                        </div>
-                    <% end %>
-                    <% if current_user.present? && current_user.level != UserLevel::THREE %>
-                        <% if @contract.contract_status == ContractStatus::IN_REVIEW %>
-                            <div>
-                                <%= form_with model: @contract, url: [@contract, :log_approval], method: :post, remote: true do |f| %>
-                                    <%= f.submit 'Set to "Approved"', class: "card-footer-item common-button" %>
-                                <% end %>
-                            </div>
-                            <div>
-                               <%= link_to "Set to \"Rejected\"", reject_contract_path(@contract), class: "card-footer-item common-button" %>
-                            </div>
-                        <% elsif @contract.contract_status == ContractStatus::APPROVED || @contract.contract_status == ContractStatus::REJECTED %>
-                            <div>
-                                <%= form_with model: @contract, url: [@contract, :log_return], method: :post, remote: true do |f| %>
-                                    <%= f.submit 'Set to "In Progress"', class: "card-footer-item common-button" %>
-                                <% end %>
-                            </div>
-                        <% end %>
-                    <% end %>
-                </footer>
+                  <% if current_user.present? && current_user.level != UserLevel::TWO %>
+                      <% if @contract.contract_status == ContractStatus::IN_PROGRESS || @contract.contract_status == ContractStatus::CREATED  %>
+                          <div>
+                              <%= link_to "Edit this contract", edit_contract_path(@contract), class: "card-footer-item common-button" %>
+                          </div>
+                          <div>
+                              <%= form_with model: @contract, url: [@contract, :log_submission], method: :post, remote: true do |f| %>
+                                  <%= f.submit 'Submit', class: "card-footer-item common-button" %>
+                              <% end %>
+                          </div>
+                      <% end %>
+                  <% end %>
+                  <% if current_user.present? && current_user.level == UserLevel::TWO %>
+                      <% if @contract.contract_status == ContractStatus::IN_REVIEW %>
+                          <div>
+                              <%= form_with model: @contract, url: [@contract, :log_approval], method: :post, remote: true do |f| %>
+                                  <%= f.submit 'Set to "Approved"', class: "card-footer-item common-button" %>
+                              <% end %>
+                          </div>
+                          <div>
+                             <%= link_to "Set to \"Rejected\"", reject_contract_path(@contract), class: "card-footer-item common-button" %>
+                          </div>
+                      <% elsif @contract.contract_status == ContractStatus::REJECTED %>
+                          <div>
+                              <%= form_with model: @contract, url: [@contract, :log_return], method: :post, remote: true do |f| %>
+                                  <%= f.submit 'Set to "In Progress"', class: "card-footer-item common-button" %>
+                              <% end %>
+                          </div>
+                      <% end %>
+                  <% end %>
+              </footer>
 
             </div>
         </div>

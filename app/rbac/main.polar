@@ -12,7 +12,7 @@ is_three(lvl) if lvl == "three";
 has_permission(user: User, "read", contract: Contract) if
     contract matches Contract and
     (not is_two(user.level) or
-    user.has_entity?(contract.entity_id) or
+    user.entity?(contract.entity_id) or
     contract.point_of_contact_id == user.id);  # Use '==' for equality check
 
 # Can a user create a contract?
@@ -24,6 +24,12 @@ has_permission(user: User, "write", contract: Contract) if
 has_permission(user: User, "edit", contract: Contract) if
     contract matches Contract and
     (not is_two(user.level));
+
+# Can a user review a contract
+has_permission(user: User, "review", contract: Contract) if
+    contract matches Contract and
+    is_two(user.level) and
+    user.entity?(contract.entity_id);
 
 # --------------------------------------------- #
 
@@ -52,7 +58,7 @@ has_permission(user: User, "edit", user_resource: User) if
 actor User {}
 
 resource Contract {
-    permissions = ["read", "write", "edit"];
+    permissions = ["read", "write", "edit", "review"];
 }
 
 resource User {
