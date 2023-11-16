@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Helper for contracts
 module ContractsHelper
     def contract_status_icon(contract)
         case contract.contract_status

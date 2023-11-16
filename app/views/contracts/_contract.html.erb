@@ -117,26 +117,21 @@
                     </table>
                 </div>
 
-  
-
                 <footer class="card-footer distribute">
                     <% if current_user.present? && current_user.level != UserLevel::TWO %>
                         <% if @contract.contract_status == ContractStatus::IN_PROGRESS || @contract.contract_status == ContractStatus::CREATED  %>
-                            <%= link_to "Edit this contract", edit_contract_path(@contract), class: "card-footer-item common-button" %>
-                            <%= link_to "Submit", review_contract_path(@contract, action: 'submit'), method: :patch, class: "card-footer-item common-button", remote: true %>
+                            <%= link_to "Edit this contract", edit_contract_path(@contract), class: "card-footer-item" %>
+                            <%= link_to "Submit", log_submission_contract_path(@contract), class: "card-footer-item" %>
                         <% end %>
-                    <% end %>
-                    <% if current_user.present? && current_user.level == UserLevel::TWO %>
+                    <% else %>
                         <% if @contract.contract_status == ContractStatus::IN_REVIEW %>
-                            <%= link_to 'Set to "Approved"', review_contract_path(@contract, action: 'approve'), method: :patch, class: "card-footer-item common-button", remote: true %>
-                            <%= link_to 'Set to "Rejected"', reject_contract_path(@contract), class: "card-footer-item common-button" %>
+                            <%= link_to 'Set to "Approved"', log_approval_contract_path(@contract), class: "card-footer-item" %>
+                            <%= link_to 'Set to "Rejected"', reject_contract_path(@contract), class: "card-footer-item" %>
                         <% elsif @contract.contract_status == ContractStatus::REJECTED %>
-                            <%= link_to 'Set to "In Progress"', review_contract_path(@contract, action: 'return'), method: :patch, class: "card-footer-item common-button", remote: true %>
+                            <%= link_to 'Set to "In Progress"', log_return_contract_path(@contract), class: "card-footer-item" %>
                         <% end %>
                     <% end %>
                 </footer>
-
-
             </div>
         </div>
         <div class="column is-6">

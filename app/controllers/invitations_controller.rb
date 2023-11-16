@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Controller for invitations
 class InvitationsController < Devise::InvitationsController
     before_action :configure_permitted_parameters
 

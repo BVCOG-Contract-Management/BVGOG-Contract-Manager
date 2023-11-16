@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Controller for vendor reviews
 class VendorReviewsController < ApplicationController
     before_action :set_vendor, only: [:create]
 

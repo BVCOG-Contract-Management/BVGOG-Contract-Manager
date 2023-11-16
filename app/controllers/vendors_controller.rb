@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
+# Controller for vendors
 class VendorsController < ApplicationController
-    before_action :set_vendor, only: %i[show edit review update destroy]
+    before_action :set_vendor, only: %i[show edit review update]
 
     # GET /vendors or /vendors.json
     def index
