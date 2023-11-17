@@ -7,6 +7,7 @@ require 'factory_bot_rails'
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'support', 'paths'))
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'support', 'selectors'))
 
+# helper for within
 module WithinHelpers
     def with_scope(locator, &block)
         locator ? within(*selector_for(locator), &block) : yield
@@ -23,10 +24,6 @@ end
 
 Then('I should see {string} element') do |element_name|
     expect(page).to have_selector(:xpath, "//strong[contains(., '#{element_name}')]")
-end
-
-When('I fill in the {string} field with {string}') do |field, filler|
-    fill_in field, with: filler
 end
 
 When('I fill in the new vendor name field with {string}') do |vendor|

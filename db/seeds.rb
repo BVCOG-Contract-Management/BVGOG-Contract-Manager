@@ -119,6 +119,7 @@ if Rails.env.production?
 
     # contact_person = User.find_by(email: 'user@example.com')
     # Create some documents with nearby expiries to test expiring docs mailer
+    statuses = ContractStatus.list.reject { |status| status == :created }
     (1..100).each do |i|
         d = Time.zone.today + 1.day * i
         FactoryBot.create(
@@ -137,7 +138,8 @@ if Rails.env.production?
             extension_count: i,
             max_extension_count: i,
             extension_duration: i,
-            extension_duration_units: TimePeriod::MONTH
+            extension_duration_units: TimePeriod::MONTH,
+            contract_status: statuses.sample
         )
     end
 
@@ -223,6 +225,7 @@ else
 
         # Create Contracts
         d = Time.zone.today + 1.day * i
+        statuses = ContractStatus.list.reject { |status| status == :created }
         FactoryBot.create(
             :contract,
             id: i,
@@ -239,7 +242,8 @@ else
             extension_count: i,
             max_extension_count: i,
             extension_duration: i.months,
-            extension_duration_units: TimePeriod::MONTH
+            extension_duration_units: TimePeriod::MONTH,
+            contract_status: statuses.sample
         )
     end
 

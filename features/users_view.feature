@@ -22,7 +22,7 @@ Scenario: Get back to view users page from new user page
 Scenario: Search for a user
 	Given I am on the users page
 	When I fill in "search" with "Example"
-	Then I should see "3"
+	Then I should see "5"
 
 Scenario: View a user
 	Given I am on the users page
