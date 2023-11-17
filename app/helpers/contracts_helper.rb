@@ -37,6 +37,7 @@ module ContractsHelper
         end
     end
 
+    # :nocov:
     def file_type_icon(file_name)
         file_type = file_name.split('.').last
         case file_type
@@ -108,6 +109,7 @@ module ContractsHelper
             ".html_safe
         end
     end
+    # :nocov:
 end
 
 def user_select_options

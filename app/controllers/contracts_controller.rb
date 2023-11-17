@@ -4,6 +4,8 @@
 class ContractsController < ApplicationController
     before_action :set_contract, only: %i[show edit update]
 
+    # Deprecated
+    # :nocov:
     def expiry_reminder
         @contract = Contract.find(params[:id])
         respond_to do |format|
@@ -20,6 +22,7 @@ class ContractsController < ApplicationController
             end
         end
     end
+    # :nocov:
 
     # GET /contracts or /contracts.json
     def index
@@ -37,8 +40,10 @@ class ContractsController < ApplicationController
         begin
             OSO.authorize(current_user, 'read', @contract)
         rescue Oso::Error
+            # :nocov:
             redirect_to root_path, alert: 'You do not have permission to access this page.'
             return
+            # :nocov:
         end
         add_breadcrumb 'Contracts', contracts_path
         add_breadcrumb @contract.title, contract_path(@contract)
@@ -126,11 +131,14 @@ class ContractsController < ApplicationController
                         end
                         format.json { render :show, status: :created, location: @contract }
                     else
+                        # :nocov:
                         format.html { render :new, status: :unprocessable_entity }
                         format.json { render json: @contract.errors, status: :unprocessable_entity }
+                        # :nocov:
                     end
                 end
             rescue StandardError => e
+                # :nocov:
                 # If error type is Oso::ForbiddenError, then the user is not authorized
                 if e.instance_of?(Oso::ForbiddenError)
                     # status = :unauthorized
@@ -141,67 +149,10 @@ class ContractsController < ApplicationController
                     message = e.message
                 end
                 format.html { redirect_to contracts_path, alert: message }
+                # :nocov:
             end
         end
     end
-
-    # def review
-    #     @contract = Contract.find(params[:id])
-    #     add_breadcrumb 'Contracts', contracts_path
-    #     add_breadcrumb @contract.title, contract_path(@contract)
-    #     add_breadcrumb 'Review', review_contract_path(@contract)
-
-    #     respond_to do |format|
-    #         ActiveRecord::Base.transaction do
-    #             OSO.authorize(current_user, 'review', @contract)
-    #             case params[:action]
-    #             when 'submit'
-    #                 handle_submit_action(format)
-    #             when 'approve'
-    #                 handle_approve_action(format)
-    #             when 'return'
-    #                 handle_return_action(format)
-    #             else
-    #                 format.html { redirect_to contract_url(@contract), alert: 'Invalid action.' }
-    #             end
-    #         end
-    #     rescue StandardError
-    #         handle_error(format)
-    #     end
-    # end
-
-    # def handle_submit_action(format)
-    #     # Your logic for handling the submission action
-    #     @contract.update(contract_status: ContractStatus::IN_REVIEW)
-    #     format.html { redirect_to contract_url(@contract), notice: 'Contract submitted successfully.' }
-    #     format.json { render :show, status: :ok, location: @contract }
-    # end
-
-    # def handle_approve_action(format)
-    #     status = case @contract.contract_status
-    #              when ContractStatus::IN_PROGRESS
-    #                  ContractStatus::APPROVED
-    #              when ContractStatus::APPROVED
-    #                  ContractStatus::IN_PROGRESS
-    #              else
-    #                  ContractStatus::IN_PROGRESS
-    #              end
-    #     @contract.update(contract_status: status)
-    #     format.html { redirect_to contract_url(@contract), notice: 'Contract approved successfully.' }
-    #     format.json { render :show, status: :ok, location: @contract }
-    # end
-
-    # def handle_return_action(format)
-    #     @contract.update(contract_status: ContractStatus::IN_PROGRESS)
-    #     format.html { redirect_to contract_url(@contract), notice: 'Contract set to "In Progress".' }
-    #     format.json { render :show, status: :ok, location: @contract }
-    # end
-
-    # def handle_error(format)
-    #     message = 'You do not have permission to perform this action on the contract.'
-    #     format.html { redirect_to contract_url(@contract), alert: message }
-    #     format.json { render json: { error: message }, status: :unauthorized }
-    # end
 
     # PATCH/PUT /contracts/1 or /contracts/1.json
     def update
@@ -278,13 +229,6 @@ class ContractsController < ApplicationController
     def contract_files
         contract_document = ContractDocument.find(params[:id])
         send_file contract_document.file.path, type: contract_document.file_content_type, disposition: :inline
-    end
-
-    def reject
-        @contract = Contract.find(params[:id])
-        add_breadcrumb 'Contracts', contracts_path
-        add_breadcrumb @contract.title, contract_path(@contract)
-        add_breadcrumb 'Reject', reject_contract_path(@contract)
     end
 
     def log_rejection

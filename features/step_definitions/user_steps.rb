@@ -44,7 +44,7 @@ Given('I am logged in as a level 2 user') do
         last_name: 'Two',
         level: UserLevel::TWO,
         program: Program.all.sample,
-        entities: [Entity.first]
+        entities: Entity.all
     )
 
     step 'I fill in "Email" with "level2@example.com"'

@@ -24,6 +24,10 @@ When(/^I follow "([^"]*)"$/) do |link|
     click_link(link)
 end
 
+When('I press Set to {string}') do |status|
+    click_button("Set to \"#{status}\"")
+end
+
 When(/^I upload "([^"]*)" to the contract documents field$/) do |filename|
     # Find the input element by name attribute
     File.new(filename, 'w')
