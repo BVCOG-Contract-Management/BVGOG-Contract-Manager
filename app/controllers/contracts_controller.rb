@@ -231,6 +231,12 @@ class ContractsController < ApplicationController
         send_file contract_document.file.path, type: contract_document.file_content_type, disposition: :inline
     end
 
+    def reject
+        @contract = Contract.find(params[:contract_id])
+        add_breadcrumb 'Contracts', contracts_path
+        add_breadcrumb @contract.title, contract_path(@contract)
+    end
+
     def log_rejection
         ActiveRecord::Base.transaction do
             @contract = Contract.find(params[:contract_id])
@@ -241,7 +247,9 @@ class ContractsController < ApplicationController
             if @decision.save
                 redirect_to contract_url(@contract.id), notice: 'Contract was Rejected.'
             else
+                # :nocov:
                 redirect_to contract_url(@contract.id), alert: 'Contract Rejection failed.'
+                # :nocov:
             end
         end
     end

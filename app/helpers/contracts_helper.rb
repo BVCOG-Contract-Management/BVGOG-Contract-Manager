@@ -6,7 +6,7 @@ module ContractsHelper
         case contract.contract_status
         when ContractStatus::CREATED
             "
-            <span class=\"tag is-warning\" style=\"background-color: #170cab\">
+            <span class=\"tag is-warning\" style=\"background-color: #659ffc\">
                 Created
             </span>
             ".html_safe
