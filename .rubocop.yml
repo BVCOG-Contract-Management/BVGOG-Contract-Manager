@@ -38,3 +38,4 @@ AllCops:
         - "tmp/**/*"
         - "vendor/**/*"
         - ".git/**/*"
+        - "bin/bundle"
