@@ -128,10 +128,10 @@
                     <% end %>
                     <% if current_user.present? && current_user.level == UserLevel::TWO%>
                         <% if @contract.contract_status == ContractStatus::IN_REVIEW %>
-                            <% link_to 'Set to "Rejected"', reject_contract_path(@contract), class: "card-footer-item" %>
                             <%= form_with model: @contract, url: [@contract, :log_approval], method: :post, remote: true, class: "card-footer-item" do |form| %>
                                 <% form.submit 'Set to "Approved"', class: "card-footer-item"%>
                             <% end %>
+                            <%= link_to 'Set to "Rejected"', reject_contract_path(@contract), class: "card-footer-item" %>
                         <% elsif @contract.contract_status == ContractStatus::REJECTED %>
                             <%= form_with model: @contract, url: [@contract, :log_return], method: :post, remote: true, class: "card-footer-item" do |form| %>
                                 <% form.submit 'Set to "In Progress"', class: "card-footer-item"%>

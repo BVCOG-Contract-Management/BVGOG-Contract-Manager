@@ -232,23 +232,24 @@ class ContractsController < ApplicationController
     end
 
     def reject
-        @contract = Contract.find(params[:contract_id])
+        @contract = Contract.find(params[:id])
         add_breadcrumb 'Contracts', contracts_path
         add_breadcrumb @contract.title, contract_path(@contract)
+        add_breadcrumb 'Reject', reject_contract_path(@contract)
     end
 
     def log_rejection
+        @contract = Contract.find(params[:contract_id])
         ActiveRecord::Base.transaction do
-            @contract = Contract.find(params[:contract_id])
-            reason = params[:contract][:rejection_reason]
+            @reason = params[:contract][:rejection_reason]
 
             @contract.update(contract_status: ContractStatus::REJECTED)
-            @decision = @contract.decisions.build(reason:, decision: ContractStatus::REJECTED, user: current_user)
+            @decision = @contract.decisions.build(reason: @reason, decision: ContractStatus::REJECTED, user: current_user)
             if @decision.save
-                redirect_to contract_url(@contract.id), notice: 'Contract was Rejected.'
+                redirect_to contract_url(@contract), notice: 'Contract was Rejected.'
             else
                 # :nocov:
-                redirect_to contract_url(@contract.id), alert: 'Contract Rejection failed.'
+                redirect_to contract_url(@contract), alert: 'Contract Rejection failed.'
                 # :nocov:
             end
         end
@@ -260,7 +261,7 @@ class ContractsController < ApplicationController
             @contract.update(contract_status: ContractStatus::APPROVED)
             @decision = @contract.decisions.build(reason: nil, decision: ContractStatus::APPROVED, user: current_user)
             @decision.save
-            redirect_to contract_url(@contract.id), notice: 'Contract was Approved.'
+            redirect_to contract_url(@contract), notice: 'Contract was Approved.'
         end
     end
 
@@ -271,7 +272,7 @@ class ContractsController < ApplicationController
             @decision = @contract.decisions.build(reason: nil, decision: ContractStatus::IN_PROGRESS,
                                                   user: current_user)
             @decision.save
-            redirect_to contract_url(@contract.id), notice: 'Contract was returned to In Progress.'
+            redirect_to contract_url(@contract), notice: 'Contract was returned to In Progress.'
         end
     end
 
@@ -281,7 +282,7 @@ class ContractsController < ApplicationController
             @contract.update(contract_status: ContractStatus::IN_REVIEW)
             @decision = @contract.decisions.build(reason: nil, decision: ContractStatus::IN_REVIEW, user: current_user)
             @decision.save
-            redirect_to contract_url(@contract.id), notice: 'Contract was Submitted.'
+            redirect_to contract_url(@contract), notice: 'Contract was Submitted.'
         end
     end
 

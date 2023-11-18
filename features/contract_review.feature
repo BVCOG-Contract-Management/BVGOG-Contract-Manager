@@ -20,9 +20,9 @@ Scenario: Gatekeeper approve a contract
 	Then I should see "Contract was Approved."
 
 @error
-Scenario: Gatekeeper approve a contract
+Scenario: Gatekeeper reject a contract
 	When I follow "Contract 2"
-	When I press Set to "Rejected"
-	And I fill "Rejection Reason" with "test"
-	And press "commit"
+	When I follow Set to "Rejected"
+	And I fill in the "Rejection Reason" field with "test"
+	And I press "commit"
 	Then I should see "Contract was Rejected."
