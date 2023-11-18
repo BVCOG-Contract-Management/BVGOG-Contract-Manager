@@ -22,6 +22,8 @@ Given('{int} example users exist') do |num_users|
         FactoryBot.create(:user,
                           id: i,
                           program: Program.all.sample,
+                          first_name: 'User',
+                          last_name: i.to_s,
                           entities: Entity.all.sample(rand(1..3)))
     end
 end

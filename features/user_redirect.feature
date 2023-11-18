@@ -24,6 +24,13 @@ Scenario: Deactivate a user
 	And I follow "Deactivate"
 	Then I should see "User was successfully updated."
 
+Scenario: Deactivate self
+	Given I am on the users page
+	And I follow "Admin"
+    When I try to deactivate this user
+    And I follow "Deactivate"
+    Then I should see "You cannot deactivate yourself."
+
 Scenario: Deactivate and redirect a user
 	Given I am on the users page
 	When I show user 1

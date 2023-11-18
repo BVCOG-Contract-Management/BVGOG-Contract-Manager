@@ -25,3 +25,9 @@ Scenario: Sort vendors by reviews
 Scenario: Sort vendors by rating
 	Given I am on the vendors page
 	When I follow "Average Rating"
+
+@error
+Scenario: Search vendor
+	Given I am on the vendors page
+	And I fill in "search" with "Vendor"
+	Then I should see "Vendor"

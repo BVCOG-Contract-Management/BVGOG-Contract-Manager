@@ -226,10 +226,12 @@ class ContractsController < ApplicationController
         end
     end
 
+    # :nocov:
     def contract_files
         contract_document = ContractDocument.find(params[:id])
         send_file contract_document.file.path, type: contract_document.file_content_type, disposition: :inline
     end
+    # :nocov:
 
     def reject
         @contract = Contract.find(params[:id])

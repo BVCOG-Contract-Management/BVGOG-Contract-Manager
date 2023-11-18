@@ -42,12 +42,10 @@ Scenario: Look at paginated contracts
 	Then I should see "Contract 11"
 	And I should see "Contract 12"
 
-
 Scenario: Try to go next on last page
 	Given I am on the contracts page
 	And I follow "Last"
 	Then I should not see "Next"
-
 
 Scenario: Try to go next on first page
 	Given I am on the contracts page

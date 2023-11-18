@@ -13,16 +13,23 @@ Scenario: Gatekeeper cannot set a contract to In Review
 	When I follow "Contract 1"
 	Then I should not see "In Review"
 
-@error
 Scenario: Gatekeeper approve a contract
 	When I follow "Contract 2"
 	When I press Set to "Approved"
 	Then I should see "Contract was Approved."
 
-@error
 Scenario: Gatekeeper reject a contract
 	When I follow "Contract 2"
 	When I follow Set to "Rejected"
 	And I fill in the "Rejection Reason" field with "test"
 	And I press "commit"
 	Then I should see "Contract was Rejected."
+
+Scenario: Gatekeeper cannot do anything on a Approved 
+	When I follow "Contract 3"
+	Then I should not see "In Review"
+
+Scenario: Gatekeeper setting a rejected contract to In Progress
+	When I follow "Contract 4"
+	And I press Set to "In Progress"
+	Then I should see "Contract was returned to In Progress."
