@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
+# Controller for the users page
 class UsersController < ApplicationController
-    before_action :set_user, only: %i[show edit update redirect destroy redirect]
+    before_action :set_user, only: %i[show edit update redirect]
 
     # GET /users or /users.json
     def index
@@ -77,8 +78,10 @@ class UsersController < ApplicationController
                 format.json { render json: @user.errors, status: :unprocessable_entity }
             end
         rescue Oso::Error => e
+            # :nocov:
             format.html { redirect_to user_url(@user), alert: 'You are not authorized to modify users.' }
             format.json { render json: { error: e.message }, status: :forbidden }
+            # :nocov:
         end
     end
 

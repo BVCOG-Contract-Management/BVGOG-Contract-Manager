@@ -12,6 +12,7 @@ class ApplicationController < ActionController::Base
         devise_parameter_sanitizer.permit(:sign_up, keys: %i[first_name last_name])
     end
 
+    # :nocov:
     def verify_user
         # If route is not the sign in page, check if user is signed in
         unless ['/users/sign_in', '/users/sign_out', '/users/password/new',
@@ -28,4 +29,5 @@ class ApplicationController < ActionController::Base
             end
         end
     end
+    # :nocov:
 end

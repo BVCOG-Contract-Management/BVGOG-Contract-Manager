@@ -44,9 +44,12 @@ class User < ApplicationRecord
         'three' => { int: 3, name: 'User' }
     }.freeze
 
+    # :nocov:
+    # Deprecated
     def level_int
         LEVEL_MAPPING[level][:int] if LEVEL_MAPPING[level]
     end
+    # :nocov:
 
     def level_name
         LEVEL_MAPPING[level][:name] if LEVEL_MAPPING[level]

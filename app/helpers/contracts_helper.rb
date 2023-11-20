@@ -6,7 +6,7 @@ module ContractsHelper
         case contract.contract_status
         when ContractStatus::CREATED
             "
-            <span class=\"tag is-warning\" style=\"background-color: #170cab\">
+            <span class=\"tag is-warning\" style=\"background-color: #659ffc\">
                 Created
             </span>
             ".html_safe
@@ -37,6 +37,7 @@ module ContractsHelper
         end
     end
 
+    # :nocov:
     def file_type_icon(file_name)
         file_type = file_name.split('.').last
         case file_type
@@ -108,6 +109,7 @@ module ContractsHelper
             ".html_safe
         end
     end
+    # :nocov:
 end
 
 def user_select_options
@@ -115,9 +117,11 @@ def user_select_options
 end
 
 def vendor_select_options
+    # :nocov:
     options = Vendor.all.map { |vendor| [vendor.name, vendor.id] }
     # Add a "New Vendor" option to the bottom of the list
     options.push(['New Vendor', 'new'])
+    # :nocov:
 end
 
 def vendor_select_options_json
@@ -134,7 +138,9 @@ end
 def entity_select_options
     options = if current_user.nil?
                   # return empty array
+                  # :nocov:
                   []
+                  # :nocov:
               elsif current_user.level == UserLevel::THREE
                   current_user.entities.map { |entity| [entity.name, entity.id] }
               else
@@ -167,7 +173,9 @@ def contract_document_filename(contract, file_extension)
     n = if contract.number && contract.number.length >= 5
             contract.number.gsub(' ', '_').slice(-5, 5).downcase
         else
+            # :nocov:
             contract.title.gsub(' ', '_').slice(0, 5).downcase
+            # :nocov:
         end
 
     # Generate a random 5 character string

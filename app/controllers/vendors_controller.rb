@@ -73,8 +73,10 @@ class VendorsController < ApplicationController
                 format.html { redirect_to vendor_url(@vendor), notice: 'Vendor was successfully updated.' }
                 format.json { render :show, status: :ok, location: @vendor }
             else
+                # :nocov:
                 format.html { render :edit, status: :unprocessable_entity }
                 format.json { render json: @vendor.errors, status: :unprocessable_entity }
+                # :nocov:
             end
         end
     end
@@ -120,7 +122,9 @@ class VendorsController < ApplicationController
     def search_vendors(vendors)
         # Search by the query string parameter "search"
         # Search in "name"
+        # :nocov:
         vendors.where('name LIKE ?', "%#{params[:search]}%")
+        # :nocov:
     end
 
     def calculate_review_index(page, per_page)

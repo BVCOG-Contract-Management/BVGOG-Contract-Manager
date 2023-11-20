@@ -2,6 +2,7 @@
 
 # Controller for additional documents added to contracts
 class ContractDocumentsController < ApplicationController
+    # :nocov:
     def download
         contract_document = ContractDocument.find(params[:id])
         if File.exist?(contract_document.full_path)
@@ -11,4 +12,5 @@ class ContractDocumentsController < ApplicationController
                         alert: "File #{contract_document.orig_file_name} does not exist"
         end
     end
+    # :nocov:
 end

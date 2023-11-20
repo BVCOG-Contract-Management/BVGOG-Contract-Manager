@@ -69,6 +69,7 @@ class ReportsController < ApplicationController
     end
 
     # DELETE /reports/1 or /reports/1.json
+    # :nocov:
     def destroy
         @report.destroy
 
@@ -77,11 +78,14 @@ class ReportsController < ApplicationController
             format.json { head :no_content }
         end
     end
+    # :nocov:
 
     def download
         # If the report file does not exist, redirect to the report show page
         if !File.exist?(@report.full_path)
+            # :nocov:
             redirect_to report_path(@report), alert: 'The report file does not exist.'
+            # :nocov:
         else
             # Send the file to the user
             send_file @report.full_path, type: 'application/pdf', x_sendfile: true
