@@ -55,6 +55,9 @@ class ContractsController < ApplicationController
         end
         add_breadcrumb 'Contracts', contracts_path
         add_breadcrumb 'New Contract', new_contract_path
+        puts("Value TYPE IN NEW = #{session[:value_type]}" )
+        @value_type= ''
+        puts("Value TYPE IN NEW AFTER= #{@value_type}" )
         @contract = Contract.new
     end
 
@@ -76,11 +79,18 @@ class ContractsController < ApplicationController
 
         contract_documents_upload = params[:contract][:contract_documents]
         contract_documents_attributes = params[:contract][:contract_documents_attributes]
+        value_type_selected = params[:contract][:value_type]
         # Delete the contract_documents from the params
         # so that it doesn't get saved as a contract attribute
         params[:contract].delete(:contract_documents)
         params[:contract].delete(:contract_documents_attributes)
         params[:contract].delete(:contract_document_type_hidden)
+        params[:contract].delete(:value_type)
+        params[:contract].delete(:vendor_visible_id)
+
+        params[:contract][:totalamount] = handle_total_amount_value(params[:contract], value_type_selected)
+        puts("totalamount = #{params[:contract][:totalamount]}")
+        puts("ALL CONTRACT PARAMS  = #{contract_params.inspect}") 
 
         contract_params_clean = contract_params
         contract_params_clean.delete(:new_vendor_name)
@@ -96,7 +106,13 @@ class ContractsController < ApplicationController
                     #  Check specific for PoC since we use it down the line to check entity association
                     if contract_params[:point_of_contact_id].blank?
                         @contract.errors.add(:base, 'Point of contact is required')
-                        format.html { render :new, status: :unprocessable_entity }
+                        puts("Value TYPE = #{value_type_selected}" )
+                        format.html {
+                            session[:value_type] = value_type_selected
+                            @value_type = session[:value_type] || ''
+                            puts("Value TYPE AFTER = #{session[:value_type]}" )
+                            render :new, status: :unprocessable_entity 
+                        }
                         format.json { render json: @contract.errors, status: :unprocessable_entity }
                     elsif @contract.point_of_contact_id.present? && !User.find(@contract.point_of_contact_id).is_active
                         if User.find(@contract.point_of_contact_id).redirect_user_id.present?
@@ -106,12 +122,21 @@ class ContractsController < ApplicationController
                             @contract.errors.add(:base,
                                                  "#{User.find(@contract.point_of_contact_id).full_name} is not active")
                         end
-                        format.html { render :new, status: :unprocessable_entity }
+                        format.html {
+                            session[:value_type] = value_type_selected
+                            render :new, status: :unprocessable_entity 
+                        }
+                        # format.html { render :new, status: :unprocessable_entity, session[:value_type] = params[:contract][:value_type] }
+                        
                         format.json { render json: @contract.errors, status: :unprocessable_entity }
                     elsif User.find(@contract.point_of_contact_id).level == UserLevel::THREE && !User.find(@contract.point_of_contact_id).entities.include?(@contract.entity)
                         @contract.errors.add(:base,
                                              "#{User.find(@contract.point_of_contact_id).full_name} is not associated with #{@contract.entity.name}")
-                        format.html { render :new, status: :unprocessable_entity }
+                        # format.html { render :new, status: :unprocessable_entity,, session[:value_type] = params[:contract][:value_type] }
+                        format.html {
+                            session[:value_type] = value_type_selected
+                            render :new, status: :unprocessable_entity 
+                        }
                         format.json { render json: @contract.errors, status: :unprocessable_entity }
                     elsif @contract.save
                         if contract_documents_upload.present?
@@ -119,11 +144,16 @@ class ContractsController < ApplicationController
                                                       contract_documents_attributes)
                         end
                         format.html do
+                            session[:value_type] = nil
                             redirect_to contract_url(@contract), notice: 'Contract was successfully created.'
                         end
                         format.json { render :show, status: :created, location: @contract }
                     else
-                        format.html { render :new, status: :unprocessable_entity }
+                        format.html {
+                            session[:value_type] = value_type_selected
+                            render :new, status: :unprocessable_entity 
+                        }
+                        # format.html { render :new, status: :unprocessable_entity, session[:value_type] = params[:contract][:value_type]}
                         format.json { render json: @contract.errors, status: :unprocessable_entity }
                     end
                 end
@@ -155,9 +185,12 @@ class ContractsController < ApplicationController
         contract_documents_attributes = params[:contract][:contract_documents_attributes]
         # Delete the contract_documents from the params
         # so that it doesn't get saved as a contract attribute
+        puts("Value Type = #{params[:contract][:value_type]}")
         params[:contract].delete(:contract_documents)
         params[:contract].delete(:contract_documents_attributes)
         params[:contract].delete(:contract_document_type_hidden)
+        params[:contract].delete(:value_type)
+        params[:contract].delete(:vendor_visible_id)
 
         respond_to do |format|
             ActiveRecord::Base.transaction do
@@ -224,6 +257,17 @@ class ContractsController < ApplicationController
     #    format.json { head :no_content }
     #  end
     # end
+
+    def handle_total_amount_value(contract_params, value_type)
+        if value_type == "Not Applicable"
+          contract_params[:totalamount] = 0
+        elsif value_type == "Calculated Value"
+          # TODO: Calculate value
+        end
+      
+        contract_params[:totalamount]
+      end
+      
 
     def get_file
         contract_document = ContractDocument.find(params[:id])
@@ -301,6 +345,8 @@ class ContractsController < ApplicationController
             max_extension_count
             extension_duration
             extension_duration_units
+            value_type
+            vendor_visible_id
         ]
         params.require(:contract).permit(allowed)
     end

@@ -80,7 +80,7 @@
 						</span>
 
             <!-- the field below is visible, but not used for the form submission -->
-            <input type="text" id="vendor_visible_id" name="vendor_visible_id" class="input">
+            <input type="text" :vendor_visible_id id="vendor_visible_id" name="vendor_visible_id" class="input">
              <!-- this field below is hidden and used for form submission -->
             <%= form.hidden_field :vendor_id, class:"input", id:"vendor_id"%>
           </div>
@@ -88,15 +88,28 @@
           <script type="text/javascript">
             var vendorOptions = <%= vendor_select_options_json.html_safe %>;
 
+            // Run the function after the page loads
+            document.addEventListener('DOMContentLoaded', function() {
+                // Check if the function exists and call it
+                // if (typeof showhideTotalValueField === 'function') {
+                    showhideTotalValueField();
+                // }
+            });
             function showhideTotalValueField() {
               var selectField = document.getElementById("contractvalueselection"); 
               var textField = document.getElementById("total_value_field");
 
-               if (selectField.value === "Total Value") {
-                  textField.style.display = "block";
-                } else {
-                  textField.style.display = "none";
-                }
+              if (selectField.value === "Total Value") {
+                textField.style.display = "block";
+                textField.value = ""; 
+              } else {
+                textField.style.display = "none";
+                textField.value = ""; 
+              }
+                console.log(" showhideTotalValueField() Total amount value = ", textField.value);
+                console.log("total amount field with id = ", document.getElementById("total_value_field").value);
+                
+
             }
             function updateForm() {
               // Get the user input from the text input
@@ -381,13 +394,14 @@
 
           <div class="field">
           <%= form.label :value_type, 'Value Type' %>
-         <%# <%= form.select :value_type, ["Not Applicable", "Total Value", "Calculated Value"], 
+<%# <%= form.select :value_type, ["Not Applicable", "Total Value", "Calculated Value"], 
            {}, { id: "contractvalueselection", class: "input", onchange: "showhideTotalValueField()" }  %> 
 
-           <%= form.select :value_type,
-                ["Not Applicable", "Total Value", "Calculated Value"],
+         <%= form.select :value_type,
+                options_for_select(["Not Applicable", "Total Value", "Calculated Value"], @value_type),
                 { include_blank: true },
-                { id: "contractvalueselection", class: "input", onchange: "showhideTotalValueField()" } %>
+                { id: "contractvalueselection", class: "input", onchange: "showhideTotalValueField()"} %>
+
 
         </div>
 

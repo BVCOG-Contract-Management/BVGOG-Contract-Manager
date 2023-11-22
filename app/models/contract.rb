@@ -14,6 +14,7 @@ class Contract < ApplicationRecord
                                                                                           end_trigger == 'limited_term'
                                                                                       }
     validates :amount_dollar, numericality: { greater_than_or_equal_to: 0 }
+    validates :totalamount, numericality: { greater_than_or_equal_to: 0 }
     validates :initial_term_amount, numericality: { greater_than_or_equal_to: 0 }
     validates :contract_type, presence: true, inclusion: { in: ContractType.list }
     validates :contract_status, inclusion: { in: ContractStatus.list }
