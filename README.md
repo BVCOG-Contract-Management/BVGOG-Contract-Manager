@@ -8,6 +8,7 @@ Full-Stack source code for the BVCOG Contract Management Platform (CMS)
 
 ## Getting Started
 ### Prerequisites
+Install the following using your prefered method of instilation.
 * [Ruby](https://www.ruby-lang.org/en/downloads/) - Ruby 3.2.0
 * [Rails](https://rubyonrails.org/) - Rails 7.1.0
 * [PostgreSQL](https://www.postgresql.org/) - PostgreSQL 12.3
@@ -18,6 +19,10 @@ If the current ruby version you are currently running is not 3.2.0 you can chang
 ```bash
 /bin/bash --login
 rvm use 3.2.0
+```
+or
+```bash
+rbenv local 3.2.0
 ```
 
 ## Installing for Local Development
@@ -58,6 +63,8 @@ rvm use 3.2.0
     ```
 
 ## Deploy to Production
+You will need to be added to the GitHub repository in order to deploy the project.  
+Please contact the [Spring 2023](#spring-2023) team or the Professor to be added.
 1. Clone the repository
 	```bash
 	git clone
@@ -73,21 +80,26 @@ rvm use 3.2.0
     ```bash
     heroku login -i
     ```
-    
-   3. Login to Heroku
-    ```bash
-    heroku login -i
-    ```
 
-   4. Create an app on Heroku
+   3. Create an app on Heroku
     ```bash
-    heroku create bvcog
+    heroku create bvcog-yyyy-semester
     ```
+    Where `yyyy-semester` is the current year and semester. i.e. `2024-spring`.
 
-3. Edit credentials
+3. Set the Rails Master Key
+   Run the command
+   ```bash
+   heroku config:set RAILS_MASTER_KEY=<BVCOG-master-key>
+   ```
+   See [Rails Master Key](#rails-master-key) for more information.
+
+4. Edit credentials
     ```bash
     EDITOR=vim rails credentials:edit
     ```
+    Add appropriate credentials here.  
+    See [Rails Master Key](#rails-master-key) for more information.
 
 ## Testing
 This project has both `cucumber` and `rspec` tests.
@@ -108,9 +120,10 @@ or
 ```bash
 make rspec
 ```
+
 ## Login Credentials
 We have different user account to be able to log into the local and production environment for testing.  
-These can be found in [seeds.rb](./db/seeds.rb) but are included here as well.
+These can be found in [seeds.rb](./db/seeds.rb) but are included here as well for convenience.
 
 ### Dev/Test Users
 For local development we have the following credentials
@@ -135,7 +148,7 @@ This is set in the [`config/credentials.yml.enc`](./config/credentials.yml.enc) 
 This file is encrypted and can only be decrypted by the `config/master.key` file.  
 The `master.key` file is not included in the repository for security reasons.  
 If you need access to the `master.key` file, please contact BVCOG's IT Department.  
-Otherwise, you can set the `ENV['MAIL_PASSWORD']` environment variable to a dummy value in order to run the application locally, or delete the `config/credentials.yml.enc` file and run `rails credentials:edit` to create a new one.
+You will need BVCOG's `master.key` you **CAN NOT** generate your own.
 
 ### RuboCop
 This project uses RuboCop to ensure consistent coding standards and style across the codebase.  
@@ -149,6 +162,29 @@ or
 make rubocop
 ```
 
-### Makefile
+### Script
 A [makefile](./makefile) has been provided for your convience.  
 Use/modify it as you see fit.
+
+A [deploy script](./script/deploy/deploy.sh) has been provided for your convience.  
+Use/modify it as you see fit.  
+Note: the [Fall 2023](#fall-2023) team deprecated this script, if you have questions about it, ask the [Spring 2023](#spring-2023) team
+
+## Contacting the Team
+Please contact the most recent team.
+
+### Fall 2023
+| Team member          | Email                 |
+| -------------------- | --------------------- |
+| Huy Lai              | lai.huy.075@gmail.com |
+| Thomas Manzini       | tom.m@nzini.com       |
+| Shreya Gubbi Prakash | shreyagp@tamu.edu     |
+| Neha Manghnani       | nehajm@tamu.edu       |
+
+### Spring 2023
+| Team member      | Email                 |
+| ---------------- | --------------------- |
+| Liam Berney      | liamrberney@gmail.com |
+| Matan Broner     | matanbroner@gmail.com |
+| Chrysanthos Pepi | cpepi001@outlook.com  |
+| Hanrui Chen      | No Email Given        |
