@@ -22,6 +22,8 @@ Given('{int} example users exist') do |num_users|
         FactoryBot.create(:user,
                           id: i,
                           program: Program.all.sample,
+                          first_name: 'User',
+                          last_name: i.to_s,
                           entities: Entity.all.sample(rand(1..3)))
     end
 end
@@ -61,6 +63,7 @@ end
 
 Given('{int} example contracts exist') do |num_contracts|
     # Create multiple contracts
+    statuses = ContractStatus.list.reject { |status| status == :created }
     (1..num_contracts).each do |i|
         d = Time.zone.today + 1.day * i
         FactoryBot.create(
@@ -79,7 +82,8 @@ Given('{int} example contracts exist') do |num_contracts|
             extension_count: i,
             max_extension_count: i,
             extension_duration: i,
-            extension_duration_units: TimePeriod::MONTH
+            extension_duration_units: TimePeriod::MONTH,
+            contract_status: statuses[i % statuses.length]
         )
     end
 end

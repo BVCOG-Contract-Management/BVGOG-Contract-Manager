@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Controller for vendor reviews
 class VendorReviewsController < ApplicationController
     before_action :set_vendor, only: [:create]
 
@@ -20,14 +21,8 @@ class VendorReviewsController < ApplicationController
                 format.html { redirect_to new_vendor_vendor_review_path(@vendor), alert: "Description can't be blank." }
                 format.json { render json: { error: "Description can't be blank." }, status: :unprocessable_entity }
             elsif @vendor_review.description.length > 2048
-                format.html do
-                    redirect_to new_vendor_vendor_review_path(@vendor),
-                                alert: "Description can't be more than 2048 characters."
-                end
-                format.json do
-                    render json: { error: "Description can't be more than 2048 characters." },
-                           status: :unprocessable_entity
-                end
+                format.html { redirect_to new_vendor_vendor_review_path(@vendor), alert: "Description can't be more than 2048 characters." }
+                format.json { render json: { error: "Description can't be more than 2048 characters." }, status: :unprocessable_entity }
             elsif @vendor_review.save
                 format.html { redirect_to vendor_url(@vendor), notice: 'Review was successfully saved.' }
                 format.json { render :show, status: :created, location: @vendor }

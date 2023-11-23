@@ -8,6 +8,10 @@ When('I visit user invites') do
     visit '/users/invitation/new'
 end
 
+When('I visit the edit page for user {int}') do |user|
+    visit "/users/#{user}/edit"
+end
+
 When('I try to redirect this user') do
     find('div.card-footer-item:contains("Redirect this user")').click
 end
@@ -22,7 +26,7 @@ Given('I am logged in as a level 1 user') do
         :user,
         email: 'level1@example.com',
         password: 'password',
-        first_name: 'Level',
+        first_name: 'Admin',
         last_name: 'One',
         level: UserLevel::ONE,
         program: Program.all.sample,
@@ -40,11 +44,11 @@ Given('I am logged in as a level 2 user') do
         :user,
         email: 'level2@example.com',
         password: 'password',
-        first_name: 'Level',
+        first_name: 'Gatekeeper',
         last_name: 'Two',
         level: UserLevel::TWO,
         program: Program.all.sample,
-        entities: [Entity.first]
+        entities: Entity.all
     )
 
     step 'I fill in "Email" with "level2@example.com"'
@@ -58,7 +62,7 @@ Given('I am logged in as a level 3 user') do
         :user,
         email: 'level3@example.com',
         password: 'password',
-        first_name: 'Level',
+        first_name: 'User',
         last_name: 'Three',
         level: UserLevel::THREE,
         program: Program.all.sample,
@@ -88,7 +92,8 @@ Given(/^an example inactive user exists/) do
         level: UserLevel::ONE,
         program: Program.all.sample,
         entities: [Entity.first],
-        is_active: false
+        is_active: false,
+        redirect_user: nil
     )
 end
 

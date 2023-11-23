@@ -54,7 +54,7 @@ Scenario: Create a contract with an inactive point of contract who has a redirec
 	Then I should see "Inactive User is not active"
 
 Scenario: Create a contract with an inactive point of contract who does not have a redirect user.
-	Given an example inactive user with a redirect user exists
+	Given an example inactive user exists
 	And I am on the new contract page
 	When I fill in "Title" with "TestContract"
 	And I select "Contract" from the "Contract Type" select box

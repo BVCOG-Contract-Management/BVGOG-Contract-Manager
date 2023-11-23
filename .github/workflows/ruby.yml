@@ -1,72 +1,72 @@
 name: Ruby
 on:
-  push:
-    branches: [ main, test ]
-  pull_request:
-    branches: [ main, test ]
+    push:
+        branches: [main, test]
+    pull_request:
+        branches: [main, test]
 jobs:
-  format:
-    if: github.event.pull_request.merged == true
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Ruby 3.2.0
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 3.2.0
-          bundler-cache: true
-      - name: Install dependencies
-        run: |
-          sudo apt-get install libpq-dev
-          gem install bundler
-          gem install rufo
-          bundle install
-      - name: Run Rufo
-        run: |
-          rufo .
-      - name: Check for Rufo changes
-        run: |
-          git diff --exit-code
-      - name: Push Rufo changes
-        if: steps.git-check.outputs.modified == 'true'
-        run: |
-          git config --global user.name 'Github Actions'
-          git config --global user.email 'github-actions@users.noreply.github.com'
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
-          git commit -am "Automated formatting changes"
-          git push
+    format:
+        if: github.event.pull_request.merged == true
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - name: Set up Ruby 3.2.0
+              uses: ruby/setup-ruby@v1
+              with:
+                  ruby-version: 3.2.0
+                  bundler-cache: true
+            - name: Install dependencies
+              run: |
+                  sudo apt-get install libpq-dev
+                  gem install bundler
+                  gem install rubocop
+                  bundle install
+            - name: Run rubocop
+              run: |
+                  rubocop --config .rubocop.yml --autocorrect-all
+            - name: Check for Rubocop changes
+              run: |
+                  git diff --exit-code
+            - name: Push Rufo changes
+              run: |
+                  git config --global user.name 'Github Actions'
+                  git config --global user.email 'github-actions@users.noreply.github.com'
+                  git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+                  git commit -am "Automated formatting changes"
+                  git push
 
-  test:
-    runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres:12.2
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: postgres
-        ports:
-          - 5432:5432
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Ruby 3.2.0
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 3.2.0
-          bundler-cache: true
-      - name: Install dependencies
-        run: |
-          sudo apt-get install libpq-dev
-          gem install bundler
-          bundle install
-      - name: Setup database
-        env: 
-          RAILS_ENV: test
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
-        run: |
-          bundle exec rails db:prepare
-          bundle exec rails db:migrate
-          bundle exec rspec spec
-
-      
+    test:
+        runs-on: ubuntu-latest
+        services:
+            postgres:
+                image: postgres:12.2
+                env:
+                    POSTGRES_USER: postgres
+                    POSTGRES_PASSWORD: postgres
+                    POSTGRES_DB: postgres
+                ports:
+                    - 5432:5432
+                options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+        steps:
+            - uses: actions/checkout@v3
+            - name: Set up Ruby 3.2.0
+              uses: ruby/setup-ruby@v1
+              with:
+                  ruby-version: 3.2.0
+                  bundler-cache: true
+            - name: Install dependencies
+              run: |
+                  sudo apt-get install libpq-dev
+                  gem install bundler
+                  bundle install
+            - name: Setup database
+              env:
+                  RAILS_ENV: test
+                  DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
+              run: |
+                  rm -f ./db/development.sqlite3
+                  rm -f ./db/test.sqlite3
+                  bundle exec rails db:create
+                  bundle exec rails db:migrate
+                  bundle exec rails db:seed
+                  bundle exec cucumber --publish-quiet --profile default

@@ -14,8 +14,9 @@ require 'factory_bot_rails'
 # orig_stdout = $stdout.clone
 # $stdout.reopen(File.new('/dev/null', 'w'))
 
-# ------------ PROD SEEDS ------------ #
 if Rails.env.production?
+    # ------------ PROD SEEDS ------------
+
     PROGRAM_NAMES = [
         '9-1-1',
         'AAA',
@@ -116,8 +117,9 @@ if Rails.env.production?
         )
     end
 
-    contact_person = User.find_by(email: 'user@example.com')
+    # contact_person = User.find_by(email: 'user@example.com')
     # Create some documents with nearby expiries to test expiring docs mailer
+    statuses = ContractStatus.list.reject { |status| status == :created }
     (1..100).each do |i|
         d = Time.zone.today + 1.day * i
         FactoryBot.create(
@@ -136,7 +138,8 @@ if Rails.env.production?
             extension_count: i,
             max_extension_count: i,
             extension_duration: i,
-            extension_duration_units: TimePeriod::MONTH
+            extension_duration_units: TimePeriod::MONTH,
+            contract_status: statuses.sample
         )
     end
 
@@ -182,7 +185,8 @@ else
         last_name: 'User',
         program: Program.all.sample,
         entities: Entity.all.sample(rand(0..Entity.count)),
-        level: UserLevel::ONE
+        level: UserLevel::ONE,
+        invitation_accepted_at: Time.zone.now
     )
 
     # Create Gatekeeper
@@ -194,7 +198,8 @@ else
         last_name: 'User',
         program: Program.all.sample,
         entities: Entity.all.sample(rand(0..Entity.count)),
-        level: UserLevel::TWO
+        level: UserLevel::TWO,
+        invitation_accepted_at: Time.zone.now
     )
 
     # Create User
@@ -206,7 +211,8 @@ else
         last_name: 'User',
         program: Program.all.sample,
         entities: Entity.all.sample(rand(0..Entity.count)),
-        level: UserLevel::THREE
+        level: UserLevel::THREE,
+        invitation_accepted_at: Time.zone.now
     )
 
     (1..50).each do |i|
@@ -219,6 +225,7 @@ else
 
         # Create Contracts
         d = Time.zone.today + 1.day * i
+        statuses = ContractStatus.list.reject { |status| status == :created }
         FactoryBot.create(
             :contract,
             id: i,
@@ -235,7 +242,8 @@ else
             extension_count: i,
             max_extension_count: i,
             extension_duration: i.months,
-            extension_duration_units: TimePeriod::MONTH
+            extension_duration_units: TimePeriod::MONTH,
+            contract_status: statuses.sample
         )
     end
 
@@ -251,7 +259,14 @@ else
             vendor: Vendor.all.sample,
             entity: Entity.all.sample,
             ends_at: Time.zone.today + 1.day * i,
-            ends_at_final: Time.zone.today + 2.days * i
+            ends_at_final: Time.zone.today + 2.days * i,
+            max_renewal_count: i,
+            renewal_duration: i.days,
+            renewal_duration_units: TimePeriod::DAY,
+            extension_count: i,
+            max_extension_count: i,
+            extension_duration: i.months,
+            extension_duration_units: TimePeriod::MONTH
         )
     end
 

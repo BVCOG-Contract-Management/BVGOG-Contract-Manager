@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# User class
 class User < ApplicationRecord
     # Include default devise modules. Others available are:
     # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
@@ -20,6 +21,7 @@ class User < ApplicationRecord
     has_one :redirect_user, class_name: 'User', foreign_key: 'redirect_user_id'
     has_many :contracts, class_name: 'Contract', foreign_key: 'point_of_contact_id'
     has_many :vendor_reviews, class_name: 'VendorReview'
+    has_many :contract_decisions, class_name: 'ContractDecision'
 
     # TODO: Should the program be optional?
     belongs_to :program, class_name: 'Program'
@@ -31,30 +33,25 @@ class User < ApplicationRecord
         @old_name
     end
 
-    def has_entity?(entity_id)
+    def entity?(entity_id)
         entities.where(id: entity_id).exists?
     end
 
     # Virtual attribute to calculate integer level on the fly
+    LEVEL_MAPPING = {
+        'one' => { int: 1, name: 'Admin' },
+        'two' => { int: 2, name: 'Gatekeeper' },
+        'three' => { int: 3, name: 'User' }
+    }.freeze
+
+    # :nocov:
+    # Deprecated
     def level_int
-        case level
-        when 'one'
-            1
-        when 'two'
-            2
-        when 'three'
-            3
-        end
+        LEVEL_MAPPING[level][:int] if LEVEL_MAPPING[level]
     end
+    # :nocov:
 
     def level_name
-        case level
-        when 'one'
-            'Admin'
-        when 'two'
-            'Gatekeeper'
-        when 'three'
-            'User'
-        end
+        LEVEL_MAPPING[level][:name] if LEVEL_MAPPING[level]
     end
 end

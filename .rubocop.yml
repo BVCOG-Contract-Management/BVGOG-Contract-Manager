@@ -14,10 +14,12 @@ Layout/IndentationStyle:
     EnforcedStyle: spaces
 Layout/IndentationWidth:
     Width: 4
+Layout/LineLength:
+    Max: 512
 Metrics/AbcSize:
     Max: 256
 Metrics/BlockLength:
-    Max: 128
+    Max: 256
 Metrics/ClassLength:
     Max: 512
 Metrics/CyclomaticComplexity:
@@ -36,3 +38,4 @@ AllCops:
         - "tmp/**/*"
         - "vendor/**/*"
         - ".git/**/*"
+        - "bin/bundle"

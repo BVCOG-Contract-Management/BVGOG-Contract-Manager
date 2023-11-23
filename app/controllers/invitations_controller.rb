@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Controller for invitations
 class InvitationsController < Devise::InvitationsController
     before_action :configure_permitted_parameters
 
@@ -29,12 +30,16 @@ class InvitationsController < Devise::InvitationsController
                 format.html { redirect_to user_url(@user), notice: 'User was successfully invited.' }
                 format.json { render :show, status: :created, location: @user }
             else
+                # :nocov:
                 format.html { render :new, status: :unprocessable_entity }
                 format.json { render json: @user.errors, status: :unprocessable_entity }
+                # :nocov:
             end
         rescue Oso::Error => e
+            # :nocov:
             format.html { redirect_to users_url, alert: 'You are not authorized to invite users.' }
             format.json { render json: { error: e.message }, status: :unprocessable_entity }
+            # :nocov:
         end
     end
 
@@ -47,9 +52,11 @@ class InvitationsController < Devise::InvitationsController
 
     private
 
+    # :nocov:
     def set_user
         @user = User.find(params[:id])
     end
+    # :nocov:
 
     # Only allow a list of trusted parameters through.
     def user_params

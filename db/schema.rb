@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_07_163604) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_08_185332) do
   create_table "bvcog_configs", force: :cascade do |t|
     t.text "contracts_path", null: false
     t.text "reports_path", null: false
@@ -23,6 +23,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_07_163604) do
     t.integer "user_id"
     t.index ["bvcog_config_id"], name: "index_bvcog_configs_users_on_bvcog_config_id"
     t.index ["user_id"], name: "index_bvcog_configs_users_on_user_id"
+  end
+
+  create_table "contract_decisions", force: :cascade do |t|
+    t.integer "contract_id", null: false
+    t.integer "user_id", null: false
+    t.string "reason"
+    t.text "decision", default: "in_progress", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["contract_id"], name: "index_contract_decisions_on_contract_id"
+    t.index ["user_id"], name: "index_contract_decisions_on_user_id"
   end
 
   create_table "contract_documents", force: :cascade do |t|
@@ -165,6 +176,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_07_163604) do
     t.index ["name"], name: "index_vendors_on_name", unique: true
   end
 
+  add_foreign_key "contract_decisions", "contracts"
+  add_foreign_key "contract_decisions", "users"
   add_foreign_key "contract_documents", "contracts"
   add_foreign_key "contracts", "entities"
   add_foreign_key "contracts", "programs"

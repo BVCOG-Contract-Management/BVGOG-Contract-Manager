@@ -22,19 +22,11 @@ class Report < ApplicationRecord
         # Filter by program
         contracts = contracts.where(program_id: report.program_id) if report.program_id.present?
         # Filter by point of contact
-        if report.point_of_contact_id.present?
-            contracts = contracts.where(point_of_contact_id: report.point_of_contact_id)
-        end
+        contracts = contracts.where(point_of_contact_id: report.point_of_contact_id) if report.point_of_contact_id.present?
         # Filter by expiring in days
-        if report.expiring_in_days.present?
-            contracts = contracts.where('ends_at <= ?', report.expiring_in_days.days.from_now)
-        end
-        if report.show_expired_contracts.present? && report.show_expired_contracts.blank?
-            contracts = contracts.where('ends_at >= ?', Time.zone.today)
-        end
-        if User.find(report.created_by).level == UserLevel::THREE
-            contracts = contracts.where(entity_id: User.find(report.created_by).entities.pluck(:id))
-        end
+        contracts = contracts.where('ends_at <= ?', report.expiring_in_days.days.from_now) if report.expiring_in_days.present?
+        contracts = contracts.where('ends_at >= ?', Time.zone.today) if report.show_expired_contracts.present? && report.show_expired_contracts.blank?
+        contracts = contracts.where(entity_id: User.find(report.created_by).entities.pluck(:id)) if User.find(report.created_by).level == UserLevel::THREE
         # Return the contracts
         contracts
     end

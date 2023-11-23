@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Contracts
 class Contract < ApplicationRecord
     validates :title, presence: true, length: { maximum: 255 }
     validates :description, length: { maximum: 2048 }
@@ -14,7 +15,6 @@ class Contract < ApplicationRecord
                                                                                           end_trigger == 'limited_term'
                                                                                       }
     validates :amount_dollar, numericality: { greater_than_or_equal_to: 0 }
-    validates :totalamount, numericality: { greater_than_or_equal_to: 0 }
     validates :initial_term_amount, numericality: { greater_than_or_equal_to: 0 }
     validates :contract_type, presence: true, inclusion: { in: ContractType.list }
     validates :contract_status, inclusion: { in: ContractStatus.list }
@@ -29,6 +29,7 @@ class Contract < ApplicationRecord
     belongs_to :point_of_contact, class_name: 'User'
     belongs_to :vendor, class_name: 'Vendor'
     has_many :contract_documents, class_name: 'ContractDocument'
+    has_many :decisions, class_name: 'ContractDecision'
 
     # Enums
     has_enumeration_for :contract_type, with: ContractType, create_helpers: true
@@ -38,14 +39,19 @@ class Contract < ApplicationRecord
     has_enumeration_for :end_trigger, with: EndTrigger, create_helpers: true
 
     # Methods
+    # Deprecated
+    # :nocov:
     def send_expiry_reminder
         ContractMailer.expiry_reminder(self).deliver_now
     end
+    # :nocov:
 
+    # Deprecated
+    # :nocov:
     def expired?
-        # TODO: Verify this behavior.
-        ends_at < Date.today or final_ends_at < Date.today
+        ends_at < Time.zone.today or final_ends_at < Time.zone.today
     end
+    # :nocov:
 
     public :send_expiry_reminder
 end

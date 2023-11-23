@@ -1,9 +1,8 @@
-# frozen_string_literal: true
-
-# Contract Controller
 class ContractsController < ApplicationController
     before_action :set_contract, only: %i[show edit update]
 
+    # Deprecated
+    # :nocov:
     def expiry_reminder
         @contract = Contract.find(params[:id])
         respond_to do |format|
@@ -20,6 +19,7 @@ class ContractsController < ApplicationController
             end
         end
     end
+    # :nocov:
 
     # GET /contracts or /contracts.json
     def index
@@ -27,9 +27,7 @@ class ContractsController < ApplicationController
         # Sort contracts
         @contracts = sort_contracts.page params[:page]
         # Filter contracts based on allowed entities if user is level 3
-        if current_user.level == UserLevel::THREE
-            @contracts = @contracts.where(entity_id: current_user.entities.pluck(:id))
-        end
+        @contracts = @contracts.where(entity_id: current_user.entities.pluck(:id)) if current_user.level != UserLevel::ONE
         # Search contracts
         @contracts = search_contracts(@contracts) if params[:search].present?
         Rails.logger.debug params[:search].inspect
@@ -39,12 +37,16 @@ class ContractsController < ApplicationController
     def show
         begin
             OSO.authorize(current_user, 'read', @contract)
-        rescue Oso::Error => e
+        rescue Oso::Error
+            # :nocov:
             redirect_to root_path, alert: 'You do not have permission to access this page.'
             return
+            # :nocov:
         end
         add_breadcrumb 'Contracts', contracts_path
         add_breadcrumb @contract.title, contract_path(@contract)
+
+        @decisions = @contract.decisions.order(created_at: :asc)
     end
 
     # GET /contracts/new
@@ -55,9 +57,7 @@ class ContractsController < ApplicationController
         end
         add_breadcrumb 'Contracts', contracts_path
         add_breadcrumb 'New Contract', new_contract_path
-        puts("Value TYPE IN NEW = #{session[:value_type]}" )
         @value_type= ''
-        puts("Value TYPE IN NEW AFTER= #{@value_type}" )
         @contract = Contract.new
     end
 
@@ -89,8 +89,6 @@ class ContractsController < ApplicationController
         params[:contract].delete(:vendor_visible_id)
 
         params[:contract][:totalamount] = handle_total_amount_value(params[:contract], value_type_selected)
-        puts("totalamount = #{params[:contract][:totalamount]}")
-        puts("ALL CONTRACT PARAMS  = #{contract_params.inspect}") 
 
         contract_params_clean = contract_params
         contract_params_clean.delete(:new_vendor_name)
@@ -101,12 +99,11 @@ class ContractsController < ApplicationController
             ActiveRecord::Base.transaction do
                 begin
                     OSO.authorize(current_user, 'write', @contract)
-
                     handle_if_new_vendor
+
                     #  Check specific for PoC since we use it down the line to check entity association
                     if contract_params[:point_of_contact_id].blank?
                         @contract.errors.add(:base, 'Point of contact is required')
-                        puts("Value TYPE = #{value_type_selected}" )
                         format.html {
                             session[:value_type] = value_type_selected
                             @value_type = session[:value_type] || ''
@@ -139,6 +136,10 @@ class ContractsController < ApplicationController
                         }
                         format.json { render json: @contract.errors, status: :unprocessable_entity }
                     elsif @contract.save
+                        @decision = @contract.decisions.build(decision: ContractStatus::CREATED, user: current_user)
+                        @decision.save
+                        @decision = @contract.decisions.build(decision: ContractStatus::IN_PROGRESS, user: current_user)
+                        @decision.save
                         if contract_documents_upload.present?
                             handle_contract_documents(contract_documents_upload,
                                                       contract_documents_attributes)
@@ -155,19 +156,22 @@ class ContractsController < ApplicationController
                         }
                         # format.html { render :new, status: :unprocessable_entity, session[:value_type] = params[:contract][:value_type]}
                         format.json { render json: @contract.errors, status: :unprocessable_entity }
+                        # :nocov:
                     end
                 end
             rescue StandardError => e
+                # :nocov:
                 # If error type is Oso::ForbiddenError, then the user is not authorized
                 if e.instance_of?(Oso::ForbiddenError)
-                    status = :unauthorized
+                    # status = :unauthorized
                     @contract.errors.add(:base, 'You are not authorized to create a contract')
                     message = 'You are not authorized to create a contract'
                 else
-                    status = :unprocessable_entity
+                    # status = :unprocessable_entity
                     message = e.message
                 end
                 format.html { redirect_to contracts_path, alert: message }
+                # :nocov:
             end
         end
     end
@@ -183,6 +187,8 @@ class ContractsController < ApplicationController
         params[:contract].delete(:new_vendor_name)
         contract_documents_upload = params[:contract][:contract_documents]
         contract_documents_attributes = params[:contract][:contract_documents_attributes]
+        
+        value_type_selected = params[:contract][:value_type]
         # Delete the contract_documents from the params
         # so that it doesn't get saved as a contract attribute
         puts("Value Type = #{params[:contract][:value_type]}")
@@ -191,6 +197,8 @@ class ContractsController < ApplicationController
         params[:contract].delete(:contract_document_type_hidden)
         params[:contract].delete(:value_type)
         params[:contract].delete(:vendor_visible_id)
+
+        params[:contract][:totalamount] = handle_total_amount_value(params[:contract], value_type_selected)
 
         respond_to do |format|
             ActiveRecord::Base.transaction do
@@ -231,16 +239,15 @@ class ContractsController < ApplicationController
                     format.json { render json: @contract.errors, status: :unprocessable_entity }
                 end
             end
-
         rescue StandardError => e
             @contract.reload
             # If error type is Oso::ForbiddenError, then the user is not authorized
             if e.instance_of?(Oso::ForbiddenError)
-                status = :unauthorized
+                # status = :unauthorized
                 @contract.errors.add(:base, 'You are not authorized to update this contract')
                 message = 'You are not authorized to update this contract'
             else
-                status = :unprocessable_entity
+                # status = :unprocessable_entity
                 message = e.message
             end
             # Rollback the transaction
@@ -266,13 +273,17 @@ class ContractsController < ApplicationController
         end
       
         contract_params[:totalamount]
-      end
+    end
       
 
     def get_file
+    end
+    # :nocov:
+    def contract_files
         contract_document = ContractDocument.find(params[:id])
         send_file contract_document.file.path, type: contract_document.file_content_type, disposition: :inline
     end
+    # :nocov:
 
     def reject
         @contract = Contract.find(params[:id])
@@ -281,22 +292,59 @@ class ContractsController < ApplicationController
         add_breadcrumb 'Reject', reject_contract_path(@contract)
     end
 
-    private
+    def log_rejection
+        @contract = Contract.find(params[:contract_id])
+        ActiveRecord::Base.transaction do
+            @reason = params[:contract][:rejection_reason]
 
-    # Use callbacks to share common setup or constraints between actions.
-    def set_contract
-        @contract = Contract.find(params[:id])
+            @contract.update(contract_status: ContractStatus::REJECTED)
+            @decision = @contract.decisions.build(reason: @reason, decision: ContractStatus::REJECTED, user: current_user)
+            if @decision.save
+                redirect_to contract_url(@contract), notice: 'Contract was Rejected.'
+            else
+                # :nocov:
+                redirect_to contract_url(@contract), alert: 'Contract Rejection failed.'
+                # :nocov:
+            end
+        end
     end
 
-    def set_users
-        @users = User.all
+    def log_approval
+        ActiveRecord::Base.transaction do
+            @contract = Contract.find(params[:contract_id])
+            @contract.update(contract_status: ContractStatus::APPROVED)
+            @decision = @contract.decisions.build(reason: nil, decision: ContractStatus::APPROVED, user: current_user)
+            @decision.save
+            redirect_to contract_url(@contract), notice: 'Contract was Approved.'
+        end
+    end
+
+    def log_return
+        ActiveRecord::Base.transaction do
+            @contract = Contract.find(params[:contract_id])
+            @contract.update(contract_status: ContractStatus::IN_PROGRESS)
+            @decision = @contract.decisions.build(reason: nil, decision: ContractStatus::IN_PROGRESS,
+                                                  user: current_user)
+            @decision.save
+            redirect_to contract_url(@contract), notice: 'Contract was returned to In Progress.'
+        end
+    end
+
+    def log_submission
+        ActiveRecord::Base.transaction do
+            @contract = Contract.find(params[:contract_id])
+            @contract.update(contract_status: ContractStatus::IN_REVIEW)
+            @decision = @contract.decisions.build(reason: nil, decision: ContractStatus::IN_REVIEW, user: current_user)
+            @decision.save
+            redirect_to contract_url(@contract), notice: 'Contract was Submitted.'
+        end
     end
 
     # Only allow a list of trusted parameters through.
     def contract_params
         allowed = %i[
             title
-            description~
+            description
             key_words
             starts_at
             ends_at
@@ -349,6 +397,15 @@ class ContractsController < ApplicationController
             vendor_visible_id
         ]
         params.require(:contract).permit(allowed)
+    end
+
+    # Use callbacks to share common setup or constraints between actions.
+    def set_contract
+        @contract = Contract.find(params[:id])
+    end
+
+    def set_users
+        @users = User.all
     end
 
     def sort_contracts

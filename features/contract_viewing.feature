@@ -22,7 +22,7 @@ Scenario: Search contracts
 	Given I am on the contracts page
 	And I fill in "search" with "Contract 11"
 	And I follow "Contract 1"
-	Then I should see "Edit this contract"
+	Then I should see "Contract 1"
 
 Scenario: Search contracts
 	Given I am on the contracts page
@@ -42,12 +42,10 @@ Scenario: Look at paginated contracts
 	Then I should see "Contract 11"
 	And I should see "Contract 12"
 
-
 Scenario: Try to go next on last page
 	Given I am on the contracts page
 	And I follow "Last"
 	Then I should not see "Next"
-
 
 Scenario: Try to go next on first page
 	Given I am on the contracts page

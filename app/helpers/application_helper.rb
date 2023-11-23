@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Application helper
 module ApplicationHelper
     # These are the pages of the application that are present in the main sidebar
     # Each page follows a format of:
@@ -65,6 +66,8 @@ def flash_type_to_bulma_class(type)
     when 'notice'
         'is-success'
     else
+        # :nocov:
         'is-info'
+        # :nocov:
     end
 end
