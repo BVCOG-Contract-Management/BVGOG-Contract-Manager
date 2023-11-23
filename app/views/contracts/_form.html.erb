@@ -252,13 +252,27 @@
                         </div>
                         <div class="column is-4">
                             <div class="field" id="initial_end_date_entry">
-                            <%= form.label :curent_end_date %>
+                            <%= form.label :curent_end_date do %>
+                            <div class="icon-text">
+                                <span class="icon has-text-info" id="contract-current-end-date-modal-open-btn">
+                                    <i class="fas fa-circle-info"></i>
+                                </span>
+                                <span>Current End Date</span>
+                            </div>
+                            <% end %>
                             <%= form.date_field :ends_at, class: "input" %>
                             </div>
                         </div>
                         <div class="column is-4">
                             <div class="field" id="final_end_date_entry">
-                            <%= form.label :ends_at_final, "Final end date"%>
+                            <%= form.label :ends_at_final do %>
+                            <div class="icon-text">
+                                <span class="icon has-text-info" id="contract-final-end-date-modal-open-btn">
+                                    <i class="fas fa-circle-info"></i>
+                                </span>
+                                <span>Final End Date</span>
+                            </div>
+                            <% end %>
                             <%= form.date_field :ends_at_final, class: "input" %>
                             </div>
                         </div>
@@ -268,21 +282,30 @@
                     <%# Dollar Amount and Amount Duration %>
                     <div class="columns">
                         <div class="column is-6">
-                        <div class="field">
-                            <%= form.label :amount_dollar, "Dollar amount" %>
-                            <p class="control has-icons-left">
-                            <%= form.number_field :amount_dollar, class: "input", id: "contract-form-dollar-amount" %>
-                            <span class="icon is-small is-left">
-                                <i class="fas fa-dollar"></i>
-                            </span>
-                            </p>
+                            <div class="field">
+                                <%= form.label :amount_dollar do %>
+                                    <div class="icon-text">
+                                        <span class="icon has-text-info" id="contract-interim-amount-modal-open-btn">
+                                            <i class="fas fa-circle-info"></i>
+                                        </span>
+                                        <span>Interim Amount</span>
+                                    </div>
+                                <% end %>
+                                <p class="control has-icons-left">
+                                    <%= form.number_field :amount_dollar, class: "input", id: "contract-form-dollar-amount" %>
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-dollar"></i>
+                                    </span>
+                                </p>
+                            </div>
                         </div>
+                        <div class="column is-1">
+                            <p class="is-size-4 has-text-centered">per</p>
                         </div>
-                        <div class="column is-6">
-                        <div class="field">
-                            <%= form.label :amount_duration %>
-                            <%= form.select :amount_duration, TimePeriod.to_a, {:include_blank => true}, class: "input" %>
-                        </div>
+                        <div class="column is-5">
+                            <div class="field">
+                                <%= form.select :amount_duration, TimePeriod.to_a, {:include_blank => true}, class: "input" %>
+                            </div>
                         </div>
                     </div>
 
@@ -381,19 +404,26 @@
 
                     <%# Contract Documents %>
                     <div class="field">
-                        <%= form.label :contract_documents %>
+                        <%= form.label :contract_documents do %>
+                            <div class="icon-text">
+                                <span class="icon has-text-info" id="contract-documents-modal-open-btn">
+                                    <i class="fas fa-circle-info"></i>
+                                </span>
+                                <span>Contract Documents</span>
+                            </div>
+                        <% end %>
                         <div class="file">
-                        <label class="file-label">
-                            <%= form.file_field :contract_documents, multiple: true, class: "file-input", id: "contract-documents-file-input" %>
-                            <span class="file-cta">
-                            <span class="file-icon">
-                                <i class="fas fa-upload"></i>
-                            </span>
-                            <span class="file-label">
-                                Choose files...
-                            </span>
-                            </span>
-                        </label>
+                            <label class="file-label">
+                                <%= form.file_field :contract_documents, multiple: true, class: "file-input", id: "contract-documents-file-input" %>
+                                <span class="file-cta">
+                                    <span class="file-icon">
+                                        <i class="fas fa-upload"></i>
+                                    </span>
+                                    <span class="file-label">
+                                        Choose files...
+                                    </span>
+                                </span>
+                            </label>
                         </div>
                     </div>
 
@@ -656,6 +686,84 @@
             This date is usually stated on the first page of the contract or just above the signatures.<br>
             If no effective date is stated, use the latest date of the signatures.
         </div>
+        </section>
+        <footer class="modal-card-foot">
+        <button class="button modal-close-btn">Close</button>
+        </footer>
+    </div>
+</div>
+
+<div class="modal" id="contract-interim-amount-modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <div class="icon-text">
+            <p class="modal-card-title">Interim Amount</p>
+            </div>
+        </header>
+        <section class="modal-card-body">
+        <div class="content">
+            Enter the Interim Amount if the contract has a limited value that occurs each year/quarter/month.
+        </div>
+        </section>
+        <footer class="modal-card-foot">
+        <button class="button modal-close-btn">Close</button>
+        </footer>
+    </div>
+</div>
+
+<div class="modal" id="contract-documents-modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <div class="icon-text">
+            <p class="modal-card-title">Contract Documents</p>
+            </div>
+        </header>
+        <section class="modal-card-body">
+        <div class="content">
+            Upload as many contract documents as necessary, including any procurement files, debarment checks, cost analysis, etc.<br>
+            Include contract amendments each time the contract is extended.
+        </section>
+        <footer class="modal-card-foot">
+        <button class="button modal-close-btn">Close</button>
+        </footer>
+    </div>
+</div>
+
+<div class="modal" id="contract-current-end-date-modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <div class="icon-text">
+            <p class="modal-card-title">Current End Date</p>
+            </div>
+        </header>
+        <section class="modal-card-body">
+        <div class="content">
+            The expiration date of the contract.<br>
+            For contracts that have optional extensions, this is the next date the contract will need to be extended.<br>
+            If the contract is in its last option period, this date is the same as the Final End Date.<br>
+            Change this field each time the contract is extended.
+        </section>
+        <footer class="modal-card-foot">
+        <button class="button modal-close-btn">Close</button>
+        </footer>
+    </div>
+</div>
+
+<div class="modal" id="contract-final-end-date-modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <div class="icon-text">
+            <p class="modal-card-title">Final End Date</p>
+            </div>
+        </header>
+        <section class="modal-card-body">
+        <div class="content">
+            The last possible expiration date of the contract.<br>
+            If the contract has optional extensions, this date is the last possible date if all extensions are used.
         </section>
         <footer class="modal-card-foot">
         <button class="button modal-close-btn">Close</button>
