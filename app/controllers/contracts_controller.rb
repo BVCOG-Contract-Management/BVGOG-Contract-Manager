@@ -58,6 +58,7 @@ class ContractsController < ApplicationController
         add_breadcrumb 'Contracts', contracts_path
         add_breadcrumb 'New Contract', new_contract_path
         @value_type= ''
+        @vendor_visible_id =''
         @contract = Contract.new
     end
 
@@ -80,6 +81,9 @@ class ContractsController < ApplicationController
         contract_documents_upload = params[:contract][:contract_documents]
         contract_documents_attributes = params[:contract][:contract_documents_attributes]
         value_type_selected = params[:contract][:value_type]
+        # puts("PARAMS = #{params.inspect}")
+        # puts("VENDOR TYPE = #{params[:vendor_visible_id]}")
+        vendor_selection = params[:vendor_visible_id]
         # Delete the contract_documents from the params
         # so that it doesn't get saved as a contract attribute
         params[:contract].delete(:contract_documents)
@@ -106,6 +110,8 @@ class ContractsController < ApplicationController
                         @contract.errors.add(:base, 'Point of contact is required')
                         format.html {
                             session[:value_type] = value_type_selected
+                            session[:vendor_visible_id] = vendor_selection
+                            @vendor_visible_id = session[:vendor_visible_id] || ''
                             @value_type = session[:value_type] || ''
                             puts("Value TYPE AFTER = #{session[:value_type]}" )
                             render :new, status: :unprocessable_entity 
@@ -121,6 +127,9 @@ class ContractsController < ApplicationController
                         end
                         format.html {
                             session[:value_type] = value_type_selected
+                            session[:vendor_visible_id] = vendor_selection
+                            @vendor_visible_id = session[:vendor_visible_id] || ''
+                            @value_type = session[:value_type] || ''
                             render :new, status: :unprocessable_entity 
                         }
                         # format.html { render :new, status: :unprocessable_entity, session[:value_type] = params[:contract][:value_type] }
@@ -132,6 +141,9 @@ class ContractsController < ApplicationController
                         # format.html { render :new, status: :unprocessable_entity,, session[:value_type] = params[:contract][:value_type] }
                         format.html {
                             session[:value_type] = value_type_selected
+                            session[:vendor_visible_id] = vendor_selection
+                            @vendor_visible_id = session[:vendor_visible_id] || ''
+                            @value_type = session[:value_type] || ''
                             render :new, status: :unprocessable_entity 
                         }
                         format.json { render json: @contract.errors, status: :unprocessable_entity }
@@ -146,12 +158,16 @@ class ContractsController < ApplicationController
                         end
                         format.html do
                             session[:value_type] = nil
+                            session[:vendor_visible_id] = nil
                             redirect_to contract_url(@contract), notice: 'Contract was successfully created.'
                         end
                         format.json { render :show, status: :created, location: @contract }
                     else
                         format.html {
                             session[:value_type] = value_type_selected
+                            session[:vendor_visible_id] = vendor_selection
+                            @vendor_visible_id = session[:vendor_visible_id] || ''
+                            @value_type = session[:value_type] || ''
                             render :new, status: :unprocessable_entity 
                         }
                         # format.html { render :new, status: :unprocessable_entity, session[:value_type] = params[:contract][:value_type]}

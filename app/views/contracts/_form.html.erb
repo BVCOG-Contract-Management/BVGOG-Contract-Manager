@@ -80,7 +80,7 @@
                         </span>
 
             <!-- the field below is visible, but not used for the form submission -->
-            <input type="text" :vendor_visible_id id="vendor_visible_id" name="vendor_visible_id" class="input">
+            <input type="text" id="vendor_visible_id" name="vendor_visible_id" class="input" value="<%= @vendor_visible_id %>">
              <!-- this field below is hidden and used for form submission -->
             <%= form.hidden_field :vendor_id, class:"input", id:"vendor_id"%>
           </div>
@@ -93,8 +93,30 @@
                 // Check if the function exists and call it
                 // if (typeof showhideTotalValueField === 'function') {
                     showhideTotalValueField();
+                    showVendorField();
                 // }
             });
+
+            function showVendorField() {
+                var selectField = document.getElementById("vendor_visible_id"); 
+                console.log("showVendorField() selectField.value = ", selectField.value);
+                var newvendorselectfield = document.getElementById("new_vendor_field");
+                var textField = document.getElementById("new_vendor_name");
+    
+                if (selectField.value === "New Vendor") {
+                    textField.style.display = "block";
+                    console.log("in IF --- showVendorField() selectField.value = ", selectField.value);
+                    // textField.style.visibility = "visible";
+                    textField.value = ""; 
+                } else {
+                    textField.style.display = "none";
+                    console.log( "in ELSE --- showVendorField() selectField.value = ", selectField.value);
+                    // textField.style.visibility = "hidden";
+                    textField.value = ""; 
+                }
+                   
+            } 
+
             function showhideTotalValueField() {
               var selectField = document.getElementById("contractvalueselection"); 
               var textField = document.getElementById("total_value_field");
@@ -154,7 +176,7 @@
                     <!-- A text input field for entering a new vendor name, initially hidden -->
                     <div id="new_vendor_field" class="field is-hidden">
                         <%= form.label :new_vendor_name %>
-                        <%= form.text_field :new_vendor_name, class: "input" %>
+                        <%= form.text_field :new_vendor_name, class: "input", id:"new_vendor_name" %>
                     </div>
 
                     <%# Description %>
