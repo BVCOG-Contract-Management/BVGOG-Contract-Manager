@@ -86,8 +86,6 @@ class ContractsController < ApplicationController
         contract_documents_upload = params[:contract][:contract_documents]
         contract_documents_attributes = params[:contract][:contract_documents_attributes]
         value_type_selected = params[:contract][:value_type]
-        puts("PARAMS = #{params.inspect}")
-        # puts("VENDOR TYPE = #{params[:vendor_visible_id]}")
         vendor_selection = params[:vendor_visible_id]
         # Delete the contract_documents from the params
         # so that it doesn't get saved as a contract attribute
@@ -208,8 +206,11 @@ class ContractsController < ApplicationController
         params[:contract].delete(:new_vendor_name)
         contract_documents_upload = params[:contract][:contract_documents]
         contract_documents_attributes = params[:contract][:contract_documents_attributes]
+
         
+        vendor_selection = params[:vendor_visible_id]
         value_type_selected = params[:contract][:value_type]
+
         # Delete the contract_documents from the params
         # so that it doesn't get saved as a contract attribute
         puts("Params = #{params.inspect}")
@@ -226,7 +227,13 @@ class ContractsController < ApplicationController
                 OSO.authorize(current_user, 'edit', @contract)
                 if @contract[:point_of_contact_id].blank? && contract_params[:point_of_contact_id].blank?
                     @contract.errors.add(:base, 'Point of contact is required')
-                    format.html { render :edit, status: :unprocessable_entity }
+                    format.html { 
+                        session[:value_type] = value_type_selected
+                        session[:vendor_visible_id] = vendor_selection
+                        @vendor_visible_id = session[:vendor_visible_id] || ''
+                        @value_type = session[:value_type] || ''
+                        render :edit, status: :unprocessable_entity 
+                    }
                     format.json { render json: @contract.errors, status: :unprocessable_entity }
                 elsif contract_params[:point_of_contact_id].present? && !User.find(contract_params[:point_of_contact_id]).is_active
                     if User.find(contract_params[:point_of_contact_id]).redirect_user_id.present?
@@ -236,7 +243,13 @@ class ContractsController < ApplicationController
                         @contract.errors.add(:base,
                                              "#{User.find(contract_params[:point_of_contact_id]).full_name} is not active")
                     end
-                    format.html { render :edit, status: :unprocessable_entity }
+                    format.html { 
+                        session[:value_type] = value_type_selected
+                        session[:vendor_visible_id] = vendor_selection
+                        @vendor_visible_id = session[:vendor_visible_id] || ''
+                        @value_type = session[:value_type] || ''
+                        render :edit, status: :unprocessable_entity 
+                    }
                     format.json { render json: @contract.errors, status: :unprocessable_entity }
 
                 # Excuse this monster if statement, it's just checking if the user is associated with the entity, and for
@@ -244,7 +257,13 @@ class ContractsController < ApplicationController
                 elsif contract_params[:point_of_contact_id].present? && User.find(contract_params[:point_of_contact_id]).level == UserLevel::THREE && !User.find(contract_params[:point_of_contact_id]).entities.include?(Entity.find((contract_params[:entity_id].presence || @contract.entity_id)))
                     @contract.errors.add(:base,
                                          "#{User.find((contract_params[:point_of_contact_id].presence || @contract.point_of_contact_id)).full_name} is not associated with #{Entity.find((contract_params[:entity_id].presence || @contract.entity_id)).name}")
-                    format.html { render :edit, status: :unprocessable_entity }
+                    format.html { 
+                        session[:value_type] = value_type_selected
+                        session[:vendor_visible_id] = vendor_selection
+                        @vendor_visible_id = session[:vendor_visible_id] || ''
+                        @value_type = session[:value_type] || ''
+                        render :edit, status: :unprocessable_entity 
+                    }
                     format.json { render json: @contract.errors, status: :unprocessable_entity }
                 elsif @contract.update(contract_params)
                     if contract_documents_upload.present?
@@ -252,11 +271,19 @@ class ContractsController < ApplicationController
                                                   contract_documents_attributes)
                     end
                     format.html do
+                        session[:value_type] = nil
+                        session[:vendor_visible_id] = nil
                         redirect_to contract_url(@contract), notice: 'Contract was successfully updated.'
                     end
                     format.json { render :show, status: :ok, location: @contract }
                 else
-                    format.html { render :edit, status: :unprocessable_entity }
+                    format.html { 
+                        session[:value_type] = value_type_selected
+                        session[:vendor_visible_id] = vendor_selection
+                        @vendor_visible_id = session[:vendor_visible_id] || ''
+                        @value_type = session[:value_type] || ''
+                        render :edit, status: :unprocessable_entity 
+                    }
                     format.json { render json: @contract.errors, status: :unprocessable_entity }
                 end
             end
