@@ -96,6 +96,12 @@ if Rails.env.production?
 
     # Create multiple contracts
     (1..50).each do |i|
+        FactoryBot.create(
+            :vendor,
+            id: i,
+            name: "Vendor #{i}"
+        )
+
         d = Time.zone.today + 1.day * i
         FactoryBot.create(
             :contract,

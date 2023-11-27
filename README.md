@@ -8,12 +8,13 @@ Full-Stack source code for the BVCOG Contract Management Platform (CMS)
 
 ## Getting Started
 ### Prerequisites
+These instructions assume that you are operating Ubuntu 22.04 either on a Linux machine or using Windows Submachine for Linux.  
 Install the following using your prefered method of instilation.
 * [Ruby](https://www.ruby-lang.org/en/downloads/) - Ruby 3.2.0
 * [Rails](https://rubyonrails.org/) - Rails 7.1.0
-* [PostgreSQL](https://www.postgresql.org/) - PostgreSQL 12.3
 * [Make](https://www.gnu.org/software/make/manual/make.html) - Make 4.3
 * [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli) - heroku/8.4.2 wsl-x64 node-v16.19.0
+* [PostgreSQL](https://www.postgresql.org/) - PostgreSQL 12.3
 
 If the current ruby version you are currently running is not 3.2.0 you can change it as follows:
 ```bash
@@ -98,14 +99,14 @@ Please contact the [Spring 2023](#spring-2023) team or the Professor to be added
     ```bash
     EDITOR=vim rails credentials:edit
     ```
-    Add appropriate credentials here.  
+    Ensure that `ENV['MAIL_PASSWORD']` is set, it if is not, please look through the git commit history to find the original credential files.  
     See [Rails Master Key](#rails-master-key) for more information.
 
 ## Testing
 This project has both `cucumber` and `rspec` tests.
 ### Cucumber
 ```bash
-bundle exec cucumber --profile default
+bundle exec cucumber --profile default --out ./out.log
 ```
 or
 ```bash
@@ -126,7 +127,7 @@ We have different user account to be able to log into the local and production e
 These can be found in [seeds.rb](./db/seeds.rb) but are included here as well for convenience.
 
 ### Dev/Test Users
-For local development we have the following credentials
+For local development we have the following credentials:
 | User Access Level | Username               | password |
 | ----------------- | ---------------------- | -------- |
 | Admin             | admin@example.com      | password |
@@ -140,6 +141,9 @@ When deployed to Heroku, we have the following credentials.
 | Admin             | admin@bvcogdev.com      | password |
 | Gatekeeper        | gatekeeper@bvcogdev.com | password |
 | User              | user@bvcogdev.com       | password |
+
+These can be found in [`db/seeds.rb`](./db/seeds.rb) but have been included here for your convinence.  
+Note: the production seeds will be overriden when you deliver the product to the customer.  
 
 ## Notes
 ### Rails Master Key
