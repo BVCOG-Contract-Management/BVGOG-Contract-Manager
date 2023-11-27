@@ -30,7 +30,7 @@ Given('I am logged in as a level 1 user') do
         last_name: 'One',
         level: UserLevel::ONE,
         program: Program.all.sample,
-        entities: [Entity.first]
+        entities: Entity.all
     )
 
     step 'I fill in "Email" with "level1@example.com"'
@@ -66,7 +66,7 @@ Given('I am logged in as a level 3 user') do
         last_name: 'Three',
         level: UserLevel::THREE,
         program: Program.all.sample,
-        entities: [Entity.first]
+        entities: Entity.all
     )
 
     step 'I fill in "Email" with "level3@example.com"'
