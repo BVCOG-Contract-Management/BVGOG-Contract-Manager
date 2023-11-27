@@ -112,6 +112,7 @@ class ContractsController < ApplicationController
                     if contract_params[:point_of_contact_id].blank?
                         @contract.errors.add(:base, 'Point of contact is required')
                         format.html {
+                            #to retain the value of the vendor dropdown and value type dropdown after validation error
                             session[:value_type] = value_type_selected
                             session[:vendor_visible_id] = vendor_selection
                             @vendor_visible_id = session[:vendor_visible_id] || ''
@@ -129,6 +130,7 @@ class ContractsController < ApplicationController
                                                  "#{User.find(@contract.point_of_contact_id).full_name} is not active")
                         end
                         format.html {
+                            #to retain the value of the vendor dropdown and value type dropdown after validation error
                             session[:value_type] = value_type_selected
                             session[:vendor_visible_id] = vendor_selection
                             @vendor_visible_id = session[:vendor_visible_id] || ''
@@ -143,6 +145,7 @@ class ContractsController < ApplicationController
                                              "#{User.find(@contract.point_of_contact_id).full_name} is not associated with #{@contract.entity.name}")
                         # format.html { render :new, status: :unprocessable_entity,, session[:value_type] = params[:contract][:value_type] }
                         format.html {
+                            #to retain the value of the vendor dropdown and value type dropdown after validation error
                             session[:value_type] = value_type_selected
                             session[:vendor_visible_id] = vendor_selection
                             @vendor_visible_id = session[:vendor_visible_id] || ''
@@ -160,6 +163,8 @@ class ContractsController < ApplicationController
                                                       contract_documents_attributes)
                         end
                         format.html do
+                            #erase the session value after successful creation of contract
+                            #so that the value of the dropdowns will not be retained for the next contract creation
                             session[:value_type] = nil
                             session[:vendor_visible_id] = nil
                             redirect_to contract_url(@contract), notice: 'Contract was successfully created.'
@@ -167,6 +172,7 @@ class ContractsController < ApplicationController
                         format.json { render :show, status: :created, location: @contract }
                     else
                         format.html {
+                            #to retain the value of the vendor dropdown and value type dropdown after validation error
                             session[:value_type] = value_type_selected
                             session[:vendor_visible_id] = vendor_selection
                             @vendor_visible_id = session[:vendor_visible_id] || ''
@@ -242,6 +248,7 @@ class ContractsController < ApplicationController
                                              "#{User.find(contract_params[:point_of_contact_id]).full_name} is not active")
                     end
                     format.html { 
+                        #to retain the value of the vendor dropdown and value type dropdown after validation error
                         session[:value_type] = value_type_selected
                         session[:vendor_visible_id] = vendor_selection
                         @vendor_visible_id = session[:vendor_visible_id] || ''
@@ -256,6 +263,7 @@ class ContractsController < ApplicationController
                     @contract.errors.add(:base,
                                          "#{User.find((contract_params[:point_of_contact_id].presence || @contract.point_of_contact_id)).full_name} is not associated with #{Entity.find((contract_params[:entity_id].presence || @contract.entity_id)).name}")
                     format.html { 
+                        #to retain the value of the vendor dropdown and value type dropdown after validation error
                         session[:value_type] = value_type_selected
                         session[:vendor_visible_id] = vendor_selection
                         @vendor_visible_id = session[:vendor_visible_id] || ''
@@ -269,6 +277,8 @@ class ContractsController < ApplicationController
                                                   contract_documents_attributes)
                     end
                     format.html do
+                        #erase the session value after successful creation of contract
+                        #so that the value of the dropdowns will not be retained for the next contract creation
                         session[:value_type] = nil
                         session[:vendor_visible_id] = nil
                         redirect_to contract_url(@contract), notice: 'Contract was successfully updated.'
@@ -276,6 +286,7 @@ class ContractsController < ApplicationController
                     format.json { render :show, status: :ok, location: @contract }
                 else
                     format.html { 
+                        #to retain the value of the vendor dropdown and value type dropdown after validation error
                         session[:value_type] = value_type_selected
                         session[:vendor_visible_id] = vendor_selection
                         @vendor_visible_id = session[:vendor_visible_id] || ''
@@ -325,8 +336,8 @@ class ContractsController < ApplicationController
     def get_calculated_value(contract_params)
         amount_dollar = contract_params[:amount_dollar].to_i       # the value of the contract for the amount_duration (days, weeks, months, years)
         initial_term = contract_params[:initial_term_amount].to_i  # no. of days, weeks, months, years the contract is for
-        amount_duration_value = contract_params[:amount_duration]
-        initial_term_duration_value = contract_params[:initial_term_duration]
+        amount_duration_value = contract_params[:amount_duration]  # the amount of the contract for {days, weeks, months, years}
+        initial_term_duration_value = contract_params[:initial_term_duration] # the number of {days, weeks, months, years} the contract is for
         
         case amount_duration_value
         when 'day'
