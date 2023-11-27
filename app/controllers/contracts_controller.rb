@@ -57,8 +57,9 @@ class ContractsController < ApplicationController
         end
         add_breadcrumb 'Contracts', contracts_path
         add_breadcrumb 'New Contract', new_contract_path
-        @value_type= ''
-        @vendor_visible_id =''
+        
+        @vendor_visible_id = ''
+        @value_type=  ''
         @contract = Contract.new
     end
 
@@ -70,6 +71,10 @@ class ContractsController < ApplicationController
         end
         add_breadcrumb 'Contracts', contracts_path
         add_breadcrumb @contract.title, contract_path(@contract)
+        vendor = Vendor.find_by(id: @contract.vendor_id)
+        vendor_name = vendor.name if vendor.present? || ''
+        
+        @vendor_visible_id = vendor_name || ''
         add_breadcrumb 'Edit', edit_contract_path(@contract)
     end
 
