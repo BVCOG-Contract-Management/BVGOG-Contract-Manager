@@ -44,6 +44,8 @@ end
 
 When('I fill in the {string} field with {string}') do |field_name, start_date|
     fill_in field_name, with: start_date
+end
+
 When('I fill in the {string} field with {string}') do |field_name, value|
     fill_in field_name, with: value
 end
