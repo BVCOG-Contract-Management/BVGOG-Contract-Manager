@@ -207,13 +207,11 @@ class ContractsController < ApplicationController
         contract_documents_upload = params[:contract][:contract_documents]
         contract_documents_attributes = params[:contract][:contract_documents_attributes]
 
-        
         vendor_selection = params[:vendor_visible_id]
         value_type_selected = params[:contract][:value_type]
 
         # Delete the contract_documents from the params
         # so that it doesn't get saved as a contract attribute
-        puts("Params = #{params.inspect}")
         params[:contract].delete(:contract_documents)
         params[:contract].delete(:contract_documents_attributes)
         params[:contract].delete(:contract_document_type_hidden)
@@ -318,31 +316,15 @@ class ContractsController < ApplicationController
           contract_params[:totalamount] = 0
         elsif value_type == "Calculated Value"
             contract_params[:totalamount]= get_calculated_value(contract_params) 
- 
+        
         end
       
         contract_params[:totalamount]
     end
       
     def get_calculated_value(contract_params)
-        # start_date = contract_params[:starts_at]
-        # end_date = contract_params[:ends_at]
         amount_dollar = contract_params[:amount_dollar].to_i       # the value of the contract for the amount_duration (days, weeks, months, years)
         initial_term = contract_params[:initial_term_amount].to_i  # no. of days, weeks, months, years the contract is for
-        
-        # contract_duration = ''
-        # getting the duration of the contract if the start and end date are present (in case of 'limited term' contract)
-        # if start_date.present? && end_date.present?
-        #     contract_duration = (end_date.to_date - start_date.to_date).to_i 
-        # end
-        
-        # if contract_duration.blank?
-        #     initial_term_duration_value = contract_params[:initial_term_duration]
-        # else 
-        #     #if contract duration is present, then it is a limited term contract, and the initial term is 
-        #     initial_term_duration_value = 'day'
-        #     initial_term_amount = contract_duration
-        # end 
         amount_duration_value = contract_params[:amount_duration]
         initial_term_duration_value = contract_params[:initial_term_duration]
         
