@@ -77,6 +77,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_08_185332) do
     t.integer "max_extension_count"
     t.integer "extension_duration"
     t.string "extension_duration_units"
+    t.float "totalamount"
     t.index ["entity_id"], name: "index_contracts_on_entity_id"
     t.index ["point_of_contact_id"], name: "index_contracts_on_point_of_contact_id"
     t.index ["program_id"], name: "index_contracts_on_program_id"
