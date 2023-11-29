@@ -393,14 +393,12 @@
                             </div>
                             <div class="column is-3">
                                 <div class="field bottom-align">
-                                <%= form.label :extension_count, "Remaining extensions" %>
+                                <%= form.label :extension_count, "Number of Extensions" %>
                                 <%= form.number_field :extension_count, class: "input" %>
                                 </div>
                             </div>
                             <div class="column is-3">
                                 <div class="field bottom-align">
-                                <%= form.label :max_extension_count, "Maximum extensions" %>
-                                <%= form.number_field :max_extension_count, class: "input" %>
                                 </div>
                             </div>
                         </div>
@@ -422,12 +420,6 @@
                     <div class="field" id="total_value_field" style="display: none;" >
                         <%= form.label :totalamount, 'Total Value' %>
                         <%= form.text_field :totalamount, id: "total_amount", class: "input"  %>
-                    </div>
-
-                    <%# Requires Rebid %>
-                    <div class="field">
-                        <%= form.label :requires_rebid %>
-                        <%= form.check_box :requires_rebid, class: "checkbox" %>
                     </div>
 
                     <%# Contract Documents %>
