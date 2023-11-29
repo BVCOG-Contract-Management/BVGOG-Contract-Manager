@@ -70,6 +70,14 @@ When('I select {string} from the end trigger dropdown') do |end_trigger|
     select end_trigger, from: 'contract[end_trigger]'
 end
 
+When('I select {string} from the contract types dropdown') do |contract_type|
+    select contract_type, from: 'contract[contract_type]'
+end
+
+When('I select {string} from the amount duration dropdown') do |duration|
+    select duration, from: 'contract[amount_duration]'
+end
+
 When('I follow \/contract_documents\/{int}"') do |int|
     visit "/contract_documents/#{int}"
 end
