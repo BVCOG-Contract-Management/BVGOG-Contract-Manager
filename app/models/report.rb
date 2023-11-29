@@ -125,12 +125,13 @@ class Report < ApplicationRecord
         report_pdf.text 'Filters', align: :center, size: 18, style: :bold
         report_pdf.move_down 10
         table_data = []
-        table_data << ['Entity', 'Program', 'Point of Contact', 'Expiring in Days', 'Show Expired']
+        table_data << ['Entity', 'Program', 'Point of Contact', 'Contract Type', 'Expiring in Days', 'Show Expired']
         poc = User.find(report.point_of_contact_id) if report.point_of_contact_id.present?
         table_data << [
             report.entity_id.present? ? Entity.find(report.entity_id).name : 'All',
             report.program_id.present? ? Program.find(report.program_id).name : 'All',
             report.point_of_contact_id.present? ? "#{poc.first_name} #{poc.last_name}" : 'All',
+            report.contract_type.present? ? report.contract_type : 'All',
             (report.expiring_in_days.presence || 'All'),
             if report.show_expired_contracts.present?
                 report.show_expired_contracts ? 'Yes' : 'No'
@@ -160,7 +161,7 @@ class Report < ApplicationRecord
                 contract.vendor.name,
                 contract.contract_type_humanize,
                 "$#{contract.amount_dollar.round(2)} per #{contract.amount_duration_humanize}",
-                contract.ends_at.strftime('%m/%d/%Y')
+                contract.ends_at.nil? ? '' : contract.ends_at.strftime('%m/%d/%Y')
             ]
         end
         # Add the table to the PDF

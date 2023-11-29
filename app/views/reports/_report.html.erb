@@ -55,6 +55,21 @@
                                         <td>All</td>
                                     </tr>
                                 <% end %>
+
+                                        
+                                <% if @report.contract_type.present? %>
+                                        <tr>
+                                            <td><strong>Contract Type:</strong></td>
+                                            <td><%= @report.contract_type.to_s.humanize.capitalize %></td>
+                                        </tr>
+                                <% else %>
+                                        <tr>
+                                            <td><strong>Contract Type:</strong></td>
+                                            <td>All</td>
+                                        </tr>
+                                <% end %>
+                                
+
                                 <% if @report.expiring_in_days.present? %>
                                     <tr>
                                         <td><strong>Expiring in:</strong></td>
@@ -117,7 +132,11 @@
                                         <%= link_to contract.title, contract_path(contract) %>
                                     </td>
                                     <td><%= contract.number %></td>
-                                    <td><%= contract.ends_at.strftime("%m/%d/%Y") %></td>
+                                    <% if contract.ends_at.present? %>
+                                        <td><%= contract.ends_at.strftime("%m/%d/%Y") %></td>
+                                    <% else %>
+                                        <td></td>
+                                    <% end %>
                                 </tr>
                             <% end %>
                         </table>
