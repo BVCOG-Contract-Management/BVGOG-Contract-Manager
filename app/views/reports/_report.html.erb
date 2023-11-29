@@ -60,7 +60,7 @@
                                 <% if @report.contract_type.present? %>
                                         <tr>
                                             <td><strong>Contract Type:</strong></td>
-                                            <td><%= @report.contract_type.to_s.humanize.capitalize %></td>
+                                            <td><%= ContractType::OPTIONS[@report.contract_type.to_sym] %></td>
                                         </tr>
                                 <% else %>
                                         <tr>
