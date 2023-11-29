@@ -30,28 +30,15 @@
                                 <td><%= @contract.initial_term_amount %> <%= @contract.initial_term_duration %><%= @contract.initial_term_amount > 1 ? "s" : "" %></td>
                             </tr>
 
-                            <% if @contract.renewal_count && contract.end_trigger == "limited_term"%>
-                                <tr>
-                                    <td><strong>Remaining renewals:</strong></td>
-                                    <td><%= @contract.renewal_count %></td>
-                                </tr>
-                            <% end %>
-                            <% if @contract.renewal_count && contract.end_trigger == "limited_term"%>
-                                <tr>
-                                    <td><strong>Renewal Period:</strong></td>
-                                    <td><%= @contract.renewal_duration %> <%= @contract.renewal_duration_units %><%= @contract.renewal_duration > 1 ? "s" : "" %></td></td>
-                                </tr>
-                            <% end %>
-
                             <% if @contract.extension_count && contract.end_trigger == "limited_term"%>
                                 <tr>
                                     <td><strong>Remaining extensions:</strong></td>
                                     <td><%= @contract.extension_count %></td>
                                 </tr>
                             <% end %>
-                            <% if @contract.renewal_count && contract.end_trigger == "limited_term"%>
+                            <% if @contract.extension_count && contract.end_trigger == "limited_term"%>
                                 <tr>
-                                    <td><strong>Renewal Period:</strong></td>
+                                    <td><strong>Extension Period:</strong></td>
                                     <td><%= @contract.extension_duration %> <%= @contract.extension_duration_units %><%= @contract.extension_duration > 1 ? "s" : "" %></td></td>
                                 </tr>
                             <% end %>

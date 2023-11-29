@@ -489,10 +489,6 @@ class ContractsController < ApplicationController
             contract_documents
             contract_documents_attributes
             contract_document_type_hidden
-            renewal_count
-            max_renewal_count
-            renewal_duration
-            renewal_duration_units
             extension_count
             max_extension_count
             extension_duration
