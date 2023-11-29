@@ -20,7 +20,7 @@ Scenario: Sucessfully create a contract
 	And I select "Contract" from the contract types dropdown
 	And I fill in "Number" with "23"
 	And I fill in the vendor field with vendor value "new"
-	And I fill in the "contract_new_vendor_name" field with "Test Vendor"
+	And I fill in the "contract[new_vendor_name]" field with "Test Vendor"
 	And I select "Example User" from the point of contact dropdown
 	And I select "Program 1" from the program dropdown
 	And I select "Entity 1" from the entity dropdown
@@ -40,7 +40,7 @@ Scenario: Create a contract with an inactive point of contract who has a redirec
 	And I select "Contract" from the contract types dropdown
 	And I fill in "Number" with "23"
 	And I fill in the vendor field with vendor value "new"
-	And I fill in the "contract_new_vendor_name" field with "Test Vendor"
+	And I fill in the "contract[new_vendor_name]" field with "Test Vendor"
 	And I select "Inactive User" from the point of contact dropdown
 	And I select "Program 1" from the program dropdown
 	And I select "Entity 1" from the entity dropdown
@@ -60,7 +60,7 @@ Scenario: Create a contract with an inactive point of contract who does not have
 	And I select "Contract" from the contract types dropdown
 	And I fill in "Number" with "23"
 	And I fill in the vendor field with vendor value "new"
-	And I fill in the "contract_new_vendor_name" field with "Test Vendor"
+	And I fill in the "contract[new_vendor_name]" field with "Test Vendor"
 	And I select "Inactive User" from the point of contact dropdown
 	And I select "Program 1" from the program dropdown
 	And I select "Entity 1" from the entity dropdown
