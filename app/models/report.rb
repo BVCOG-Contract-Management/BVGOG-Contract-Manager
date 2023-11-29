@@ -14,14 +14,8 @@ class Report < ApplicationRecord
     alias_attribute :created_by, :user_id
 
     def query_filtered_report_contracts
-        puts()
         report = self
         # Get the contracts
-
-        # Print the value of report
-        puts "Value of report: #{report.inspect}"
-
-        puts "Getting all the reports"
         contracts = Contract.all
         # Filter by entity
         contracts = contracts.where(entity_id: report.entity_id) if report.entity_id.present?

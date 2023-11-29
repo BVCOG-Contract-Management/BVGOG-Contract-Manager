@@ -68,11 +68,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_29_173405) do
     t.text "end_trigger"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "renewal_count", default: 1
     t.date "ends_at_final"
-    t.integer "max_renewal_count"
-    t.integer "renewal_duration"
-    t.string "renewal_duration_units"
     t.integer "extension_count"
     t.integer "max_extension_count"
     t.integer "extension_duration"
