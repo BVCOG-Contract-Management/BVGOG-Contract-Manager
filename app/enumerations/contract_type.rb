@@ -11,4 +11,14 @@ class ContractType < EnumerateIt::Base
         :letter_of_intent,
         :other
     )
+
+    OPTIONS = {
+        contract: "Contract",
+        grant: "Grant",
+        property_lease: "Property Lease",
+        ila: "ILA",
+        mou_moa: "MOU/MOA",
+        letter_of_intent: "Letter of Intent",
+        other: "Other"
+      }
 end

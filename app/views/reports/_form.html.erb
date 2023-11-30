@@ -53,6 +53,12 @@
                             <%= form.select :entity_id, entity_select_options, {:include_blank => true}, class: "input" %>
                         </div>
 
+                        <%# Contract Type %>
+                        <div class="field">
+                            <%= form.label :contract_type %>
+                            <%= form.select :contract_type, ContractType.to_a, {:include_blank => true}, class: "input" %>
+                        </div>
+
                         <%# Show Expired Contracts %>
                         <div class="field">
                             <%= form.label :show_expired_contracts %>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_08_185332) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_29_173405) do
   create_table "bvcog_configs", force: :cascade do |t|
     t.text "contracts_path", null: false
     t.text "reports_path", null: false
@@ -115,6 +115,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_08_185332) do
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
     t.boolean "show_expired_contracts", default: false
+    t.string "contract_type"
     t.index ["entity_id"], name: "index_reports_on_entity_id"
     t.index ["point_of_contact_id"], name: "index_reports_on_point_of_contact_id"
     t.index ["program_id"], name: "index_reports_on_program_id"
