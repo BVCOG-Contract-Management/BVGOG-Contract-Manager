@@ -33,10 +33,10 @@ RSpec.describe '/contracts', type: :request do
         vendor = create(:vendor)
         return build(
             :contract,
-            entity:,
-            program:,
-            point_of_contact:,
-            vendor:
+            entity: entity,
+            program: program,
+            point_of_contact: point_of_contact,
+            vendor: vendor
         ).attributes
     end
 
