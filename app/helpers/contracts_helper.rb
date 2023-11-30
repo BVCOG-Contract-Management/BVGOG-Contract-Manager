@@ -116,13 +116,13 @@ def user_select_options
     options = User.all.map { |user| [user.full_name, user.id] }
 end
 
-def vendor_select_options
-    # :nocov:
-    options = Vendor.all.map { |vendor| [vendor.name, vendor.id] }
-    # Add a "New Vendor" option to the bottom of the list
-    options.push(['New Vendor', 'new'])
-    # :nocov:
-end
+# def vendor_select_options
+#     # :nocov:
+#     options = Vendor.all.map { |vendor| [vendor.name, vendor.id] }
+#     # Add a "New Vendor" option to the bottom of the list
+#     options.push(['New Vendor', 'new'])
+#     # :nocov:
+# end
 
 def vendor_select_options_json
     options = Vendor.all.map { |vendor| { label: vendor.name, value: vendor.id } }
