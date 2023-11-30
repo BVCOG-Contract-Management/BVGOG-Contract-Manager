@@ -21,7 +21,7 @@ class Report < ApplicationRecord
         contracts = contracts.where(entity_id: report.entity_id) if report.entity_id.present?
         # Filter by program
         contracts = contracts.where(program_id: report.program_id) if report.program_id.present?
-        # Filter by program
+        # Filter by contract type
         contracts = contracts.where(contract_type: report.contract_type) if report.contract_type.present?
         # Filter by point of contact
         contracts = contracts.where(point_of_contact_id: report.point_of_contact_id) if report.point_of_contact_id.present?
