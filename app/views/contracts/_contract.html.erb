@@ -178,6 +178,7 @@
                     </div>
                 </div>
             </div>
+            <% if @decisions.present? %>
             <div class="column is-12 is-paddingless">
                 <div class="card">
                     <header class="card-header">
@@ -189,21 +190,22 @@
                             <tr>
                                 <td>
                                     <strong>Event:</strong> 
-                                    <% if decision.decision == ContractStatus::CREATED %>
+                                    <% case decision.decision %>
+                                    <% when ContractStatus::CREATED %>
                                         Created
-                                    <% elsif decision.decision == ContractStatus::IN_PROGRESS %>
+                                    <% when ContractStatus::IN_PROGRESS %>
                                         Moved to "In Progress"
-                                    <% elsif decision.decision == ContractStatus::IN_REVIEW %>
+                                    <% when ContractStatus::IN_REVIEW %>
                                         Moved to "In Review"
-                                    <% elsif decision.decision == ContractStatus::REJECTED %>
+                                    <% when ContractStatus::REJECTED %>
                                         Rejected
-                                    <% elsif decision.decision == ContractStatus::APPROVED %>
+                                    <% when ContractStatus::APPROVED %>
                                         Approved
-                                    <% end %> 
+                                    <% end %>
                                     <br>
                                     <strong>User:</strong> <%= link_to decision.user.full_name, user_path(decision.user) %><br>
                                     <strong>Date:</strong> <%= decision.created_at %><br>
-                                    <% if decision.reason != nil %>
+                                    <% if decision.reason.present? %>
                                         <strong>Reason:</strong> <%= decision.reason %><br>
                                     <% end %>
                                 </td>
@@ -213,5 +215,6 @@
                     </table>
                 </div>
             </div>
+            <% end %>
         </div>
 </div>
