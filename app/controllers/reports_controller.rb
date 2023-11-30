@@ -109,6 +109,7 @@ class ReportsController < ApplicationController
             point_of_contact_id
             entity_id
             program_id
+            contract_type
             expiring_in_days
             show_expired_contracts
         ]
