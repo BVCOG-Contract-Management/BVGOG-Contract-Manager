@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# report model
 class Report < ApplicationRecord
     EXPIRATION_OPTIONS = [30, 60, 90].freeze
 
