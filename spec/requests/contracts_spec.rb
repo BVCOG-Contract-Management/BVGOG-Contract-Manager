@@ -87,6 +87,7 @@ RSpec.describe '/contracts', type: :request do
     describe 'POST /create' do
         context 'with valid parameters' do
             it 'creates a new Contract' do
+                puts "Valid Attributes: #{valid_attributes}"
                 expect do
                     post contracts_url, params: { contract: valid_attributes }
                 end.to change(Contract, :count).by(1)
