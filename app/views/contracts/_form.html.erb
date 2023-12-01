@@ -43,9 +43,6 @@
                                 <span>Title</span>
                             </div>
                         <% end %>
-                        <span class="help">
-                            Click the information icon above for more information.
-                        </span>
                         <%= form.text_field :title, class: "input" %>
                     </div>
 
@@ -59,9 +56,6 @@
                                 <span>Number</span>
                             </div>
                         <% end %>
-                        <span class="help">
-                            Click the information icon above for more information.
-                        </span>
                         <%= form.text_field :number, class: "input" %>
                     </div>
 
@@ -75,9 +69,6 @@
                                 <span>Vendor</span>
                             </div>
                         <% end %>
-                        <span class="help">
-                            Click the information icon above for more information.
-                        </span>
 
 
             <!-- the field below is visible, but not used for the form submission -->
@@ -180,9 +171,6 @@
                                 <span>Description</span>
                             </div>
                         <% end %>
-                        <span class="help">
-                            Click the information icon above for more information.
-                        </span>
                         <%= form.text_area :description, class: "textarea" %>
                     </div>
 
@@ -202,9 +190,6 @@
                                 <span>Point of Contact</span>
                             </div>
                         <% end %>
-                        <span class="help">
-                            Click the information icon above for more information.
-                        </span>
                         <%= form.select :point_of_contact_id, user_select_options, {:include_blank => true}, class: "input" %>
                     </div>
 
@@ -218,9 +203,6 @@
                                 <span>Program</span>
                             </div>
                         <% end %>
-                        <span class="help">
-                            Click the information icon above for more information.
-                        </span>
                         <%= form.select :program_id, program_select_options, {:include_blank => !@contract.program_id.present?}, class: "input" %>
                     </div>
 
@@ -234,9 +216,6 @@
                                 <span>Entity</span>
                             </div>
                         <% end %>
-                        <span class="help">
-                            Click the information icon above for more information.
-                        </span>
                         <%= form.select :entity_id, entity_select_options, {:include_blank => !@contract.entity_id.present?}, class: "input" %>
                     </div>
 
@@ -250,9 +229,6 @@
                                 <span>Key Words</span>
                             </div>
                         <% end %>
-                        <span class="help">
-                            Click the information icon above for more information.
-                        </span>
                         <%= form.text_field :key_words, placeholder: "Separate key words with a comma", class: "input" %>
                     </div>
                 </div>
@@ -316,6 +292,29 @@
                         </div>
                     </div>
 
+                    <div id="contract_extension_entry">
+                        <div class="columns">
+                            <div class="column is-1">
+                                <span>&nbsp;</span>
+                            </div>
+                            <div class="column is-4">
+                                <%= form.label :extension_count, "Number of Extensions" %>
+                                <%= form.number_field :extension_count, class: "input" %>
+                            </div>
+                            <div class="column is-8">
+                                <%= form.label :extension_duration, "Extension duration" %>
+                                <div class="columns">
+                                    <div class="column is-3">
+                                        <%= form.number_field :extension_duration, class: "input" %>
+                                    </div>
+                                    <div class="column is-4">
+                                        <%= form.select :extension_duration_units, TimePeriod.to_a, {:include_blank => true}, class: "input " %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <%# Dollar Amount and Amount Duration %>
                     <div class="columns">
                         <div class="column is-6">
@@ -337,9 +336,15 @@
                             </div>
                         </div>
                         <div class="column is-1">
+                            <div class="icon-text">
+                                <span>&nbsp;</span>
+                            </div>
                             <p class="is-size-4 has-text-centered">per</p>
                         </div>
                         <div class="column is-5">
+                            <div class="icon-text">
+                                <span>&nbsp;</span>
+                            </div>
                             <div class="field">
                                 <%= form.select :amount_duration, TimePeriod.to_a, {:include_blank => true}, class: "input" %>
                             </div>
@@ -358,9 +363,6 @@
                                     <span>Initial Term</span>
                                 </div>
                             <% end %>
-                            <span class="help">
-                                Click the information icon above for more information.
-                            </span>
                             <p class="control has-icons-left">
                                 <%= form.number_field :initial_term_amount, class: "input" %>
                                 <span class="icon is-small is-left">
@@ -374,33 +376,6 @@
                             <%= form.label :initial_term_duration %>
                             <%= form.select :initial_term_duration, TimePeriod.to_a, {:include_blank => true}, class: "input " %>
                         </div>
-                        </div>
-                    </div>
-
-                    <div id="contract_extension_entry">
-                        <div class="columns">
-                            <div class="column is-3">
-                                <div class="field bottom-align">
-                                <%= form.label :extension_duration, "Extension duration" %>
-                                <%= form.number_field :extension_duration, class: "input" %>
-                                </div>
-                            </div>
-                            <div class="column is-3">
-                                <div class="field bottom-align">
-                                <%= form.label :extension_duration_units, "Extension duration units" %>
-                                <%= form.select :extension_duration_units, TimePeriod.to_a, {:include_blank => true}, class: "input " %>
-                                </div>
-                            </div>
-                            <div class="column is-3">
-                                <div class="field bottom-align">
-                                <%= form.label :extension_count, "Number of Extensions" %>
-                                <%= form.number_field :extension_count, class: "input" %>
-                                </div>
-                            </div>
-                            <div class="column is-3">
-                                <div class="field bottom-align">
-                                </div>
-                            </div>
                         </div>
                     </div>
 
