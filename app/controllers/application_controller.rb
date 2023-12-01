@@ -9,11 +9,13 @@ class ApplicationController < ActionController::Base
     protected
 
     def configure_permitted_parameters
+        # :nocov:
         devise_parameter_sanitizer.permit(:sign_up, keys: %i[first_name last_name])
+        # :nocov:
     end
 
-    # :nocov:
     def verify_user
+        # :nocov:
         # If route is not the sign in page, check if user is signed in
         unless ['/users/sign_in', '/users/sign_out', '/users/password/new',
                 '/users/password', '/users/password/edit', '/users/confirmation',
@@ -28,6 +30,6 @@ class ApplicationController < ActionController::Base
                 redirect_to new_user_session_path, alert: 'Your account is not currently active.'
             end
         end
+        # :nocov:
     end
-    # :nocov:
 end

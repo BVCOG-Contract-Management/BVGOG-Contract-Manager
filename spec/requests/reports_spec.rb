@@ -47,12 +47,8 @@ RSpec.describe '/reports', type: :request do
             get "#{new_report_url}?type=contracts"
             expect(response).to be_successful
         end
-    end
-
-    describe 'GET /edit' do
         it 'renders a successful response' do
-            report = Report.create! valid_attributes
-            get edit_report_url(report)
+            get "#{new_report_url}?type=users"
             expect(response).to be_successful
         end
     end

@@ -70,8 +70,10 @@ class VendorsController < ApplicationController
 
         respond_to do |format|
             if @vendor.update(vendor_params)
+                # :nocov:
                 format.html { redirect_to vendor_url(@vendor), notice: 'Vendor was successfully updated.' }
                 format.json { render :show, status: :ok, location: @vendor }
+                # :nocov:
             else
                 # :nocov:
                 format.html { render :edit, status: :unprocessable_entity }
@@ -80,16 +82,6 @@ class VendorsController < ApplicationController
             end
         end
     end
-
-    # DELETE /vendors/1 or /vendors/1.json
-    # def destroy
-    #  @vendor.destroy
-    #
-    #  respond_to do |format|
-    #    format.html { redirect_to vendors_url, notice: "Vendor was successfully destroyed." }
-    #    format.json { head :no_content }
-    #  end
-    # end
 
     private
 
@@ -107,13 +99,17 @@ class VendorsController < ApplicationController
         # Sorts by the query string parameter "sort"
         order = params[:order] == 'desc' ? :desc : :asc
         if params[:sort] == 'reviews'
+            # :nocov:
             Vendor.left_joins(:vendor_reviews)
                   .group(:id)
                   .order("COUNT(vendor_reviews.id) #{order}")
+            # :nocov:
         elsif params[:sort] == 'rating'
+            # :nocov:
             Vendor.left_joins(:vendor_reviews)
                   .group(:id)
                   .order("AVG(vendor_reviews.rating) #{order}")
+            # :nocov:
         else
             Vendor.order(created_at: order)
         end

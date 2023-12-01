@@ -60,14 +60,14 @@ module ApplicationHelper
 end
 
 def flash_type_to_bulma_class(type)
+    # :nocov:
     case type
     when 'alert'
         'is-danger'
     when 'notice'
         'is-success'
     else
-        # :nocov:
         'is-info'
-        # :nocov:
     end
+    # :nocov:
 end

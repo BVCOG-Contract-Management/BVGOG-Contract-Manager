@@ -63,6 +63,14 @@ RSpec.describe '/vendors', type: :request do
         end
     end
 
+    describe 'GET /review' do
+        it 'renders a successful response' do
+            vendor = Vendor.create! valid_attributes
+            get review_vendor_url(vendor)
+            expect(response).to be_successful
+        end
+    end
+
     describe 'POST /create' do
         context 'with valid parameters' do
             it 'creates a new Vendor' do
