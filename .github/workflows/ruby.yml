@@ -64,6 +64,4 @@ jobs:
                   RAILS_ENV: test
                   DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
               run: |
-                  bundle exec rails db:reset
-                  bundle exec rails db:seed
                   bundle exec cucumber --publish-quiet --profile default
