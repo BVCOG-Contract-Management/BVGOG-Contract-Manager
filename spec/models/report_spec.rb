@@ -7,13 +7,15 @@ RSpec.describe Report, type: :model do
 
     it 'filters contracts based on entity' do
         # Create test data
+        user = create(:user, id: 3, level: UserLevel::ONE)
         entity_one = create(:entity, name: 'Entity 1')
         entity_two = create(:entity, name: 'Entity 2')
-        contract_one = create(:contract, entity: entity_one, program: create(:program), vendor: create(:vendor), point_of_contact: create(:user))
-        contract_two = create(:contract, entity: entity_two, program: create(:program), vendor: create(:vendor), point_of_contact: create(:user))
+        contract_one = create(:contract, entity: entity_one, program: create(:program), vendor: create(:vendor), point_of_contact: user)
+        contract_two = create(:contract, entity: entity_two, program: create(:program), vendor: create(:vendor), point_of_contact: user)
 
         # Invoke the method being tested
-        filtered_contracts = described_class.query_filtered_report_contracts(entity: entity_one)
+        report = described_class.new(entity_id: entity_one.id, created_by: user.id)
+        filtered_contracts = report.query_filtered_report_contracts
 
         # Assertion to check if the contracts are filtered based on entity_id
         expect(filtered_contracts).to include(contract_one)
@@ -22,13 +24,15 @@ RSpec.describe Report, type: :model do
 
     it 'filters contracts based on program' do
         # Create test data
+        user = create(:user, id: 3, level: UserLevel::ONE)
         program_one = create(:program, name: 'Program 1')
         program_two = create(:program, name: 'Program 2')
-        contract_one = create(:contract, entity: create(:entity), program: program_one, vendor: create(:vendor), point_of_contact: create(:user))
-        contract_two = create(:contract, entity: create(:entity), program: program_two, vendor: create(:vendor), point_of_contact: create(:user))
+        contract_one = create(:contract, entity: create(:entity), program: program_one, vendor: create(:vendor), point_of_contact: user)
+        contract_two = create(:contract, entity: create(:entity), program: program_two, vendor: create(:vendor), point_of_contact: user)
 
         # Invoke the method being tested
-        filtered_contracts = described_class.query_filtered_report_contracts(program: program_one)
+        report = described_class.new(program_id: program_one.id, created_by: user.id)
+        filtered_contracts = report.query_filtered_report_contracts
 
         # Assertion to check if the contracts are filtered based on entity_id
         expect(filtered_contracts).to include(contract_one)
