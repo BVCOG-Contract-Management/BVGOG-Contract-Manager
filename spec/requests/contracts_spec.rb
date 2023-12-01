@@ -87,7 +87,6 @@ RSpec.describe '/contracts', type: :request do
     describe 'POST /create' do
         context 'with valid parameters' do
             it 'creates a new Contract' do
-                puts "Valid Attributes: #{valid_attributes}"
                 expect do
                     post contracts_url, params: { contract: valid_attributes }
                 end.to change(Contract, :count).by(1)
@@ -115,15 +114,16 @@ RSpec.describe '/contracts', type: :request do
 
     describe 'PATCH /update' do
         context 'with valid parameters' do
-            let(:new_attributes) do
-                skip('Add a hash of attributes valid for your model')
-            end
-
+            let(:new_attributes) { { title: 'Updated Title', amount_dollar: 1500 } }
+        
             it 'updates the requested contract' do
-                contract = Contract.create! valid_attributes
-                patch contract_url(contract), params: { contract: new_attributes }
-                contract.reload
-                skip('Add assertions for updated state')
+              contract = Contract.create! valid_attributes
+              patch contract_url(contract), params: { contract: new_attributes }
+              contract.reload
+    
+              expect(contract.title).to eq('Updated Title')
+              expect(contract.amount_dollar).to eq(1500)
+              
             end
 
             it 'redirects to the contract' do
@@ -131,7 +131,7 @@ RSpec.describe '/contracts', type: :request do
                 patch contract_url(contract), params: { contract: new_attributes }
                 contract.reload
                 expect(response).to redirect_to(contract_url(contract))
-            end
+              end
         end
 
         context 'with invalid parameters' do

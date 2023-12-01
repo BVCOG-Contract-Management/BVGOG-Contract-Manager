@@ -30,6 +30,10 @@ Metrics/ModuleLength:
     Max: 128
 Metrics/PerceivedComplexity:
     Max: 128
+RSpec/ExampleLength:
+    Max: 16
+RSpec/MultipleExpectations:
+    Max: 4
 
 AllCops:
     # Suggestextensions: false

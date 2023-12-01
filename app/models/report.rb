@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# report model
 class Report < ApplicationRecord
     EXPIRATION_OPTIONS = [30, 60, 90].freeze
 
@@ -21,6 +22,8 @@ class Report < ApplicationRecord
         contracts = contracts.where(entity_id: report.entity_id) if report.entity_id.present?
         # Filter by program
         contracts = contracts.where(program_id: report.program_id) if report.program_id.present?
+        # Filter by contract type
+        contracts = contracts.where(contract_type: report.contract_type) if report.contract_type.present?
         # Filter by point of contact
         contracts = contracts.where(point_of_contact_id: report.point_of_contact_id) if report.point_of_contact_id.present?
         # Filter by expiring in days
@@ -117,12 +120,13 @@ class Report < ApplicationRecord
         report_pdf.text 'Filters', align: :center, size: 18, style: :bold
         report_pdf.move_down 10
         table_data = []
-        table_data << ['Entity', 'Program', 'Point of Contact', 'Expiring in Days', 'Show Expired']
+        table_data << ['Entity', 'Program', 'Point of Contact', 'Contract Type', 'Expiring in Days', 'Show Expired']
         poc = User.find(report.point_of_contact_id) if report.point_of_contact_id.present?
         table_data << [
             report.entity_id.present? ? Entity.find(report.entity_id).name : 'All',
             report.program_id.present? ? Program.find(report.program_id).name : 'All',
             report.point_of_contact_id.present? ? "#{poc.first_name} #{poc.last_name}" : 'All',
+            report.contract_type.present? ? ContractType::OPTIONS[report.contract_type.to_sym] : 'All',
             (report.expiring_in_days.presence || 'All'),
             if report.show_expired_contracts.present?
                 report.show_expired_contracts ? 'Yes' : 'No'
@@ -152,7 +156,7 @@ class Report < ApplicationRecord
                 contract.vendor.name,
                 contract.contract_type_humanize,
                 "$#{contract.amount_dollar.round(2)} per #{contract.amount_duration_humanize}",
-                contract.ends_at.strftime('%m/%d/%Y')
+                contract.ends_at.nil? ? '' : contract.ends_at.strftime('%m/%d/%Y')
             ]
         end
         # Add the table to the PDF
