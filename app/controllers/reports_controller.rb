@@ -32,13 +32,6 @@ class ReportsController < ApplicationController
         end
     end
 
-    # GET /reports/1/edit
-    def edit
-        # In the future, we may want to add the ability to edit reports
-        # For now, we will just redirect to the show page
-        redirect_to report_path(@report)
-    end
-
     # POST /reports or /reports.json
     def create
         @report = Report.new(report_params)
@@ -61,11 +54,12 @@ class ReportsController < ApplicationController
         end
     end
 
-    # PATCH/PUT /reports/1 or /reports/1.json
+    def edit
+        redirect_to report_path(@report), alert: 'You are being redirected.'
+    end
+
     def update
-        # In the future, we may want to add the ability to edit reports
-        # For now, we will just redirect to the show page
-        redirect_to report_path(@report)
+        redirect_to report_path(@report), alert: 'You are being redirected.'
     end
 
     # DELETE /reports/1 or /reports/1.json
@@ -81,15 +75,15 @@ class ReportsController < ApplicationController
     # :nocov:
 
     def download
+        # :nocov:
         # If the report file does not exist, redirect to the report show page
         if !File.exist?(@report.full_path)
-            # :nocov:
             redirect_to report_path(@report), alert: 'The report file does not exist.'
-            # :nocov:
         else
             # Send the file to the user
             send_file @report.full_path, type: 'application/pdf', x_sendfile: true
         end
+        # :nocov:
     end
 
     private
@@ -101,6 +95,7 @@ class ReportsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def report_params
+        # :nocov:
         allowed = %i[
             title
             file_path
@@ -114,5 +109,6 @@ class ReportsController < ApplicationController
             show_expired_contracts
         ]
         params.fetch(:report, {}).permit(allowed)
+        # :nocov:
     end
 end

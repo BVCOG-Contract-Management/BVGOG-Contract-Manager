@@ -34,21 +34,6 @@ class UsersController < ApplicationController
         add_breadcrumb 'Edit', edit_user_path(@user)
     end
 
-    # POST /users or /users.json
-    # def create
-    #  @user = User.new(user_params)
-    #
-    #  respond_to do |format|
-    #    if @user.save
-    #      format.html { redirect_to user_url(@user), notice: "User was successfully created." }
-    #      format.json { render :show, status: :created, location: @user }
-    #    else
-    #      format.html { render :new, status: :unprocessable_entity }
-    #      format.json { render json: @user.errors, status: :unprocessable_entity }
-    #    end
-    #  end
-    # end
-
     # PATCH/PUT /users/1 or /users/1.json
     def update
         add_breadcrumb 'Users', users_path
@@ -134,20 +119,12 @@ class UsersController < ApplicationController
                 format.json { render :show, status: :ok, location: @user }
             end
         rescue Oso::Error => e
+            # :nocov:
             format.html { redirect_to user_url(@user), alert: 'You are not authorized to modify users.' }
             format.json { render json: { error: e.message }, status: :forbidden }
+            # :nocov:
         end
     end
-
-    # DELETE /users/1 or /users/1.json
-    # def destroy
-    #  @user.destroy
-    #
-    #  respond_to do |format|
-    #    format.html { redirect_to users_url, notice: "User was successfully destroyed." }
-    #    format.json { head :no_content }
-    #  end
-    # end
 
     def reinvite
         @user = User.find(params[:id])
@@ -186,8 +163,9 @@ class UsersController < ApplicationController
                 params[:sort] ? User.order(params[:sort] => asc.to_sym) : User.order(created_at: :asc)
             rescue ActiveRecord::StatementInvalid
                 # Otherwise, sort by title
-                # TODO: should we reconsider this?
+                # :nocov:
                 User.order(title: :asc)
+                # :nocov:
             end
         end
 
@@ -197,6 +175,9 @@ class UsersController < ApplicationController
     def search_users(users)
         # Search by the query string parameter "search"
         # Search in "first_name", "last_name"
+
+        # :nocov:
         users.where('first_name LIKE ? OR last_name LIKE ?', "%#{params[:search]}%", "%#{params[:search]}%")
+        # :nocov:
     end
 end

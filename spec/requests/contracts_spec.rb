@@ -33,10 +33,10 @@ RSpec.describe '/contracts', type: :request do
         vendor = create(:vendor)
         return build(
             :contract,
-            entity:,
-            program:,
-            point_of_contact:,
-            vendor:
+            entity: entity,
+            program: program,
+            point_of_contact: point_of_contact,
+            vendor: vendor
         ).attributes
     end
 
@@ -114,15 +114,16 @@ RSpec.describe '/contracts', type: :request do
 
     describe 'PATCH /update' do
         context 'with valid parameters' do
-            let(:new_attributes) do
-                skip('Add a hash of attributes valid for your model')
-            end
-
+            let(:new_attributes) { { title: 'Updated Title', amount_dollar: 1500 } }
+        
             it 'updates the requested contract' do
-                contract = Contract.create! valid_attributes
-                patch contract_url(contract), params: { contract: new_attributes }
-                contract.reload
-                skip('Add assertions for updated state')
+              contract = Contract.create! valid_attributes
+              patch contract_url(contract), params: { contract: new_attributes }
+              contract.reload
+    
+              expect(contract.title).to eq('Updated Title')
+              expect(contract.amount_dollar).to eq(1500)
+              
             end
 
             it 'redirects to the contract' do
@@ -130,7 +131,7 @@ RSpec.describe '/contracts', type: :request do
                 patch contract_url(contract), params: { contract: new_attributes }
                 contract.reload
                 expect(response).to redirect_to(contract_url(contract))
-            end
+              end
         end
 
         context 'with invalid parameters' do

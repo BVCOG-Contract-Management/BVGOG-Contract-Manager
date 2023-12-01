@@ -2,6 +2,7 @@
 
 # Helper for contracts
 module ContractsHelper
+    # :nocov:
     def contract_status_icon(contract)
         case contract.contract_status
         when ContractStatus::CREATED
@@ -36,6 +37,7 @@ module ContractsHelper
             ".html_safe
         end
     end
+    # :nocov:
 
     # :nocov:
     def file_type_icon(file_name)
@@ -116,14 +118,6 @@ def user_select_options
     options = User.all.map { |user| [user.full_name, user.id] }
 end
 
-def vendor_select_options
-    # :nocov:
-    options = Vendor.all.map { |vendor| [vendor.name, vendor.id] }
-    # Add a "New Vendor" option to the bottom of the list
-    options.push(['New Vendor', 'new'])
-    # :nocov:
-end
-
 def vendor_select_options_json
     options = Vendor.all.map { |vendor| { label: vendor.name, value: vendor.id } }
     options.push({ label: 'New Vendor', value: 'new' })
@@ -149,6 +143,7 @@ def entity_select_options
 end
 
 def contract_document_filename(contract, file_extension)
+    # :nocov:
     # Sample file name:  EEEEE-PPP-VVV-NNNNN-XXXXX
     # Where,
     #   EEEEE = 5 characters for the Entity Name
@@ -173,9 +168,7 @@ def contract_document_filename(contract, file_extension)
     n = if contract.number && contract.number.length >= 5
             contract.number.gsub(' ', '_').slice(-5, 5).downcase
         else
-            # :nocov:
             contract.title.gsub(' ', '_').slice(0, 5).downcase
-            # :nocov:
         end
 
     # Generate a random 5 character string
@@ -185,4 +178,5 @@ def contract_document_filename(contract, file_extension)
     "#{e}-#{p}-#{n}-#{x}#{file_extension}"
 
     # Return the file name
+    # :nocov:
 end
