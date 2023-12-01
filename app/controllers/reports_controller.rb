@@ -54,6 +54,14 @@ class ReportsController < ApplicationController
         end
     end
 
+    def edit
+        redirect_to report_path(@report), alert: 'You are being redirected.'
+    end
+
+    def update
+        redirect_to report_path(@report), alert: 'You are being redirected.'
+    end
+
     # DELETE /reports/1 or /reports/1.json
     # :nocov:
     def destroy
