@@ -10,10 +10,10 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v3
-            - name: Set up Ruby 3.2.0
+            - name: Set up Ruby 3.2.2
               uses: ruby/setup-ruby@v1
               with:
-                  ruby-version: 3.2.0
+                  ruby-version: 3.2.2
                   bundler-cache: true
             - name: Install dependencies
               run: |
@@ -49,10 +49,10 @@ jobs:
                 options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
         steps:
             - uses: actions/checkout@v3
-            - name: Set up Ruby 3.2.0
+            - name: Set up Ruby 3.2.2
               uses: ruby/setup-ruby@v1
               with:
-                  ruby-version: 3.2.0
+                  ruby-version: 3.2.2
                   bundler-cache: true
             - name: Install dependencies
               run: |
@@ -64,9 +64,4 @@ jobs:
                   RAILS_ENV: test
                   DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
               run: |
-                  rm -f ./db/development.sqlite3
-                  rm -f ./db/test.sqlite3
-                  bundle exec rails db:create
-                  bundle exec rails db:migrate
-                  bundle exec rails db:seed
                   bundle exec cucumber --publish-quiet --profile default

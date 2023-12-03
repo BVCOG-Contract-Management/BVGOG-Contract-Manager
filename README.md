@@ -10,20 +10,20 @@ Full-Stack source code for the BVCOG Contract Management Platform (CMS)
 ### Prerequisites
 These instructions assume that you are operating Ubuntu 22.04 either on a Linux machine or using Windows Submachine for Linux.  
 Install the following using your prefered method of instilation.
-* [Ruby](https://www.ruby-lang.org/en/downloads/) - Ruby 3.2.0
+* [Ruby](https://www.ruby-lang.org/en/downloads/) - Ruby 3.2.2
 * [Rails](https://rubyonrails.org/) - Rails 7.1.0
 * [Make](https://www.gnu.org/software/make/manual/make.html) - Make 4.3
 * [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli) - heroku/8.4.2 wsl-x64 node-v16.19.0
 * [PostgreSQL](https://www.postgresql.org/) - PostgreSQL 12.3
 
-If the current ruby version you are currently running is not 3.2.0 you can change it as follows:
+If the current ruby version you are currently running is not 3.2.2 you can change it as follows:
 ```bash
 /bin/bash --login
-rvm use 3.2.0
+rvm use 3.2.2
 ```
 or
 ```bash
-rbenv local 3.2.0
+rbenv local 3.2.2
 ```
 
 ## Installing for Local Development
