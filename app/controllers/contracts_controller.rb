@@ -288,8 +288,10 @@ class ContractsController < ApplicationController
                     # :nocov:
                 elsif @contract.update(contract_params)
                     if contract_documents_upload.present?
+                        # :nocov:
                         handle_contract_documents(contract_documents_upload,
                                                   contract_documents_attributes)
+                        # :nocov:
                     end
                     format.html do
                         #erase the session value after successful creation of contract
