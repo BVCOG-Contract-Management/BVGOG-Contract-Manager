@@ -80,6 +80,7 @@ class ContractsController < ApplicationController
         
         @vendor_visible_id = vendor_name || ''
         add_breadcrumb 'Edit', edit_contract_path(@contract)
+        @value_type = @contract.value_type
     end
 
     # POST /contracts or /contracts.json
@@ -96,11 +97,10 @@ class ContractsController < ApplicationController
         params[:contract].delete(:contract_documents)
         params[:contract].delete(:contract_documents_attributes)
         params[:contract].delete(:contract_document_type_hidden)
-        params[:contract].delete(:value_type)
         params[:contract].delete(:vendor_visible_id)
 
-        params[:contract][:totalamount] = handle_total_amount_value(params[:contract], value_type_selected)
-
+        params[:contract][:total_amount] = handle_total_amount_value(params[:contract], value_type_selected)
+        
         contract_params_clean = contract_params
         contract_params_clean.delete(:new_vendor_name)
 
@@ -122,7 +122,6 @@ class ContractsController < ApplicationController
                             session[:vendor_visible_id] = vendor_selection
                             @vendor_visible_id = session[:vendor_visible_id] || ''
                             @value_type = session[:value_type] || ''
-                            puts("Value TYPE AFTER = #{session[:value_type]}" )
                             render :new, status: :unprocessable_entity 
                         }
                         format.json { render json: @contract.errors, status: :unprocessable_entity }
@@ -233,10 +232,9 @@ class ContractsController < ApplicationController
         params[:contract].delete(:contract_documents)
         params[:contract].delete(:contract_documents_attributes)
         params[:contract].delete(:contract_document_type_hidden)
-        params[:contract].delete(:value_type)
         params[:contract].delete(:vendor_visible_id)
 
-        params[:contract][:totalamount] = handle_total_amount_value(params[:contract], value_type_selected)
+        params[:contract][:total_amount] = handle_total_amount_value(params[:contract], value_type_selected)
 
         respond_to do |format|
             ActiveRecord::Base.transaction do
@@ -290,8 +288,10 @@ class ContractsController < ApplicationController
                     # :nocov:
                 elsif @contract.update(contract_params)
                     if contract_documents_upload.present?
+                        # :nocov:
                         handle_contract_documents(contract_documents_upload,
                                                   contract_documents_attributes)
+                        # :nocov:
                     end
                     format.html do
                         #erase the session value after successful creation of contract
@@ -333,13 +333,14 @@ class ContractsController < ApplicationController
 
     def handle_total_amount_value(contract_params, value_type)
         if value_type == "Not Applicable"
-          contract_params[:totalamount] = 0
+          contract_params[:total_amount] = 0
+          contract_params[:value_type] = "Not Applicable"
         elsif value_type == "Calculated Value"
-            contract_params[:totalamount]= get_calculated_value(contract_params) 
-        
+            contract_params[:total_amount]= get_calculated_value(contract_params) 
+            contract_params[:value_type] = "Calculated Value"
         end
       
-        contract_params[:totalamount]
+        contract_params[:total_amount]
     end
       
     def get_calculated_value(contract_params)
@@ -352,41 +353,41 @@ class ContractsController < ApplicationController
         when 'day'
             case initial_term_duration_value
             when 'week'
-                contract_params[:totalamount] = amount_dollar * initial_term * 7
+                contract_params[:total_amount] = amount_dollar * initial_term * 7
             when 'month'
-                contract_params[:totalamount] = amount_dollar * initial_term * 30
+                contract_params[:total_amount] = amount_dollar * initial_term * 30
             when 'year'
-                contract_params[:totalamount] = amount_dollar * initial_term * 365
+                contract_params[:total_amount] = amount_dollar * initial_term * 365
             end
         when 'week'
             case initial_term_duration_value
             when 'day'
-                contract_params[:totalamount] = amount_dollar * initial_term / 7
+                contract_params[:total_amount] = amount_dollar * initial_term / 7
             when 'month'
-                contract_params[:totalamount] = amount_dollar * initial_term * 4
+                contract_params[:total_amount] = amount_dollar * initial_term * 4
             when 'year'
-                contract_params[:totalamount] = amount_dollar * initial_term * 52
+                contract_params[:total_amount] = amount_dollar * initial_term * 52
             end
         when 'month'
             case initial_term_duration_value
             when 'day'
-                contract_params[:totalamount] = amount_dollar * initial_term / 30
+                contract_params[:total_amount] = amount_dollar * initial_term / 30
             when 'week'
-                contract_params[:totalamount] = amount_dollar * initial_term / 4
+                contract_params[:total_amount] = amount_dollar * initial_term / 4
             when 'year'
-                contract_params[:totalamount] = amount_dollar * initial_term * 12
+                contract_params[:total_amount] = amount_dollar * initial_term * 12
             end
         when 'year'
             case initial_term_duration_value
             when 'day'
-                contract_params[:totalamount] = amount_dollar * initial_term / 365
+                contract_params[:total_amount] = amount_dollar * initial_term / 365
             when 'week'
-                contract_params[:totalamount] = amount_dollar * initial_term / 52
+                contract_params[:total_amount] = amount_dollar * initial_term / 52
             when 'month'
-                contract_params[:totalamount] = amount_dollar * initial_term / 12
+                contract_params[:total_amount] = amount_dollar * initial_term / 12
             end
         end
-        return contract_params[:totalamount]
+        return contract_params[:total_amount]
     end
 
     def get_file
@@ -410,8 +411,9 @@ class ContractsController < ApplicationController
         ActiveRecord::Base.transaction do
             @reason = params[:contract][:rejection_reason]
 
-            @contract.update(contract_status: ContractStatus::REJECTED)
+            @contract.update(contract_status: ContractStatus::IN_PROGRESS)
             @decision = @contract.decisions.build(reason: @reason, decision: ContractStatus::REJECTED, user: current_user)
+            @decision = @contract.decisions.build(reason: nil, decision: ContractStatus::IN_PROGRESS, user: current_user)
             if @decision.save
                 redirect_to contract_url(@contract), notice: 'Contract was Rejected.'
             else
@@ -468,7 +470,7 @@ class ContractsController < ApplicationController
 			point_of_contact_id
 			vendor_id
 			amount_dollar
-			totalamount
+			total_amount
 			amount_duration
 			initial_term_amount
 			initial_term_duration

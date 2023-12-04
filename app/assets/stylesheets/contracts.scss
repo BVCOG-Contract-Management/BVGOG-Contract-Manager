@@ -35,7 +35,6 @@
     }
 
     .common-button {
-        display: inline-block;
         padding: 10px;
         font-size: 16px;
         text-decoration: none;
@@ -48,6 +47,7 @@
         text-align: center;
         line-height: 30px;
         background: none;
+        text-align: center;
     }
 
     .common-button:hover {
