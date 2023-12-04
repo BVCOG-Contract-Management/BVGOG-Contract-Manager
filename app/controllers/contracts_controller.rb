@@ -501,7 +501,6 @@ class ContractsController < ApplicationController
             contract_documents_attributes
             contract_document_type_hidden
             extension_count
-            max_extension_count
             extension_duration
             extension_duration_units
             value_type
