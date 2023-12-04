@@ -98,11 +98,12 @@
                             </tr>
                              <tr>
                                 <td><strong>Total Amount:</strong></td>
-                                <% if @contract.totalamount == 0 %>
+                                <% if @contract.total_amount == 0 && @contract.value_type == "Not Applicable" %>
                                     <td>Not Applicable</td>
                                 <% else %>
-                                    <td><%= number_to_currency(@contract.totalamount) %></td>
+                                    <td><%= number_to_currency(@contract.total_amount) %></td>
                                 <% end %>
+                                <td><%= @contract.value_type %> <%= @contract.total_amount%></td>
                             </tr>
                             <tr>
                                 <td><strong>Status:</strong></td>

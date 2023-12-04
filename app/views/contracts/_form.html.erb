@@ -6,6 +6,73 @@
         height: 100%;
     }
 </style>
+<script type="text/javascript">
+    // Run the function after the page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOMContentLoaded event triggered');
+        showhideTotalValueField();
+        showVendorField();
+    });
+
+    var vendorOptions = <%= vendor_select_options_json.html_safe %>;
+
+    function showVendorField() {
+        var selectField = document.getElementById("vendor_visible_id"); 
+        var newvendorselectfield = document.getElementById("new_vendor_field");
+        var textField = document.getElementById("new_vendor_name");
+
+        if (selectField.value === "New Vendor") {
+            textField.style.display = "block";
+            textField.value = ""; 
+        } else {
+            textField.style.display = "none";
+            textField.value = ""; 
+        }
+           
+    } 
+
+    function showhideTotalValueField() {
+        var selectField = document.getElementById("value_type"); 
+        var textField = document.getElementById("total_value_field");
+        console.log(selectField.value)
+        if (selectField.value === "Total Value") {
+            textField.style.display = "block";
+            textField.value = ""; 
+        } else {
+            textField.style.display = "none";
+            textField.value = ""; 
+        }
+        
+
+    }
+    function updateForm() {
+        // Get the user input from the text input
+        const userInput = document.getElementById('contract_end_trigger').value;
+        var contract_end_trigger_label = document.getElementById('contract_end_trigger_label');
+        var contract_date_entry_div = document.getElementById('contract_date_entry');
+        var contract_extension_entry_div = document.getElementById('contract_extension_entry');
+        var contract_final_end_date_entry_div = document.getElementById('final_end_date_entry');
+        var contract_initial_end_date_entry_div = document.getElementById('initial_end_date_entry');
+
+    if(userInput === "limited_term") {
+            contract_date_entry_div.style.display = 'block'
+            contract_extension_entry_div.style.display = 'block'
+            contract_final_end_date_entry_div.style.display = 'block';
+            contract_initial_end_date_entry_div.style.display = 'block';
+        }
+        else if (userInput === "upon_completion" || userInput === "continuous"){
+            contract_date_entry_div.style.display = 'block'
+            contract_extension_entry_div.style.display = 'none'
+            contract_final_end_date_entry_div.style.display = 'none';
+            contract_initial_end_date_entry_div.style.display = 'none';
+        }
+        else{
+            contract_date_entry_div.style.display = 'none'
+            contract_extension_entry_div.style.display = 'none'
+        }
+    }
+</script>
+
 <div id="contract-form">
     <div class="card">
         <header class="card-header">
@@ -71,90 +138,11 @@
                         <% end %>
 
 
-            <!-- the field below is visible, but not used for the form submission -->
-            <input type="text" id="vendor_visible_id" name="vendor_visible_id" class="input" value="<%= @vendor_visible_id %>">
-             <!-- this field below is hidden and used for form submission -->
-            <%= form.hidden_field :vendor_id, class:"input", id:"vendor_id"%>
-          </div>
-
-          <script type="text/javascript">
-            var vendorOptions = <%= vendor_select_options_json.html_safe %>;
-
-            // Run the function after the page loads
-            document.addEventListener('DOMContentLoaded', function() {
-                // Check if the function exists and call it
-                // if (typeof showhideTotalValueField === 'function') {
-                    showhideTotalValueField();
-                    showVendorField();
-                // }
-            });
-
-            function showVendorField() {
-                var selectField = document.getElementById("vendor_visible_id"); 
-                console.log("showVendorField() selectField.value = ", selectField.value);
-                var newvendorselectfield = document.getElementById("new_vendor_field");
-                var textField = document.getElementById("new_vendor_name");
-    
-                if (selectField.value === "New Vendor") {
-                    textField.style.display = "block";
-                    console.log("in IF --- showVendorField() selectField.value = ", selectField.value);
-                    // textField.style.visibility = "visible";
-                    textField.value = ""; 
-                } else {
-                    textField.style.display = "none";
-                    console.log( "in ELSE --- showVendorField() selectField.value = ", selectField.value);
-                    // textField.style.visibility = "hidden";
-                    textField.value = ""; 
-                }
-                   
-            } 
-
-            function showhideTotalValueField() {
-              var selectField = document.getElementById("contractvalueselection"); 
-              var textField = document.getElementById("total_value_field");
-
-              if (selectField.value === "Total Value") {
-                textField.style.display = "block";
-                textField.value = ""; 
-              } else {
-                textField.style.display = "none";
-                textField.value = ""; 
-              }
-                console.log(" showhideTotalValueField() Total amount value = ", textField.value);
-                console.log("total amount field with id = ", document.getElementById("total_value_field").value);
-                
-
-            }
-            function updateForm() {
-              // Get the user input from the text input
-              const userInput = document.getElementById('contract_end_trigger').value;
-              var contract_end_trigger_label = document.getElementById('contract_end_trigger_label');
-              var contract_date_entry_div = document.getElementById('contract_date_entry');
-              var contract_extension_entry_div = document.getElementById('contract_extension_entry');
-              var contract_final_end_date_entry_div = document.getElementById('final_end_date_entry');
-              var contract_initial_end_date_entry_div = document.getElementById('initial_end_date_entry');
-
-                        if(userInput === "limited_term") {
-                            contract_date_entry_div.style.display = 'block'
-                            contract_extension_entry_div.style.display = 'block'
-                            contract_final_end_date_entry_div.style.display = 'block';
-                            contract_initial_end_date_entry_div.style.display = 'block';
-                        }
-                        else if (userInput === "upon_completion" || userInput === "continuous"){
-                            contract_date_entry_div.style.display = 'block'
-                            contract_extension_entry_div.style.display = 'none'
-                            contract_final_end_date_entry_div.style.display = 'none';
-                            contract_initial_end_date_entry_div.style.display = 'none';
-                        }
-                        else{
-                            contract_date_entry_div.style.display = 'none'
-                            contract_extension_entry_div.style.display = 'none'
-                        }
-
-                        console.log(userInput)
-                        }
-                    </script>
-            
+                        <!-- the field below is visible, but not used for the form submission -->
+                        <input type="text" id="vendor_visible_id" name="vendor_visible_id" class="input" value="<%= @vendor_visible_id %>">
+                         <!-- this field below is hidden and used for form submission -->
+                        <%= form.hidden_field :vendor_id, class:"input", id:"vendor_id"%>
+                    </div>            
                     <!-- A text input field for entering a new vendor name, initially hidden -->
                     <div id="new_vendor_field" class="field is-hidden">
                         <%= form.label :new_vendor_name %>
@@ -244,51 +232,51 @@
                                 <span>Length of Contract</span>
                             </div>
                         <% end %>
-                        <%= form.select :end_trigger, EndTrigger.to_a, {:include_blank => true}, class: "input", onclick:"updateForm()", id: "contract_end_trigger" %>
+                        <%= form.select :end_trigger, EndTrigger.to_a, {:include_blank => true}, class: "input", onchange:"updateForm()", id: "contract_end_trigger" %>
                     </div>
 
                     <div id="contract_date_entry">
                         <%# Start Date & End Date & Final End Date%>
                         <div class="columns">
-                        <div class="column is-4">
-                            <div class="field">
-                            <%= form.label :effective_date do %>
-                            <div class="icon-text">
-                                <span class="icon has-text-info" id="contract-effective-date-modal-open-btn">
-                                    <i class="fas fa-circle-info"></i>
-                                </span>
-                                <span>Effective Date</span>
+                            <div class="column is-4">
+                                <div class="field">
+                                <%= form.label :effective_date do %>
+                                <div class="icon-text">
+                                    <span class="icon has-text-info" id="contract-effective-date-modal-open-btn">
+                                        <i class="fas fa-circle-info"></i>
+                                    </span>
+                                    <span>Effective Date</span>
+                                </div>
+                                <% end %>
+                                <%= form.date_field :starts_at, class: "input" %>
+                                </div>
                             </div>
-                            <% end %>
-                            <%= form.date_field :starts_at, class: "input" %>
+                            <div class="column is-4">
+                                <div class="field" id="initial_end_date_entry">
+                                <%= form.label :curent_end_date do %>
+                                <div class="icon-text">
+                                    <span class="icon has-text-info" id="contract-current-end-date-modal-open-btn">
+                                        <i class="fas fa-circle-info"></i>
+                                    </span>
+                                    <span>Current End Date</span>
+                                </div>
+                                <% end %>
+                                <%= form.date_field :ends_at, class: "input" %>
+                                </div>
                             </div>
-                        </div>
-                        <div class="column is-4">
-                            <div class="field" id="initial_end_date_entry">
-                            <%= form.label :curent_end_date do %>
-                            <div class="icon-text">
-                                <span class="icon has-text-info" id="contract-current-end-date-modal-open-btn">
-                                    <i class="fas fa-circle-info"></i>
-                                </span>
-                                <span>Current End Date</span>
+                            <div class="column is-4">
+                                <div class="field" id="final_end_date_entry">
+                                <%= form.label :ends_at_final do %>
+                                <div class="icon-text">
+                                    <span class="icon has-text-info" id="contract-final-end-date-modal-open-btn">
+                                        <i class="fas fa-circle-info"></i>
+                                    </span>
+                                    <span>Final End Date</span>
+                                </div>
+                                <% end %>
+                                <%= form.date_field :ends_at_final, class: "input" %>
+                                </div>
                             </div>
-                            <% end %>
-                            <%= form.date_field :ends_at, class: "input" %>
-                            </div>
-                        </div>
-                        <div class="column is-4">
-                            <div class="field" id="final_end_date_entry">
-                            <%= form.label :ends_at_final do %>
-                            <div class="icon-text">
-                                <span class="icon has-text-info" id="contract-final-end-date-modal-open-btn">
-                                    <i class="fas fa-circle-info"></i>
-                                </span>
-                                <span>Final End Date</span>
-                            </div>
-                            <% end %>
-                            <%= form.date_field :ends_at_final, class: "input" %>
-                            </div>
-                        </div>
                         </div>
                     </div>
 
@@ -308,7 +296,7 @@
                                         <%= form.number_field :extension_duration, class: "input" %>
                                     </div>
                                     <div class="column is-4">
-                                        <%= form.select :extension_duration_units, TimePeriod.to_a, {:include_blank => true}, class: "input " %>
+                                        <%= form.select :extension_duration_units, TimePeriod.to_a, {:include_blank => true}, class: "input" %>
                                     </div>
                                 </div>
                             </div>
@@ -354,47 +342,42 @@
                     <%# Initial Term Amount, Initial Term Duration%>
                     <div class="columns">
                         <div class="column is-6">
-                        <div class="field">
-                            <%= form.label :initial_term_amount do %>
-                                <div class="icon-text">
-                                    <span class="icon has-text-info" id="contract-initial-term-modal-open-btn">
-                                        <i class="fas fa-circle-info"></i>
+                            <div class="field">
+                                <%= form.label :initial_term_amount do %>
+                                    <div class="icon-text">
+                                        <span class="icon has-text-info" id="contract-initial-term-modal-open-btn">
+                                            <i class="fas fa-circle-info"></i>
+                                        </span>
+                                        <span>Initial Term</span>
+                                    </div>
+                                <% end %>
+                                <p class="control has-icons-left">
+                                    <%= form.number_field :initial_term_amount, class: "input" %>
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-clock"></i>
                                     </span>
-                                    <span>Initial Term</span>
-                                </div>
-                            <% end %>
-                            <p class="control has-icons-left">
-                                <%= form.number_field :initial_term_amount, class: "input" %>
-                                <span class="icon is-small is-left">
-                                    <i class="fas fa-clock"></i>
-                                </span>
-                            </p>
-                        </div>
+                                </p>
+                            </div>
                         </div>
                         <div class="column is-6">
-                        <div class="field">
-                            <%= form.label :initial_term_duration %>
-                            <%= form.select :initial_term_duration, TimePeriod.to_a, {:include_blank => true}, class: "input " %>
-                        </div>
+                            <div class="field">
+                                <%= form.label :initial_term_duration %>
+                                <%= form.select :initial_term_duration, TimePeriod.to_a, {:include_blank => true}, class: "input" %>
+                            </div>
                         </div>
                     </div>
 
                     <div class="field">
                         <%= form.label :value_type, 'Value Type' %>
-<%# <%= form.select :value_type, ["Not Applicable", "Total Value", "Calculated Value"], 
-           {}, { id: "contractvalueselection", class: "input", onchange: "showhideTotalValueField()" }  %> 
-
                         <%= form.select :value_type,
                             options_for_select(["Not Applicable", "Total Value", "Calculated Value"], @value_type),
                             { include_blank: true },
-                            { id: "contractvalueselection", class: "input", onchange: "showhideTotalValueField()"} %>
-
-
+                            { id: "value_type", class: "input", onchange: "showhideTotalValueField()"} %>
                     </div>
 
                     <div class="field" id="total_value_field" style="display: none;" >
-                        <%= form.label :totalamount, 'Total Value' %>
-                        <%= form.text_field :totalamount, id: "total_amount", class: "input"  %>
+                        <%= form.label :total_amount, 'Total Value' %>
+                        <%= form.text_field :total_amount, id: "total_amount", class: "input"  %>
                     </div>
 
                     <%# Contract Documents %>
@@ -422,71 +405,70 @@
                         </div>
                     </div>
 
-            <%# Use a hidden select tag that JS can copy over for each uploaded file %>
-            <%= form.select :contract_document_type_hidden, ContractDocumentType.to_a, {:selected => ContractDocumentType::OTHER}, class: "input is-small is-hidden", id: "contract_document_type_hidden" %>
+                    <%# Use a hidden select tag that JS can copy over for each uploaded file %>
+                    <%= form.select :contract_document_type_hidden, ContractDocumentType.to_a, {:selected => ContractDocumentType::OTHER}, class: "input is-small is-hidden", id: "contract_document_type_hidden" %>
 
-            <%# Display the uploaded contract documents %>
-            <table id="uploaded-contract-documents-table" class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
-                <tbody>
-                <%# JavaScript adds to this table as files are uploaded %>
-                <%# Ruby is annoying and doesn't do this nicely... %>
+                    <%# Display the uploaded contract documents %>
+                    <table id="uploaded-contract-documents-table" class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+                        <tbody>
+                        <%# JavaScript adds to this table as files are uploaded %>
+                        <%# Ruby is annoying and doesn't do this nicely... %>
 
-                <%# Files that are already uploaded are not removable %>
-                <% @contract.contract_documents.each do |contract_document| %>
-                    <tr class="is-disabled" id="contract-document-<%= contract_document.id %>">
-                    <td>
-                        <%= file_type_icon(contract_document.file_name) %>
-                        <strong><%= contract_document.orig_file_name.present? ? contract_document.orig_file_name.truncate(30) : contract_document.file_name.truncate(30) %></strong>
-                    </td>
-                    <td>
-                        <%= contract_document.document_type.present? ? contract_document.document_type.humanize : "Other" %>
-                    </td>
-                    </tr>
-                <% end %>
-                </tbody>
-            </table>
-            
+                        <%# Files that are already uploaded are not removable %>
+                        <% @contract.contract_documents.each do |contract_document| %>
+                            <tr class="is-disabled" id="contract-document-<%= contract_document.id %>">
+                            <td>
+                                <%= file_type_icon(contract_document.file_name) %>
+                                <strong><%= contract_document.orig_file_name.present? ? contract_document.orig_file_name.truncate(30) : contract_document.file_name.truncate(30) %></strong>
+                            </td>
+                            <td>
+                                <%= contract_document.document_type.present? ? contract_document.document_type.humanize : "Other" %>
+                            </td>
+                            </tr>
+                        <% end %>
+                        </tbody>
+                    </table>  
+                </div>
             </div>
         </div>
-        </div>
-
         <footer class="card-footer">
-        <div class="card-footer-item">
-            <div class="field is-grouped">
-            <div class="control">
-                <%= form.submit class: "button is-link" %>
+            <div class="card-footer-item">
+                <div class="field is-grouped">
+                <div class="control">
+                    <%= form.submit class: "button is-link" %>
+                </div>
+                <div class="control">
+                    <%= link_to "Back to contracts", contracts_path, class: "button is-danger is-outlined" %>
+                </div>
+                </div>
             </div>
-            <div class="control">
-                <%= link_to "Back to contracts", contracts_path, class: "button is-danger is-outlined" %>
-            </div>
-            </div>
-        </div>
         </footer>
-        <% end %>
+    <% end %>
     </div>
     <script type="text/javascript">updateForm()</script>
+    <script type="text/javascript">showhideTotalValueField()</script>
 
-<%# Hints User Story. See https://www.pivotaltracker.com/story/show/186056105 %>
-<div class="modal" id="contract-title-modal">
-    <div class="modal-background"></div>
-    <div class="modal-card">
-        <header class="modal-card-head">
-            <div class="icon-text">
-            <p class="modal-card-title">Contract Title</p>
+    <%# Hints User Story. See https://www.pivotaltracker.com/story/show/186056105 %>
+    <div class="modal" id="contract-title-modal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <div class="icon-text">
+                <p class="modal-card-title">Contract Title</p>
+                </div>
+            </header>
+            <section class="modal-card-body">
+            <div class="content">
+                The name of the contract/grant/ILA.<br>
+                This is usually found on the first page of the contract.<br>
+                Type it exactly, even if it's a long title.
             </div>
-        </header>
-        <section class="modal-card-body">
-        <div class="content">
-            The name of the contract/grant/ILA.<br>
-            This is usually found on the first page of the contract.<br>
-            Type it exactly, even if it's a long title.
+            </section>
+            <footer class="modal-card-foot">
+            <button class="button modal-close-btn">Close</button>
+            </footer>
         </div>
-        </section>
-        <footer class="modal-card-foot">
-        <button class="button modal-close-btn">Close</button>
-        </footer>
     </div>
-</div>
 
 <div class="modal" id="contract-id-modal">
     <div class="modal-background"></div>
