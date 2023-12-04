@@ -114,7 +114,6 @@ if Rails.env.production?
             ends_at: d,
             ends_at_final: d + 1.day * i,
             extension_count: i,
-            max_extension_count: i,
             extension_duration: i,
             extension_duration_units: TimePeriod::MONTH
         )
@@ -136,7 +135,6 @@ if Rails.env.production?
             ends_at: d,
             ends_at_final: d + 1.day * i,
             extension_count: i,
-            max_extension_count: i,
             extension_duration: i,
             extension_duration_units: TimePeriod::MONTH,
             contract_status: statuses.sample
@@ -237,7 +235,6 @@ else
             ends_at: d,
             ends_at_final: d + 1.day * i,
             extension_count: i,
-            max_extension_count: i,
             extension_duration: i.months,
             extension_duration_units: TimePeriod::MONTH,
             contract_status: statuses.sample
@@ -258,7 +255,6 @@ else
             ends_at: Time.zone.today + 1.day * i,
             ends_at_final: Time.zone.today + 2.days * i,
             extension_count: i,
-            max_extension_count: i,
             extension_duration: i.months,
             extension_duration_units: TimePeriod::MONTH
         )

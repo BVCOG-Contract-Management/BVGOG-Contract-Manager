@@ -413,8 +413,8 @@ class ContractsController < ApplicationController
 
             @contract.update(contract_status: ContractStatus::IN_PROGRESS)
             @decision = @contract.decisions.build(reason: @reason, decision: ContractStatus::REJECTED, user: current_user)
-            @decision = @contract.decisions.build(reason: nil, decision: ContractStatus::IN_PROGRESS, user: current_user)
-            if @decision.save
+            @decision_in_prog = @contract.decisions.build(reason: nil, decision: ContractStatus::IN_PROGRESS, user: current_user)
+            if @decision.save && @decision_in_prog.save
                 redirect_to contract_url(@contract), notice: 'Contract was Rejected.'
             else
                 # :nocov:
@@ -501,7 +501,6 @@ class ContractsController < ApplicationController
             contract_documents_attributes
             contract_document_type_hidden
             extension_count
-            max_extension_count
             extension_duration
             extension_duration_units
             value_type
