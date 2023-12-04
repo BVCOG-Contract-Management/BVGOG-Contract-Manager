@@ -83,16 +83,6 @@
                                 </tr>
                             <% end %>
                             <tr>
-                                <td><strong>Requires Rebid:</strong></td>
-                                <td>
-                                    <% if @contract.requires_rebid%>
-                                        <span class="tag is-success">Yes</span>
-                                    <% else %>
-                                        <span class="tag is-danger">No</span>
-                                    <% end %>
-                                </td>
-                            </tr>
-                            <tr>
                                 <td><strong>Amount:</strong></td>
                                 <td><%= number_to_currency(@contract.amount_dollar) %> per <%= @contract.amount_duration %></td>
                             </tr>
