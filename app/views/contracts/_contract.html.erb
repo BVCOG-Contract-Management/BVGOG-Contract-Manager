@@ -1,3 +1,45 @@
+<style>
+    .alert {
+    position: relative;
+    padding: 16px;
+    margin-bottom: 16px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    }
+
+    .alert-warning {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    }
+</style>
+
+<% if @decisions != nil %>
+<% @decisions.reverse.each do |decision| %>
+<tr>
+    <td>
+    <% if @contract.contract_status.in?([ContractStatus::IN_PROGRESS]) %>
+        <% case decision.decision %>
+            <% when ContractStatus::REJECTED %>
+                <% if decision.reason.present? %>
+                    <div class="alert alert-warning"> 
+                        Soft Reject Reason: 
+                        <%= decision.reason %><br>
+                    </div>
+                    <% break %>
+                <% end %>
+            <% when ContractStatus::APPROVED %>
+                <% break %>
+            <% when ContractStatus::IN_REVIEW %>
+                <% break %>
+        <% end %>
+    <% end %>
+    </td>
+</tr>
+<% end %>
+<% end %>
+
+
 <div id="contract-show">
     <div class="columns is-desktop">
         <div class="column is-6">
@@ -14,41 +56,31 @@
                     <table class="table is-striped is-hoverable is-fullwidth">
                         <tbody>
                             <tr>
-                                <td><strong>Title:</strong></td>
-                                <td><%= @contract.title %></td>
+                                <td><strong>Contract Title:</strong></td>
+                              <td><%= @contract.title %></td>
                             </tr>
                             <tr>
-                                <td><strong>Number:</strong></td>
-                                <td><%= @contract.number %></td>
+                                <td><strong>Contract ID:</strong></td>
+                                <td>
+                                    <% if @contract.contract_status.in?([ContractStatus::IN_PROGRESS, ContractStatus::IN_REVIEW]) %>
+                                        <% @modification_logs = @contract.modification_logs.order(updated_at: :desc) %>
+                                        <% latest_log = @modification_logs.where(status: 'pending').order(updated_at: :desc).first %>
+                                        <% if latest_log && latest_log.changes_made['number'].present? %>
+                                            <div class="diff">
+                                                <span class="old-value"><%= latest_log.changes_made['number'][0] %></span>
+                                                <span class="new-value"><%= latest_log.changes_made['number'][1] %></span>
+                                            </div>
+                                        <% else %>
+                                            <%= @contract.number %>
+                                        <% end %>
+                                    <% else %>
+                                        <%= @contract.number %>
+                                    <% end %>
+                                </td>
                             </tr>
                             <tr>
                                 <td><strong>Contract Type:</strong></td>
                                 <td><%= @contract.contract_type_humanize %></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Initial Term:</strong></td>
-                                <td><%= @contract.initial_term_amount %> <%= @contract.initial_term_duration %><%= @contract.initial_term_amount > 1 ? "s" : "" %></td>
-                            </tr>
-
-                            <% if @contract.extension_count && @contract.end_trigger == "limited_term"%>
-                                <tr>
-                                    <td><strong>Remaining extensions:</strong></td>
-                                    <td><%= @contract.extension_count %></td>
-                                </tr>
-                            <% end %>
-			    <% if @contract.extension_count && @contract.end_trigger == "limited_term"%>
-                                <tr>
-                                    <td><strong>Extension Period:</strong></td>
-                                    <% if @contract.extension_duration.present? %>
-                                        <td><%= @contract.extension_duration %> <%= @contract.extension_duration_units %><%= @contract.extension_duration > 1 ? "s" : "" %></td>
-                                    <% else %>
-					<td></td>
-                                    <% end %>
-                                </tr>
-                            <% end %>
-                            <tr>
-                                <td><strong>End Trigger:</strong></td>
-                                <td><%= @contract.end_trigger_humanize %></td>
                             </tr>
                             <tr>
                                 <td><strong>Point of Contact:</strong></td>
@@ -63,38 +95,99 @@
                                 </td>
                             </tr>
                             <tr>
+                                <td><strong>Funding Source:</strong></td>
+                                 <td><%= @contract.funding_source.presence || 'N/A' %></td>
+                            </tr>
+
+                            <tr>
                                 <td><strong>Entity:</strong></td>
                                 <td><%= @contract.entity.name %></td>
                             </tr>
                             <tr>
                                 <td><strong>Program:</strong></td>
                                 <td><%= @contract.program.name %></td>
+                            </tr>
                             <tr>
                                 <td><strong>Start Date:</strong></td>
-                                <td><%= @contract.starts_at.strftime("%B %d, %Y") %></td>
+                                <td>
+                                    <% if @contract.contract_status.in?([ContractStatus::IN_PROGRESS, ContractStatus::IN_REVIEW]) %>
+                                        <% @modification_logs = @contract.modification_logs.order(updated_at: :desc) %>
+                                        <% latest_log = @modification_logs.where(status: 'pending').order(updated_at: :desc).first %>
+                                        <% if latest_log && latest_log.changes_made['starts_at'].present? %>
+                                            <div class="diff">
+                                                <span class="old-value"><%= Date.parse(latest_log.changes_made['starts_at'][0]).strftime("%B %d, %Y") %></span>
+                                                <span class="new-value"><%= Date.parse(latest_log.changes_made['starts_at'][1]).strftime("%B %d, %Y") %></span>
+                                            </div>
+                                        <% else %>
+                                            <%= @contract.starts_at.strftime("%B %d, %Y") %>
+                                        <% end %>
+                                    <% else %>
+                                        <%= @contract.starts_at.strftime("%B %d, %Y") %>
+                                    <% end %>
+                                </td>
                             </tr>
-                            <% if @contract.ends_at && contract.end_trigger == "limited_term"%>
-                                <tr>
-                                    <td><strong>End Date:</strong></td>
-                                    <td><%= @contract.ends_at.strftime("%B %d, %Y") %></td>
-                                </tr>
-                            <% end %>
-                            <% if @contract.ends_at_final && contract.end_trigger == "limited_term"%>
-                                <tr>
-                                    <td><strong>Final End Date:</strong></td>
-                                    <td><%= @contract.ends_at_final.strftime("%B %d, %Y") %></td>
-                                </tr>
-                            <% end %>
                             <tr>
-                                <td><strong>Amount:</strong></td>
-                                <td><%= number_to_currency(@contract.amount_dollar) %> per <%= @contract.amount_duration %></td>
+                                <td><strong>End Date:</strong></td>
+                                <td>
+                                    <% if @contract.contract_status.in?([ContractStatus::IN_PROGRESS, ContractStatus::IN_REVIEW]) %>
+                                        <% @modification_logs = @contract.modification_logs.order(updated_at: :desc) %>
+                                        <% latest_log = @modification_logs.where(status: 'pending').order(updated_at: :desc).first %>
+                                        <% if latest_log && latest_log.changes_made.key?('ends_at') %>
+                                            <div class="diff">
+                                                <span class="old-value">
+                                                    <% old_ends_at = latest_log.changes_made['ends_at'][0] %>
+                                                    <% if old_ends_at.present? %>
+                                                        <%= Date.parse(old_ends_at).strftime("%B %d, %Y") %>
+                                                    <% else %>
+                                                        N/A
+                                                    <% end %>
+                                                </span>
+                                                <span class="new-value">
+                                                    <% new_ends_at = latest_log.changes_made['ends_at'][1] %>
+                                                    <% begin %>
+                                                    <%= Date.parse(new_ends_at).strftime("%B %d, %Y") %>
+                                                    <% rescue ArgumentError %>
+                                                    N/A
+                                                    <% end %>
+                                                </span>
+                                            </div>
+                                        <% else %>
+                                            <% if @contract.ends_at.present? %>
+                                            <%= @contract.ends_at.strftime("%B %d, %Y") %>
+                                            <% else %>
+                                                N/A
+                                            <% end %>
+                                        <% end %>
+                                    <% else %>
+                                        <% if @contract.ends_at.present? %>
+                                            <%= @contract.ends_at.strftime("%B %d, %Y") %>
+                                        <% else %>
+                                            N/A
+                                        <% end %>
+                                    <% end %>
+                                </td>
                             </tr>
                              <tr>
-                                <td><strong>Total Amount:</strong></td>
+                                <td><strong>Contract Value:</strong></td>
                                 <% if @contract.total_amount == 0 && @contract.value_type == "Not Applicable" %>
                                     <td>Not Applicable</td>
                                 <% else %>
-                                    <td><%= number_to_currency(@contract.total_amount) %></td>
+                                    <td>
+                                        <% if @contract.contract_status.in?([ContractStatus::IN_PROGRESS, ContractStatus::IN_REVIEW]) %>
+                                            <% @modification_logs = @contract.modification_logs.order(updated_at: :desc) %>
+                                            <% latest_log = @modification_logs.where(status: 'pending').order(updated_at: :desc).first %>
+                                            <% if latest_log && latest_log.changes_made['total_amount'].present? %>
+                                                <div class="diff">
+                                                    <span class="old-value"><%= number_to_currency(latest_log.changes_made['total_amount'][0]) %></span>
+                                                    <span class="new-value"><%= number_to_currency(latest_log.changes_made['total_amount'][1]) %></span>
+                                                </div>
+                                            <% else %>
+                                                <%= number_to_currency(@contract.total_amount) %>
+                                            <% end %>
+                                        <% else %>
+                                            <%= number_to_currency(@contract.total_amount) %>
+                                        <% end %>
+                                    </td>
                                 <% end %>
                             </tr>
                             <tr>
@@ -108,9 +201,16 @@
                 <footer class="card-footer distribute">
                     <% if current_user.present? && current_user.level != UserLevel::TWO %>
                         <% if @contract.contract_status == ContractStatus::IN_PROGRESS  %>
-                            <%= link_to "Edit this contract", edit_contract_path(@contract), class: "card-footer-item common-button" %>
+                            <%= link_to @contract.current_type == 'contract' ? "Edit this contract" : 'Edit this request', edit_contract_path(@contract), class: "card-footer-item common-button" %>
                             <%= form_with model: @contract, url: [@contract, :log_submission], method: :post, remote: true, class: "card-footer-item common-button" do |form| %>
                                 <% form.submit 'Set to "In Review"', class: "card-footer-item common-button"%>
+                            <% end %>
+                        <% elsif @contract.contract_status == ContractStatus::APPROVED %>
+                            <%= link_to amend_contract_path(@contract), class: 'card-footer-item button is-info is-rounded', style: 'display: flex; align-items: center; justify-content: center;' do %>
+                                <span class="icon is-small">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </span>
+                                <span>Amend</span>
                             <% end %>
                         <% end %>
                     <% end %>
@@ -120,6 +220,9 @@
                                 <% form.submit 'Set to "Approved"', class: "card-footer-item common-button"%>
                             <% end %>
                             <%= link_to 'Set to "Rejected"', reject_contract_path(@contract), class: "card-footer-item common-button" %>
+                            <% if @contract.current_type == 'amend' || @contract.current_type == 'renew' %>
+                                <%= link_to 'Void Amendment', void_contract_path(@contract), class: "card-footer-item common-button" %>
+                            <% end %>
                         <% elsif @contract.contract_status == ContractStatus::REJECTED %>
                             <%= form_with model: @contract, url: [@contract, :log_return], method: :post, remote: true, class: "card-footer-item common-button" do |form| %>
                                 <% form.submit 'Set to "In Progress"', class: "card-footer-item common-button"%>
@@ -137,19 +240,29 @@
                             <span class="icon">
                                 <i class="fas fa-info-circle"></i>
                             </span>
-                            Description
+                            Summary
                         </p>
                     </header>
                     <div class="card-content is-paddingless">
                         <table class="table is-striped is-hoverable is-fullwidth">
                             <tbody>
                                 <tr>
-                                    <td><strong>Key Words:</strong></td>
-                                    <td><%= @contract.key_words %></td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Description:</strong></td>
-                                    <td><%= @contract.description %></td>
+                                    <td>
+                                        <% if @contract.contract_status.in?([ContractStatus::IN_PROGRESS, ContractStatus::IN_REVIEW]) %>
+                                            <% @modification_logs = @contract.modification_logs.order(updated_at: :desc) %>
+                                            <% latest_log = @modification_logs.where(status: 'pending').order(updated_at: :desc).first %>
+                                            <% if latest_log && latest_log.changes_made['description'].present? %>
+                                                <div class="diff">
+                                                    <span class="old-value"><%= (latest_log.changes_made['description'][0]) %></span>
+                                                    <span class="new-value"><%= (latest_log.changes_made['description'][1]) %></span>
+                                                </div>
+                                            <% else %>
+                                                <%= @contract.description %>
+                                            <% end %>
+                                        <% else %>
+                                            <%= @contract.description %>
+                                        <% end %>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -177,6 +290,7 @@
                     <header class="card-header">
                         <p class="card-header-title">Contract Decision History</p>
                     </header>
+                  <div class="card-content is-paddingless scrollable-container">
                     <table class="table is-striped is-hoverable is-fullwidth">
                         <tbody>
                             <% @decisions.each do |decision| %>
@@ -206,8 +320,161 @@
                             <% end %>
                         </tbody>
                     </table>
+                  </div>
                 </div>
             </div>
             <% end %>
+
+            <% if @modification_logs.present? %>
+            <div class="column is-12 is-paddingless">
+            <div class="card">
+                <header class="card-header">
+                <p class="card-header-title">
+                    <span class="icon">
+                    <i class="fas fa-history"></i>
+                    </span>
+                    Modification Logs
+                </p>
+                </header>
+                <div class="card-content is-paddingless scrollable-container">
+                    <div class="table-container">
+                        <table class="table is-striped is-hoverable is-fullwidth">
+                            <thead>
+                            <tr>
+                                <th>Modifier</th>
+                                <th>Timestamp</th>
+                                <th>Fields Changed</th>
+                                <th>Values</th>
+                                <th>Status</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <% @modification_logs.each do |log| %>
+                                <% unless log.status == 'pending' %>
+                                    <tr>
+                                        <td><%= log.modified_by.full_name %></td>
+                                        <td><%= log.created_at.strftime("%B %d, %Y %H:%M") %></td>
+                                        <td><%= log.changes_made.keys.map { |field| humanize_field_name(field) }.join(", ") %></td>
+                                        <td>
+                                            <div class="limited-content">
+                                                <span class="content">
+                                                    <%= log.changes_made.values.map { |change| "#{change[0]} -> #{change[1]}" }.join(", ") %>
+                                                </span>
+                                            </div>
+                                            <% if log.changes_made.values.map { |change| "#{change[0]} -> #{change[1]}" }.join(", ").length > 54 %>
+                                                <a href="javascript:void(0);" class="show-more-link" onclick="showFullContentModal('<%= j log.changes_made.keys.join(", ") %>', '<%= j log.changes_made.values.map { |change| change.join(' -> ') }.join(', ') %>')">
+                                                    show more
+                                                </a>
+                                            <% end %>
+
+                                        </td>
+                                        <td><%= log.status %></td>
+                                    </tr>
+                                <% end %>
+                            <% end %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div id="fullContentModal" class="modal">
+                    <div class="modal-background" onclick="closeFullContentModal()"></div>
+                    <div class="modal-content">
+                        <div class="box">
+                            <h3 class="title is-5">Detailed Changes</h3>
+                            <table class="table is-fullwidth" id="modalTable">
+                                <thead>
+                                    <tr>
+                                        <th>Field</th>
+                                        <th>Old Value</th>
+                                        <th>New Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="modalTableBody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <button class="modal-close is-large" aria-label="close" onclick="closeFullContentModal()"></button>
+                </div>
+            </div>
+            </div>
+            <% end %>
         </div>
+  </div>
 </div>
+
+
+
+
+<script>
+    // Show full content in modal
+    function showFullContentModal(fieldsChanged, values) {
+        const tableBody = document.getElementById('modalTableBody');
+        tableBody.innerHTML = '';
+
+        const fieldsArray = fieldsChanged.split(', ');
+        const valuesArray = values.split(', ').map(item => item.split(' -> '));
+
+        const fieldDisplayNames = {
+        'description': 'Summary',
+        'starts_at': 'Effective Date',
+        'ends_at': 'End Date',
+        'total_amount': 'Contract Value',
+        'number': 'Contract ID'
+        };
+
+        for (let i = 0; i < fieldsArray.length; i++) {
+            const row = document.createElement('tr');
+
+            const fieldCell = document.createElement('td');
+            fieldCell.innerText = fieldDisplayNames[fieldsArray[i]] || fieldsArray[i];
+            row.appendChild(fieldCell);
+
+            const oldValueCell = document.createElement('td');
+            oldValueCell.innerText = valuesArray[i][0] || ''; 
+            row.appendChild(oldValueCell);
+
+            const newValueCell = document.createElement('td');
+            newValueCell.innerText = valuesArray[i][1] || '';
+            row.appendChild(newValueCell);
+            tableBody.appendChild(row);
+        }
+
+        document.getElementById('fullContentModal').classList.add('is-active');
+    }
+
+    // Close modal
+    function closeFullContentModal() {
+        document.getElementById('fullContentModal').classList.remove('is-active');
+    }
+</script>
+
+<style>
+.limited-content {
+    max-height: 4.5em; 
+    overflow: hidden;
+    position: relative;
+}
+
+.content {
+    display: block; 
+    margin-bottom: 0.5em; 
+}
+
+.show-more-link {
+    display: block; 
+    color: blue !important;
+    cursor: pointer;
+    text-decoration: underline;
+    padding-top: 5px; 
+    position: relative; 
+}
+
+.modal {
+    display: none;
+}
+
+.modal.is-active {
+    display: flex;
+}
+</style>

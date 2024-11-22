@@ -1,3 +1,13 @@
+<head>
+   <style>
+    .custom {
+      background-color: #753436; 
+    }
+    .cusbotton{
+      font-weight: bold;
+    }
+  </style>
+</head>
 <%= form_for(resource, as: resource_name, url: session_path(resource_name), validate:true) do |f| %>
   <div class="field">
     <%= f.label :email, style: "display: block" %>
@@ -17,7 +27,7 @@
   <% end %>
 
   <div class="actions">
-    <%= f.submit "Log In", class: "button is-success"%>
+    <%= f.submit "Log In", class: "button cusbotton"%>
     <%= render "devise/shared/links" %>
   </div>
 <% end %>

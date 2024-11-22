@@ -8,4 +8,14 @@ class ContractDocument < ApplicationRecord
     has_enumeration_for :document_type, with: ContractDocumentType, create_helpers: true
 
     belongs_to :contract, class_name: 'Contract'
+
+    # Check if the document is pending
+    def pending?
+        status == 'pending'
+    end
+
+    # Check if the document is approved
+    def approved?
+        status == 'approved'
+    end
 end

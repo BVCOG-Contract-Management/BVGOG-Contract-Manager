@@ -2,6 +2,14 @@
   Administration
 <% end %>
 
+<script type="text/javascript">
+  function on_select_filter() {
+    const program_id = document.getElementById("select_program").value;
+    const entity_id = document.getElementById("select_entity").value;
+    window.location.href = "/admin?flter_program_id=" + program_id + "&flter_entity_id=" + entity_id + "#user_name_loc";
+  }
+</script>
+
 <div id="admin-form">
   <div class="card">
 
@@ -112,7 +120,17 @@
                     <% Program.all.each do |program| %>
                     <tr>
                       <td><%= program.name %></td>
+                      <!--
                       <td><%= form.check_box :delete_programs, { multiple: true }, program.id, nil %></td>
+                      -->
+                      <td>
+                        <a href="/admin/delete_program?program_id=<%= program.id %>" data-method="put" class="button is-danger is-small" style="color:#ffffff;">
+                                <span class="icon is-small">
+                                    <i class="fas fa-times" aria-hidden="true"></i>
+                                </span>
+                                <span>Remove</span>
+                        </a>
+                      </td>
                     </tr>
                     <% end %>
                   </tbody>
@@ -152,7 +170,17 @@
                     <% Entity.all.each do |entity| %>
                     <tr>
                       <td><%= entity.name %></td>
+                      <!--
                       <td><%= form.check_box :delete_entities, { multiple: true }, entity.id, nil %></td>
+                      -->
+                      <td>
+                        <a href="/admin/delete_entity?entity_id=<%= entity.id %>" data-method="put" class="button is-danger is-small" style="color:#ffffff;">
+                                <span class="icon is-small">
+                                    <i class="fas fa-times" aria-hidden="true"></i>
+                                </span>
+                                <span>Remove</span>
+                        </a>
+                      </td>
                     </tr>
                     <% end %>
                   </tbody>
@@ -162,10 +190,46 @@
           </div>
 
         <%# Automated Expiration Users %>
-              <div class="field">
+              <div class="field" id="user_name_loc">
                 <%= form.label :user_ids, "Automated Expiration Report Recipients" %>
+                <div>
+                  <%= form.label :select_program_label, "Filter: Select Program:" %>
+                  <select id="select_program" onchange="on_select_filter()">
+                    <% flter_program_id_matched = false; %>
+                    <% Program.all.each do |program| %>
+                      <%
+                          if not flter_program_id_matched and @flter_program_id.present? and @flter_program_id == program.id
+                            selected_opt = %{selected="selected"}
+                            flter_program_id_matched = true;
+                          else
+                            selected_opt = nil
+                          end
+                        %>
+                      <option value="<%= program.id %>" <%= selected_opt %> ><%= program.name %></option>
+                    <% end %>
+                    <option value="" <%= flter_program_id_matched ? nil : %{selected="selected"} %> ></option>
+                  </select>
+
+                  <%= form.label :select_entity_label, " Select entity:" %>
+                  <select id="select_entity" onchange="on_select_filter()">
+                    <% flter_entity_id_matched = false; %>
+                    <% Entity.all.each do |entity| %>
+                      <%
+                          if not flter_entity_id_matched and @flter_entity_id.present? and @flter_entity_id == entity.id
+                            selected_opt = %{selected="selected"}
+                            flter_entity_id_matched = true;
+                          else
+                            selected_opt = nil
+                          end
+                        %>
+                      <option value="<%= entity.id %>" <%= selected_opt %> ><%= entity.name %></option>
+                    <% end %>
+                    <option value="" <%= flter_entity_id_matched ? nil : %{selected="selected"} %> ></option>
+                  </select>
+                </div>
                 <div class="columns">
-                    <% User.all.each_slice((User.count/4.0).ceil) do |user_group| %>
+                  <% if @selected_users.count > 0 %>
+                    <% @selected_users.each_slice((@selected_users.count/4.0).ceil) do |user_group| %>
                     <div class="column">
                       <table class="table is-hoverable">
                         <tbody>
@@ -179,6 +243,7 @@
                       </table>
                     </div>
                     <% end %>
+                  <% end %>
                 </div>
               </div>
     </div>
@@ -194,7 +259,7 @@
       
     
   </div>
-
+</div>
 
 <%# Directory Upload Explanation Modal %>
 <div class="modal" id="directory-contracts-upload-modal">

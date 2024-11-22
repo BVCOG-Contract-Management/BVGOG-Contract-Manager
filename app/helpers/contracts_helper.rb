@@ -2,7 +2,6 @@
 
 # Helper for contracts
 module ContractsHelper
-    # :nocov:
     def contract_status_icon(contract)
         case contract.contract_status
         when ContractStatus::CREATED
@@ -37,9 +36,20 @@ module ContractsHelper
             ".html_safe
         end
     end
-    # :nocov:
 
-    # :nocov:
+    def humanize_field_name(field)
+        field_mappings = {
+            'contract_value' => 'Contract Value',
+            'starts_at' => 'Start Date',
+            'ends_at' => 'End Date',
+            'total_amount' => 'Contract Value',
+            'number' => 'Contract ID',
+            'contract_type' => 'Contract Type'
+            # Add other mappings as needed
+        }
+        field_mappings[field] || field.humanize
+    end
+
     def file_type_icon(file_name)
         file_type = file_name.split('.').last
         case file_type
@@ -111,11 +121,10 @@ module ContractsHelper
             ".html_safe
         end
     end
-    # :nocov:
 end
 
 def user_select_options
-    options = User.all.map { |user| [user.full_name, user.id] }
+    User.all.map { |user| [user.full_name, user.id] }
 end
 
 def vendor_select_options_json
@@ -125,25 +134,37 @@ def vendor_select_options_json
     options.to_json
 end
 
+def vendor_select_options
+    Vendor.all.pluck(:name, :id).push(['New Vendor', 'new'])
+end
+
+def funding_source_select_options_json
+    options = Contract.distinct.pluck(:funding_source).compact.map { |source| { label: source, value: source } }
+    options.push({ label: 'New Funding Source', value: 'new' })
+
+    options.to_json
+end
+
+def funding_source_select_options
+    Contract.distinct.pluck(:funding_source).compact.push(['New Funding Source', 'new'])
+end
+
 def program_select_options
-    options = Program.all.map { |program| [program.name, program.id] }
+    Program.all.map { |program| [program.name, program.id] }
 end
 
 def entity_select_options
-    options = if current_user.nil?
-                  # return empty array
-                  # :nocov:
-                  []
-                  # :nocov:
-              elsif current_user.level == UserLevel::THREE
-                  current_user.entities.map { |entity| [entity.name, entity.id] }
-              else
-                  options = Entity.all.map { |entity| [entity.name, entity.id] }
-              end
+    if current_user.nil?
+        # return empty array
+        []
+    elsif current_user.level == UserLevel::THREE
+        current_user.entities.map { |entity| [entity.name, entity.id] }
+    else
+        Entity.all.map { |entity| [entity.name, entity.id] }
+    end
 end
 
 def contract_document_filename(contract, file_extension)
-    # :nocov:
     # Sample file name:  EEEEE-PPP-VVV-NNNNN-XXXXX
     # Where,
     #   EEEEE = 5 characters for the Entity Name
@@ -164,7 +185,6 @@ def contract_document_filename(contract, file_extension)
     p = contract.program.name.gsub(' ', '_').slice(0, 3).downcase
 
     # Take the last 5 characters of the contract number or the first 5 characters of the contract title
-    n = ''
     n = if contract.number && contract.number.length >= 5
             contract.number.gsub(' ', '_').slice(-5, 5).downcase
         else
@@ -178,5 +198,4 @@ def contract_document_filename(contract, file_extension)
     "#{e}-#{p}-#{n}-#{x}#{file_extension}"
 
     # Return the file name
-    # :nocov:
 end

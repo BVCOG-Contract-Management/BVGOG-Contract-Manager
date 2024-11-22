@@ -4,13 +4,22 @@
 <% # The sidebar is a Bulma panel %>
 <% # https://bulma.io/documentation/components/panel/ %>
 
+<head>
+   <style>
+    .custom {
+      color: white; 
+      font-weight: bold;
+    }
+  </style>
+</head>
+
 <div>
   <div id="sidebar-header" class="sidebar-logo">
       <%= image_tag('bvcog-logo', style: 'height: 50px;') %>
   </div>
   <aside class="sidebar-main menu">
     <% page_list.each do |page| %>
-      <p class="menu-label">
+      <p class="menu-label custom">
         <%= page[:title] %>
       </p>
       <ul class="menu-list">
@@ -22,7 +31,7 @@
             <% end %>
 
           <% else %>
-            <%= link_to url_for(item[:path]), "data-turbo-method": item[:method].present? ? item[:method] : :get , class: "sidebar-item  menu-item has-text-light" do %>
+            <%= link_to url_for(item[:path]), "data-turbo-method": item[:method].present? ? item[:method] : :get , class: "sidebar-item  menu-item has-text-grey-lighter" do %>
                 <i class="fa-solid fa-<%= item[:icon] %>"></i>
               <%= item[:name] %>
             <% end %>

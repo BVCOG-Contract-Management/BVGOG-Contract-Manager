@@ -151,8 +151,11 @@ The application requires the `ENV['MAIL_PASSWORD']` environment variable to be s
 This is set in the [`config/credentials.yml.enc`](./config/credentials.yml.enc) file.  
 This file is encrypted and can only be decrypted by the `config/master.key` file.  
 The `master.key` file is not included in the repository for security reasons.  
-If you need access to the `master.key` file, please contact BVCOG's IT Department.  
+To retrieve the key please contact the professor or a member of the Fall 2024 team. 
+In the case they are unable to retrieve it, BVCOG's IT team can also access the key. 
 You will need BVCOG's `master.key` you **CAN NOT** generate your own.
+
+The key is critical to deployment so ensure to retrieve this as early as possible.
 
 ### RuboCop
 This project uses RuboCop to ensure consistent coding standards and style across the codebase.  
@@ -174,8 +177,22 @@ A [deploy script](./script/deploy/deploy.sh) has been provided for your convienc
 Use/modify it as you see fit.  
 Note: the [Fall 2023](#fall-2023) team deprecated this script, if you have questions about it, ask the [Spring 2023](#spring-2023) team
 
+
 ## Contacting the Team
 Please contact the most recent team.
+
+
+### Fall 2024
+| Team member         | Email                        |
+|---------------------|------------------------------|
+| Chi-Ming Lee        | chiminglee831@tamu.edu       |
+| Xinyi Zhao          | xinyi929@tamu.edu            |
+| Jingrui Mao         | vivinmao@tamu.edu            |
+| Kumaran Gowrisankar | kumaran.gowrisankar@tamu.edu |
+| Zicheng Chen        | chenzc2001@tamu.edu          |
+| Jingyuan Mu         | mjy333@tamu.edu              |
+| Zhaoming Xu         | zhaoming0812@tamu.edu        |
+| Nathaniel Bright    | brightn@tamu.edu             |
 
 ### Fall 2023
 | Team member          | Email                 |
@@ -192,3 +209,7 @@ Please contact the most recent team.
 | Matan Broner     | matanbroner@gmail.com |
 | Chrysanthos Pepi | cpepi001@outlook.com  |
 | Hanrui Chen      | No Email Given        |
+
+### Sprint 4 Code Climate and  Deployment (Fall 2024)
+![image](app/assets/images/code_climate.png)
+[Heroku deployment](https://bvcog-2024-fall-702c30e5a327.herokuapp.com) for Fall 2024

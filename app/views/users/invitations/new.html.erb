@@ -51,7 +51,7 @@
             </div>
             <div class="field">
               <%= f.label :level %>
-              <%= f.select :level, UserLevel.to_a.reject { |level| level[0] == "Zero" }, { include_blank: true }, class: "input" %>
+              <%= f.select :level, [["Admin", "one"], ["Gatekeeper", "two"], ["User", "three"]], { include_blank: true }, class: "input" %>
             </div>
           </div>
           <div class="column is-half">

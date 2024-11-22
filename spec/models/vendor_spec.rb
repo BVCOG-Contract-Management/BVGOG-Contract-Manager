@@ -16,7 +16,7 @@ RSpec.describe Vendor, type: :model do
     end
 
     it 'does not save vendor with duplicate name' do
-        vendor_one = create(:vendor, name: 'New Vendor')
+        create(:vendor, name: 'New Vendor')
         vendor_two = build(:vendor, name: 'New Vendor')
         expect { vendor_two.save! }.to raise_error(ActiveRecord::RecordNotUnique)
     end

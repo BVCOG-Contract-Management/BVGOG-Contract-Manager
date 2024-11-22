@@ -1,0 +1,9 @@
+---
+name: simplecov
+version: '0.22'
+source:
+  type: git
+  name: ruby/gem_rbs_collection
+  revision: 0c458c0f40aede6c24a083d5d6bd5e7d0fb93d6c
+  remote: https://github.com/ruby/gem_rbs_collection.git
+  repo_dir: gems

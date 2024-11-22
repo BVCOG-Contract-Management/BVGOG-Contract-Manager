@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_29_173405) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_18_171601) do
   create_table "bvcog_configs", force: :cascade do |t|
     t.text "contracts_path", null: false
     t.text "reports_path", null: false
@@ -44,6 +44,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_29_173405) do
     t.datetime "updated_at", null: false
     t.text "orig_file_name"
     t.text "document_type"
+    t.string "status"
     t.index ["contract_id"], name: "index_contract_documents_on_contract_id"
   end
 
@@ -68,12 +69,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_29_173405) do
     t.text "end_trigger"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "extension_count", default: 1
     t.date "ends_at_final"
-    t.integer "extension_count"
-    t.integer "max_extension_count"
     t.integer "extension_duration"
     t.string "extension_duration_units"
-    t.float "totalamount"
+    t.float "total_amount"
+    t.string "value_type"
+    t.decimal "contract_value", precision: 15, scale: 2
+    t.string "current_type", default: "contract"
+    t.string "funding_source"
+    t.json "documents_added"
     t.index ["entity_id"], name: "index_contracts_on_entity_id"
     t.index ["point_of_contact_id"], name: "index_contracts_on_point_of_contact_id"
     t.index ["program_id"], name: "index_contracts_on_program_id"
@@ -93,6 +98,21 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_29_173405) do
     t.index ["entity_id", "user_id"], name: "index_entities_users_on_entity_id_and_user_id", unique: true
     t.index ["entity_id"], name: "index_entities_users_on_entity_id"
     t.index ["user_id"], name: "index_entities_users_on_user_id"
+  end
+
+  create_table "modification_logs", force: :cascade do |t|
+    t.integer "contract_id", null: false
+    t.string "approved_by"
+    t.string "modification_type", null: false
+    t.text "changes_made", null: false
+    t.string "status", default: "pending", null: false
+    t.text "remarks"
+    t.datetime "modified_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "modified_by_id", null: false
+    t.index ["contract_id"], name: "index_modification_logs_on_contract_id"
+    t.index ["modified_by_id"], name: "index_modification_logs_on_modified_by_id"
   end
 
   create_table "programs", force: :cascade do |t|
@@ -180,6 +200,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_29_173405) do
   add_foreign_key "contracts", "programs"
   add_foreign_key "contracts", "users", column: "point_of_contact_id"
   add_foreign_key "contracts", "vendors"
+  add_foreign_key "modification_logs", "contracts"
+  add_foreign_key "modification_logs", "users", column: "modified_by_id"
   add_foreign_key "reports", "entities"
   add_foreign_key "reports", "programs"
   add_foreign_key "reports", "users"

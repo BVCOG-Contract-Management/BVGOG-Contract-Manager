@@ -21,6 +21,8 @@ module NavigationHelpers
         when /^the reports page/ then '/reports/'
         when /^the new report page/ then '/reports/new'
         when /^the new user invitation page/ then '/users/invitation/new'
+        when /^the renew page/ then '/contracts/1/renew'
+        when /^the amend page/ then '/contracts/1/amend'
 
         else
             raise "Can't find mapping from \"#{page_name}\" to a path.\nNow, go and add a mapping in #{__FILE__}"

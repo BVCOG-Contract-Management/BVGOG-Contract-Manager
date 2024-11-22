@@ -2,7 +2,7 @@
 
 require 'net/http'
 
-uri = URI('https://example.com/vendors/4')
+URI('https://example.com/vendors/4')
 params = { 'vendor_review' => { 'rating' => '3', 'description' => 'dsafdsaf' }, 'commit' => 'Submit' }
 headers = { 'Content-Type' => 'application/x-www-form-urlencoded' }
 

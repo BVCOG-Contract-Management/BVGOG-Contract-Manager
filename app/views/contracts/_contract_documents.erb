@@ -1,30 +1,34 @@
 <table class="table is-striped is-hoverable is-fullwidth">
-    <thead>
-        <tr>
-            <th>File Name</th>
-            <th>Document Type</th>
-            <th></th>
-        </tr>
-    <tbody>
-        <% contract.contract_documents.each do |contract_document| %>
-            <tr>
-                <td>
-                    <%= file_type_icon(contract_document.file_name) %>
-                    <strong><%= contract_document.orig_file_name.present? ? contract_document.orig_file_name.truncate(30) : contract_document.file_name.truncate(30) %></strong>
-                </td>
-                <td>
-                    <%= contract_document.document_type.present? ? contract_document.document_type.humanize : "Other" %>
-                </td>
-                <td class="download-file-button">
-                    <% if action == "download" %>
-                        <%= link_to download_contract_document_path(id: contract_document.id) do %>
-                            <span class="icon">
-                                <i class="fas fa-download"></i>
-                            </span>
-                        <% end %>
-                    <% end %>
-                </td>
-            </tr>
+  <thead>
+  <tr>
+    <th>File Name</th>
+    <th>Document Type</th>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
+  <% contract.contract_documents.each do |contract_document| %>
+    <tr>
+      <td>
+        <%= file_type_icon(contract_document.file_name) %>
+        <strong>
+          <%= contract_document.orig_file_name.present? ? contract_document.orig_file_name.truncate(30) : contract_document.file_name.truncate(30) %>
+        </strong>
+        <% if contract_document.pending? %>
+          <span class="tag is-warning ml-2">Pending</span>
         <% end %>
-    </tbody>
+      </td>
+      <td>
+        <%= contract_document.document_type.present? ? contract_document.document_type.humanize : "Other" %>
+      </td>
+      <td class="download-file-button">
+        <%= link_to download_contract_document_path(id: contract_document.id) do %>
+            <span class="icon">
+              <i class="fas fa-download"></i>
+            </span>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+  </tbody>
 </table>

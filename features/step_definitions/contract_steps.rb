@@ -81,3 +81,20 @@ end
 When('I follow \/contract_documents\/{int}"') do |int|
     visit "/contract_documents/#{int}"
 end
+
+Then('I should see {string} field') do |field_name|
+    expect(page).to have_field(field_name)
+end
+
+Then('I should not see {string} field') do |field_name|
+    expect(page).to have_no_field(field_name)
+end
+
+Then('{string} field should have a maximum of $99 million') do |field_name|
+    max_value = find_field(field_name)['max'].to_i
+    expect(max_value).to eq(99_000_000)
+end
+
+Then('{string} should be optional') do |field_name|
+    expect(page).to have_no_selector("##{field_name.downcase.tr(' ', '_')}[required]")
+end

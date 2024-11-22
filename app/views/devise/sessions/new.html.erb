@@ -1,6 +1,13 @@
+<head>
+   <style>
+    .custom {
+      background-color: #753436; 
+    }
+  </style>
+</head>
 <div class="columns is-centered mt-6">
   <div class="column is-one-third">
-    <div class="box has-background-dark" id="unauthed-form">
+    <div class="box custom" id="unauthed-form">
         <%= image_tag('bvcog-logo.png', style: 'height: 50px;') %>
       <h1 class="is-size-2 has-text-weight-bold mb-3">Login</h1>
       <%= render "login_form", session: @session %>

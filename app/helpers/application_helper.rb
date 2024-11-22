@@ -18,12 +18,13 @@ module ApplicationHelper
         # Level 3 users can only view contracts
         pages << if current_user.level == UserLevel::TWO
                      { title: 'Contracts', subpaths: [
-                         { name: 'View Contracts', path: contracts_path, icon: 'file-contract' }
+                         { name: 'View Contracts', path: contracts_path, icon: 'file-contract' },
                      ] }
                  else
                      { title: 'Contracts', subpaths: [
                          { name: 'View Contracts', path: contracts_path, icon: 'file-contract' },
-                         { name: 'Create a Contract', path: new_contract_path, icon: 'pencil' }
+                         { name: 'Add a Contract', path: new_contract_path, icon: 'pencil' },
+                         { name: 'Amend Contracts', path: modify_contracts_path, icon: 'pen-to-square' }
                      ] }
                  end
         # All users can view reports

@@ -52,6 +52,10 @@ document.addEventListener('turbo:load', () => {
     const vendorVisibleField = document.querySelector('#vendor_visible_id')
     const vendorSelect = document.querySelector('#vendor_id');
     const newVendorField = document.querySelector('#new_vendor_field');
+    const fundingSourceVisibleField = document.querySelector('#funding_source_visible');
+    const fundingSourceSelect = document.querySelector('#contract_funding_source');
+    const newFundingSourceField = document.querySelector('#new_funding_source_field');
+
 
     // Add an event listener to the vendor select field
     if (vendorVisibleField) {
@@ -108,6 +112,59 @@ document.addEventListener('turbo:load', () => {
          
         });
       });
+
+    // Add an event listener to the funding source select field
+    if (fundingSourceVisibleField) {
+        fundingSourceVisibleField.addEventListener('input', (event) => {
+            // If the value of the funding source select field is 'new'
+            if (event.target.value === 'new') {
+                // Show the new funding source input field
+                newFundingSourceField.classList.remove('is-hidden');
+            } else {
+                // Hide the new funding source input field
+                newFundingSourceField.classList.add('is-hidden');
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        $(fundingSourceVisibleField).autocomplete({
+            source: fundingSourceOptions,
+            minLength: 1,
+            max: 5,
+            maxHeight: 200,
+            focus: function (event, ui) {
+                // Prevent the input field from displaying funding source value when an option is highlighted
+                event.preventDefault();
+                // Set the input field value to the highlighted funding source name
+                $(fundingSourceVisibleField).val(ui.item.label);
+
+                if ($(fundingSourceVisibleField).val() === 'New Funding Source') {
+                    // Show the 'new' text field only if 'New Funding Source' is selected
+                    newFundingSourceField.classList.remove('is-hidden');
+                } else {
+                    // Hide the new funding source input field
+                    newFundingSourceField.classList.add('is-hidden');
+                }
+            },
+            select: function (event, ui) {
+                event.preventDefault();
+                // Set the value of the input field to the selected funding source name
+                $(fundingSourceVisibleField).val(ui.item.label);
+                $(fundingSourceSelect).val(ui.item.value);
+
+                if ($(fundingSourceSelect).val() === 'new') {
+                    // Show the new funding source input field
+                    newFundingSourceField.classList.remove('is-hidden');
+                } else {
+                    // Hide the new funding source input field
+                    newFundingSourceField.classList.add('is-hidden');
+                }
+                return false; // Prevent the default behavior of filling the input with the value
+            }
+        });
+    });
+   
 
     // Set cursor blink in search table
     const searchInput = document.querySelector('#search-input');
@@ -172,7 +229,13 @@ document.addEventListener('turbo:load', () => {
                         file.name}</strong>
                     </td>
                     <td>
-                        ${documentTypeSelectNew.outerHTML}
+                        <div class="control has-icons-right">
+                            ${documentTypeSelectNew.outerHTML}
+                            <span class="icon is-small is-right">
+                                <i class="fas fa-chevron-down"></i>
+                            </span>
+                        </div>
+                    </td>
                     <td>
                         <button type="button" class="button is-danger is-small" data-file-name="${file.name} class="${file.name}">
                             <span class="icon is-small">

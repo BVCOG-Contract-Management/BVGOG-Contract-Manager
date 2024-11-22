@@ -1,0 +1,44 @@
+<!-- _tooltip_select_field.html.erb -->
+<div class="field">
+  <%= form.label field_id do %>
+    <div class="icon-text">
+      <span class="icon has-text-info tooltip-container">
+        <i class="fas fa-circle-info"></i>
+        <div class="tooltip-content">
+          <%= tooltip_text %>
+        </div>
+      </span>
+      <span><%= field_label %></span>
+    </div>
+  <% end %>
+
+  <div class="control has-icons-right">
+    <% if field_type == 'select' %>
+      <%= form.select(
+        field_id, 
+        field_options, 
+        { include_blank: field_options_hash[:include_blank] }, 
+        { class: field_options_hash[:class], disabled: field_options_hash[:disabled] }
+      ) %>
+    <% elsif field_type == 'number' %>
+      <%= form.number_field field_id, **field_options_hash.merge(class: "input") %>
+    <% elsif field_type == 'textarea' %>
+      <%= form.text_area field_id, **field_options_hash.merge(class: "textarea") %>
+    <% else %>
+      <%= form.text_field field_id, **field_options_hash.merge(class: "input") %>
+    <% end %>
+
+    <% if field_type == 'select' %>
+      <span class="icon is-small is-right">
+        <i class="fas fa-chevron-down"></i>
+      </span>
+    <% end %>
+  </div>
+</div>
+
+<style>
+    input:focus, textarea:focus, select:focus {
+        outline: none;
+        box-shadow: none;
+    }
+</style>

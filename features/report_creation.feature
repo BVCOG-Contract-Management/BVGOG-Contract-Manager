@@ -10,7 +10,7 @@ Background:
 	Given bvcog_config is set up
 	Given I am logged in as a level 1 user
 
-Scenario: Sucessfully create contracts report
+Scenario: Successfully create contracts report
 	Given I am on the new report page
 	When I fill in the "report[title]" field with "TestReport"
 	And I select "30" from the "report[expiring_in_days]" select box
@@ -20,7 +20,7 @@ Scenario: Sucessfully create contracts report
 	And I press "Create Report"
 	Then I should see "Report was successfully created."
 
-Scenario: Sucessfully create contracts expiration report
+Scenario: Successfully create contracts expiration report
 	Given I am on the new report page
 	When I fill in the "report[title]" field with "TestReport"	
 	And I select "30" from the "report[expiring_in_days]" select box
@@ -50,7 +50,7 @@ Scenario: Go to users report page
 	And I follow "Users Report"
 	Then I should see "Report Arguments"
 
-Scenario: Sucessfully create users report
+Scenario: Successfully create users report
 	Given I am on the new report page
 	And I follow "Users Report"
 	And I fill in "report[title]" with "Example User Report"

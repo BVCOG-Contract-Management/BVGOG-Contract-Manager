@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # User Factory
-
+#
 FactoryBot.define do
     factory :user do
         email { Faker::Internet.email }

@@ -21,7 +21,7 @@ RSpec.describe Entity, type: :model do
     end
 
     it 'does not save entity with duplicate name' do
-        entity_one = create(:entity, name: 'New Vendor')
+        create(:entity, name: 'New Vendor')
         entity_two = build(:entity, name: 'New Vendor')
         expect { entity_two.save! }.to raise_error(ActiveRecord::RecordNotUnique)
     end

@@ -21,7 +21,7 @@ RSpec.describe Program, type: :model do
     end
 
     it 'does not save program with duplicate name' do
-        program_one = create(:program, name: 'New Vendor')
+        create(:program, name: 'New Vendor')
         program_two = build(:program, name: 'New Vendor')
         expect { program_two.save! }.to raise_error(ActiveRecord::RecordNotUnique)
     end

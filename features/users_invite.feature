@@ -22,7 +22,7 @@ Scenario: Invite a level 3 user
 	When I fill in "First name" with "Liam"
 	And I fill in "Last name" with "Berney"
 	And I fill in "Email" with "liamrberney3@tamu.edu"
-	And I select "Three" from the "user_level" select box
+	And I select "User" from the "user_level" select box
 	And I select "Program 1" from the "user[program_id]" select box
 	And I check Entity 1
 	And I press "commit"
@@ -35,7 +35,7 @@ Scenario: Invite a level 2 user
 	When I fill in "First name" with "Liam"
 	And I fill in "Last name" with "Berney"
 	And I fill in "Email" with "liamrberney2@tamu.edu"
-	And I select "Two" from the "user_level" select box
+	And I select "Gatekeeper" from the "user_level" select box
 	And I select "Program 1" from the "user[program_id]" select box
 	And I check Entity 1
 	And I press "commit"
@@ -48,7 +48,7 @@ Scenario: Invite a level 1 user
 	When I fill in "First name" with "Liam"
 	And I fill in "Last name" with "Berney"
 	And I fill in "Email" with "liamrberney1@tamu.edu"
-	And I select "Two" from the "user_level" select box
+	And I select "Gatekeeper" from the "user_level" select box
 	And I select "Program 1" from the "user[program_id]" select box
 	And I check Entity 1
 	And I press "commit"
@@ -60,7 +60,7 @@ Scenario: Re-invite a user
 	When I fill in "First name" with "Liam"
 	And I fill in "Last name" with "Berney"
 	And I fill in "Email" with "liamrberney1@tamu.edu"
-	And I select "Two" from the "user_level" select box
+	And I select "Gatekeeper" from the "user_level" select box
 	And I select "Program 1" from the "user[program_id]" select box
 	And I check Entity 1
 	And I press "commit"

@@ -1,0 +1,8 @@
+<%= content_for :title do %>
+  <span class="icon">
+    <i class="fa-solid fa-pen-to-square"></i>
+  </span> 
+  Renew <%= @contract.title %>
+<% end %>
+
+<%= render "renewform", contract: @contract %>

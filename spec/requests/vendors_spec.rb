@@ -20,17 +20,17 @@ RSpec.describe '/vendors', type: :request do
     # adjust the attributes here as well.
     let(:valid_attributes) do
         {
-          name: "Vendor 1"
-          # Add other attributes as needed
+            name: 'Vendor 1'
+            # Add other attributes as needed
         }
-      end
-      
-      let(:invalid_attributes) do
+    end
+
+    let(:invalid_attributes) do
         {
-          name: nil
-          # Add other attributes as needed
+            name: nil
+            # Add other attributes as needed
         }
-      end
+    end
 
     describe 'GET /index' do
         it 'renders a successful response' do
@@ -89,7 +89,7 @@ RSpec.describe '/vendors', type: :request do
             it 'does not create a new Vendor' do
                 expect do
                     post vendors_url, params: { vendor: invalid_attributes }
-                end.to change(Vendor, :count).by(0)
+                end.not_to change(Vendor, :count)
             end
 
             it "renders a successful response (i.e. to display the 'new' template)" do

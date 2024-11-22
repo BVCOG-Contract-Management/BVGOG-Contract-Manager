@@ -16,7 +16,7 @@ Scenario: Invite a user using UI
 	When I fill in "user[first_name]" with "TestFirstName"
 	When I fill in "user[last_name]" with "TestLastName"
 	When I fill in "user[email]" with "FeaturedUser@example.com"
-	And I select "Three" from the "user[level]" select box
+	And I select "User" from the "user[level]" select box
 	And I select "Program 1" from the "user[program_id]" select box
 	And I select the Entity 1 checkbox
 	#And I press "commit"

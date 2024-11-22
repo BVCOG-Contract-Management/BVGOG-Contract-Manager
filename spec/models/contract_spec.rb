@@ -42,7 +42,7 @@ RSpec.describe Contract, type: :model do
     end
 
     it 'does not save contract with ends_at before starts_at' do
-        contract = build(:contract, starts_at: Date.today, ends_at: Date.today - 1.day)
+        contract = build(:contract, starts_at: Time.zone.today, ends_at: Time.zone.today - 1.day)
         expect { contract.save! }.to raise_error(ActiveRecord::RecordInvalid)
     end
 

@@ -22,6 +22,7 @@ class User < ApplicationRecord
     has_many :contracts, class_name: 'Contract', foreign_key: 'point_of_contact_id'
     has_many :vendor_reviews, class_name: 'VendorReview'
     has_many :contract_decisions, class_name: 'ContractDecision'
+    has_many :modification_logs, class_name: 'ModificationLog'
 
     # TODO: Should the program be optional?
     belongs_to :program, class_name: 'Program'

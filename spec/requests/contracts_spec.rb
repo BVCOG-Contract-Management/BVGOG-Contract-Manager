@@ -33,11 +33,11 @@ RSpec.describe '/contracts', type: :request do
         vendor = create(:vendor)
         return build(
             :contract,
-            entity: entity,
-            program: program,
-            point_of_contact: point_of_contact,
-            vendor: vendor
-        ).attributes
+            entity:,
+            program:,
+            point_of_contact:,
+            vendor:
+        ).attributes.except('id', 'created_at', 'updated_at')
     end
 
     let(:invalid_attributes) do
@@ -50,7 +50,7 @@ RSpec.describe '/contracts', type: :request do
             starts_at: nil,
             title: nil,
             contract_type: nil
-        ).attributes
+        ).attributes.except('id', 'created_at', 'updated_at')
     end
 
     describe 'GET /index' do
@@ -62,10 +62,29 @@ RSpec.describe '/contracts', type: :request do
     end
 
     describe 'GET /show' do
-        it 'renders a successful response' do
-            contract = Contract.create! valid_attributes
+        it 'renders a successful response if user entity matches contract entity' do
+            user = create(:user)
+            entity = Entity.create!(name: 'Test Entity')
+            user.entities << entity
+
+            contract = Contract.create!(valid_attributes.merge(entity_id: entity.id))
+
+            sign_in user # Assuming Devise or similar authentication helper is being used
+
             get contract_url(contract)
             expect(response).to be_successful
+        end
+
+        it 'redirects to root path if user entity does not match contract entity' do
+            user = create(:user)
+            another_entity = Entity.create!(name: 'Another Entity')
+            contract = Contract.create!(valid_attributes.merge(entity_id: another_entity.id))
+
+            sign_in user # Assuming Devise or similar authentication helper is being used
+
+            get contract_url(contract)
+            expect(response).to redirect_to(root_path)
+            expect(flash[:alert]).to eq('You do not have permission to access this page.')
         end
     end
 
@@ -77,9 +96,30 @@ RSpec.describe '/contracts', type: :request do
     end
 
     describe 'GET /edit' do
-        it 'renders a successful response' do
-            contract = Contract.create! valid_attributes
+        it 'renders a successful response if user has permission to edit the contract' do
+            # Create a user with level not equal to 'two'
+            user = create(:user, level: 'one') # Ensure user.level is not 'two'
+
+            # Create an entity and associate it with the user
+            entity = Entity.create!(name: 'Test Entity')
+            user.entities << entity
+
+            # Create a contract with 'in_progress' status and associate it with the entity
+            contract = Contract.create!(
+                valid_attributes.merge(
+                    entity_id: entity.id,
+                    contract_status: 'in_progress',
+                    point_of_contact_id: user.id # Set user as point of contact (optional)
+                )
+            )
+
+            # Sign in the user
+            sign_in user # Assuming Devise or similar authentication helper is being used
+
+            # Make the GET request to the edit path
             get edit_contract_url(contract)
+
+            # Expect a successful response
             expect(response).to be_successful
         end
     end
@@ -92,8 +132,8 @@ RSpec.describe '/contracts', type: :request do
                 end.to change(Contract, :count).by(1)
             end
 
-            pending 'redirects to the created contract' do
-                it contracts_url, params: { contract: valid_attributes }
+            it 'redirects to the created contract' do
+                post contracts_url, params: { contract: valid_attributes }
                 expect(response).to redirect_to(contract_url(Contract.last))
             end
         end
@@ -105,40 +145,63 @@ RSpec.describe '/contracts', type: :request do
                 end.to change(Contract, :count).by(0)
             end
 
-            pending "renders a successful response (i.e. to display the 'new' template)" do
+            it 're-renders the new template with validation errors' do
                 post contracts_url, params: { contract: invalid_attributes }
-                expect(response).to be_successful
+                expect(response).to have_http_status(:unprocessable_entity) # Checks for 422 status
+                expect(response.body).to include('error') # Optionally check if an error message is present in the response
             end
         end
     end
 
     describe 'PATCH /update' do
         context 'with valid parameters' do
-            let(:new_attributes) { { title: 'Updated Title', amount_dollar: 1500 } }
-        
-            it 'updates the requested contract' do
-              contract = Contract.create! valid_attributes
-              patch contract_url(contract), params: { contract: new_attributes }
-              contract.reload
-    
-              expect(contract.title).to eq('Updated Title')
-              expect(contract.amount_dollar).to eq(1500)
-              
-            end
+            let(:new_attributes) { { title: 'Updated Title', total_amount: 1500 } }
 
-            it 'redirects to the contract' do
-                contract = Contract.create! valid_attributes
+            it 'updates the requested contract if user entity matches contract entity' do
+                user = create(:user)
+                entity = Entity.create!(name: 'Test Entity')
+                user.entities << entity
+
+                contract = Contract.create!(valid_attributes.merge(entity_id: entity.id, contract_status: 'in_progress'))
+
+                sign_in user # Assuming Devise or similar authentication helper is being used
+
                 patch contract_url(contract), params: { contract: new_attributes }
                 contract.reload
-                expect(response).to redirect_to(contract_url(contract))
-              end
+                expect(contract.title).to eq(new_attributes[:title])
+                expect(contract.total_amount).to eq(1500)
+            end
+
+            it 'redirects to the contract after successful update' do
+                user = create(:user)
+                entity = Entity.create!(name: 'Test Entity')
+                user.entities << entity
+
+                contract = Contract.create!(valid_attributes.merge(entity_id: entity.id, contract_status: 'in_progress'))
+
+                sign_in user # Assuming Devise or similar authentication helper is being used
+
+                patch contract_url(contract), params: { contract: new_attributes }
+                contract.reload
+
+                expect(response).to redirect_to(edit_contract_url(contract))
+            end
         end
 
         context 'with invalid parameters' do
-            pending "renders a successful response (i.e. to display the 'edit' template)" do
-                contract = Contract.create! valid_attributes
+            it 'does not update the contract and re-renders the edit template' do
+                user = create(:user)
+                entity = Entity.create!(name: 'Test Entity')
+                user.entities << entity
+
+                contract = Contract.create!(valid_attributes.merge(entity_id: entity.id, contract_status: 'in_progress'))
+
+                sign_in user # Assuming Devise or similar authentication helper is being used
+
                 patch contract_url(contract), params: { contract: invalid_attributes }
-                expect(response).to be_successful
+
+                expect(response).to have_http_status(:unprocessable_entity) # Expect 422 Unprocessable Entity
+                expect(response.body).to include('error') # Optionally check if error messages are present in the response
             end
         end
     end

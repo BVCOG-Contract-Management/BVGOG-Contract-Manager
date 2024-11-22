@@ -117,7 +117,7 @@ class Report < ApplicationRecord
             report.program_id.present? ? Program.find(report.program_id).name : 'All',
             report.point_of_contact_id.present? ? "#{poc.first_name} #{poc.last_name}" : 'All',
             report.contract_type.present? ? ContractType::OPTIONS[report.contract_type.to_sym] : 'All',
-            (report.expiring_in_days.presence || 'All'),
+            report.expiring_in_days.presence || 'All',
             if report.show_expired_contracts.present?
                 report.show_expired_contracts ? 'Yes' : 'No'
             else
@@ -135,8 +135,8 @@ class Report < ApplicationRecord
         report_pdf.text 'Contracts', align: :center, size: 18, style: :bold
         report_pdf.move_down 10
         table_data = []
-        table_data << ['Entity', 'Program', 'Contract Title', 'Contract Number', 'Vendor', 'Contract Type',
-                       'Contract Amount', 'Expiration Date']
+        table_data << ['Entity', 'Program', 'Contract Title', 'Contract ID', 'Vendor', 'Contract Type',
+                       'Contract Value', 'Expiration Date']
         contracts.each do |contract|
             table_data << [
                 contract.entity.name,
@@ -145,10 +145,121 @@ class Report < ApplicationRecord
                 contract.number,
                 contract.vendor.name,
                 contract.contract_type_humanize,
-                "$#{contract.amount_dollar.round(2)} per #{contract.amount_duration_humanize}",
+                contract.total_amount,
                 contract.ends_at.nil? ? '' : contract.ends_at.strftime('%m/%d/%Y')
             ]
         end
+        # Add the table to the PDF
+        report_pdf.table table_data, header: true, width: report_pdf.bounds.width do
+            row(0).font_style = :bold
+            columns(0..7).align = :center
+            self.row_colors = %w[DDDDDD FFFFFF]
+            self.header = true
+        end
+
+        # Save the PDF
+        report_pdf.render_file report.full_path
+    end
+
+    def generate_contract_expiration_report
+        report = self
+
+        report.file_name = "bvcog-auto-contract-expiration-report-#{Time.zone.today.strftime('%Y-%m-%d')}.pdf"
+        report.full_path = File.join(BvcogConfig.last.reports_path, report.file_name).to_s
+
+        # Collect contracts expiring in the next 30 days
+        contracts_30_days = Contract.where('ends_at >= ? AND ends_at <= ?', Time.zone.today,
+                                           Time.zone.today + 30.days).order(:ends_at)
+        # Collect contracts expiring in the next 31-60 days
+        contracts_31_60_days = Contract.where('ends_at >= ? AND ends_at <= ?', Time.zone.today + 31.days,
+                                              Time.zone.today + 60.days).order(:ends_at)
+        # Collect contracts expiring in the next 61-90 days
+        contracts_61_90_days = Contract.where('ends_at >= ? AND ends_at <= ?', Time.zone.today + 61.days,
+                                              Time.zone.today + 90.days).order(:ends_at)
+
+        # Create the PDF
+        report_pdf = Prawn::Document.new(page_size: 'A4', page_layout: :landscape)
+        report_pdf.text report.title, align: :center, size: 24, style: :bold
+        report_pdf.move_down 20
+
+        # Create subtitle
+        report_pdf.text 'Contracts Expiring in the next 30 days', align: :center, size: 18, style: :bold
+        report_pdf.move_down 10
+        # Create table
+        table_data = []
+        table_data << ['Entity', 'Program', 'Contract Title', 'Contract ID', 'Vendor', 'Contract Type',
+                       'Contract Value', 'Expiration Date']
+        contracts_30_days.each do |contract|
+            table_data << [
+                contract.entity.name,
+                contract.program.name,
+                contract.title,
+                contract.number,
+                contract.vendor.name,
+                contract.contract_type_humanize,
+                contract.total_amount,
+                contract.ends_at.strftime('%m/%d/%Y')
+            ]
+        end
+
+        # Add the table to the PDF
+        report_pdf.table table_data, header: true, width: report_pdf.bounds.width do
+            row(0).font_style = :bold
+            columns(0..7).align = :center
+            self.row_colors = %w[DDDDDD FFFFFF]
+            self.header = true
+        end
+
+        # Create subtitle
+        report_pdf.move_down 20
+        report_pdf.text 'Contracts Expiring in the next 31-60 days', align: :center, size: 18, style: :bold
+        report_pdf.move_down 10
+        # Create table
+        table_data = []
+        table_data << ['Entity', 'Program', 'Contract Title', 'Contract ID', 'Vendor', 'Contract Type',
+                       'Contract Value', 'Expiration Date']
+        contracts_31_60_days.each do |contract|
+            table_data << [
+                contract.entity.name,
+                contract.program.name,
+                contract.title,
+                contract.number,
+                contract.vendor.name,
+                contract.contract_type_humanize,
+                contract.total_amount,
+                contract.ends_at.strftime('%m/%d/%Y')
+            ]
+        end
+
+        # Add the table to the PDF
+        report_pdf.table table_data, header: true, width: report_pdf.bounds.width do
+            row(0).font_style = :bold
+            columns(0..7).align = :center
+            self.row_colors = %w[DDDDDD FFFFFF]
+            self.header = true
+        end
+
+        # Create subtitle
+        report_pdf.move_down 20
+        report_pdf.text 'Contracts Expiring in the next 61-90 days', align: :center, size: 18, style: :bold
+        report_pdf.move_down 10
+        # Create table
+        table_data = []
+        table_data << ['Entity', 'Program', 'Contract Title', 'Contract ID', 'Vendor', 'Contract Type',
+                       'Contract Value', 'Expiration Date']
+        contracts_61_90_days.each do |contract|
+            table_data << [
+                contract.entity.name,
+                contract.program.name,
+                contract.title,
+                contract.number,
+                contract.vendor.name,
+                contract.contract_type_humanize,
+                contract.total_amount,
+                contract.ends_at.strftime('%m/%d/%Y')
+            ]
+        end
+
         # Add the table to the PDF
         report_pdf.table table_data, header: true, width: report_pdf.bounds.width do
             row(0).font_style = :bold

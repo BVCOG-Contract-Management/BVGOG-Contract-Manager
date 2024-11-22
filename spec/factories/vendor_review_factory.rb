@@ -4,9 +4,8 @@
 
 FactoryBot.define do
     factory :vendor_review do
-        association :vendor, factory: :vendor
-        association :user, factory: :user
-
+        vendor # This automatically associates a vendor using the vendor factory
+        user   # Ensure you have a user factory if needed for this association
         id { Faker::Number.positive }
         rating { rand(1..5) }
         description { Faker::Lorem.paragraph(sentence_count: 5) }

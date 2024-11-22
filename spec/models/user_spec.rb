@@ -62,7 +62,7 @@ RSpec.describe User, type: :model do
 
     it 'does not save user with duplicate email' do
         email = 'ExampleUser@example.com'
-        user1 = create(:user, email:)
+        create(:user, email:)
         user2 = build(:user, email:)
 
         expect { user2.save! }.to raise_error(ActiveRecord::RecordInvalid)

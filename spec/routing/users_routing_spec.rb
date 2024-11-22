@@ -20,7 +20,7 @@ RSpec.describe UsersController, type: :routing do
             expect(get: '/users/1/edit').to route_to('users#edit', id: '1')
         end
 
-        pending it 'routes to #create' do
+        it 'routes to #create' do
             expect(post: '/users').to route_to({ 'controller' => 'devise/registrations', 'action' => 'create' })
         end
 

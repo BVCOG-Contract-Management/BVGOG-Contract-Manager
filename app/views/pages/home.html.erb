@@ -3,93 +3,148 @@
 <% end %>
 
 <div class="columns is-desktop" id="home-about-you">
-    <div class="column is-4">
-        <div class="card">
-            <div class="card-header">
-                <p class="card-header-title">
+  <div class="column is-4">
+    <div class="card">
+      <div class="card-header">
+        <p class="card-header-title">
                     <span class="icon">
                         <i class="fas fa-user"></i>
                     </span>
-                    About You
-                </p>
-            </div>
-            <div class="card-content is-paddingless">
-                <table class="table is-striped is-hoverable is-fullwidth">
-                    <tbody>
-                        <tr>
-                            <td><strong>Name:</strong></td>
-                            <td><%= current_user.full_name %></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Email:</strong></td>
-                            <td><%= current_user.email %></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Level:</strong></td>
-                            <td><%= current_user.level_name %></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Program:</strong></td>
-                            <td><%= current_user.program.name %></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Program Manager:</strong></td>
-                            <td>
-                                <% if @current_user.is_program_manager%>
-                                    <span class="tag is-success">Yes</span>
-                                <% else %>
-                                    <span class="tag is-danger">No</span>
-                                <% end %>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><strong>Joined:</strong></td>
-                            <td><%= current_user.invitation_accepted_at.present? ? current_user.invitation_accepted_at.strftime("%B %d, %Y") : current_user.created_at.strftime("%B %d, %Y") %></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+          About You
+        </p>
+      </div>
+      <div class="card-content is-paddingless">
+        <table class="table is-striped is-hoverable is-fullwidth">
+          <tbody>
+          <tr>
+            <td><strong>Name:</strong></td>
+            <td><%= current_user.full_name %></td>
+          </tr>
+          <tr>
+            <td><strong>Email:</strong></td>
+            <td><%= current_user.email %></td>
+          </tr>
+          <tr>
+            <td><strong>Level:</strong></td>
+            <td><%= current_user.level_name %></td>
+          </tr>
+          <tr>
+            <td><strong>Program:</strong></td>
+            <td><%= current_user.program.name %></td>
+          </tr>
+          <tr>
+            <td><strong>Program Manager:</strong></td>
+            <td>
+              <% if current_user.is_program_manager %>
+                <span class="tag is-success">Yes</span>
+              <% else %>
+                <span class="tag is-danger">No</span>
+              <% end %>
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Joined:</strong></td>
+            <td><%= current_user.invitation_accepted_at.present? ? current_user.invitation_accepted_at.strftime("%B %d, %Y") : current_user.created_at.strftime("%B %d, %Y") %></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
+  </div>
 
-    <%# Latest contracts, show based on user's level, and allow level 1/2 users to filter by in-review %>
-    <div class="column is-8">
-        <div class="card">
-            <div class="card-header">
-                <p class="card-header-title">
-                    <span class="icon">
-                        <i class="fas fa-file-contract"></i>
-                    </span>
-                    <% if current_user.level == UserLevel::THREE %>
-                        Latest Contracts
-                    <% else %>
-                        Contracts in Review
-                    <% end %>
-                </p>
-            </div>
-            <div class="card-content is-paddingless" id="home-page-contracts-table-container">
-                <table class="table is-striped is-hoverable is-fullwidth">
-                    <thead>
-                        <tr>
-                            <th>Title</th>
-                            <th>Number</th>
-                            <th>Point of Contact</th>
-                            <th>Created At</th>    
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% @contracts.each do |contract| %>
-                            <tr>
-                                <td><%= link_to contract.title, contract_path(contract) %></td>
-                                <td><%= contract.number %></td>
-                                <td><%= contract.point_of_contact.full_name %></td>
-                                <td><%= contract.created_at.strftime("%B %d, %Y") %></td>
-                            </tr>
-                        <% end %>
-                    </tbody>
-                </table>
-            </div>
+  <!-- Single column containing both tables stacked vertically -->
+  <div class="columns">
+    <div class="column is-12">
+      <!-- Table for Contracts -->
+      <div class="card">
+        <div class="card-header">
+          <p class="card-header-title">
+          <span class="icon">
+            <i class="fas fa-file-contract"></i>
+          </span>
+            <% if current_user.level == UserLevel::THREE %>
+              Contracts in Progress
+            <% else %>
+              Contracts in Review
+            <% end %>
+          </p>
         </div>
+        <div class="card-content is-paddingless" id="home-page-contracts-table-container" style="max-height: 300px; overflow-y: auto;">
+          <table class="table is-striped is-hoverable is-fullwidth">
+            <thead>
+            <tr>
+              <th>Title</th>
+              <th>Number</th>
+              <th>Point of Contact</th>
+              <th>Created At</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% if @contracts.present? %>
+              <% @contracts.each do |contract| %>
+                <tr>
+                  <td><%= link_to contract.title, contract_path(contract) %></td>
+                  <td><%= contract.number %></td>
+                  <td><%= contract.point_of_contact.full_name %></td>
+                  <td><%= contract.created_at.strftime("%B %d, %Y") %></td>
+                </tr>
+            <% end %>
+            <% else %>
+              <tr>
+                <td colspan="4" class="has-text-centered">No Contracts Available</td>
+              </tr>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Spacer between the two tables, optional for visual separation -->
+      <br/>
+
+      <!-- Table for Amendments/Renewals -->
+      <div class="card">
+        <div class="card-header">
+          <p class="card-header-title">
+          <span class="icon">
+            <i class="fas fa-file-contract"></i>
+          </span>
+            <% if current_user.level == UserLevel::THREE %>
+              Amendments in Progress
+            <% else %>
+              Amendments in Review
+            <% end %>
+          </p>
+        </div>
+        <div class="card-content is-paddingless" id="home-page-amendments-table-container" style="max-height: 300px; overflow-y: auto;">
+          <table class="table is-striped is-hoverable is-fullwidth">
+            <thead>
+            <tr>
+              <th>Title</th>
+              <th>Number</th>
+              <th>Point of Contact</th>
+              <th>Created At</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% if @amendments_and_renewals.present? %>
+              <% @amendments_and_renewals.each do |contract| %>
+                <tr>
+                  <td><%= link_to contract.title, contract_path(contract) %></td>
+                  <td><%= contract.number %></td>
+                  <td><%= contract.point_of_contact.full_name %></td>
+                  <td><%= contract.created_at.strftime("%B %d, %Y") %></td>
+                </tr>
+              <% end %>
+            <% else %>
+              <tr>
+                <td colspan="4" class="has-text-centered">No Amendments or Renewals Available</td>
+              </tr>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
-

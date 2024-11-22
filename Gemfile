@@ -62,6 +62,7 @@ group :development, :test do
     gem 'sqlite3', '~> 1.4'
 
     gem 'byebug'
+    gem 'rubycritic'
 end
 
 group :development do
@@ -88,8 +89,6 @@ group :test do
     gem 'simplecov', require: false
     gem 'webdrivers'
 end
-
-gem 'rubocop', '~> 1.45'
 
 gem 'rubocop-capybara'
 gem 'rubocop-rails', '~> 2.17'

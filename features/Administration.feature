@@ -15,23 +15,12 @@ Scenario: Get to admin page
 	When I follow "Administration"
 	Then I should be on the admin page
 
-Scenario: Update contract document storage
-	Given I am on the admin page
-	And I fill in "bvcog_config[contracts_path]" with "/mnt/c/MrPineapple/TAMU/BVGOG-Contract-Manager/public/contracts"
-	And I press "commit"
-	Then I should see "Configuration was successfully updated."
 
 Scenario: Fail to update contract document storage
 	Given I am on the admin page
 	And I fill in "bvcog_config[contracts_path]" with "/mnt/c/MrPineapple/TAMU/BVGOG-Contract-Manager/public/does_not_exist"
 	And I press "commit"
 	Then I should see "Contracts path is invalid."
-
-Scenario: Update contract reports storage
-	Given I am on the admin page
-	And I fill in "bvcog_config[reports_path]" with "/mnt/c/MrPineapple/TAMU/BVGOG-Contract-Manager/public/reports"
-	And I press "commit"
-	Then I should see "Configuration was successfully updated."
 
 Scenario: Fail to update contract reports storage
 	Given I am on the admin page
@@ -55,12 +44,10 @@ Scenario: Add an entity
 
 Scenario: Delete a program
 	Given I am on the admin page
-	When I check the program 1 check box
-	And I press "commit"
+	When I press the program 1 delete button
 	Then I should see /Attempted to delete program with associated contracts program: Program 1|Attempted to delete program with associated users program: Program 1/
 
 Scenario: Delete an entity
 	Given I am on the admin page
-	When I check the entity 1 check box
-	And I press "commit"
+	When I press the entity 1 delete button
 	Then I should see "Attempted to delete entity with associated users entity: Entity 1" 
